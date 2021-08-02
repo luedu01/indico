@@ -1,0 +1,175 @@
+body{
+	background-color: white;
+}
+.FormColumna1{
+	width: 15%;
+	vertical-align: top;
+}
+.FormColumna2{
+	width: 70%;
+	vertical-align: top;
+}
+.FormColumna3{
+	width: 15%;
+	vertical-align: top;
+}
+.FormColumna2-1{
+	width: 30%;
+	vertical-align: top;
+}
+.FormColumna2-2{
+	width: 70%;
+	vertical-align: top;
+}
+.ui-datatable-scrollable-body{
+	background-color: white;
+}
+.ui-widget {
+	font-size: 12px;
+}
+
+.ui-tree {
+    position: relative;
+    width: 200px !important;
+}
+.panelDos{
+	width: 100%;
+	vertical-align: top;
+}
+.columnFechas{
+	vertical-align: top;
+	width : 30%;
+}
+.columnElementos{
+	vertical-align: top;
+	width : 70%;
+}
+.panelIzquierda{
+	vertical-align: top;
+	border: 0;
+	width: 15%;
+}
+.panelDerecha{
+	vertical-align: top;
+	border: 0;
+	width: 15%;
+}
+.ArbolIzquierda{
+	width: 100px;
+	background-color: white;
+	border-width: 0px;
+	border: 0px;
+	padding: 1px;
+}
+
+.ArbolDerecha{
+	width: 290px !important;
+	background-color: white;
+	border-width: 0px;
+	border: 0px;
+	padding: 1px;
+}
+
+.elementosSuperior{
+	margin-right: 4px;
+}
+
+.tablaDatos{
+	height: 400px;
+}
+
+.ui-button {
+	margin-right: 5px !important;
+}
+.panelPrincipal{
+	width: 100%;
+	background-color: #FFFFFF !important;
+}
+.ui-widget-header{
+	  color : #FFFFFF !important;
+}
+
+.banner{
+    background-color: #FFFFFF !important;
+    
+}
+.ui-state-highlight, 
+.ui-widget-content .ui-state-highlight, 
+.ui-widget-header .ui-state-highlight {
+	background: #42A3B9;
+	border: 1px solid #368A9D;
+}
+.ui-menubar,
+.ui-menu,
+.ui-menu-child{
+    background: #3c6973 !important;
+}
+.ui-widget-content a {
+    color: #fff;
+}
+.panelLogIn{
+	width: 20%;
+	margin : auto ;
+	/*margin-top : 10em;*/
+	background-color: #ffffff!important;
+	/*border: 1px solid #aaaaaa !important;*/
+}
+
+.ui-widget-content{
+	border: 0;
+}
+.ui-panelgrid .ui-panelgrid-cell{
+	border-width: 0 !important;
+}
+
+.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield {
+    		width: 30em;
+}
+
+.enlace{
+	color: #000000 !important;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*INDEX*/
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++*/
+body#indexBody {
+    background-color: #0B4350;
+    color: #fff;
+    font-family: 'telefonica_textregular';
+    font-size: 12pt;
+    margin: 0;
+}
+
+.gradient-corner-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+}.gradient-corner-right {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+.panelPrincipalLogo{
+	width: 20%;
+	margin : auto ;
+	margin-top : 10em;
+}
+.panelPrincipalLogo td{
+	background-color: #FFFFFF !important;
+}
+.panelLogIn td{
+	color: black;
+	text-align:center;
+}
+.LogOut{
+	align: right;
+}
+.inputLogin {
+    padding: 6px;
+}
+
+.loading { 
+    background-image:  url(../resources/images/26- flecha fiondo azul-01.svg);
+    display: none;
+}

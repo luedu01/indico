@@ -1,0 +1,68 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.indico.jee</groupId>
+	<artifactId>indico</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>indico</name>
+	<properties> 
+		<!-- Define general properties here -->
+		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<modules>
+		<module>indico-ejb</module>
+		<module>indico-web</module>
+		<module>indico-ear</module>
+	</modules>
+	<!--distributionManagement>
+		<snapshotRepository>
+			<id>WJENKINS1D</id>
+			<name>WJENKINS1D-snapshots</name>
+			<url>http://wjenkins1d:8083/artifactory/libs-snapshot-banrep-local</url>
+		</snapshotRepository>
+	</distributionManagement-->
+	<repositories>
+		<repository>
+			<id>prime-repo</id>
+			<name>Prime Repo</name>
+			<url>https://repository.primefaces.org</url>
+		</repository>
+	    <repository>
+	      <id>central</id>
+	      <name>Maven Repository Switchboard</name>
+	      <layout>default</layout>
+	      <url>https://repo1.maven.org/maven2</url>
+	      <snapshots>
+	        <enabled>false</enabled>
+	      </snapshots>
+	    </repository>
+	  </repositories>
+	
+	  <pluginRepositories>
+	    <pluginRepository>
+	      <id>central</id>
+	      <name>Maven Plugin Repository</name>
+	      <url>https://repo1.maven.org/maven2</url>
+	      <layout>default</layout>
+	      <snapshots>
+	        <enabled>false</enabled>
+	      </snapshots>
+	      <releases>
+	        <updatePolicy>never</updatePolicy>
+	      </releases>
+	    </pluginRepository>
+	  </pluginRepositories>
+   	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>3.4.0.905</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

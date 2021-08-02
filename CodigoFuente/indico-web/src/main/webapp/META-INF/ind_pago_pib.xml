@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mes:Structure
+	xmlns:mes="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+	xmlns:str="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure"
+	xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+	<mes:Header>
+		<mes:ID>BANREP_IND_PAGOS_PIB</mes:ID>
+		<mes:Test>false</mes:Test>
+		<mes:Prepared>2018-12-14T07:15:03.107Z</mes:Prepared>
+		<mes:Sender id="DSW" />
+		<mes:Receiver id="unknown" />
+	</mes:Header>
+	<com:Annotations>
+		<com:Annotation>
+			<com:AnnotationTitle>Indicadores de pagos PIB</com:AnnotationTitle>
+		</com:Annotation>
+	</com:Annotations>
+	<mes:Attributes>
+		<mes:Value id="VAR_FECHA_O_PERIODO" value="Fecha de las transferencias" />
+		<mes:Value id="VAR_VALOR" value="Valor del PIB (Valor/PIB)" />
+	</mes:Attributes>
+	<mes:Obs>
+		<mes:ObsKey>
+			<mes:Value id="DIM_PAIS" value="CO"/>
+		</mes:ObsKey>
+		<mes:ObsValue value="0"/>
+		<mes:Attributes>
+			<mes:Value id="VAR_FECHA_O_PERIODO" value="{0}"/>
+			<mes:Value id="VAR_VALOR" 	value="{1}" />
+		</mes:Attributes>
+	</mes:Obs>
+</mes:Structure>
+  

@@ -1,0 +1,348 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:fado="http://java.sun.com/jsf/composite/customs">
+	<h:outputScript library="js" name="pdfmake.min.js"/>
+	<h:outputScript library="js" name="vfs_fonts.js"/>
+	<h:outputStylesheet library="css" name="iThing.css" />
+	<h:outputStylesheet library="css" name="chart.css" />
+
+	<h:outputScript library="js" name="chart.js"/>
+	<h:outputScript library="js" name="banrep.js"/>
+	<h:outputScript library="js" name="CompensacionNacionalInterbancaria.js"/>
+	
+	<p:outputPanel id="panelx1_bv" styleClass="ui-panelgrid-blank">
+		<p:panelGrid id="vbajoval_panelx2" columns="1" styleClass="cleaner2" layout="grid">
+			
+			<!--	iniciobarratop -->
+			<p:outputPanel styleClass="BlueBack">
+				<div class="EmptyBox10 DisplayOnDesk"></div>
+				<div class="EmptyBox10 DisplayOnMobile"></div>
+				<div class="ui-g">
+					<h:outputText
+						styleClass="Fs20 Wid90  DispInlBlock TexAlRight  White PaddingRight10 BoxSizeBorder TextTitle"
+						value="Descripci&#243;n y f&#243;rmula" />
+					<p:outputPanel styleClass="DispInlBlock Wid10 TexAlCenter">
+						<h:form>
+							<h:commandLink
+								actionListener="#{transfeBajoValorMaBean.showHideMessageInformation}">
+								<h:graphicImage value="./resources/images/17-MAS-01.svg"
+									styleClass="MarAuto" rendered="true" height="24" width="24" />
+								<p:ajax update="@([id$=panelInformacionBV])" />
+							</h:commandLink>
+						</h:form>
+					</p:outputPanel>
+				</div>
+				<div class="EmptyBox5 DisplayOnMobile"></div>
+				<div class="EmptyBox10 DisplayOnDesk"></div>
+				<div class="EmptyBox5 BlueBack-5"></div>
+			</p:outputPanel>
+
+
+			<p:outputPanel id="panelInformacionBV" styleClass=" GrayBack-1">
+				<p:outputPanel rendered="#{transfeBajoValorMaBean.ocultarmostrar}">
+					<article class="Fs18 PadWithBorder40 BoxSizeBorder DispBlock">
+						<p>Comportamiento hist&#243;rico de las transacciones compensadas y liquidadas en el sistema CENIT – Compensaci&#243;n Electr&#243;nica Nacional Interbancaria.</p>
+						<p>Por defecto se visualizan el valor y número del total de transacciones de los últimos 10 días. El usuario puede seleccionar para su consulta un periodo de tiempo diferente. 
+
+Las cifras se presentan en miles de millones de pesos</p>
+					</article>
+					<div class="EmptyBox10"></div>
+				</p:outputPanel>
+				<p:outputPanel rendered="#{transfeBajoValorMaBean.ocultarmostrar}">
+					<div class="EmptyBox10 BlueBack-5"></div>
+				</p:outputPanel>
+
+			</p:outputPanel>
+			<!-- 		finalbarratop  -->
+			
+			<p:outputPanel id="vbajoval_panelfiltro_parent" columns="1" styleClass="cleaner2" layout="grid">
+				<p:outputPanel id="vbajoval_pvalor" styleClass="cleaner2">
+					<p:outputPanel id="vbajoval_valorfiltro" styleClass="cleaner2">
+						<p:panelGrid columns="2" columnClasses="ui-g-12 ui-md-12 ui-lg-9,ui-g-12 ui-md-12 ui-lg-3" styleClass="cleaner2" layout="grid">
+							<p:outputPanel styleClass="cleaner2">
+								<p:panelGrid columns="2" columnClasses="ui-g-12 ui-md-12 ui-lg-7,ui-g-12 ui-md-12 ui-lg-5 NoPaddingRight NoPaddingLeft"
+										styleClass="ui-panelgrid-blank ui-fluid cleaner2" layout="grid">
+									<p:panelGrid id="vbajoval_panelFiltros" columns="1" styleClass="cleaner2 NoPaddingLeft NoPaddingRight"
+											layout="grid" columnClasses="NoPaddingLeft NoPaddingRight">
+										<h:form >
+											<p:outputPanel styleClass="Wid100 ui-g VerticalCenter BoxSizeBorder">
+												<p:outputLabel value="Periodo" styleClass="ui-g-3 Fs14"></p:outputLabel>
+												<p:outputPanel styleClass="ui-g-9 NoPaddingTopBotton" style="padding-right: 4px !important;">
+													<p:selectOneMenu id="vbajoval_selFiltroPorValor"  
+														widgetVar="vbajoval_selFiltroPorValorW" required="true"
+														autoWidth="false"
+														value="#{transfeBajoValorMaBean.periodicidad}"
+														requiredMessage="Seleccione Periodo" placeholder="Periodo"
+														styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande"
+														>
+														<f:selectItem itemLabel="Diario" itemValue="1" />
+														<f:selectItem itemLabel="Mensual" itemValue="2" />
+														<f:selectItem itemLabel="Trimestral" itemValue="3" />
+														<f:selectItem itemLabel="Semestral" itemValue="4" />
+														<f:selectItem itemLabel="Anual" itemValue="5" />
+														<p:ajax process="@this" update="@([id$='vbajoval_panelesValoresDinamic'],[id$='vbajoval_valorgraficavalor'])" listener="#{transfeBajoValorMaBean.changePanelAction}" onsuccess="vbajovalchangeperiodo(); return false;"/>
+													</p:selectOneMenu>
+												</p:outputPanel>
+											</p:outputPanel>
+											
+											<p:panelGrid id="vbajoval_panelesValoresDinamic" columns="1" styleClass="cleaner2 NoPaddingLeft NoPaddingRight border-left-gray-Desk "
+													layout="grid" columnClasses="ui-g-12 NoPaddingLeft NoPaddingRight">
+												<p:outputPanel id="vbajoval_pValorDiario" styleClass="ui-g" style="display:none;">
+													<fado:slideraniomesdia idg="vbajoval_valperiodo1" tittle="Desde" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideraniomesdia idg="vbajoval_valperiodo2" tittle="Hasta" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+												<p:outputPanel id="vbajoval_pValorMensual" styleClass="ui-g" style="display:none;">
+													<fado:slideraniomes idg="vbajoval_valmensual1" tittle="Desde" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12"  Align="TextToAlRight FontBold"/>
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideraniomes idg="vbajoval_valmensual2" tittle="Hasta" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+												<p:outputPanel id="vbajoval_pValorTrimestral" styleClass="ui-g" style="display:none;">
+													<fado:slideraniotrimestre idg="vbajoval_valtrimestral1" tittle="Desde" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideraniotrimestre idg="vbajoval_valtrimestral2" tittle="Hasta" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+												<p:outputPanel id="vbajoval_pValorSemestral" styleClass="ui-g" style="display:none;"> 
+													<fado:slideraniosemestre idg="vbajoval_valsemestral1" tittle="Desde" toUpdate="vbajoval_valorgraficavalor" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideraniosemestre idg="vbajoval_valsemestral2" tittle="Hasta" toUpdate="vbajoval_valorgraficavalor" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+												<p:outputPanel id="vbajoval_pValorAnual" styleClass="ui-g" style="display:none;">
+													<fado:slideranio idg="vbajoval_valanual1" tittle="Desde" toUpdate="vbajoval_valorgraficavalor" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideranio idg="vbajoval_valanual2" tittle="Hasta" toUpdate="vbajoval_valorgraficavalor" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+											</p:panelGrid>
+										</h:form>
+									</p:panelGrid>
+									<p:panelGrid id="vbajoval_panelSelects" columns="1" layout="grid" styleClass="cleaner2">
+										<p:outputPanel styleClass="DisplayOnDesk">
+											<h:form>
+												<p:outputPanel class="ui-g Wid90">
+													<p:commandButton icon="" styleClass="WhiteBack Black Wid60 NoMargin NoBorder-radius-Right Fs14 border-gray-1 " process="@this"
+														value="Restaurar" update="@([id$='vbajoval_panelfiltro_parent'],[id$='vbajoval_valorgraficavalor'])" 
+														actionListener="#{transfeBajoValorMaBean.restaurarAction}"  onclick="recargarcanje();"
+														/>
+													<p:commandButton icon="icon-restaurar" styleClass="BlueBack Wid30 NoMargin NoBorder-radius-Left"  process="@this"
+														update="@([id$='vbajoval_panelfiltro_parent'],[id$='vbajoval_valorgraficavalor'])" 
+														actionListener="#{transfeBajoValorMaBean.restaurarAction}"  onclick="recargarcanje();">
+													</p:commandButton>
+												</p:outputPanel>
+											</h:form>
+										</p:outputPanel>
+										<p:outputPanel styleClass="DisplayOnMobile">
+											<h:form styleClass="ui-g-6">
+												<p:outputPanel class="ui-g" style="padding-top: 4px !important">
+													<p:commandButton icon=""
+														styleClass="WhiteBack Black Wid70 NoMargin NoBorder-radius-Right Padding5 Fs14 border-gray-1 TexAlLeft"
+														value="Restaurar" process="@this"
+														update="@([id$='vbajoval_panelfiltro_parent'],[id$='vbajoval_valorgraficavalor'])"
+														actionListener="#{transfeBajoValorMaBean.restaurarAction}"  onclick="recargarcanje();"
+														/>
+													<p:commandButton icon="icon-restaurar"
+														styleClass="BlueBack Wid30 NoMargin Padding5 NoBorder-radius-Left"
+														process="@this" immediate="true"
+														update="@([id$='vbajoval_panelfiltro_parent'],[id$='vbajoval_valorgraficavalor'])"
+														actionListener="#{transfeBajoValorMaBean.restaurarAction}"  onclick="recargarcanje();"  />
+												</p:outputPanel>
+											</h:form>
+											<h:form id="vbajoval_frmExportar001" onsubmit="assignValuesceni()"> 
+												<div style="display: none;">
+													<p:inputText widgetVar="vbajoval_startVar001" value="#{transfeBajoValorMaBean.start}"/>
+													<p:inputText widgetVar="vbajoval_endVar001" value="#{transfeBajoValorMaBean.end}"/>
+												</div>
+												<p:outputPanel id="vbajoval_panelexportar001"  styleClass="border-left-c ui-g-6  NoPaddingRight">
+													<p:panelGrid columns="1" styleClass="panelgridExportar MarAuto ui-g-12 ui-md-6">
+														<p:selectOneMenu widgetVar="vchque_exportarG001W" onchange="exportChart(this.value,'vbajoval_chart', 'Transferencias electrónicas interbancarias de bajo valor'); restartExportar('vchque_exportarG001W');" styleClass="selectonemenugrande selectDownload">
+															<f:selectItem itemLabel="Gráfica" itemValue="" />
+															<f:selectItem itemLabel="JPG" itemValue="jpg" />
+															<f:selectItem itemLabel="PDF" itemValue="pdf" />
+														</p:selectOneMenu>
+														<p:selectOneMenu id="vbajoval_selectdescargar001" widgetVar="vbajoval_selectdescargarW001" value="#{transfeBajoValorMaBean.tipoaexportar}" styleClass="selectonemenugrande">
+															<f:selectItem itemLabel="Datos" itemValue="" />
+															<f:selectItem itemLabel="CSV" itemValue="csv" />
+															<f:selectItem itemLabel="XLS" itemValue="xls" />
+															<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
+															<p:ajax event="change" onsuccess='$(&apos;[id*="vbajoval_downloadFile001"]&apos;).click();' process="@this" update="@([id$=vbajoval_panelexportar001])"/>
+														</p:selectOneMenu>
+														<p:commandButton id="vbajoval_downloadFile001" widgetVar="vbajoval_downloadFile001W" value="Download" ajax="false" icon="fa fa-fw fa-cloud-download"
+															actionListener="#{transfeBajoValorMaBean.exportAction}" style="display: none;" onclick="vbajoval_updatedescargar001()">
+															<f:attribute name="start" 		value="#{transfeBajoValorMaBean.start}"/>
+															<f:attribute name="end" 		value="#{transfeBajoValorMaBean.end}"/>
+														</p:commandButton>
+														<p:remoteCommand name="vbajoval_updatedescargar001" update="@([id$=vbajoval_panelexportar001])" action="#{transfeBajoValorMaBean.changeTabExportar}" delay="3000"/>
+													</p:panelGrid>
+												</p:outputPanel>
+											</h:form>
+										</p:outputPanel>
+									</p:panelGrid>
+									<p:messages id="vbajoval_messageinformationglobal"  showDetail="false" rendered="true">
+										<p:autoUpdate />
+									</p:messages>
+								</p:panelGrid>
+							</p:outputPanel>
+							
+							<h:form id="vbajoval_frmExportar0002"  styleClass="DisplayOnDesk border-left-c" onsubmit="assignValuesceni()">
+								<p:outputPanel id="vbajoval_panelexportar0002">
+									<div style="display: none;">
+										<p:inputText widgetVar="vbajoval_startVar" value="#{transfeBajoValorMaBean.start}"/>
+										<p:inputText widgetVar="vbajoval_endVar" value="#{transfeBajoValorMaBean.end}"/>
+									</div>
+									
+									<p:panelGrid columns="1" styleClass="panelgridExportar MarginLeft15">
+										<p:selectOneMenu widgetVar="vchque_exportarG002W" onchange="exportChart(this.value,'vbajoval_chart','Transferencias electrónicas interbancarias de bajo valor'); restartExportar('vchque_exportarG002W');"  styleClass="selectonemenugrande selectDownload">
+											<f:selectItem itemLabel="Gráfica" itemValue="" />
+											<f:selectItem itemLabel="JPG" itemValue="jpg" />
+											<f:selectItem itemLabel="PDF" itemValue="pdf" />
+										</p:selectOneMenu>
+										<p:selectOneMenu id="vbajoval_selectdescargar" widgetVar="vbajoval_selectdescargarW" value="#{transfeBajoValorMaBean.tipoaexportar}" styleClass="selectonemenugrande">
+											<f:selectItem itemLabel="Datos" itemValue="" />
+											<f:selectItem itemLabel="CSV" itemValue="csv" />
+											<f:selectItem itemLabel="XLS" itemValue="xls" />
+											<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
+											<p:ajax event="change" onsuccess='$(&apos;[id*="vbajoval_downloadFile0002"]&apos;).click();' update="@this"/>
+										</p:selectOneMenu>
+										<p:commandButton id="vbajoval_downloadFile0002" widgetVar="vbajoval_downloadFileW0002" value="Download" ajax="false"
+											icon="fa fa-fw fa-cloud-download" onclick="vbajoval_updatedescargar002();" 
+											actionListener="#{transfeBajoValorMaBean.exportAction}"
+											style="display: none;"
+											>
+											<f:attribute name="start" value="#{transfeBajoValorMaBean.start}"/>
+											<f:attribute name="end" value="#{transfeBajoValorMaBean.end}"/>
+										</p:commandButton>
+										<p:remoteCommand name="vbajoval_updatedescargar002" update="@([id$=vbajoval_panelexportar0002])" action="#{transfeBajoValorMaBean.changeTabExportar}" delay="3000"/>
+									</p:panelGrid>
+								</p:outputPanel>
+							</h:form>
+						</p:panelGrid>
+						
+						<p:panelGrid id="vbajoval_valorgraficavalor" columns="1" styleClass="cleaner2">
+							<h:form prependid="vbajoval_false">
+								<div class="ui-g">
+		 						  	<div class="ui-g-12 ui-md-12 ui-lg-12"><div id="vbajoval_chart" class="superzoom"/></div>
+		 						</div>  		
+								<h:outputScript>
+								function assignValuesceni() {
+										
+										var v_start;
+										var v_end;
+										var periodo = PF('vbajoval_selFiltroPorValorW').jq.find('option:selected').val();
+										switch (periodo) {
+											case "1":
+												v_start = getDateStartFromDiario('vbajoval_valperiodo1')
+												v_end = getDateEndFromDiario('vbajoval_valperiodo2')
+												break;										
+											case "2":
+												v_start = getDateStartFromMensual('vbajoval_valmensual1')
+												v_end = getDateEndFromMensual('vbajoval_valmensual2')
+												break;										
+											case "3":
+												v_start = getDateStartFromTrimestral('vbajoval_valtrimestral1')
+												v_end = getDateEndFromTrimestral('vbajoval_valtrimestral2')
+												break;
+											case "4": 
+												v_start = getDateStartFromSemestral('vbajoval_valsemestral1')
+												v_end = getDateEndFromSemestral('vbajoval_valsemestral2')
+												break;										
+											case "5": 
+												v_start = getDateStartFromAnual('vbajoval_valanual1')
+												v_end = getDateEndFromAnual('vbajoval_valanual2')
+												break;										
+										};//switch	
+										PF('vbajoval_startVar').jq.val(v_start);
+										PF('vbajoval_endVar').jq.val(v_end);
+										PF('vbajoval_startVar001').jq.val(v_start);
+										PF('vbajoval_endVar001').jq.val(v_end);
+									}
+																
+									function vbajovalchangeperiodo() {
+									
+										var periodo = PF('vbajoval_selFiltroPorValorW').jq.find('option:selected').val();
+										
+										$("[id*='vbajoval_pValorDiario']").hide();
+										$("[id*='vbajoval_pValorMensual']").hide();
+										$("[id*='vbajoval_pValorTrimestral']").hide();
+										$("[id*='vbajoval_pValorSemestral']").hide();
+										$("[id*='vbajoval_pValorAnual']").hide();
+										switch (periodo) {
+											case "1":
+												$("[id*='vbajoval_pValorDiario']").show();
+												vcomcanjePeriodo1 = "vbajoval_valperiodo1";
+												vcomcanjePeriodo2 = "vbajoval_valperiodo2";
+												break;										
+											case "2":
+												$("[id*='vbajoval_pValorMensual']").show();
+												vcomcanjePeriodo1 = "vbajoval_valmensual1";
+												vcomcanjePeriodo2 = "vbajoval_valmensual2";
+												
+												break;										
+											case "3":
+												$("[id*='vbajoval_pValorTrimestral']").show();
+												vcomcanjePeriodo1 = "vbajoval_valtrimestral1";
+												vcomcanjePeriodo2 = "vbajoval_valtrimestral2";											
+												break;
+											case "4": 
+												$("[id*='vbajoval_pValorSemestral']").show();
+												vcomcanjePeriodo1 = "vbajoval_valsemestral1";
+												vcomcanjePeriodo2 = "vbajoval_valsemestral2";												
+												break;										
+											case "5": 
+												$("[id*='vbajoval_pValorAnual']").show();
+												vcomcanjePeriodo1 = "vbajoval_valanual1";
+												vcomcanjePeriodo2 = "vbajoval_valanual2";												
+												break;										
+										};//switch
+										createSliderTransBajoValor('vbajoval_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,'vbajoval_messageinformationglobal');
+									}//function
+									
+									function recargarcanje(){
+									}
+									
+								    $(document).ready(function(){
+								    	vbajovalchangeperiodo();
+								    	var isIPhone = {
+										   
+										    iOS: function() {
+										        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+										    },
+										    any: function() {
+										        return (isMobile.iOS());
+										    }
+										};
+								     });
+								     
+								    jQuery(window).resize(function() {
+								    	var isIPhone = {
+										   
+										    iOS: function() {
+										        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+										    },
+										    any: function() {
+										        return (isMobile.iOS());
+										    }
+										};
+								    	if( isIPhone.any() ){
+	         							}else{
+	         								vbajovalchangeperiodo();
+	         							}
+	      							});
+								</h:outputScript>
+							</h:form>
+						</p:panelGrid>
+					</p:outputPanel>
+				</p:outputPanel>
+			</p:outputPanel>
+		</p:panelGrid>
+	</p:outputPanel>
+</ui:composition>

@@ -1,0 +1,2124 @@
+/**
+ *  GENERAL FUNCTIONS
+ **/
+
+var _ENTERO		=1;
+var _PORCENTAJE	=2;
+var _NUMERICO	=3;
+var logerrors 	=true;
+var _DIARIO		=1;
+var _MENSUAL	=2;
+var _TRIMESTRAL	=3;
+var _SEMESTRAL	=4;
+var _ANUAL		=5;
+
+function restartExportar(selectname){
+	 setTimeout(function () {
+			PF(''+selectname+'').selectValue("");
+	    }, 1000);
+}
+
+function formatdate (val){
+        var days = val.getDate(); 
+        var month = val.getMonth() + 1;
+        var year = val.getFullYear();
+        return days + "/" + month + "/" + year;
+}
+
+function getDateStartFromDiario(compDiario) {
+	var anio = $("#"+compDiario+"_sel_anio").val();
+	var mes = $("#"+compDiario+"_sel_mes").val();
+	var dia = $("#"+compDiario+"_sel_dia").val();
+	return anio + "-" + ("0" + (mes)).slice(-2) + "-" +("0" + (dia)).slice(-2);
+}
+
+function getDateEndFromDiario(compDiario) {
+	var anio = $("#"+compDiario+"_sel_anio").val();
+	var mes = $("#"+compDiario+"_sel_mes").val();
+	var dia = $("#"+compDiario+"_sel_dia").val();
+	return anio + "-" + ("0" + (mes)).slice(-2) + "-" +("0" + (dia)).slice(-2);
+}
+
+function getDateStartFromMensual(componenteMensual) {
+	var anio = $("#"+componenteMensual+"_sel_anio").val();
+	var mes = $("#"+componenteMensual+"_sel_mes").val();
+	var dia = "01";
+	return anio + "-" + ("0" + (mes)).slice(-2) + "-" +("0" + (dia)).slice(-2);
+}
+
+function getDateEndFromMensual(componenteMensual) {
+	var anio = $("#"+componenteMensual+"_sel_anio").val();
+	var mes = $("#"+componenteMensual+"_sel_mes").val();
+	var dia = new Date(anio, (parseInt(mes)) , 0).getDate();
+	return anio + "-" + ("0" + (mes)).slice(-2) + "-" +("0" + (dia)).slice(-2);
+}
+
+function getDateStartFromTrimestral(componenteTrimestral) {
+	var anio = $("#"+componenteTrimestral+"_sel_anio").val();
+	var mestrimestre = parseInt($("#"+componenteTrimestral+"_sel_trimestre").val());
+	var dia = "01";
+	return anio + "-" + ("0" + (mestrimestre)).slice(-2) + "-" +("0" + (dia)).slice(-2);
+}
+
+function getDateEndFromTrimestral(componenteTrimestral) {
+	var anio = $("#"+componenteTrimestral+"_sel_anio").val();
+	var mestrimestre = parseInt($("#"+componenteTrimestral+"_sel_trimestre").val())+2;
+	var dia = new Date(anio, mestrimestre , 0).getDate();
+	return anio + "-" + ("0" + (mestrimestre)).slice(-2) + "-" +("0" + (dia)).slice(-2);
+}
+
+function getDateStartFromSemestral(componenteSemestral) {
+	var anio = $("#"+componenteSemestral+"_sel_anio").val();
+	var messemestre = parseInt($("#"+componenteSemestral+"_sel_semestre").val());
+	var dia = "01";
+	return anio + "-" + ("0" + (messemestre)).slice(-2) + "-" +("0" + (dia)).slice(-2);
+}
+
+function getDateEndFromSemestral(componenteSemestral) {
+	var anio = $("#"+componenteSemestral+"_sel_anio").val();
+	var messemestre = parseInt($("#"+componenteSemestral+"_sel_semestre").val())+5;
+	var dia = new Date(anio, messemestre , 0).getDate();
+	return anio + "-" + ("0" + (messemestre)).slice(-2) + "-" +("0" + (dia)).slice(-2);
+}
+
+function getDateStartFromAnual(componenteAnual) {
+	var anio = $("#"+componenteAnual+"_sel_anio").val();
+	var mes = "01";
+	var dia =  "01";
+	return anio + "-" + ("0" + (mes)).slice(-2) + "-" +("0" + (dia)).slice(-2);
+}
+
+function getDateEndFromAnual(componenteAnual) {
+	var anio = $("#"+componenteAnual+"_sel_anio").val();
+	var mes = "12";
+	var dia = "31";
+	return anio + "-" + ("0" + (mes)).slice(-2) + "-" +("0" + (dia)).slice(-2);
+}
+
+/**
+ *  Nuevos componentes basados en el tiempo
+ **/
+
+function startvaluescomponentstimes(valchanged1,compdiario1,data,tipo) {
+	var selected;
+	if (valchanged1!=null) {
+		selected = valchanged1;
+	} else {
+		var fechasea;
+		switch (tipo) {
+			case _DIARIO:
+				fechasea = getDateStartFromDiario(compdiario1);
+				break;
+			case _MENSUAL:
+				fechasea = getDateStartFromMensual(compdiario1);
+				break;
+			case _TRIMESTRAL:
+				fechasea = getDateStartFromTrimestral(compdiario1);
+				break;
+			case _SEMESTRAL:
+				fechasea = getDateStartFromSemestral(compdiario1);
+				break;
+			case _ANUAL:				
+				fechasea = getDateStartFromAnual(compdiario1);
+				break;
+		}
+		var fechaselecteda;
+		if (fechasea!=null) {
+			if (fechasea.length==10) {
+				var fechaAux = fechasea.split("-");
+				if (fechaAux.length==3){
+					fechaselecteda = new Date(fechaAux[0],parseInt(fechaAux[1])-1,fechaAux[2]) 
+				}
+			}
+		}
+		selected = data["endX"];
+		var fechaA = data["endX"].split("-");
+		if (fechaA.length==1) {
+			fechaA[1]="01";
+			fechaA[2]="01";
+		}	
+		selected = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2])
+		if (fechaselecteda instanceof Date ) {
+			selected = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
+			if (selected>fechaselecteda) { selected=fechaselecteda ; } 
+		} else selected = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
+	}
+	var selanio1    	= '#'+compdiario1+"_sel_anio";
+	var selmes1 		= '#'+compdiario1+"_sel_mes";
+	var seldia1 		= '#'+compdiario1+"_sel_dia";
+	var seltrimestre1 	= '#'+compdiario1+"_sel_trimestre";
+	var selsemestre1 	= '#'+compdiario1+"_sel_semestre";
+	
+	
+	
+	addaniotimes(data,selanio1,selected);
+	addmesestimes(data,selmes1,selected);
+	adddiastimes(data,seldia1,selected);
+	addtrimestretimes(data,seltrimestre1,selected);
+	addsemestretimes(data,selsemestre1,selected);
+	
+}
+
+function updatevaluescomponentstimesfromslider(slider,compdiario1,compdiario2,data,tipo) {
+	var inicioX 	= new Date((slider.values.min.getTime()+(60*60*1000*5)));
+	var endX		= new Date((slider.values.max.getTime()+(60*60*1000*5)));
+	inicioX = getDateFromSlider(inicioX,tipo);
+	endX = getDateFromSlider(endX,tipo);
+	var selanio1    	= '#'+compdiario1+"_sel_anio";
+	var selmes1 		= '#'+compdiario1+"_sel_mes";
+	var seldia1 		= '#'+compdiario1+"_sel_dia";
+	var seltrimestre1 	= '#'+compdiario1+"_sel_trimestre";
+	var selsemestre1 	= '#'+compdiario1+"_sel_semestre";
+	addaniotimes(data,selanio1,inicioX);
+	addmesestimes(data,selmes1,inicioX);
+	adddiastimes(data,seldia1,inicioX);
+	addtrimestretimes(data,seltrimestre1,inicioX);
+	addsemestretimes(data,selsemestre1,inicioX);
+	
+	var selanio2    	= '#'+compdiario2+"_sel_anio";
+	var selmes2 		= '#'+compdiario2+"_sel_mes";
+	var seldia2 		= '#'+compdiario2+"_sel_dia";
+	var seltrimestre2 	= '#'+compdiario2+"_sel_trimestre";
+	var selsemestre2 	= '#'+compdiario2+"_sel_semestre";
+	addaniotimes(data,selanio2,endX);
+	addmesestimes(data,selmes2,endX);
+	adddiastimes(data,seldia2,endX);
+	addtrimestretimes(data,seltrimestre2,endX);
+	addsemestretimes(data,selsemestre2,endX);
+}
+
+function addaniotimes(data,selanio,selected) {
+	if ($(selanio).length) {
+		var selectanio = $(selanio);
+		selectanio.empty();
+		var fechaA = data["MinX"].split("-");
+		var minXdistValor = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
+		var fechaB = data["MaxX"].split("-");
+		var maxXdistValor = new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
+		var aniostart = minXdistValor.getFullYear();
+		var anioend = maxXdistValor.getFullYear();
+		var option = $('<option/>').val("").text("Año").attr('disabled','disabled');
+		option.appendTo(selectanio);
+		for (var anio=aniostart; anio<=anioend; anio++) {
+			var option = $('<option/>').val(anio).text(anio);
+			option.appendTo(selectanio);
+		}
+		selectanio.val(selected.getFullYear());
+	}	
+}
+
+function addmesestimes(data,selmeses,selected) {
+	if ($(selmeses).length) {
+		var selectmeses= $(selmeses);
+		selectmeses.empty();
+		var fechaA = data["MinX"].split("-");
+		var minXdistValor = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
+		var fechaB = data["MaxX"].split("-");
+		var maxXdistValor = new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
+		var aniostart = minXdistValor.getFullYear();
+		var anioend = maxXdistValor.getFullYear();
+		var mesInicial=1;
+		var mesFinal=12;
+		if (aniostart==selected.getFullYear()) {
+			mesInicial = minXdistValor.getMonth() + 1 ;
+		} 
+		if (anioend==selected.getFullYear()){
+			mesFinal = maxXdistValor.getMonth() + 1 ;
+		} 
+		//
+		var option = $('<option/>').val("").text("Mes").attr('disabled','disabled');
+		option.appendTo(selectmeses);
+		
+		if (mesInicial<=1 && mesFinal>=1) {
+			option = $('<option/>').val("1").text("Enero");
+			option.appendTo(selectmeses);
+		}
+		if (mesInicial<=2 && mesFinal>=2) {
+			option = $('<option/>').val("2").text("Febrero");
+			option.appendTo(selectmeses);
+		}
+		if (mesInicial<=3 && mesFinal>=3) {
+			option = $('<option/>').val("3").text("Marzo");
+			option.appendTo(selectmeses);
+		}
+		if (mesInicial<=4 && mesFinal>=4) {
+			option = $('<option/>').val("4").text("Abril");
+			option.appendTo(selectmeses);
+		}
+		if (mesInicial<=5 && mesFinal>=5) {
+			option = $('<option/>').val("5").text("Mayo");
+			option.appendTo(selectmeses);
+		}
+		if (mesInicial<=6 && mesFinal>=6){
+			option = $('<option/>').val("6").text("Junio");
+			option.appendTo(selectmeses);
+		}
+		if (mesInicial<=7 && mesFinal>=7){
+			option = $('<option/>').val("7").text("Julio");
+			option.appendTo(selectmeses);
+		}
+		if (mesInicial<=8 && mesFinal>=8){
+			option = $('<option/>').val("8").text("Agosto");
+			option.appendTo(selectmeses);
+		}
+		if (mesInicial<=9 && mesFinal>=9){
+			option = $('<option/>').val("9").text("Septiembre");
+			option.appendTo(selectmeses);
+		}
+		if (mesInicial<=10 && mesFinal>=10){
+			option = $('<option/>').val("10").text("Octubre");
+			option.appendTo(selectmeses);
+		}
+		if (mesInicial<=11 && mesFinal>=11) {
+			option = $('<option/>').val("11").text("Noviembre");
+			option.appendTo(selectmeses);
+		}
+		if (mesInicial<=12 && mesFinal>=12) {
+			option = $('<option/>').val("12").text("Diciembre");
+			option.appendTo(selectmeses);
+		}
+		var messeleccionado = selected.getMonth()+1;
+		if ((messeleccionado<mesInicial) || (messeleccionado>mesFinal)){
+			messeleccionado=mesInicial;
+		}
+		selectmeses.val(messeleccionado);
+	}
+}
+
+function adddiastimes(data,seldia,selected) {
+	if ($(seldia).length) {
+		var selectdias= $(seldia);
+		selectdias.empty();
+		var fechaA = data["MinX"].split("-");
+		var minXdistValor = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
+		var fechaB = data["MaxX"].split("-");
+		var maxXdistValor = new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
+		var aniostart = minXdistValor.getFullYear();
+		var anioend = maxXdistValor.getFullYear();
+		var diaInicial=1;
+		var diaFinal= (new Date(selected.getFullYear(),selected.getMonth()+1, 0)).getDate() ;
+		if (selected.getFullYear()==minXdistValor.getFullYear() && selected.getMonth()+1==minXdistValor.getMonth()+1) {
+			diaInicial = minXdistValor.getDate();
+		}
+		if (selected.getFullYear()==maxXdistValor.getFullYear() && selected.getMonth()+1==maxXdistValor.getMonth()+1) {
+			diaFinal = maxXdistValor.getDate();
+		}
+		var option = $('<option/>').val("").text("Día").attr('disabled','disabled');
+		option.appendTo(selectdias);
+		for (var i=diaInicial ; i<=diaFinal; i++) {
+			option = $('<option/>').val(i).text(i);
+			option.appendTo(selectdias);
+		};
+		var diaseleccionado = selected.getDate();
+		if ((diaseleccionado<diaInicial) || (diaseleccionado>diaFinal)){
+			diaseleccionado=diaInicial;
+		}
+		selectdias.val(diaseleccionado);
+	}
+}
+
+function addtrimestretimes(data,seltrimestre,selected) {
+	if ($(seltrimestre).length) {
+		var selecttrimestre = $(seltrimestre);
+		selecttrimestre.empty();
+		var fechaA = data["MinX"].split("-");
+		var minXdistValor = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
+		var fechaB = data["MaxX"].split("-");
+		var maxXdistValor = new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
+		var periodoInicial = 1;
+		var periodoFinal = 10;
+		var aniostart = minXdistValor.getFullYear();
+		var anioend = maxXdistValor.getFullYear();
+		if (aniostart==selected.getFullYear()) {
+			periodoInicial = minXdistValor.getMonth() + 1 ;
+		} 
+		if (anioend==selected.getFullYear()){
+			periodoFinal = maxXdistValor.getMonth() + 1 ;
+		} 
+		var option = $('<option/>').val("").text("Trimestre").attr('disabled','disabled');
+		option.appendTo(selecttrimestre);
+		if (periodoInicial<=1 && periodoFinal>=1) {
+			option = $('<option/>').val("1").text("I");
+			option.appendTo(selecttrimestre);
+		}
+		if (periodoInicial<=4 && periodoFinal>=4) {
+			option = $('<option/>').val("4").text("II");
+			option.appendTo(selecttrimestre);
+		}
+		if (periodoInicial<=7 && periodoFinal>=7) {
+			option = $('<option/>').val("7").text("III");
+			option.appendTo(selecttrimestre);
+		}
+		if (periodoInicial<=10 && periodoFinal>=10) {
+			option = $('<option/>').val("10").text("IV");
+			option.appendTo(selecttrimestre);
+		}
+		//
+		var trimestreseleccionado = selected.getMonth()+1;
+		if ((trimestreseleccionado<periodoInicial) || (trimestreseleccionado>periodoFinal)){
+			trimestreseleccionado=periodoInicial;
+		}
+		selecttrimestre.val(""+trimestreseleccionado+"");
+	}
+}
+
+function addsemestretimes(data,selsemestre,selected) {
+	if ($(selsemestre).length) {
+		var selectsemestre = $(selsemestre);
+		selectsemestre.empty();
+		var fechaA = data["MinX"].split("-");
+		var minXdistValor = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
+		var fechaB = data["MaxX"].split("-");
+		var maxXdistValor = new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
+		var periodoInicial = 1;
+		var periodoFinal = 7;
+		var aniostart = minXdistValor.getFullYear();
+		var anioend = maxXdistValor.getFullYear();
+		if (aniostart==selected.getFullYear()) {
+			periodoInicial = minXdistValor.getMonth() + 1 ;
+		} 
+		if (anioend==selected.getFullYear()){
+			periodoFinal = maxXdistValor.getMonth() + 1 ;
+		} 
+		var option = $('<option/>').val("").text("Semestre").attr('disabled','disabled');
+		option.appendTo(selectsemestre);
+		if (periodoInicial<=1 && periodoFinal>=1) {
+			option = $('<option/>').val("1").text("I");
+			option.appendTo(selectsemestre);
+		}
+		if (periodoInicial<=7 && periodoFinal>=7) {
+			option = $('<option/>').val("7").text("II");
+			option.appendTo(selectsemestre);
+		}
+		var semestreseleccionado = selected.getMonth()+1;
+		if ((semestreseleccionado<periodoInicial) || (semestreseleccionado>periodoFinal)){
+			semestreseleccionado=periodoInicial;
+		}
+		selectsemestre.val(""+semestreseleccionado+"");
+	}
+}
+
+function changedatesselectedstimes(componente,data) {
+	
+	var anio1,mes1,dia1,trimestre1,semestre1;
+	
+	//Primer y ultimo valor de año
+	var selAnio1 = document.getElementById(componente+"_sel_anio");
+	var lastValue = selAnio1.options[selAnio1.options.length - 1].value;
+	
+	//Primer y ultimo valor de meses
+	var selMes1 = document.getElementById(componente+"_sel_mes");
+	if(selMes1 != null){
+		var lastMesValue = selMes1.options[selMes1.options.length - 1].value;
+	}
+		
+	////Primer y ultimo valor de días
+	var selDia1 = document.getElementById(componente+"_sel_dia");
+	if(selDia1 != null){
+		var lastDiaValue = selDia1.options[selDia1.options.length - 1].value;
+	}
+	
+	//Primer y ultimo valor de trimestre
+	var selQuarter1 = document.getElementById(componente+"_sel_trimestre");
+	if(selQuarter1 != null){
+		var lastTriValue = selQuarter1.options[selQuarter1.options.length - 1].value;
+	}
+	
+	//Primer y ultimo valor de año
+	var selSem1 = document.getElementById(componente+"_sel_semestre");
+	if(selSem1 != null){
+		var lastSemValue = selSem1.options[selSem1.options.length - 1].value;
+	}
+	
+	if ($("#"+componente+"_sel_anio").length) {
+		anio1 	= $("#"+componente+"_sel_anio").val();
+		if(anio1 == ""){
+			anio1 	= lastValue;
+		}
+	}
+	
+	if ($("#"+componente+"_sel_mes").length) {
+		mes1 	= $("#"+componente+"_sel_mes").val();
+		if(mes1 == ""){
+			mes1 = lastMesValue;
+		}
+		mes1 = mes1-1;
+		
+	}else{
+		mes1="0";
+	}
+	
+	if ($("#"+componente+"_sel_dia").length) {
+		dia1 	= $("#"+componente+"_sel_dia").val();
+		if(dia1 == ""){
+			dia1 = lastDiaValue;
+		}
+	}else {
+		dia1 ="01";
+	}
+	
+	if ($("#"+componente+"_sel_trimestre").length) {
+		var valor = $("#"+componente+"_sel_trimestre").val();
+		if(valor == ""){
+			valor 	= lastTriValue;
+		}
+		switch(valor) {
+			case "1":
+				mes1="0";
+				break;
+			case "4":
+				mes1="3";
+				break;
+			case "7":
+				mes1="6";
+				break;
+			case "10":
+				mes1="9";
+				break;
+			default:
+				mes1="01";
+		}
+		dia1 ="01";
+	}
+	
+	if ($("#"+componente+"_sel_semestre").length) {
+		var valor = $("#"+componente+"_sel_semestre").val();
+		
+		if(valor == ""){
+			valor = lastSemValue;
+		}
+		
+		switch(valor) {
+			case "1":
+				mes1="0";
+				break;
+			case "7":
+				mes1="6";
+				break;
+		}
+		
+		dia1 ="01";
+	}
+	
+	var selected = new Date(anio1,mes1,dia1); 
+	//
+	addaniotimes(data	,"#"+componente+"_sel_anio",selected);
+	addmesestimes(data	,"#"+componente+"_sel_mes",selected);
+	adddiastimes(data	,"#"+componente+"_sel_dia",selected);
+	addtrimestretimes(data	,"#"+componente+"_sel_trimestre",selected);
+	addsemestretimes(data	,"#"+componente+"_sel_semestre",selected);
+}
+
+function updatedatapieplottimesranges(leftplot,rigthplot,componente,divvalores,divcantidad,data,tipo,errormessage,chartvaloresid,chartcantidadid) {
+	var counta = 0;
+	var countb = 0;
+	var anio1,mes1,dia1,trimestre1,semestre1,anio1; 
+	/*****   *****/
+	var dateselected;
+	switch (tipo) {
+		case 1:
+			dateselected=getDateStartFromDiario(componente);
+			break;
+		case 2:
+			dateselected=getDateStartFromMensual(componente);
+			break;
+		case 3:
+			dateselected=getDateStartFromTrimestral(componente);
+			break;
+		case 4:
+			dateselected=getDateStartFromSemestral(componente);
+			break;
+		case 5:
+			dateselected=getDateStartFromAnual(componente);
+			break;
+	}//
+	var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
+	var datoscantidad = getDataFiltered(data["SerieCantidad"],dateselected);
+	
+	if (datosvalores[0].length && datoscantidad[0].length) {
+		$("#"+chartvaloresid).show();
+		$("#"+chartcantidadid).show();
+		$("[id*='"+errormessage+"']").empty();
+		leftplot.series[0].data = datosvalores[0];
+		leftplot.data[0]		= datosvalores[0];
+		var leftplot2 = leftplot;
+		leftplot.replot();
+		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftplot2,_NUMERICO);
+		document.getElementById(divvalores).innerHTML=legendavalores;
+		rigthplot.data[0] 		 = datoscantidad[0];
+		rigthplot.series[0].data = datoscantidad[0];
+		$("#"+divcantidad).empty();
+		var rigthplot2 = rigthplot;
+		rigthplot.replot();
+		var legendacantidades = createlegend("Cantidad de cheques", datoscantidad[1],rigthplot2,_ENTERO);
+		document.getElementById(divcantidad).innerHTML=legendacantidades;
+		//plot2.resetAxesScale();
+	} else {
+		$("#"+chartvaloresid).hide();
+		$("#"+chartcantidadid).hide();
+		$("[id*='"+errormessage+"']").empty();
+		$("[id*='"+errormessage+"'").append(brmensaje(mensageError, "error"));
+	}
+}
+
+function updatedCanjealCobro(leftplot,rigthplot,componente,divvalores,divcantidad,data,tipo,errormessage,chartvaloresid,chartcantidadid) {
+	
+	var counta = 0;
+	var countb = 0;
+	var anio1,mes1,dia1,trimestre1,semestre1,anio1; 
+	/*****   *****/
+	var dateselected;
+	switch (tipo) {
+		case 1:
+			dateselected=getDateStartFromDiario(componente);
+			break;
+		case 2:
+			dateselected=getDateStartFromMensual(componente);
+			break;
+		case 3:
+			dateselected=getDateStartFromTrimestral(componente);
+			break;
+		case 4:
+			dateselected=getDateStartFromSemestral(componente);
+			break;
+		case 5:
+			dateselected=getDateStartFromAnual(componente);
+			break;
+	}//
+	var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
+	var datoscantidad = getDataFiltered(data["SerieCantidad"],dateselected);
+	
+	if (datosvalores[0].length && datoscantidad[0].length) {
+		$("#"+chartvaloresid).show();
+		$("#"+chartcantidadid).show();
+		$("[id*='"+errormessage+"']").empty();
+		leftplot.series[0].data = datosvalores[0];
+		leftplot.data[0]		= datosvalores[0];
+		var leftplot2 = leftplot;
+		leftplot.replot();
+		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftplot2,_NUMERICO);
+		document.getElementById(divvalores).innerHTML=legendavalores;
+		rigthplot.data[0] 		 = datoscantidad[0];
+		rigthplot.series[0].data = datoscantidad[0];
+		$("#"+divcantidad).empty();
+		var rigthplot2 = rigthplot;
+		rigthplot.replot();
+		var legendacantidades = createlegend("Cantidad de cheques", datoscantidad[1],rigthplot2,_ENTERO);
+		document.getElementById(divcantidad).innerHTML=legendacantidades;
+		//plot2.resetAxesScale();
+	} else {
+		$("#"+chartvaloresid).hide();
+		$("#"+chartcantidadid).hide();
+		$("[id*='"+errormessage+"']").empty();
+		$("[id*='"+errormessage+"'").append(brmensaje(mensageError, "error"));
+	}
+}
+
+function changedatesselectedstrimestralestimes(comptrimestral1,comptrimestral2,data,slider) {
+	var anio1,mes1,dia1,trimestre1,semestre1,anio1; 
+	var anio2,mes2,dia2,trimestre2,semestre2,anio2;
+	
+	if ($("#"+comptrimestral1+"_sel_anio").length) {
+		anio1 	= $("#"+comptrimestral1+"_sel_anio").val();	
+	}
+	
+	if ($("#"+comptrimestral1+"_sel_trimestre").length) {
+		var valor = $("#"+comptrimestral1+"_sel_trimestre").val();
+		switch(valor) {
+			case "1":
+				mes1="0";
+				break;
+			case "4":
+				mes1="3";
+				break;
+			case "7":
+				mes1="6";
+				break;
+			case "10":
+				mes1="9";
+				break;
+		}
+	} else  {
+		mes1="0" 
+	}
+	
+	dia1 ="01";
+	
+	if ($("#"+comptrimestral2+"_sel_anio").length) {
+		anio2 	= $("#"+comptrimestral2+"_sel_anio").val();	
+	} else {
+		anio2 = "2010";
+	}
+	
+	if ($("#"+comptrimestral2+"_sel_trimestre").length) {
+		var valor = $("#"+comptrimestral2+"_sel_trimestre").val();
+		switch(valor) {
+			case "1":
+				mes2="0";
+				break;
+			case "4":
+				mes2="3";
+				break;
+			case "7":
+				mes2="6";
+				break;
+			case "10":
+				mes2="9";
+				break;
+		}
+	} else {
+		mes2="0";
+	}
+	dia2 ="01";
+	var inicio = new Date(anio1,mes1,dia1); 
+	var fin = new Date(anio2,mes2,dia2);
+	
+	addaniotimes(data	,"#"+comptrimestral1+"_sel_anio",inicio);
+	addtrimestretimes(data	,"#"+comptrimestral1+"_sel_trimestre",inicio);
+	addaniotimes(data	,"#"+comptrimestral2+"_sel_anio",fin);
+	addtrimestretimes(data	,"#"+comptrimestral2+"_sel_trimestre",fin);
+
+}
+
+function changedatesselectedssemestralestimes(compsemestral1,compsemestral2,data,slider) {
+	var anio1,mes1,dia1,trimestre1,semestre1,anio1; 
+	var anio2,mes2,dia2,trimestre2,semestre2,anio2;
+	
+	if ($("#"+compsemestral1+"_sel_anio").length) {
+		anio1 	= $("#"+compsemestral1+"_sel_anio").val();	
+	}
+	
+	if ($("#"+compsemestral1+"_sel_semestre").length) {
+		var valor = $("#"+compsemestral1+"_sel_semestre").val();
+		switch(valor) {
+			case "1":
+				mes1="0";
+				break;
+			case "7":
+				mes1="6";
+				break;
+		}
+	} else  {
+		mes1="0" 
+	}
+	
+	dia1 ="01";
+	
+	if ($("#"+compsemestral2+"_sel_anio").length) {
+		anio2 	= $("#"+compsemestral2+"_sel_anio").val();	
+	} else {
+		anio2 = "2010";
+	}
+	
+	if ($("#"+compsemestral2+"_sel_semestre").length) {
+		var valor = $("#"+compsemestral2+"_sel_semestre").val();
+		switch(valor) {
+			case "1":
+				mes2="0";
+				break;
+			case "7":
+				mes2="6";
+				break;
+		}
+	} else {
+		mes2="0";
+	}
+	dia2 ="01";
+	
+	var inicio = new Date(anio1,mes1,dia1); 
+	var fin = new Date(anio2,mes2,dia2);
+	//
+	addaniotimes(data	,"#"+compsemestral1+"_sel_anio",inicio);
+	addsemestretimes(data	,"#"+compsemestral1+"_sel_semestre",inicio);
+	addaniotimes(data	,"#"+compsemestral2+"_sel_anio",fin);
+	addsemestretimes(data	,"#"+compsemestral2+"_sel_semestre",fin);
+}
+
+function valuesPlotChangedTimes(dataSlider,controllerPlot,targetPlot,compdiario1,compdiario2,data,tipo) {
+	var minimo 	= dataSlider.values.min;
+	var maximo	= dataSlider.values.max;
+	
+	var xStart 	=(controllerPlot.axes.xaxis.u2p(minimo)).toFixed(2);
+	var xEnd	=(controllerPlot.axes.xaxis.u2p(maximo)).toFixed(2);
+	var xStart2 	=(targetPlot.axes.xaxis.u2p(minimo)).toFixed(2);
+	var xEnd2	=(targetPlot.axes.xaxis.u2p(maximo)).toFixed(2);
+	
+	var v = targetPlot;
+    var x = controllerPlot.plugins.cursor;
+    var z = x.zoomCanvas._ctx.canvas.height;
+    var q = x.zoomCanvas._ctx.canvas.width;
+    var w = v.axes;
+    var o_start = controllerPlot.plugins.cursor._zoom.start[0];
+    var o_end = controllerPlot.plugins.cursor._zoom.end[0];
+    var o_end=xEnd2;
+    var updateperiodo = dataSlider.updateperiodo;
+	x._zoom.zooming = true;
+	x._zoom.started = true;
+	x._zoom.start=[xStart2,1];
+	var gridEnd = {
+	    		x : xEnd2,
+	    		y : 1,
+	};
+	x._zoom.end = [xEnd2, 1];
+	x._zoom.gridpos = gridEnd;      
+	var dataEnd = {
+	    		xaxis: maximo,
+	    		yaxis: 1,
+	}
+	var t = x._zoom.datapos=dataEnd;
+	x._zoom.axes.start={
+		xaxis: minimo,
+		yaxis: 1,
+	}
+	x._zoom.axes.end={
+		xaxis: maximo,
+		yaxis: 1,
+	}
+	if (minimo instanceof Date) {
+		w.xaxis.tickInterval 	= getTickInterval(tipo);
+		w.xaxis.numberTicks 	= getTicks(minimo,maximo,tipo) ;
+	}
+	x.doZoom(gridEnd, dataEnd, v, x);
+    x._zoom.started = false;
+    x._zoom.zooming = false;
+    //$(document).unbind("mousemove.jqplotCursor", h);
+    if (document.onselectstart != undefined && x._oldHandlers.onselectstart != null) {
+        document.onselectstart = x._oldHandlers.onselectstart;
+        x._oldHandlers.onselectstart = null
+    }
+    if (document.ondrag != undefined && x._oldHandlers.ondrag != null) {
+        document.ondrag = x._oldHandlers.ondrag;
+        x._oldHandlers.ondrag = null
+    }
+    if (document.onmousedown != undefined && x._oldHandlers.onmousedown != null) {
+        document.onmousedown = x._oldHandlers.onmousedown;
+        x._oldHandlers.onmousedown = null
+    }
+}
+
+function valuesPlotChangedTimesHour(dataSlider,controllerPlot,targetPlot,compdiario1,compdiario2,data,tipo) {
+	var minimo 	= dataSlider.values.min;
+	var maximo	= dataSlider.values.max;
+	
+	var xStart 	=(controllerPlot.axes.xaxis.u2p(minimo)).toFixed(2);
+	var xEnd	=(controllerPlot.axes.xaxis.u2p(maximo)).toFixed(2);
+	var xStart2 =(targetPlot.axes.xaxis.u2p(minimo)).toFixed(2);
+	var xEnd2	=(targetPlot.axes.xaxis.u2p(maximo)).toFixed(2);
+	
+	var v = targetPlot;
+    var x = controllerPlot.plugins.cursor;
+    var z = x.zoomCanvas._ctx.canvas.height;
+    var q = x.zoomCanvas._ctx.canvas.width;
+    var w = v.axes;
+    var o_start = controllerPlot.plugins.cursor._zoom.start[0];
+    var o_end = controllerPlot.plugins.cursor._zoom.end[0];
+    var o_end=xEnd2;
+    var updateperiodo = dataSlider.updateperiodo;
+	x._zoom.zooming = true;
+	x._zoom.started = true;
+	x._zoom.start=[xStart2,1];
+	var gridEnd = {
+	    		x : xEnd2,
+	    		y : 1,
+	};
+	x._zoom.end = [xEnd2, 1];
+	x._zoom.gridpos = gridEnd;      
+	var dataEnd = {
+	    		xaxis: maximo,
+	    		yaxis: 1,
+	}
+	var diferencia = Math.abs(Math.round(maximo-minimo));
+	if (diferencia<=12) {
+		w.xaxis.numberTicks 	= diferencia+1;
+		w.xaxis.tickInterval 	= 1;
+		var alignTicks 				= true; 
+	}
+	var t = x._zoom.datapos=dataEnd;
+	x._zoom.axes.start={
+		xaxis: minimo,
+		yaxis: 1,
+	}
+	x._zoom.axes.end={
+		xaxis: maximo,
+		yaxis: 1,
+	}
+	x.doZoom(gridEnd, dataEnd, v, x);
+	x.doZoom(gridEnd, dataEnd, v, x);
+    x._zoom.started = false;
+    x._zoom.zooming = false;
+    if (document.onselectstart != undefined && x._oldHandlers.onselectstart != null) {
+        document.onselectstart = x._oldHandlers.onselectstart;
+        x._oldHandlers.onselectstart = null
+    }
+    if (document.ondrag != undefined && x._oldHandlers.ondrag != null) {
+        document.ondrag = x._oldHandlers.ondrag;
+        x._oldHandlers.ondrag = null
+    }
+    if (document.onmousedown != undefined && x._oldHandlers.onmousedown != null) {
+        document.onmousedown = x._oldHandlers.onmousedown;
+        x._oldHandlers.onmousedown = null
+    }
+}
+
+function formatter(tipo) {
+	switch (tipo) {
+		case 1: return "DIARIO" 
+		case 2: return "MENSUAL" 
+		case 3: return "TRIMESTRAL" 
+		case 4: return "SEMESTRAL" 
+		case 5: return "ANUAL" 
+	}
+}
+
+function formatterLabel(tipo,valor) {
+	var fecvar =  valor.split("-");
+	var anio = fecvar[0];
+	var mes = fecvar[1];
+	var dia = fecvar[2];
+	switch (tipo) {
+	case 1: return anio+"-"+mes+"-"+dia;
+	case 2: return anio+"-"+mes;
+	case 3: 
+	    var month = parseInt(mes);
+	    var year = parseInt(anio);
+	    var df =""+year;
+	    if (month<=2) {
+	    	df =  + df + "-I" ;
+	    } else if (month<=5) {
+	    	df = df + "-II" ;
+	    } else if (month<=8) {
+	    	df = df + "-III";
+	    } else {
+	    	df = df + "-IV";
+	    }
+	    return df;
+	case 4:
+	    var month = parseInt(mes);
+	    var year = parseInt(anio);
+	    var df =""+year;
+	    if	(month<=5) {
+	    	df =  + df + "-I" ;
+	    } else {
+	    	df = + df + "-II";
+	    }
+	    return df;
+	case 5:
+		return anio;
+	}
+}
+
+function getTickInterval(tipo) {
+	var mintickinterval;
+	switch (tipo){
+		case 1: mintickinterval="10 days";
+			break;
+		case 2: mintickinterval="1 month";
+			break;
+		case 3: mintickinterval="6 months";
+			break;
+		case 4: mintickinterval="12 months";
+			break;
+		case 5: mintickinterval="2 years";
+			break;
+	}
+	return mintickinterval	
+}
+
+function getTicks(min,max,tipo) {
+	var resultado;
+	switch (tipo) {
+	case 1:
+		 var dias = Math.abs(Math.round((min.getTime() - max.getTime())/(60*60*1000*24)));
+		 if (dias<=10) resultado=dias;
+		 else resultado = "10"
+		break;
+	case 2:
+		 var meses = Math.abs(Math.round((min.getTime() - max.getTime())/(60*60*1000*24*30)));
+		 if (meses<=10) resultado = meses;
+		 else resultado = "10"
+		break;
+	case 3:
+		 var trimestres = Math.abs(Math.round((min.getTime() - max.getTime())/(60*60*1000*24*90)));
+		 if (trimestres<=10) resultado = trimestres;
+		 else resultado=10;
+		break;
+	case 4:
+		 var semestres = Math.abs(Math.round((min.getTime() - max.getTime())/(60*60*1000*24*180)));
+		 if (semestres<=10) resultado = semestres;
+		 else resultado=10;
+		break;
+	case 5:
+		 var anios = Math.abs(min.getFullYear()-max.getFullYear());
+		 if (anios<=10) resultado = anios;
+		 else resultado=10;
+		break;
+	}
+	return resultado==1?2:resultado;
+} 
+
+var mensageError ="No hay datos para visualizar";
+
+function brmensaje(message, type){
+    return '<div class="ui-messages-' + type + ' ui-corner-all">'+
+        '<a href="#" class="ui-messages-close" onclick="$(this).parent().slideUp();return false;">'+
+            '<span class="ui-icon ui-icon-close" />'+
+        '</a>'+
+        '<span class="ui-messages-' + type + '-icon" />'+
+        '<ul>'+
+            '<li>'+
+                '<span class="ui-messages-' + type + '-summary">'+
+                message +
+                '</span>'+
+            '</li>'+
+        '</ul>'+
+    '</div>';
+};
+
+var formatNumber = {
+	separador: ".", // separador para los miles
+	sepDecimal: ',', // separador para los decimales
+	formatear:function (num,decimales){
+		
+					//numero de decimales.
+					num=Number(num).toFixed(decimales)
+					num +='';
+					var splitStr = num.split('.');
+					var splitLeft = splitStr[0];
+					var splitRight = splitStr.length > 1 ? this.sepDecimal + splitStr[1] : '';
+					var regx = /(\d+)(\d{3})/;
+					while (regx.test(splitLeft)) {
+						splitLeft = splitLeft.replace(regx, '$1' + this.separador + '$2');
+					}
+					return this.simbol + splitLeft +splitRight;
+		 	},
+	new:function(num, decimales,simbol){
+		 this.simbol = simbol ||'';
+		 return this.formatear(num,decimales);
+	}
+}
+
+function createlegend(titulo,valor,plot,tipodatototal) {
+	
+	var numero;
+	if (tipodatototal==_ENTERO) {//entero
+		numero = formatNumber.new(valor,0);
+	} if (tipodatototal==2) {//porcentaje
+		numero = Number(valor*100).toFixed(3);
+	} else if  (tipodatototal==_NUMERICO) {
+		numero = formatNumber.new(valor,3);
+	}
+	var line="<center><table class=\"custompielegendparent\">	"+
+	 	 " 	<tr> 									"+
+		 "		<td style=\"Wid100\" colspan=\"3\">	"+
+  		 "		<div class=\"NoWrap\">				"+
+  		 "			<div class=\"custompielegen\">	"+
+  		 "				<div>"+titulo+"</div> "+
+  		 "			</div>							"+ 
+  		 "			<div class=\"FloatRigth\">Total " + numero + "</div>"+
+  		 "		</div>								" +
+		 "		</td>								" +	
+		 "	</tr>									" ;
+	if (plot.data[0].length) {
+		for (var i=0; i<plot.data[0].length;i++) {
+			var porcentaje;
+			//if(parseFloat(plot.data[0][i][1]) < parseFloat(0.001)){
+				//var porcentaje = Number((parseFloat(plot.data[0][i][1])*100)).toFixed(3)
+			var porcentaje = Number((parseFloat(plot.data[0][i][1])*100)).toFixed(3).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+			/*}else{
+				var porcentaje = Number(plot.data[0][i][1]*100).toFixed(3);
+			}*/
+			
+			line=line +"<tr style=\"color: #535353 !important;\"> 									";
+			line=line +"    <td style='background: "+ plot.seriesColors[i] +"; border-top: 4px solid white !important; border-bottom: 4px solid white !important; margin-left: 10px !important'>";
+			line=line +"    </td>														"
+			line=line +"    <td>".concat(plot.data[0][i][0]);
+			line=line +"    </td>														"
+			line=line +"    <td style='text-align: right;'>".concat( porcentaje ) +"%"; 
+			line=line +"    </td>														"
+			line=line + "</tr></center>													";
+		}
+	}
+	line=line +	 " </table>	" ;
+	return line;
+}
+
+function getDataFiltered(datos,dateselected) {
+	
+	var datasel=[];
+	var datossumados=[];
+	var totalesParse=[];
+	var j=0;
+	var totalS=0;
+	var totales			=0;
+	for (var i=0; i<datos.length; i++) {
+		if (datos[i][1]==dateselected) {
+			datasel[j]=new Array(datos[i][2],datos[i][3])
+		   totales = parseFloat(totales + datos[i][4]);
+		  
+		   datossumados[j]=new Array(datos[i][2],datos[i][4],datos[i][3])
+		   totalS= totalS + 1;
+			j++;
+		}
+	}
+	
+	var datosseleccionados = [[]];
+	datosseleccionados[0] = datasel;
+	datosseleccionados[1] = totales;
+	var totalvalorsumado = totalS;
+	
+	return datosseleccionados;
+}
+
+/**
+ * COMPENSACION CHEQUES CANJE
+ **/
+
+function scroll (){
+	 var ua = window.navigator.userAgent;
+	    var msie = ua.indexOf("MSIE ");
+	 if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))  // If Internet Explorer, return version number
+	    {
+		
+		 try 
+		 { 
+			 var bodyheight = document.getElementById('vcanje_chartvalores').clientHeight;
+			 var bodyheight2 = document.getElementById('vdevol_chartvalores').clientHeight;
+			
+		 }
+		 catch(err){
+			var bodyheight2 = 0;
+		 }
+		 
+		 if (bodyheight > 0  ) {
+			var boyheight2 = boyheight2 -50; 
+				window.scrollTo(0,bodyheight);
+		 }
+			
+	    }else {
+	    	window.scrollTo(0,333);
+	    	
+	    }
+}
+
+function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza,label,errormessage){
+	var targetPlot,controllerPlot,idMini,idDivSlider,data;
+	try {
+		data =  RestCompensacionServices.getCompensacionDiaria({'tipodeplaza':tipodeplaza});
+		
+		/* PIE VALORES */
+		$("#"+chartvalores).empty();
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		startvaluescomponentstimes (null,compdiario1,data,_DIARIO);
+		$("#"+chartvalores)[0].setAttribute("class","");
+		var chartvaloresid=chartvalores+"_chart"; 
+		var divchart = document.createElement('div');
+		divchart.style="chartcustom"
+		divchart.id=chartvaloresid;
+		document.getElementById(chartvalores).appendChild(divchart);
+		var datasel = [[]];
+		var dateselected = data["endX"];
+		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
+		var leftPlot 		= createplotpieleft ( chartvaloresid		,	datosvalores[0] , _DIARIO);
+		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
+		var divlegendvalores = document.createElement('div');
+		var divlegendvaloresid=chartvalores+"_legend"
+		divlegendvalores.id=divlegendvaloresid;
+		divlegendvalores.innerHTML=legendavalores;
+		document.getElementById(chartvalores).appendChild(divlegendvalores);
+		/* PIE CANTIDAD */
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		$("#"+chartcantidad)[0].setAttribute("class","");
+		var chartcantidadid=chartcantidad+"_chart"; 
+		var divchartcant = document.createElement('div');
+		//divchartcant.style="chartcustom"
+		divchartcant.id=chartcantidadid;
+		document.getElementById(chartcantidad).appendChild(divchartcant);
+		var datoscantidades = getDataFiltered(data["SerieCantidad"],dateselected);
+		var rigthPlot 		= createplotpieright ( chartcantidadid		,	datoscantidades[0] , _DIARIO);
+		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
+		var divlegendcantidad = document.createElement('div');
+		var divlegendcantidadid=chartcantidad+"_legend"
+		divlegendcantidad.id=divlegendcantidadid;
+		divlegendcantidad.innerHTML=legendacantidad;
+		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
+		
+		var dateend 	= data["MaxX"].split("-");;
+		dateend			= new Date(dateend[0],(parseInt(dateend[1])-1),dateend[2]);
+		
+		var selanio2    	= '#'+compdiario1+"_sel_anio";
+		var selmes2 		= '#'+compdiario1+"_sel_mes";
+		var seldia2 		= '#'+compdiario1+"_sel_dia";
+		var seltrimestre2 	= '#'+compdiario1+"_sel_trimestre";
+		var selsemestre2 	= '#'+compdiario1+"_sel_semestre";
+		addaniotimes(data,selanio2,dateend);
+		addmesestimes(data,selmes2,dateend);
+		adddiastimes(data,seldia2,dateend);
+		addtrimestretimes(data,seltrimestre2,dateend);
+		addsemestretimes(data,selsemestre2,dateend);
+		
+		scroll();
+		
+		$("#"+compdiario1+"_sel_anio").unbind();
+		$("#"+compdiario1+"_sel_anio").change(function(evt) {
+			changedatesselectedstimes(compdiario1,data);
+			updatedCanjealCobro(leftPlot,rigthPlot,compdiario1,divlegendvaloresid,divlegendcantidadid,data,_DIARIO,errormessage,chartvalores,chartcantidad);
+		});
+		$("#"+compdiario1+"_sel_mes").unbind();
+		$("#"+compdiario1+"_sel_mes").change(function(evt) {
+			changedatesselectedstimes(compdiario1,data);
+			updatedCanjealCobro(leftPlot,rigthPlot,compdiario1,divlegendvaloresid,divlegendcantidadid,data,_DIARIO,errormessage,chartvalores,chartcantidad);
+		});
+		
+		$("#"+compdiario1+"_sel_dia").unbind();
+		$("#"+compdiario1+"_sel_dia").change(function(evt) {
+			changedatesselectedstimes(compdiario1,data);
+			updatedCanjealCobro(leftPlot,rigthPlot,compdiario1,divlegendvaloresid,divlegendcantidadid,data,_DIARIO,errormessage,chartvalores,chartcantidad);
+		});
+	} catch (err) {
+		if (logerrors) console.log(err);
+		$("[id*='"+errormessage+"'").show();
+		$("[id*='"+errormessage+"']").empty();
+		$("[id*='"+errormessage+"'").append(brmensaje(mensageError, "error"));
+	}
+};
+
+function createChartMinMensual(chartvalores,chartcantidad,compmensual1,tipodeplaza,label,errormessage){
+	var targetPlot,controllerPlot,idMini,idDivSlider,data;
+	try {
+		data =  RestCompensacionServices.getCompensacionMensual({'tipodeplaza':tipodeplaza});
+		
+		/* PIE VALORES */
+		$("#"+chartvalores).empty();
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		startvaluescomponentstimes (null,compmensual1,data,_MENSUAL);
+		$("#"+chartvalores)[0].setAttribute("class","");
+		var chartvaloresid=chartvalores+"_chart"; 
+		var divchart = document.createElement('div');
+		divchart.style="chartcustom"
+		divchart.id=chartvaloresid;
+		document.getElementById(chartvalores).appendChild(divchart);
+		var datasel = [[]];
+		var dateselected = data["endX"];
+		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
+		var leftPlot 		= createplotpieleft ( chartvaloresid		,	datosvalores[0] , _MENSUAL);
+		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
+		var divlegendvalores = document.createElement('div');
+		var divlegendvaloresid=chartvalores+"_legend"
+		divlegendvalores.id=divlegendvaloresid;
+		divlegendvalores.innerHTML=legendavalores;
+		document.getElementById(chartvalores).appendChild(divlegendvalores);
+		/* PIE CANTIDAD */
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		$("#"+chartcantidad)[0].setAttribute("class","");
+		var chartcantidadid=chartcantidad+"_chart"; 
+		var divchartcant = document.createElement('div');
+		//divchartcant.style="chartcustom"
+		divchartcant.id=chartcantidadid;
+		document.getElementById(chartcantidad).appendChild(divchartcant);
+		var datoscantidades = getDataFiltered(data["SerieCantidad"],dateselected);
+		var rigthPlot 		= createplotpieright ( chartcantidadid		,	datoscantidades[0] , _MENSUAL);
+		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
+		var divlegendcantidad = document.createElement('div');
+		var divlegendcantidadid=chartcantidad+"_legend"
+		divlegendcantidad.id=divlegendcantidadid;
+		divlegendcantidad.innerHTML=legendacantidad;
+		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
+		
+		var dateend 	= data["MaxX"].split("-");;
+		dateend			= new Date(dateend[0],(parseInt(dateend[1])-1),dateend[2]);
+		
+		var selanio2    	= '#'+compmensual1+"_sel_anio";
+		var selmes2 		= '#'+compmensual1+"_sel_mes";
+		var seldia2 		= '#'+compmensual1+"_sel_dia";
+		var seltrimestre2 	= '#'+compmensual1+"_sel_trimestre";
+		var selsemestre2 	= '#'+compmensual1+"_sel_semestre";
+		addaniotimes(data,selanio2,dateend);
+		addmesestimes(data,selmes2,dateend);
+		adddiastimes(data,seldia2,dateend);
+		addtrimestretimes(data,seltrimestre2,dateend);
+		addsemestretimes(data,selsemestre2,dateend);
+		
+		scroll();
+		
+		$("#"+compmensual1+"_sel_anio").unbind();
+		$("#"+compmensual1+"_sel_anio").change(function(evt) {
+			changedatesselectedstimes(compmensual1,data);
+			updatedCanjealCobro(leftPlot,rigthPlot,compmensual1,divlegendvaloresid,divlegendcantidadid,data,_MENSUAL,errormessage,chartvalores,chartcantidad);
+		});
+		
+		$("#"+compmensual1+"_sel_mes").unbind();
+		$("#"+compmensual1+"_sel_mes").change(function(evt) {
+			changedatesselectedstimes(compmensual1,data);
+			updatedCanjealCobro(leftPlot,rigthPlot,compmensual1,divlegendvaloresid,divlegendcantidadid,data,_MENSUAL,errormessage,chartvalores,chartcantidad);
+		});
+	} catch (err) {
+		if (logerrors) console.log(err);
+		$("[id*='"+errormessage+"'").show();
+		$("[id*='"+errormessage+"']").empty();
+		$("[id*='"+errormessage+"'").append(brmensaje(mensageError, "error"));
+	}		
+};
+
+function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tipodeplaza,label,errormessage){
+	var targetPlot,controllerPlot,idMini,idDivSlider,data;
+	try {
+		data =  RestCompensacionServices.getCompensacionTrimestral({'tipodeplaza':tipodeplaza});
+		
+		/* PIE VALORES */
+		$("#"+chartvalores).empty();
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		startvaluescomponentstimes (null,comptrimestral1,data,_TRIMESTRAL);
+		$("#"+chartvalores)[0].setAttribute("class","");
+		var chartvaloresid=chartvalores+"_chart"; 
+		var divchart = document.createElement('div');
+		divchart.style="chartcustom"
+		divchart.id=chartvaloresid;
+		document.getElementById(chartvalores).appendChild(divchart);
+		var datasel = [[]];
+		var dateselected = data["endX"];
+		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
+		var leftPlot 		= createplotpieleft ( chartvaloresid		,	datosvalores[0] , _TRIMESTRAL);
+		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
+		var divlegendvalores = document.createElement('div');
+		var divlegendvaloresid=chartvalores+"_legend"
+		divlegendvalores.id=divlegendvaloresid;
+		divlegendvalores.innerHTML=legendavalores;
+		document.getElementById(chartvalores).appendChild(divlegendvalores);
+		/* PIE CANTIDAD */
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		$("#"+chartcantidad)[0].setAttribute("class","");
+		var chartcantidadid=chartcantidad+"_chart"; 
+		var divchartcant = document.createElement('div');
+		//divchartcant.style="chartcustom"
+		divchartcant.id=chartcantidadid;
+		document.getElementById(chartcantidad).appendChild(divchartcant);
+		var datoscantidades = getDataFiltered(data["SerieCantidad"],dateselected);
+		var rigthPlot 		= createplotpieright ( chartcantidadid		,	datoscantidades[0] , _TRIMESTRAL);
+		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
+		var divlegendcantidad = document.createElement('div');
+		var divlegendcantidadid=chartcantidad+"_legend"
+		divlegendcantidad.id=divlegendcantidadid;
+		divlegendcantidad.innerHTML=legendacantidad;
+		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
+		
+		var dateend 	= data["MaxX"].split("-");;
+		dateend			= new Date(dateend[0],(parseInt(dateend[1])-1),dateend[2]);
+		
+		var selanio2    	= '#'+comptrimestral1+"_sel_anio";
+		var selmes2 		= '#'+comptrimestral1+"_sel_mes";
+		var seldia2 		= '#'+comptrimestral1+"_sel_dia";
+		var seltrimestre2 	= '#'+comptrimestral1+"_sel_trimestre";
+		var selsemestre2 	= '#'+comptrimestral1+"_sel_semestre";
+		addaniotimes(data,selanio2,dateend);
+		addmesestimes(data,selmes2,dateend);
+		adddiastimes(data,seldia2,dateend);
+		addtrimestretimes(data,seltrimestre2,dateend);
+		addsemestretimes(data,selsemestre2,dateend);
+		
+		scroll();
+		
+		$("#"+comptrimestral1+"_sel_anio").unbind();
+		$("#"+comptrimestral1+"_sel_anio").change(function(evt) {
+			changedatesselectedstimes(comptrimestral1,data);
+			updatedCanjealCobro(leftPlot,rigthPlot,comptrimestral1,divlegendvaloresid,divlegendcantidadid,data,_TRIMESTRAL,errormessage,chartvalores,chartcantidad);
+		});
+		
+		$("#"+comptrimestral1+"_sel_trimestre").unbind();
+		$("#"+comptrimestral1+"_sel_trimestre").change(function(evt) {
+			changedatesselectedstimes(comptrimestral1,data);
+			updatedCanjealCobro(leftPlot,rigthPlot,comptrimestral1,divlegendvaloresid,divlegendcantidadid,data,_TRIMESTRAL,errormessage,chartvalores,chartcantidad);
+		});
+	} catch (err) {
+		if (logerrors) console.log(err);
+		$("[id*='"+errormessage+"'").show();
+		$("[id*='"+errormessage+"']").empty();
+		$("[id*='"+errormessage+"'").append(brmensaje(mensageError, "error"));
+	}
+}
+
+function createChartMinSemestral(chartvalores,chartcantidad,compsemestral1,tipodeplaza,label,errormessage){
+	var targetPlot,controllerPlot,idMini,idDivSlider,data;
+	try {
+		data =  RestCompensacionServices.getCompensacionSemestral({'tipodeplaza':tipodeplaza});
+		
+		/* PIE VALORES */
+		$("#"+chartvalores).empty();
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		startvaluescomponentstimes (null,compsemestral1,data,_SEMESTRAL);
+		$("#"+chartvalores)[0].setAttribute("class","");
+		var chartvaloresid=chartvalores+"_chart"; 
+		var divchart = document.createElement('div');
+		divchart.style="chartcustom"
+		divchart.id=chartvaloresid;
+		document.getElementById(chartvalores).appendChild(divchart);
+		var datasel = [[]];
+		var dateselected = data["endX"];
+		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
+		var leftPlot 		= createplotpieleft ( chartvaloresid		,	datosvalores[0] , _SEMESTRAL);
+		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
+		var divlegendvalores = document.createElement('div');
+		var divlegendvaloresid=chartvalores+"_legend"
+		divlegendvalores.id=divlegendvaloresid;
+		divlegendvalores.innerHTML=legendavalores;
+		document.getElementById(chartvalores).appendChild(divlegendvalores);
+		/* PIE CANTIDAD */
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		$("#"+chartcantidad)[0].setAttribute("class","");
+		var chartcantidadid=chartcantidad+"_chart"; 
+		var divchartcant = document.createElement('div');
+		//divchartcant.style="chartcustom"
+		divchartcant.id=chartcantidadid;
+		document.getElementById(chartcantidad).appendChild(divchartcant);
+		var datoscantidades = getDataFiltered(data["SerieCantidad"],dateselected);
+		var rigthPlot 		= createplotpieright ( chartcantidadid		,	datoscantidades[0] , _SEMESTRAL);
+		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
+		var divlegendcantidad = document.createElement('div');
+		var divlegendcantidadid=chartcantidad+"_legend"
+		divlegendcantidad.id=divlegendcantidadid;
+		divlegendcantidad.innerHTML=legendacantidad;
+		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
+		
+		var dateend 	= data["MaxX"].split("-");;
+		dateend			= new Date(dateend[0],(parseInt(dateend[1])-1),dateend[2]);
+		
+		var selanio2    	= '#'+compsemestral1+"_sel_anio";
+		var selmes2 		= '#'+compsemestral1+"_sel_mes";
+		var seldia2 		= '#'+compsemestral1+"_sel_dia";
+		var seltrimestre2 	= '#'+compsemestral1+"_sel_trimestre";
+		var selsemestre2 	= '#'+compsemestral1+"_sel_semestre";
+		addaniotimes(data,selanio2,dateend);
+		addmesestimes(data,selmes2,dateend);
+		adddiastimes(data,seldia2,dateend);
+		addtrimestretimes(data,seltrimestre2,dateend);
+		addsemestretimes(data,selsemestre2,dateend);
+		
+		scroll();
+		
+		$("#"+compsemestral1+"_sel_anio").unbind();
+		$("#"+compsemestral1+"_sel_anio").change(function(evt) {
+			changedatesselectedstimes(compsemestral1,data);
+			updatedCanjealCobro(leftPlot,rigthPlot,compsemestral1,divlegendvaloresid,divlegendcantidadid,data,_SEMESTRAL,errormessage,chartvalores,chartcantidad);
+		});
+		
+		$("#"+compsemestral1+"_sel_semestre").unbind();
+		$("#"+compsemestral1+"_sel_semestre").change(function(evt) {
+			changedatesselectedstimes(compsemestral1,data);
+			updatedCanjealCobro(leftPlot,rigthPlot,compsemestral1,divlegendvaloresid,divlegendcantidadid,data,_SEMESTRAL,errormessage,chartvalores,chartcantidad);
+		});
+		
+	} catch (err) {
+		if (logerrors) console.log(err);
+		$("[id*='"+errormessage+"'").show();
+		$("[id*='"+errormessage+"']").empty();
+		$("[id*='"+errormessage+"'").append(brmensaje(mensageError, "error"));
+	}
+}
+
+function getDataFiltereCompensacion(datos,dateselected) {
+	
+	var datasel=[];
+	var datossumados=[];
+	var totalesParse=[];
+	var j=0;
+	var totalS=0;
+	var totales=0;
+	
+	for (var i=0; i<datos.length; i++) {
+		if (datos[i].ejex==dateselected) {
+			
+			datasel[j]=new Array(datos[i].ciudad,datos[i].valorPorcentaje)
+		    totales = parseFloat(totales + datos[i].serieValor);
+		  
+		    datossumados[j]=new Array(datos[i].ciudad,datos[i].serieValor,datos[i].valorPorcentaje)
+		    totalS= totalS + 1;
+			j++;
+		}
+	}
+	
+	var datosseleccionados = [[]];
+	datosseleccionados[0] = datasel;
+	datosseleccionados[1] = totales;
+	var totalvalorsumado = totalS;
+	
+	return datosseleccionados;
+}
+
+function createChartMinAnual(chartvalores,chartcantidad,companual1,tipodeplaza,label,errormessage){
+	var targetPlot,controllerPlot,idMini,idDivSlider,data;
+	try {
+		data =  RestCompensacionServices.getCompensacionAnual({'tipodeplaza':tipodeplaza});
+		
+		
+		/* PIE VALORES */
+		$("#"+chartvalores).empty();
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		startvaluescomponentstimes (null,companual1,data,_ANUAL);
+		$("#"+chartvalores)[0].setAttribute("class","");
+		var chartvaloresid=chartvalores+"_chart"; 
+		var divchart = document.createElement('div');
+		divchart.style="chartcustom"
+		divchart.id=chartvaloresid;
+		document.getElementById(chartvalores).appendChild(divchart);
+		var datasel = [[]];
+		var dateselected = data["endX"];
+		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
+		
+		var leftPlot 		= createplotpieleft ( chartvaloresid		,	datosvalores[0] , _ANUAL);
+		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
+		var divlegendvalores = document.createElement('div');
+		var divlegendvaloresid=chartvalores+"_legend"
+		divlegendvalores.id=divlegendvaloresid;
+		divlegendvalores.innerHTML=legendavalores;
+		document.getElementById(chartvalores).appendChild(divlegendvalores);
+		/* PIE CANTIDAD */
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		$("#"+chartcantidad)[0].setAttribute("class","");
+		var chartcantidadid=chartcantidad+"_chart"; 
+		var divchartcant = document.createElement('div');
+		//divchartcant.style="chartcustom"
+		divchartcant.id=chartcantidadid;
+		document.getElementById(chartcantidad).appendChild(divchartcant);
+		
+		var datoscantidades = getDataFiltered(data["SerieCantidad"],dateselected);
+		var rigthPlot 		= createplotpieright ( chartcantidadid		,	datoscantidades[0] , _ANUAL);
+		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
+		var divlegendcantidad = document.createElement('div');
+		var divlegendcantidadid=chartcantidad+"_legend"
+		divlegendcantidad.id=divlegendcantidadid;
+		divlegendcantidad.innerHTML=legendacantidad;
+		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
+		
+		var dateend 	= data["MaxX"].split("-");;
+		dateend			= new Date(dateend[0],(parseInt(dateend[1])-1),dateend[2]);
+		
+		var selanio2    	= '#'+companual1+"_sel_anio";
+		var selmes2 		= '#'+companual1+"_sel_mes";
+		var seldia2 		= '#'+companual1+"_sel_dia";
+		var seltrimestre2 	= '#'+companual1+"_sel_trimestre";
+		var selsemestre2 	= '#'+companual1+"_sel_semestre";
+		addaniotimes(data,selanio2,dateend);
+		addmesestimes(data,selmes2,dateend);
+		adddiastimes(data,seldia2,dateend);
+		addtrimestretimes(data,seltrimestre2,dateend);
+		addsemestretimes(data,selsemestre2,dateend);
+		
+		scroll();
+		
+		$("#"+companual1+"_sel_anio").unbind();
+		$("#"+companual1+"_sel_anio").change(function(evt) {
+			changedatesselectedstimes(companual1,data);
+			updatedCanjealCobro(leftPlot,rigthPlot,companual1,divlegendvaloresid,divlegendcantidadid,data,_ANUAL,errormessage,chartvalores,chartcantidad);
+		});
+	} catch (err) {
+		if (logerrors) console.log(err);
+		$("[id*='"+errormessage+"'").show();
+		$("[id*='"+errormessage+"']").empty();
+		$("[id*='"+errormessage+"'").append(brmensaje(mensageError, "error"));
+	}
+	
+};
+
+function createplotpieleft (name,data,tipo) {
+ 	$.jqplot.sprintf.thousandsSeparator = '.';
+	$.jqplot.sprintf.decimalMark = ',';
+	var plot2 = $.jqplot(name, [data] , {
+		seriesColors:['#006fb9','#ffce00','#cc003a','#EAA228','#c5b47f','#579575','#839557','#958c12','#953579','#4b5de4','#26B4E3','#d8b83f','#ff5800','#0085cc','#c747a3','#cddf54','#FBD178','#26B4E3','#f9d4de'],
+		seriesDefaults:{ 
+			renderer:$.jqplot.PieRenderer,
+			showMarker: true, 
+			rendererOptions: {
+				smooth: false,
+				fillToZero: true,
+				varyBarColor: true,
+				barMargin: 1,
+				shadowDepth: 5,
+				showDataLabels: true,
+				dataLabelFormatString: '%.3f%'
+			},
+            animation: {
+                show: false
+            },
+        },
+	    grid: {
+    		background : 'rgba(255, 255, 255, 0.01)',
+    		borderColor : '#eeeeee',
+    		gridLineColor : '#F5F5F5',
+    		shadow : false,
+    		drawBorder : false,
+    		gridLineWidth : 0.8,
+    		borderWidth: 0.8,
+    		left: "0",
+    		
+        },
+        legend: {
+        	dataLabelFormatString: '%.3f%'
+        },
+	});
+	return plot2;
+}
+
+function createplotpieright (name,data,tipo) {
+ 	$.jqplot.sprintf.thousandsSeparator = '.';
+	$.jqplot.sprintf.decimalMark = ',';
+	var plot2 = $.jqplot(name, [data] , {
+		seriesColors:['#95288f','#ffce00','#0097ac','#EAA228','#c5b47f','#579575','#839557','#958c12','#953579','#4b5de4','#26B4E3','#d8b83f','#ff5800','#0085cc','#c747a3','#cddf54','#FBD178','#26B4E3','#f9d4de'],
+		seriesDefaults:{ 
+			renderer:$.jqplot.PieRenderer,
+			showMarker: true, 
+			rendererOptions: {
+				smooth: false,
+				fillToZero: true,
+				varyBarColor: true,
+				barMargin: 1,
+				shadowDepth: 5,
+				showDataLabels: true,
+				dataLabelFormatString: '%.3f%'
+			},
+            animation: {
+                show: false
+            },
+        },
+	    grid: {
+    		background : '#ffffff',
+    		borderColor : '#eeeeee',
+    		gridLineColor : '#F5F5F5',
+    		shadow : false,
+    		drawBorder : false,
+    		gridLineWidth : 0.8,
+    		borderWidth: 0.8,
+    		left: "0",
+        },
+	});
+	return plot2;
+}
+
+
+
+/**
+ * COMPENSACION CHEQUES DEVOLUCIONES
+ **/
+
+function scroll2 (){
+
+	 var ua = window.navigator.userAgent;
+	    var msie = ua.indexOf("MSIE ");
+	 if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))  // If Internet Explorer, return version number
+	    {
+		
+		 try 
+		 { 
+			 var bodyheight2 = document.getElementById('vdevol_chartvalores').clientHeight;
+			 var bodyheight = document.getElementById('vcanje_chartvalores').clientHeight;
+			
+		 }
+		 catch(err){
+			var bodyheight = 0;
+		 }
+		 if (bodyheight > 0 ) {
+			 var bodyheight2 = bodyheight2 + 150;
+		 }
+		
+		 var bodyheight2 = bodyheight2 + 50;
+		 var final =bodyheight+bodyheight2;
+			window.scrollTo(0,final );
+						
+	    }
+	 else {
+		 window.scrollTo(0,414 );
+		 
+	 }
+}
+
+function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipodeplaza,label,errormessage){
+	var targetPlot,controllerPlot,idMini,idDivSlider,data;
+	try {
+		data =  RestCompensacionServices.getCompensacionDevolDiaria({'tipodeplaza':tipodeplaza});
+		/* PIE VALORES */
+		$("#"+chartvalores).empty();
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		startvaluescomponentstimes (null,compdiario1,data,_DIARIO);
+		$("#"+chartvalores)[0].setAttribute("class","");
+		var chartvaloresid=chartvalores+"_chart"; 
+		var divchart = document.createElement('div');
+		divchart.style="chartcustom"
+		divchart.id=chartvaloresid;
+		document.getElementById(chartvalores).appendChild(divchart);
+		var datasel = [[]];
+		var dateselected = data["endX"];
+		var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
+		var leftPlot 		= createplotpieleftdevol ( chartvaloresid		,	datosvalores[0] , _DIARIO);
+		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
+		var divlegendvalores = document.createElement('div');
+		var divlegendvaloresid=chartvalores+"_legend"
+		divlegendvalores.id=divlegendvaloresid;
+		divlegendvalores.innerHTML=legendavalores;
+		document.getElementById(chartvalores).appendChild(divlegendvalores);
+		/* PIE CANTIDAD */
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		$("#"+chartcantidad)[0].setAttribute("class","");
+		var chartcantidadid=chartcantidad+"_chart"; 
+		var divchartcant = document.createElement('div');
+		//divchartcant.style="chartcustom"
+		divchartcant.id=chartcantidadid;
+		document.getElementById(chartcantidad).appendChild(divchartcant);
+		var datoscantidades = getDataFiltered(data["SerieCantidad"],dateselected);
+		var rigthPlot 		= createplotpierightdevol ( chartcantidadid		,	datoscantidades[0] , _DIARIO);
+		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
+		var divlegendcantidad = document.createElement('div');
+		var divlegendcantidadid=chartcantidad+"_legend"
+		divlegendcantidad.id=divlegendcantidadid;
+		divlegendcantidad.innerHTML=legendacantidad;
+		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
+		
+		var dateend 	= data["MaxX"].split("-");;
+		dateend			= new Date(dateend[0],(parseInt(dateend[1])-1),dateend[2]);
+		
+		var selanio2    	= '#'+compdiario1+"_sel_anio";
+		var selmes2 		= '#'+compdiario1+"_sel_mes";
+		var seldia2 		= '#'+compdiario1+"_sel_dia";
+		var seltrimestre2 	= '#'+compdiario1+"_sel_trimestre";
+		var selsemestre2 	= '#'+compdiario1+"_sel_semestre";
+		addaniotimes(data,selanio2,dateend);
+		addmesestimes(data,selmes2,dateend);
+		adddiastimes(data,seldia2,dateend);
+		addtrimestretimes(data,seltrimestre2,dateend);
+		addsemestretimes(data,selsemestre2,dateend);
+		
+		scroll2 ();
+		
+		$("#"+compdiario1+"_sel_anio").unbind();
+		$("#"+compdiario1+"_sel_anio").change(function(evt) {
+			changedatesselectedstimes(compdiario1,data);
+			updatedatapieplottimesranges(leftPlot,rigthPlot,compdiario1,divlegendvaloresid,divlegendcantidadid,data,_DIARIO,errormessage,chartvalores,chartcantidad);
+		});
+		
+		$("#"+compdiario1+"_sel_mes").unbind();
+		$("#"+compdiario1+"_sel_mes").change(function(evt) {
+			changedatesselectedstimes(compdiario1,data);
+			updatedatapieplottimesranges(leftPlot,rigthPlot,compdiario1,divlegendvaloresid,divlegendcantidadid,data,_DIARIO,errormessage,chartvalores,chartcantidad);
+		});
+		
+		$("#"+compdiario1+"_sel_dia").unbind();
+		$("#"+compdiario1+"_sel_dia").change(function(evt) {
+			changedatesselectedstimes(compdiario1,data);
+			updatedatapieplottimesranges(leftPlot,rigthPlot,compdiario1,divlegendvaloresid,divlegendcantidadid,data,_DIARIO,errormessage,chartvalores,chartcantidad);
+		});
+	} catch (err) {
+		if (logerrors) console.log(err);
+		$("[id*='"+errormessage+"'").show();
+		$("[id*='"+errormessage+"']").empty();
+		$("[id*='"+errormessage+"'").append(brmensaje(mensageError, "error"));
+	}
+};
+
+function createChartMinMensualDevol(chartvalores,chartcantidad,compmensual1,tipodeplaza,label,errormessage){
+	var targetPlot,controllerPlot,idMini,idDivSlider,data;
+	try {
+		data =  RestCompensacionServices.getCompensacionDevolMensual({'tipodeplaza':tipodeplaza});
+		/* PIE VALORES */
+		$("#"+chartvalores).empty();
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		startvaluescomponentstimes (null,compmensual1,data,_MENSUAL);
+		$("#"+chartvalores)[0].setAttribute("class","");
+		var chartvaloresid=chartvalores+"_chart"; 
+		var divchart = document.createElement('div');
+		divchart.style="chartcustom"
+		divchart.id=chartvaloresid;
+		document.getElementById(chartvalores).appendChild(divchart);
+		var datasel = [[]];
+		var dateselected = data["endX"];
+		var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
+		var leftPlot 		= createplotpieleftdevol ( chartvaloresid		,	datosvalores[0] , _MENSUAL);
+		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
+		var divlegendvalores = document.createElement('div');
+		var divlegendvaloresid=chartvalores+"_legend"
+		divlegendvalores.id=divlegendvaloresid;
+		divlegendvalores.innerHTML=legendavalores;
+		document.getElementById(chartvalores).appendChild(divlegendvalores);
+		/* PIE CANTIDAD */
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		$("#"+chartcantidad)[0].setAttribute("class","");
+		var chartcantidadid=chartcantidad+"_chart"; 
+		var divchartcant = document.createElement('div');
+		//divchartcant.style="chartcustom"
+		divchartcant.id=chartcantidadid;
+		document.getElementById(chartcantidad).appendChild(divchartcant);
+		var datoscantidades = getDataFiltered(data["SerieCantidad"],dateselected);
+		var rigthPlot 		= createplotpierightdevol ( chartcantidadid		,	datoscantidades[0] , _MENSUAL);
+		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
+		var divlegendcantidad = document.createElement('div');
+		var divlegendcantidadid=chartcantidad+"_legend"
+		divlegendcantidad.id=divlegendcantidadid;
+		divlegendcantidad.innerHTML=legendacantidad;
+		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
+		
+		var dateend 	= data["MaxX"].split("-");;
+		dateend			= new Date(dateend[0],(parseInt(dateend[1])-1),dateend[2]);
+		
+		var selanio2    	= '#'+compmensual1+"_sel_anio";
+		var selmes2 		= '#'+compmensual1+"_sel_mes";
+		var seldia2 		= '#'+compmensual1+"_sel_dia";
+		var seltrimestre2 	= '#'+compmensual1+"_sel_trimestre";
+		var selsemestre2 	= '#'+compmensual1+"_sel_semestre";
+		addaniotimes(data,selanio2,dateend);
+		addmesestimes(data,selmes2,dateend);
+		adddiastimes(data,seldia2,dateend);
+		addtrimestretimes(data,seltrimestre2,dateend);
+		addsemestretimes(data,selsemestre2,dateend);
+		
+		scroll2 ();
+		
+		$("#"+compmensual1+"_sel_anio").unbind();
+		$("#"+compmensual1+"_sel_anio").change(function(evt) {
+			changedatesselectedstimes(compmensual1,data);
+			updatedatapieplottimesranges(leftPlot,rigthPlot,compmensual1,divlegendvaloresid,divlegendcantidadid,data,_MENSUAL,errormessage,chartvalores,chartcantidad);
+		});
+		
+		$("#"+compmensual1+"_sel_mes").unbind();
+		$("#"+compmensual1+"_sel_mes").change(function(evt) {
+			changedatesselectedstimes(compmensual1,data);
+			updatedatapieplottimesranges(leftPlot,rigthPlot,compmensual1,divlegendvaloresid,divlegendcantidadid,data,_MENSUAL,errormessage,chartvalores,chartcantidad);
+		});
+	} catch (err) {
+		if (logerrors) console.log(err);
+		$("[id*='"+errormessage+"'").show();
+		$("[id*='"+errormessage+"']").empty();
+		$("[id*='"+errormessage+"'").append(brmensaje(mensageError, "error"));
+	}		
+};
+
+function createChartMinTrimestralDevol(chartvalores,chartcantidad,comptrimestral1,tipodeplaza,label,errormessage){
+	var targetPlot,controllerPlot,idMini,idDivSlider,data;
+	try {
+		data =  RestCompensacionServices.getCompensacionDevolTrimestral({'tipodeplaza':tipodeplaza});
+		/* PIE VALORES */
+		$("#"+chartvalores).empty();
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		startvaluescomponentstimes (null,comptrimestral1,data,_TRIMESTRAL);
+		$("#"+chartvalores)[0].setAttribute("class","");
+		var chartvaloresid=chartvalores+"_chart"; 
+		var divchart = document.createElement('div');
+		divchart.style="chartcustom"
+		divchart.id=chartvaloresid;
+		document.getElementById(chartvalores).appendChild(divchart);
+		var datasel = [[]];
+		var dateselected = data["endX"];
+		var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
+		var leftPlot 		= createplotpieleftdevol ( chartvaloresid		,	datosvalores[0] , _TRIMESTRAL);
+		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
+		var divlegendvalores = document.createElement('div');
+		var divlegendvaloresid=chartvalores+"_legend"
+		divlegendvalores.id=divlegendvaloresid;
+		divlegendvalores.innerHTML=legendavalores;
+		document.getElementById(chartvalores).appendChild(divlegendvalores);
+		/* PIE CANTIDAD */
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		$("#"+chartcantidad)[0].setAttribute("class","");
+		var chartcantidadid=chartcantidad+"_chart"; 
+		var divchartcant = document.createElement('div');
+		//divchartcant.style="chartcustom"
+		divchartcant.id=chartcantidadid;
+		document.getElementById(chartcantidad).appendChild(divchartcant);
+		var datoscantidades = getDataFiltered(data["SerieCantidad"],dateselected);
+		var rigthPlot 		= createplotpierightdevol ( chartcantidadid		,	datoscantidades[0] , _TRIMESTRAL);
+		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
+		var divlegendcantidad = document.createElement('div');
+		var divlegendcantidadid=chartcantidad+"_legend"
+		divlegendcantidad.id=divlegendcantidadid;
+		divlegendcantidad.innerHTML=legendacantidad;
+		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
+		
+		var dateend 	= data["MaxX"].split("-");;
+		dateend			= new Date(dateend[0],(parseInt(dateend[1])-1),dateend[2]);
+		
+		var selanio2    	= '#'+comptrimestral1+"_sel_anio";
+		var selmes2 		= '#'+comptrimestral1+"_sel_mes";
+		var seldia2 		= '#'+comptrimestral1+"_sel_dia";
+		var seltrimestre2 	= '#'+comptrimestral1+"_sel_trimestre";
+		var selsemestre2 	= '#'+comptrimestral1+"_sel_semestre";
+		addaniotimes(data,selanio2,dateend);
+		addmesestimes(data,selmes2,dateend);
+		adddiastimes(data,seldia2,dateend);
+		addtrimestretimes(data,seltrimestre2,dateend);
+		addsemestretimes(data,selsemestre2,dateend);
+		
+		scroll2 ();
+		
+		$("#"+comptrimestral1+"_sel_anio").unbind();
+		$("#"+comptrimestral1+"_sel_anio").change(function(evt) {
+			changedatesselectedstimes(comptrimestral1,data);
+			updatedatapieplottimesranges(leftPlot,rigthPlot,comptrimestral1,divlegendvaloresid,divlegendcantidadid,data,_TRIMESTRAL,errormessage,chartvalores,chartcantidad);
+		});
+		
+		$("#"+comptrimestral1+"_sel_trimestre").unbind();
+		$("#"+comptrimestral1+"_sel_trimestre").change(function(evt) {
+			changedatesselectedstimes(comptrimestral1,data);
+			updatedatapieplottimesranges(leftPlot,rigthPlot,comptrimestral1,divlegendvaloresid,divlegendcantidadid,data,_TRIMESTRAL,errormessage,chartvalores,chartcantidad);
+		});
+	} catch (err) {
+		if (logerrors) console.log(err);
+		$("[id*='"+errormessage+"'").show();
+		$("[id*='"+errormessage+"']").empty();
+		$("[id*='"+errormessage+"'").append(brmensaje(mensageError, "error"));
+	}
+}
+
+function createChartMinSemestralDevol(chartvalores,chartcantidad,compsemestral1,tipodeplaza,label,errormessage){
+	var targetPlot,controllerPlot,idMini,idDivSlider,data;
+	try {
+		data =  RestCompensacionServices.getCompensacionDevolSemestral({'tipodeplaza':tipodeplaza});
+		/* PIE VALORES */
+		$("#"+chartvalores).empty();
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		startvaluescomponentstimes (null,compsemestral1,data,_SEMESTRAL);
+		$("#"+chartvalores)[0].setAttribute("class","");
+		var chartvaloresid=chartvalores+"_chart"; 
+		var divchart = document.createElement('div');
+		divchart.style="chartcustom"
+		divchart.id=chartvaloresid;
+		document.getElementById(chartvalores).appendChild(divchart);
+		var datasel = [[]];
+		var dateselected = data["endX"];
+		var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
+		var leftPlot 		= createplotpieleftdevol ( chartvaloresid		,	datosvalores[0] , _SEMESTRAL);
+		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
+		var divlegendvalores = document.createElement('div');
+		var divlegendvaloresid=chartvalores+"_legend"
+		divlegendvalores.id=divlegendvaloresid;
+		divlegendvalores.innerHTML=legendavalores;
+		document.getElementById(chartvalores).appendChild(divlegendvalores);
+		/* PIE CANTIDAD */
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		$("#"+chartcantidad)[0].setAttribute("class","");
+		var chartcantidadid=chartcantidad+"_chart"; 
+		var divchartcant = document.createElement('div');
+		//divchartcant.style="chartcustom"
+		divchartcant.id=chartcantidadid;
+		document.getElementById(chartcantidad).appendChild(divchartcant);
+		var datoscantidades = getDataFiltered(data["SerieCantidad"],dateselected);
+		var rigthPlot 		= createplotpierightdevol ( chartcantidadid		,	datoscantidades[0] , _SEMESTRAL);
+		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
+		var divlegendcantidad = document.createElement('div');
+		var divlegendcantidadid=chartcantidad+"_legend"
+		divlegendcantidad.id=divlegendcantidadid;
+		divlegendcantidad.innerHTML=legendacantidad;
+		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
+		
+		var dateend 	= data["MaxX"].split("-");;
+		dateend			= new Date(dateend[0],(parseInt(dateend[1])-1),dateend[2]);
+		
+		var selanio2    	= '#'+compsemestral1+"_sel_anio";
+		var selmes2 		= '#'+compsemestral1+"_sel_mes";
+		var seldia2 		= '#'+compsemestral1+"_sel_dia";
+		var seltrimestre2 	= '#'+compsemestral1+"_sel_trimestre";
+		var selsemestre2 	= '#'+compsemestral1+"_sel_semestre";
+		addaniotimes(data,selanio2,dateend);
+		addmesestimes(data,selmes2,dateend);
+		adddiastimes(data,seldia2,dateend);
+		addtrimestretimes(data,seltrimestre2,dateend);
+		addsemestretimes(data,selsemestre2,dateend);
+		
+		scroll2 ();
+		
+		$("#"+compsemestral1+"_sel_anio").unbind();
+		$("#"+compsemestral1+"_sel_anio").change(function(evt) {
+			changedatesselectedstimes(compsemestral1,data);
+			updatedatapieplottimesranges(leftPlot,rigthPlot,compsemestral1,divlegendvaloresid,divlegendcantidadid,data,_SEMESTRAL,errormessage,chartvalores,chartcantidad);
+		});
+		
+		$("#"+compsemestral1+"_sel_semestre").unbind();
+		$("#"+compsemestral1+"_sel_semestre").change(function(evt) {
+			changedatesselectedstimes(compsemestral1,data);
+			updatedatapieplottimesranges(leftPlot,rigthPlot,compsemestral1,divlegendvaloresid,divlegendcantidadid,data,_SEMESTRAL,errormessage,chartvalores,chartcantidad);
+		});
+	} catch (err) {
+		if (logerrors) console.log(err);
+		$("[id*='"+errormessage+"'").show();
+		$("[id*='"+errormessage+"']").empty();
+		$("[id*='"+errormessage+"'").append(brmensaje(mensageError, "error"));
+	}
+}
+
+function createChartMinAnualDevol(chartvalores,chartcantidad,companual1,tipodeplaza,label,errormessage){
+	var targetPlot,controllerPlot,idMini,idDivSlider,data;
+	try {
+		data =  RestCompensacionServices.getCompensacionDevolAnual({'tipodeplaza':tipodeplaza});
+		/* PIE VALORES */
+		$("#"+chartvalores).empty();
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		startvaluescomponentstimes (null,companual1,data,_ANUAL);
+		$("#"+chartvalores)[0].setAttribute("class","");
+		var chartvaloresid=chartvalores+"_chart"; 
+		var divchart = document.createElement('div');
+		divchart.style="chartcustom"
+		divchart.id=chartvaloresid;
+		document.getElementById(chartvalores).appendChild(divchart);
+		var datasel = [[]];
+		var dateselected = data["endX"];
+		var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
+		var leftPlot 		= createplotpieleftdevol ( chartvaloresid		,	datosvalores[0] , _ANUAL);
+		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
+		var divlegendvalores = document.createElement('div');
+		var divlegendvaloresid=chartvalores+"_legend"
+		divlegendvalores.id=divlegendvaloresid;
+		divlegendvalores.innerHTML=legendavalores;
+		document.getElementById(chartvalores).appendChild(divlegendvalores);
+		/* PIE CANTIDAD */
+		$("#"+chartcantidad).empty();
+		if (label==null || label =="undefined") label = "Todas";
+		data["Title"] = data["Title"] + " - " + label;
+		$("#"+chartcantidad)[0].setAttribute("class","");
+		var chartcantidadid=chartcantidad+"_chart"; 
+		var divchartcant = document.createElement('div');
+		//divchartcant.style="chartcustom"
+		divchartcant.id=chartcantidadid;
+		document.getElementById(chartcantidad).appendChild(divchartcant);
+		var datoscantidades = getDataFiltered(data["SerieCantidad"],dateselected);
+		var rigthPlot 		= createplotpierightdevol ( chartcantidadid		,	datoscantidades[0] , _ANUAL);
+		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
+		var divlegendcantidad = document.createElement('div');
+		var divlegendcantidadid=chartcantidad+"_legend"
+		divlegendcantidad.id=divlegendcantidadid;
+		divlegendcantidad.innerHTML=legendacantidad;
+		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
+		
+		var dateend 	= data["MaxX"].split("-");;
+		dateend			= new Date(dateend[0],(parseInt(dateend[1])-1),dateend[2]);
+		
+		var selanio2    	= '#'+companual1+"_sel_anio";
+		var selmes2 		= '#'+companual1+"_sel_mes";
+		var seldia2 		= '#'+companual1+"_sel_dia";
+		var seltrimestre2 	= '#'+companual1+"_sel_trimestre";
+		var selsemestre2 	= '#'+companual1+"_sel_semestre";
+		addaniotimes(data,selanio2,dateend);
+		addmesestimes(data,selmes2,dateend);
+		adddiastimes(data,seldia2,dateend);
+		addtrimestretimes(data,seltrimestre2,dateend);
+		addsemestretimes(data,selsemestre2,dateend);
+		
+		scroll2 ();
+		
+		$("#"+companual1+"_sel_anio").unbind();
+		$("#"+companual1+"_sel_anio").change(function(evt) {
+			changedatesselectedstimes(companual1,data);
+			updatedatapieplottimesranges(leftPlot,rigthPlot,companual1,divlegendvaloresid,divlegendcantidadid,data,_ANUAL,errormessage,chartvalores,chartcantidad);
+		});
+	} catch (err) {
+		if (logerrors) console.log(err);
+		$("[id*='"+errormessage+"'").show();
+		$("[id*='"+errormessage+"']").empty();
+		$("[id*='"+errormessage+"'").append(brmensaje(mensageError, "error"));
+	}
+	
+};
+
+function createplotpieleftdevol (name,data,tipo) {
+ 	$.jqplot.sprintf.thousandsSeparator = '.';
+	$.jqplot.sprintf.decimalMark = ',';
+	var plot2 = $.jqplot(name, [data] , {
+		seriesColors:['#006fb9','#ffce00','#cc003a','#EAA228','#c5b47f','#579575','#839557','#958c12','#953579','#4b5de4','#26B4E3','#d8b83f','#ff5800','#0085cc','#c747a3','#cddf54','#FBD178','#26B4E3','#f9d4de'],
+		seriesDefaults:{ 
+			renderer:$.jqplot.PieRenderer,
+			showMarker: true, 
+			rendererOptions: {
+				smooth: false,
+				fillToZero: true,
+				varyBarColor: true,
+				barMargin: 1,
+				shadowDepth: 5,
+				showDataLabels: true,
+				dataLabelFormatString: '%.3f%'
+			},
+            animation: {
+                show: false
+            },
+        },
+	    grid: {
+    		background : 'rgba(255, 255, 255, 0.01)',
+    		borderColor : '#eeeeee',
+    		gridLineColor : '#F5F5F5',
+    		shadow : false,
+    		drawBorder : false,
+    		gridLineWidth : 0.8,
+    		borderWidth: 0.8,
+    		left: "0",
+        },
+        legend: {
+        	dataLabelFormatString: '%.3f%'
+        },
+	});
+	return plot2;
+}
+
+function createplotpierightdevol (name,data,tipo) {
+ 	$.jqplot.sprintf.thousandsSeparator = '.';
+	$.jqplot.sprintf.decimalMark = ',';
+	var plot2 = $.jqplot(name, [data] , {
+		seriesColors:['#95288f','#ffce00','#0097ac','#EAA228','#c5b47f','#579575','#839557','#958c12','#953579','#4b5de4','#26B4E3','#d8b83f','#ff5800','#0085cc','#c747a3','#cddf54','#FBD178','#26B4E3','#f9d4de'],
+		seriesDefaults:{ 
+			renderer:$.jqplot.PieRenderer,
+			showMarker: true, 
+			rendererOptions: {
+				smooth: false,
+				fillToZero: true,
+				varyBarColor: true,
+				barMargin: 1,
+				shadowDepth: 5,
+				showDataLabels: true,
+				dataLabelFormatString: '%.3f%'
+			},
+            animation: {
+                show: false
+            },
+        },
+	    grid: {
+    		background : '#ffffff',
+    		borderColor : '#eeeeee',
+    		gridLineColor : '#F5F5F5',
+    		shadow : false,
+    		drawBorder : false,
+    		gridLineWidth : 0.8,
+    		borderWidth: 0.8,
+    		left: "0",
+        },
+	});
+	return plot2;
+}

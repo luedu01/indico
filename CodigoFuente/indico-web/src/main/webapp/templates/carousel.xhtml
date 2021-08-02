@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+	<p:panelGrid id="containerCarrouselDesktop" columns="1"
+		styleClass="cleaner2 BoxSizeContent" layout="grid"
+		style="border:0px !important;">
+		<p:outputPanel styleClass="EmptyBox20" />
+		<div class="BoxSizeBorder">
+			<div id="wrapper">
+				<div class="line"></div>
+				<div class="textbox DisplayOnDesk">
+					<div class="text">
+						Más <strong>indicadores</strong>
+					</div>
+				</div>
+				<div class="textbox DisplayOnMobile">
+					<div class="text">
+						<strong>Más indicadores</strong>
+					</div>
+					<br></br>
+					<div
+						style="margin-top: -10px; text-align: justify; text-justify: inter-word; text-align: center; font-size: 20px;">de
+						sistemas de pago</div>
+				</div>
+			</div>
+		</div>
+		<div class="EmptyBox40 DisplayOnDesk" />
+		<div class="EmptyBox40 DisplayOnMobile" />
+		<p:panelGrid columns="3" layout="grid"
+			columnClasses="ui-g-12 ui-md-12 ui-lg-1,ui-g-12 ui-md-12 ui-lg-10,ui-g-12 ui-md-12 ui-lg-1"
+			styleClass="ui-noborder">
+			<p:outputPanel
+				style="padding-top: 100% !important; text-align: center;"
+				styleClass="NoMargin NoPadding DisplayOnDesk" rendered="false">
+				<h:form>
+					<p:commandLink rendered="false">
+						<p:graphicImage value="./resources/images/Izquierda01.svg"
+							style="height: 55px;" />
+					</p:commandLink>
+				</h:form>
+			</p:outputPanel>
+			<p:outputPanel></p:outputPanel>
+			<p:outputPanel>
+				<center>
+					<p:panelGrid columns="2">
+						<p:outputPanel styleClass="cardCustonT">
+							<h:form>
+							<!-- Se agrega rel="noopener noreferrer" para solucionar navegacion No segura hacia segura -->
+								<h:commandLink action="estadistica" rel="noopener noreferrer">
+									<p:outputPanel>
+										<div class="EmptyBox30"></div>
+										<center>
+											<p:graphicImage styleClass="imagecarousel" id="imgcrs"
+												value="./resources/images/sistema de pagos de alto valor.svg" />
+										</center>
+										<div class="EmptyBox20"></div>
+										<div class="EmptyBox">
+											<p:outputPanel styleClass="textbelow">
+												<span class="textbelow-tittle">Sistema de cuentas de
+												</span>
+												<div class="EmptyBox1"></div>
+												<span class="importantxt">Depósito - CUD</span>
+											</p:outputPanel>
+										</div>
+										<div class="EmptyBox10"></div>
+									</p:outputPanel>
+								</h:commandLink>
+							</h:form>
+						</p:outputPanel>
+						<p:outputPanel styleClass="cardCustonT">
+							<h:form>
+								<h:commandLink action="compensacion">
+									<p:outputPanel>
+										<div class="EmptyBox15"></div>
+										<center>
+											<p:graphicImage styleClass="imagecarousel" style="width:35% !important" id="imgcrs"
+												value="./resources/images/Compensacion de Cheques.svg" />
+										</center>
+										<div class="EmptyBox20"></div>
+										<div class="EmptyBox1">
+											<center>
+												<p:outputPanel styleClass="textbelow">
+													<span class="textbelow-tittle">compensación de </span>
+													<div class="EmptyBox1"></div>
+													<span class="importantxt">cheques</span>
+												</p:outputPanel>
+											</center>
+										</div>
+										<div class="EmptyBox10"></div>
+									</p:outputPanel>
+								</h:commandLink>
+							</h:form>
+						</p:outputPanel>
+					</p:panelGrid>
+				</center>
+			</p:outputPanel>
+			<p:outputPanel></p:outputPanel>
+			<p:outputPanel
+				style="padding-top: 100% !important; text-align: center;"
+				styleClass="NoMargin NoPadding DisplayOnDesk" rendered="false">
+				<h:form>
+					<p:commandLink rendered="false">
+						<p:graphicImage value="./resources/images/Derecha01.svg"
+							style="height: 55px;" />
+					</p:commandLink>
+				</h:form>
+			</p:outputPanel>
+		</p:panelGrid>
+	</p:panelGrid>
+
+
+	<!-- p:panelGrid id="containerCarrousel" columns="1"
+		styleClass="cleaner2 BoxSizeContent DisplayOnMobile" layout="grid"
+		style="border:0px !important;">
+		<p:outputPanel styleClass="EmptyBox20" />
+		<div class="BoxSizeBorder">
+			<div id="wrapper">
+				<div class="line"></div>
+				<div class="textbox DisplayOnDesk">
+					<div class="text">
+						Más <strong>indicadores</strong>
+					</div>
+				</div>
+				<div class="textbox DisplayOnMobile">
+					<div class="text">
+						<strong>Más indicadores</strong>
+					</div>
+					<br></br>
+					<div
+						style="margin-top: -10px; text-align: justify; text-justify: inter-word; text-align: center; font-size: 20px;">de
+						sistemas de pago</div>
+				</div>
+			</div>
+		</div>
+		<div class="EmptyBox40 DisplayOnDesk" />
+		<div class="EmptyBox40 DisplayOnMobile" />
+
+
+		<p:panelGrid columns="3" layout="grid"
+			columnClasses="ui-g-2 ui-md-2 ui-lg-2, ui-g-8 ui-md-8 ui-lg-8, ui-g-2 ui-md-2 ui-lg-2"
+			styleClass="ui-noborder" id="panelItems">
+
+			<p:outputPanel id="PrevView"
+				style="padding-top: 75px !important; text-align: center;"
+				styleClass="NoMargin NoPadding" rendered="true">
+				<h:form>
+					<p:commandLink rendered="true"
+						action="#{carouselView.proximaPagina}">
+						<p:graphicImage value="./resources/images/Izquierda01.svg"
+							style="height: 45px;" />
+					</p:commandLink>
+				</h:form>
+			</p:outputPanel>
+
+			<p:outputPanel>
+				<p:carousel headerText="Responsive" itemStyle="text-align:center;"
+					responsive="true" value="#{carouselView.indicadores}"
+					var="indicadores" circular="true"
+					numVisible="#{carouselView.numeroItems}" 
+					widgetVar="carouselW">
+					<p:outputPanel styleClass="cardCustonT"
+						style="display: inline-block;">
+						<h:form>
+							<h:commandLink
+								action="#{carouselView.redireccionarPagina(indicadores.formulario)}">
+								<p:outputPanel style="margin: auto">
+									<div class="EmptyBox30"></div>
+									<center>
+										<p:graphicImage styleClass="imagecarousel"
+											id="imgcrs_#{indicadores.id}"
+											value="#{indicadores.urlImagen}" />
+									</center>
+									<div class="EmptyBox20"></div>
+									<div class="EmptyBox">
+										<p:outputPanel styleClass="textbelow">
+											<span class="textbelow-tittle">#{indicadores.title} </span>
+											<div class="EmptyBox1"></div>
+											<span class="importantxt"> #{indicadores.subTitle} </span>
+										</p:outputPanel>
+									</div>
+									<div class="EmptyBox10"></div>
+								</p:outputPanel>
+							</h:commandLink>
+						</h:form>
+					</p:outputPanel>
+				</p:carousel>
+			</p:outputPanel>
+
+
+			<p:outputPanel id="NextView"
+				style="padding-top: 75px !important; text-align: center;"
+				styleClass="NoMargin NoPadding" rendered="true">
+				<h:form>
+					<p:commandLink rendered="true"
+						action="#{carouselView.anteriorPagina}">
+						<p:graphicImage value="./resources/images/Derecha01.svg"
+							style="height: 45px;" />
+					</p:commandLink>
+				</h:form>
+			</p:outputPanel>
+
+		</p:panelGrid>
+	</p:panelGrid-->
+	<div class="EmptyBox20 DisplayOnDesk" />
+	<div class="EmptyBox20 DisplayOnMobile" />
+
+	<h:form>
+		<input type="hidden" id="valorInicial"></input>
+		<input type="hidden" id="totalItems" value="#{carouselView.indicadores.size()}"></input>
+		<input type="hidden" id="commandoButtonDesktop" onclick="execute()"></input>
+		<p:remoteCommand name="executeItemDesktop"
+			update="@([id$=panelItems])"
+			action="#{carouselView.ejecutarActionItemDesktop}"></p:remoteCommand>
+	</h:form>
+
+	<h:outputScript>
+		function execute() {
+			var numItems = $('#valorInicial').val();
+			var parametros = [];
+			parametros[0] = {name: 'valueItem', value: numItems}
+			executeItemDesktop(parametros);
+		}
+	
+		function redimensionar() {
+			var valorInicial = "1";
+			var totalItems = $('#totalItems').val();
+			if(valorInicial >= totalItems) { valorInicial = totalItems }
+			if(totalItems == 2) {
+				//$('.ui-carousel-viewport').css('width', '40%!important');
+				//$('.ui-carousel-viewport').css('margin-left', '30%!important');
+			}
+			var anchoVentana = $(window).width();
+			if(anchoVentana >= 1587) {
+				$('#valorInicial').val(valorInicial);
+				$('#commandoButtonDesktop').trigger('click');
+			} else if(anchoVentana >= 1304) {
+				if(valorInicial >= 2) {
+					valorInicial = (valorInicial-1);
+				}
+				$('#valorInicial').val(valorInicial);
+				$('#commandoButtonDesktop').trigger('click');
+			} else if(anchoVentana >= 1104) {
+				if(valorInicial >= 2) {
+					valorInicial = (valorInicial-1);
+				}
+				$('#valorInicial').val(valorInicial);
+				$('#commandoButtonDesktop').trigger('click');
+			} else {
+				$('#valorInicial').val("1");
+				$('#commandoButtonDesktop').trigger('click');
+			}
+		}
+	
+		$(document).ready(function(){
+			redimensionar();
+		});
+	
+		jQuery(window).resize(function() {
+			redimensionar();
+		});
+	</h:outputScript>
+</ui:composition>
