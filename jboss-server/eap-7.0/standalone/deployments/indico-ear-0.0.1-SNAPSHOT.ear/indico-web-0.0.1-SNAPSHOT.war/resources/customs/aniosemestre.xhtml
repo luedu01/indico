@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+<composite:interface>
+ 	<composite:attribute name="remoteCommandView" method-signature="void action()" required="false"/>
+ 	<composite:attribute name="toUpdate" type="java.lang.String" required="false"/>
+ 	<composite:attribute name="tittle" type="java.lang.String" required="true"/>
+ 	<composite:attribute name="idg" type="java.lang.String" required="true"/>
+ 	<composite:attribute name="bean" type="com.indico.jee.resources.CompAnioSemestre" required="true"/>
+</composite:interface>
+<composite:implementation>
+
+    <p:remoteCommand name="#{cc.attrs.idg}_remoteCommand" update="@([id$=#{cc.attrs.toUpdate}])" action="#{cc.attrs.remoteCommandView}" />
+
+	<p:panelGrid id="#{cc.attrs.idg}_panelDiario" columns="5" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2">
+		<span style="color: #5E2129">#{cc.attrs.tittle}</span>
+		<p:selectOneMenu value="#{cc.attrs.bean.anioSelected}" valueChangeListener="#{cc.attrs.bean.changeAnioAction}"> 
+			<f:selectItem itemLabel="A&#241;o" itemValue=""/>	
+			<f:selectItems value="#{cc.attrs.bean.anios}" var="anio" itemLabel="#{anio.label}" itemValue="#{anio.value}"/>
+			<p:ajax process="@this" update="@([id$=#{cc.attrs.idg}_panelDiario])" onsuccess="#{cc.attrs.idg}_remoteCommand()"/>
+		</p:selectOneMenu>
+		<p:selectOneMenu value="#{cc.attrs.bean.semestreSelected}" valueChangeListener="#{cc.attrs.bean.changeSemestreAction}">	
+			<f:selectItem itemLabel="Semestre" itemValue=""/>	
+			<f:selectItems value="#{cc.attrs.bean.semestres}" var="semestre" itemLabel="#{semestre.label}" itemValue="#{semestre.value}"/>
+			<p:ajax process="@this" update="@([id$=#{cc.attrs.idg}_panelDiario])" onsuccess="#{cc.attrs.idg}_remoteCommand()"/>
+		</p:selectOneMenu>
+	</p:panelGrid>	
+</composite:implementation>      
+</html> 

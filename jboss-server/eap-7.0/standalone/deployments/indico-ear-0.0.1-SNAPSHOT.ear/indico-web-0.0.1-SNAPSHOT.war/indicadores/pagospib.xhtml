@@ -1,0 +1,132 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:fado="http://java.sun.com/jsf/composite/customs"
+>
+<h:outputScript library="js" name="pdfmake.min.js" />
+<h:outputScript library="js" name="vfs_fonts.js" />
+<h:outputScript library="js" name="indico.js" />
+
+<p:outputPanel id="ppib_panelx1" styleClass="cleaner2">
+		<p:panelGrid id="ppib_panelfiltro" columns="4" style="width:100%; vertical-align: top !important;" styleClass="cleaner2">
+					<p:outputPanel id="ppib_pvalor" style="padding: 0px 0px 0px 30px; vertical-align: top !important;">
+							<p:outputPanel id="ppib_valorfiltro" styleClass="cleaner2">
+									<p:panelGrid columns="3" columnClasses="ui-grid-col-9,ui-grid-col-1,ui-grid-col-2" styleClass="cleaner2">
+										<h:form>
+									  	  <p:outputPanel style="vertical-align: top !important;" styleClass="cleaner2">
+												<p:panelGrid id="ppib_panelFiltros" columns="2" columnClasses="ui-grid-col-5,ui-grid-col-5" style="vertical-align: top !important;" styleClass="cleaner2">
+									  		      <p:panelGrid columns="2" styleClass="cleaner2" columnClasses="ui-grid-col-2,ui-grid-col-10">
+										  		    <p:outputLabel value="Periodo" styleClass="cleaner2" style="padding-top: 6px !important"/>
+													<p:selectOneMenu id="ppib_selFiltroPorValor" widgetVar="ppib_selFiltroPorValorW" required="true"  autoWidth="false" value="#{pagosPIBMaBean.tipoPeriodoSelected}"
+																	requiredMessage="Seleccione Periodo" placeholder="Periodo" style="width: 100px;"
+																	>
+														<f:selectItem itemLabel="Diario" 		itemValue="1"/>
+														<f:selectItem itemLabel="Mensual" 		itemValue="2"/>
+														<f:selectItem itemLabel="Trimestral" 	itemValue="3"/>
+														<f:selectItem itemLabel="Semestral" 	itemValue="4"/>
+														<f:selectItem itemLabel="Anual" 		itemValue="5"/>
+														<p:ajax process="@this" update="@([id$=ppib_panelesValoresDinamic],[id$=ppib_panelFiltros])" listener="#{pagosPIBMaBean.changePanelAction}"/>
+													</p:selectOneMenu>
+												</p:panelGrid>
+												<p:outputPanel style="width:120px;">
+													<p:panelGrid columns="2" layout="grid" style="border:1px;">
+															<p:commandButton icon="icon-restaurar"  
+																	process="@this"
+																	update="@([id$=ppib_valorgraficavalor],[id$=ppib_panelesValoresDinamic],[id$=ppib_panelFiltros])" 
+																	actionListener="#{pagosPIBMaBean.restaurarAction}">
+															</p:commandButton>
+															<h:outputText styleClass="ui-selectonemenu ui-widget ui-state-default ui-corner-all"
+																	style="width: 80px !important; height: 100% !important; padding: 1px 1px 1px 2px;" 
+																	value="Restaurar"/>
+													</p:panelGrid>
+												</p:outputPanel>	
+												<p:messages id="ppib_messageinformationglobal" showDetail="false" autoUpdate="true"/>
+											</p:panelGrid>
+											
+											<p:panelGrid columns="2" style="vertical-align: top !important; width: 65%;" columnClasses="ui-grid-col-10,ui-grid-col-2">
+												<p:outputPanel id="ppib_panelesValoresDinamic" style="width: 100%;">
+													<p:outputPanel id="ppib_pValorDiario" rendered="#{pagosPIBMaBean.pintar==1}"> 
+														<fado:aniomesdia idg="valperiodo1"  bean="#{pagosPIBMaBean.valaniomesdiaP1}" tittle="Desde" remoteCommandView="#{pagosPIBMaBean.validateGraficForDiario}" toUpdate="valorgraficavalor"/>
+														<p:separator style="padding: 0px 0px 0px 0px; margin: 0 0 0 0;"/>	
+														<fado:aniomesdia idg="valperiodo2"  bean="#{pagosPIBMaBean.valaniomesdiaP2}" tittle="Hasta" remoteCommandView="#{pagosPIBMaBean.validateGraficForDiario}" toUpdate="valorgraficavalor"/>	
+													</p:outputPanel>
+													<p:outputPanel id="ppib_pValorMensual" rendered="#{pagosPIBMaBean.pintar==2}">
+														<fado:aniomes idg="valmensual1"  bean="#{pagosPIBMaBean.valaniomesP1}" tittle="Primer Periodo"  remoteCommandView="#{pagosPIBMaBean.validateGraficForMensual}" toUpdate="valorgraficavalor"/>
+														<p:separator style="padding: 0px 0px 0px 0px; margin: 0 0 0 0;"/>	
+														<fado:aniomes idg="valmensual2"  bean="#{pagosPIBMaBean.valaniomesP2}" tittle="Segundo Periodo"  remoteCommandView="#{pagosPIBMaBean.validateGraficForMensual}" toUpdate="valorgraficavalor"/>	
+													</p:outputPanel>
+													<p:outputPanel id="ppib_pValorTrimestral" rendered="#{pagosPIBMaBean.pintar==3}">
+														<fado:aniotrimestre idg="valtrimestral1"  bean="#{pagosPIBMaBean.valaniotrimestralP1}" tittle="Primer Periodo"  remoteCommandView="#{pagosPIBMaBean.validateGraficForTrimestral}" toUpdate="valorgraficavalor"/>
+														<p:separator style="padding: 0px 0px 0px 0px; margin: 0 0 0 0;"/>
+														<fado:aniotrimestre idg="valtrimestral2"  bean="#{pagosPIBMaBean.valaniotrimestralP2}" tittle="Segundo Periodo"  remoteCommandView="#{pagosPIBMaBean.validateGraficForTrimestral}" toUpdate="valorgraficavalor"/>	
+													</p:outputPanel>
+													<p:outputPanel id="ppib_pValorSemestral" rendered="#{pagosPIBMaBean.pintar==4}">
+														<fado:aniosemestre idg="valsemestral1"  bean="#{pagosPIBMaBean.valaniosemestralP1}" tittle="Primer Periodo"  remoteCommandView="#{pagosPIBMaBean.validateGraficForSemestral}" toUpdate="valorgraficavalor"/>
+														<p:separator style="padding: 0px 0px 0px 0px; margin: 0 0 0 0;"/>
+														<fado:aniosemestre idg="valtrimestral2"  bean="#{pagosPIBMaBean.valaniosemestralP2}" tittle="Segundo Periodo"  remoteCommandView="#{pagosPIBMaBean.validateGraficForSemestral}" toUpdate="valorgraficavalor"/>	
+													</p:outputPanel>
+													<p:outputPanel id="ppib_pValorAnual" rendered="#{pagosPIBMaBean.pintar==5}">
+														<fado:anio idg="valanual1"  bean="#{pagosPIBMaBean.valanioanualP1}" tittle="Primer Periodo"  remoteCommandView="#{pagosPIBMaBean.validateGraficForAnual}" toUpdate="valorgraficavalor"/>
+														<p:separator style="padding: 0px 0px 0px 0px; margin: 0 0 0 0;"/>
+														<fado:anio idg="valanual2"  bean="#{pagosPIBMaBean.valanioanualP2}" tittle="Segundo Periodo"  remoteCommandView="#{pagosPIBMaBean.validateGraficForAnual}" toUpdate="valorgraficavalor"/>	
+													</p:outputPanel>
+												</p:outputPanel>
+											</p:panelGrid>		
+										  </p:outputPanel>
+										</h:form>
+										<p:separator style="border: 2px solid #5E2129 !important; background: #5E2129; height: 80px; width: 1px; padding: 0px 0px 0px 0px; margin:0px 0px 0px 0px; float:inline-end;"/>
+										<h:form id="ppib_frmExportar">	
+										  	<p:outputPanel id="ppib_panelexportar">
+										  		<p:panelGrid columns="2">
+													<span class="ui-icon icon-download"></span>										  			
+													<p:selectOneMenu onchange="exportChart(this.value);" styleClass="selectDownload">
+										  				<f:selectItem itemLabel="Grafica" itemValue=""/>
+										  				<f:selectItem itemLabel="JPG" itemValue="jpg"/>
+										  				<f:selectItem itemLabel="PDF" itemValue="pdf"/>
+										  			</p:selectOneMenu>
+													<span class="ui-icon icon-download"></span>										  			
+										  			<p:selectOneMenu value="#{pagosPIBMaBean.tipoaexportar}">
+										  				<f:selectItem itemLabel="Datos" itemValue=""/>
+										  				<f:selectItem itemLabel="CSV" itemValue="csv"/>
+										  				<f:selectItem itemLabel="XLS" itemValue="xls"/>
+										  				<f:selectItem itemLabel="DSMX" itemValue="dsmx"/>
+ 										  				<p:ajax event="change" onsuccess="$('#frmExportar\\:vcan_downloadFile').click();"/> 
+										  			</p:selectOneMenu>
+													<p:commandButton id="ppib_downloadFile" widgetVar="ppib_downloadFileW"   value="Download" ajax="false" icon="fa fa-fw fa-cloud-download" actionListener="#{pagosPIBMaBean.exportAction}" style="display: none;">
+													</p:commandButton>
+												</p:panelGrid>
+										  	</p:outputPanel>
+										</h:form>  	
+									</p:panelGrid>
+							</p:outputPanel>
+							<p:panelGrid id="ppib_valorgraficavalor" columns="1" style="width: 100%; text-align: center;">
+							  <h:form>
+								<p:chart id="ppib_graficaTransaccion" widgetVar="ppib_graficaTransaccionW" type="line" model="#{pagosPIBMaBean.lineModelTransferencia}" style="height:300px;" responsive="true" styleClass="chartcustom"/>
+								<p:outputPanel style="width:100%; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 30px;">
+									<center>
+										<p:toolbar styleClass="toolbar-custom">
+											<f:facet name="left">
+												<p:commandButton icon="icon-before" styleClass="buttons-background" 
+													actionListener="#{pagosPIBMaBean.beforeGraficAction}" update="@([id$=ppib_valorgraficavalor])" process="@this">
+												</p:commandButton>
+									        </f:facet>
+											<f:facet name="right">
+												<p:commandButton icon="icon-next" styleClass="buttons-background" 
+													actionListener="#{pagosPIBMaBean.nextGraficAction}" update="@([id$=ppib_valorgraficavalor])" process="@this"/>
+											</f:facet>
+										</p:toolbar>
+									</center>
+								</p:outputPanel>
+							  </h:form>	
+						</p:panelGrid>
+					</p:outputPanel>
+	</p:panelGrid>
+</p:outputPanel>
+<p:dialog widgetVar="ppib_dlgw" showEffect="fade" modal="true" header="Grafica de Transacci&#243;n como Imagen" resizable="false">
+    <p:outputPanel id="ppib_output" layout="block" style="width:500px;height:300px"/>
+</p:dialog>	
+</ui:composition>	    

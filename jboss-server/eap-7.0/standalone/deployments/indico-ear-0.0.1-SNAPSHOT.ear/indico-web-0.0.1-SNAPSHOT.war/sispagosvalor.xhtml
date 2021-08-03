@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      template="templates/sispagosaltovalortemplate.xhtml"
+      > 
+<ui:define name="indicadores">
+		<p:panelGrid id="contenedorizquierda" columns="2" columnClasses="ui-grid-col-3,ui-grid-col-9" layout="grid" styleClass="ui-panelgrid-blank ui-fluid cleaner2">
+              <p:outputPanel id="panelmenulateral" styleClass="cleaner2"> 
+			  <p:panelGrid columns="1" style="text-align:right;" styleClass="cleaner2">
+				  <h:graphicImage value="./resources/images/sistemaPagosAV.png" rendered="true" height="200" width="260"/>
+                     <h:form>
+					  	<p:commandLink actionListener="#{sispagosMaBean.selectAction}" update="@([id$=panelmenulateral],[id$=panelIndicador])" process="@this" style="padding: 0px 20px 0px 0px;">
+					  		<h:outputText value="Transferencia electronica interbancaria |" style="#{sispagosMaBean.selected==0?'color: #006fb9;':''}"/>
+					  		<f:attribute name="sel" value="0"></f:attribute>
+					  	</p:commandLink>
+				    </h:form>		 
+                    <h:form>
+					  	<p:commandLink actionListener="#{sispagosMaBean.selectAction}" update="@([id$=panelmenulateral],[id$=panelIndicador])" process="@this" style="padding: 0px 20px 0px 0px;">
+						  	<h:outputText value="Distribuci&#243;n por rango |"  style="#{sispagosMaBean.selected==1?'color: #006fb9;':''}"/> 
+					  		<f:attribute name="sel" value="1"></f:attribute>
+					  	</p:commandLink>	 
+				    </h:form>		 
+                    <h:form>
+					  	<p:commandLink actionListener="#{sispagosMaBean.selectAction}" update="@([id$=panelmenulateral],[id$=panelIndicador])" process="@this" style="padding: 0px 20px 0px 0px;">
+						  	<h:outputText value="Indicadores de Pagos |"  style="#{sispagosMaBean.selected==2?'color: #006fb9;':''}"/>
+					  		<f:attribute name="sel" value="2"></f:attribute>
+					  	</p:commandLink>
+				    </h:form>		 
+				  	<p:separator style="border: 2px solid #006fb9 !important; padding: 0 0 0 0 !important;" />
+				  	<h:form>
+					  	<h:commandLink action="inicio">
+						  	<div>
+		    					<div style="float:left;" class="returnBack"></div>
+		    					<div style="float:left; font-size: 13px; color: #006fb9; padding: 4px 3px 2px 6px !important;">Volver</div>    
+							</div> 
+						</h:commandLink>
+				    </h:form>		 
+					  	<p:separator/>
+                     <h:form>
+					  	<h:commandLink action="inicio"> 
+						  	<div>
+		    					<div style="float:left;" class="pregunta01"></div>
+		    					<div style="float:left; font-size: 13px; padding: 4px 3px 2px 6px !important;">Guia de usuario</div>    
+							</div> 
+				  	   </h:commandLink>
+				  	</h:form>   
+				</p:panelGrid>
+			  </p:outputPanel>
+		    <p:outputPanel columns="1" styleClass="cleaner2" id="panelIndicador">
+				<ui:insert>
+					<ui:include src="#{sispagosMaBean.src}">
+					</ui:include>
+				</ui:insert>
+		    </p:outputPanel>
+		</p:panelGrid>
+</ui:define>	
+</ui:composition>      
+
