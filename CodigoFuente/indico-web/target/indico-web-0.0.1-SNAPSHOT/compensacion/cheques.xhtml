@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:fado="http://java.sun.com/jsf/composite/customs">
+	
+
+	
+	<p:outputPanel>
+	<!-- 	  	iniciobarratop -->
+			<p:outputPanel styleClass="BlueBack">
+				<div class="EmptyBox10 DisplayOnDesk"></div>
+				<div class="EmptyBox10 DisplayOnMobile"></div>
+				<div class="ui-g">
+					<h:outputText
+						styleClass="Fs20 Wid90  DispInlBlock TexAlRight  White PaddingRight10 BoxSizeBorder TextTitle"
+						value="Descripci&#243;n y f&#243;rmula" />
+					<p:outputPanel styleClass="DispInlBlock Wid10 TexAlCenter">
+						<h:form>
+							<h:commandLink actionListener="#{compChequesMaBean.showHideMessageInformation}">
+								<h:graphicImage value="./resources/images/17-MAS-01.svg"
+									styleClass="MarAuto" rendered="true" height="24" width="24" />
+								<p:ajax update="@([id$=panelInformacion3])" />
+							</h:commandLink>
+						</h:form>
+					</p:outputPanel>
+				</div>
+				<div class="EmptyBox5 DisplayOnMobile"></div>
+				<div class="EmptyBox10 DisplayOnDesk"></div>
+				<div class="EmptyBox5 BlueBack-5"></div>
+			</p:outputPanel>
+
+
+			<p:outputPanel id="panelInformacion3" styleClass="GrayBack-1">
+				<p:outputPanel rendered="#{compChequesMaBean.ocultarmostrar}">
+					<article class="Fs18 PadWithBorder40 BoxSizeBorder DispBlock">
+						<p>
+							Participación porcentual de la compensación interbancaria de cheques por tipo de plaza. 
+							Las estadísticas se clasifican dependiendo de la sesión del canje: primera o canje al cobro y segunda correspondiente a las devoluciones.
+						</p>
+						<p>
+							La compensación de cheques se realiza en tres tipos de plazas:
+						</p>
+						<p>
+							<strong>a.</strong>	CEDEC: Ciudades donde opera la cámara electrónica de cheques. <br/>
+						</p>
+						<p>
+							<strong>b.</strong>	Sucursales Banco de la República: Ciudades donde el Banco opera la cámara y no son CEDEC.<br/>
+						</p>
+						<p>
+							<strong>c.</strong>	Delegadas: Ciudades donde el canje opera a través de una entidad participante.
+						</p>
+						<p>
+							Las cifras se presentan en miles de millones de pesos.
+						</p>
+					</article>
+					<div class="EmptyBox10"></div>
+				</p:outputPanel>
+				<p:outputPanel rendered="#{compChequesMaBean.ocultarmostrar}">
+					<div class="EmptyBox10 BlueBack-5"></div>
+				</p:outputPanel>
+
+			</p:outputPanel>
+			<!-- 		finalbarratop  -->
+	<p:panelGrid id="panelx2-4" columns="1" styleClass="cleaner2">
+	    
+		<p:accordionPanel id="accordionCh" activeIndex="-1" cache="false" dynamic="true" styleClass="NoPaddingRight NoPaddingLeft" multiple="true">
+			<p:ajax event="tabChange" update="@([id$=pacanje],[id$=padevoluciones])" listener="#{compChequesMaBean.onTabChange}"/> 
+		   <p:tab id="tabCanje" titleStyleClass="tabtittles ">
+		       <f:facet name="title">
+		        <p:outputPanel styleClass="ui-g Wid100 MarginLeft15">
+	               	<p:outputLabel value="Canje al cobro" styleClass="fontTabTittle"/>
+	            </p:outputPanel>   	
+            </f:facet>
+	           <p:panel id="pacanje">
+	              <p:outputPanel styleClass="ui-helper-clearfix NoPaddingLeft NoPaddingRight ">
+	           	   	<ui:include src="chequescanje.xhtml"></ui:include>
+	           	  </p:outputPanel> 
+		       </p:panel>        	
+		   </p:tab>	
+		   
+		   <p:tab id="tabDevolucion" titleStyleClass="tabtittles">
+		       <f:facet name="title">
+		        <p:outputPanel styleClass="ui-g Wid100 MarginLeft15">
+	               	<p:outputLabel value="Devoluciones" styleClass="fontTabTittle"/>
+	            </p:outputPanel>   	
+            </f:facet>
+	           <p:panel id="padevoluciones" styleClass="cleaner2">
+	              <p:outputPanel styleClass="ui-helper-clearfix">
+					<ui:include src="chequesdevolucion.xhtml"></ui:include>
+	           	  </p:outputPanel> 
+		       </p:panel>        	
+		   </p:tab>	
+		</p:accordionPanel>
+	</p:panelGrid>
+</p:outputPanel>	
+</ui:composition>	    

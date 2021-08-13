@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:fado="http://java.sun.com/jsf/composite/customs">
+	<h:outputScript library="js" name="pdfmake.min.js"/>
+	<h:outputScript library="js" name="vfs_fonts.js"/>
+	<h:outputStylesheet library="css" name="iThing.css" />
+	<h:outputStylesheet library="css" name="chart.css" />
+
+	<h:outputScript library="js" name="chart.js"/>
+	<h:outputScript library="js" name="chartc.js"/>
+	<p:outputPanel id="vdevol_panelx1" styleClass="cleaner2">
+		<p:panelGrid id="vdevol_panelx2" columns="1" styleClass="cleaner2" layout="grid">
+			<p:outputPanel id="vdevol_panelfiltro" columns="1" styleClass="cleaner2" layout="grid">
+				<p:outputPanel id="vdevol_pvalor" styleClass="cleaner2">
+					<p:outputPanel id="vdevol_valorfiltroParent" styleClass="cleaner2">
+						<p:panelGrid columns="2"
+							columnClasses="ui-g-12 ui-md-12 ui-lg-9,ui-g-12 ui-md-12 ui-lg-3"
+							styleClass="cleaner2" layout="grid">
+								<p:outputPanel styleClass="cleaner2">
+									<p:panelGrid columns="2"
+										columnClasses="ui-g-12 ui-md-12 ui-lg-7,ui-g-12 ui-md-12 ui-lg-5 NoPaddingRight NoPaddingLeft"
+										styleClass="ui-panelgrid-blank ui-fluid cleaner2"
+										layout="grid">
+										<p:panelGrid id="vdevol_panelFiltros" columns="1"
+											styleClass="cleaner2 NoPaddingLeft NoPaddingRight"
+											layout="grid" columnClasses="NoPaddingLeft NoPaddingRight">
+										<h:form >
+											<p:outputPanel styleClass="Wid100 ui-g VerticalCenter BoxSizeBorder">
+												<p:outputLabel value="Periodo" styleClass="ui-g-3 Fs14"></p:outputLabel>
+												<p:outputPanel styleClass="ui-g-9 NoPaddingTopBotton" style="padding-right: 4px !important;">
+												<p:selectOneMenu id="vdevol_selFiltroPorValor"  
+													widgetVar="vdevol_selFiltroPorValorW" required="true"
+													autoWidth="false"
+													value="#{compChequesDevolucionMaBean.periodicidad}"
+													requiredMessage="Seleccione Periodo" placeholder="Periodo"
+													styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande"
+													>
+													<f:selectItem itemLabel="Diario" itemValue="1" />
+													<f:selectItem itemLabel="Mensual" itemValue="2" />
+													<f:selectItem itemLabel="Trimestral" itemValue="3" />
+													<f:selectItem itemLabel="Semestral" itemValue="4" />
+													<f:selectItem itemLabel="Anual" itemValue="5" />
+													<p:ajax process="@this" update="@([id$='vdevol_panelesValoresDinamic'],[id$='vdevol_valorgraficavalor'])" listener="#{compChequesDevolucionMaBean.changePanelAction}" onsuccess="changeperiodiciorperiododevol(); return false;"/>
+												</p:selectOneMenu>
+												</p:outputPanel>
+											</p:outputPanel>
+											<p:panelGrid id="vdevol_panelesValoresDinamic" columns="1"
+												styleClass="cleaner2 NoPaddingLeft NoPaddingRight border-left-gray-Desk "
+												layout="grid" columnClasses="ui-g-12 NoPaddingLeft NoPaddingRight">
+												<p:outputPanel id="vdevol_pValorDiario" styleClass="ui-g" style="display:none;">
+													<fado:slideraniomesdia idg="vdevol_valperiodo1" tittle="" StyleClassWidth="ui-g-9 ui-md-9 ui-lg-12 MarAutoLeft" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+												<p:outputPanel id="vdevol_pValorMensual" styleClass="ui-g" style="display:none;">
+													<fado:slideraniomes idg="vdevol_valmensual1" tittle="" StyleClassWidth="ui-g-9 ui-md-9 ui-lg-12 MarAutoLeft" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+												<p:outputPanel id="vdevol_pValorTrimestral" styleClass="ui-g" style="display:none;">
+													<fado:slideraniotrimestre idg="vdevol_valtrimestral1" tittle="" StyleClassWidth="ui-g-9 ui-md-9 ui-lg-12 MarAutoLeft" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+												<p:outputPanel id="vdevol_pValorSemestral" styleClass="ui-g" style="display:none;"> 
+													<fado:slideraniosemestre idg="vdevol_valsemestral1" tittle="" toUpdate="vdevol_valorgraficavalor" StyleClassWidth="ui-g-9 ui-md-9 ui-lg-12 MarAutoLeft" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+												<p:outputPanel id="vdevol_pValorAnual" styleClass="ui-g" style="display:none;">
+													<fado:slideranio idg="vdevol_valanual1" tittle="" toUpdate="vdevol_valorgraficavalor" StyleClassWidth="ui-g-9 ui-md-9 ui-lg-12 MarAutoLeft" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+											</p:panelGrid>
+											</h:form>
+										</p:panelGrid>
+										<p:panelGrid columns="1" layout="grid" styleClass="cleaner2">
+											<p:outputPanel styleClass="cleaner2">
+											  <h:form styleClass="ui-g VerticalCenter">
+											  <p:outputLabel value="Tipo de Plaza" styleClass="ui-g-5 Fs14" ></p:outputLabel>
+											  <p:outputPanel styleClass="ui-g-7 NoPaddingTopBotton">
+												<p:selectOneMenu id="vdevol_tipoplaza" value="#{compChequesDevolucionMaBean.tipodeplaza}" widgetVar="vdevol_tipoplazaVar" styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande NoPadding">
+													<f:selectItem itemValue="todas" itemLabel="Todas"/>
+													<f:selectItems value="#{compChequesDevolucionMaBean.tiposdeplaza}" var="tp" itemValue="#{tp.idMedioServCompensacion}" itemLabel="#{tp.descMedioServCompensacion}"/>
+													<p:ajax onsuccess="changeperiodiciorperiododevol(); return false;" update="@([id$=vdevol_valorgraficavalor],[id$=vdevol_messageinformationglobal])"/>
+												</p:selectOneMenu>
+												</p:outputPanel>
+											  </h:form>	 
+											</p:outputPanel>
+											<p:outputPanel styleClass="DisplayOnDesk">
+												<h:form>
+													<p:outputPanel class="ui-g Wid90">
+														<p:commandButton icon="" styleClass="WhiteBack Black Wid60 NoMargin NoBorder-radius-Right Fs14 border-gray-1 " process="@this"
+															value="Restaurar" update="@([id$='vdevol_valorfiltroParent'],[id$='vdevol_valorgraficavalor'],[id$=vdevol_sel_tipoplaza])" 
+															actionListener="#{compChequesDevolucionMaBean.restaurarAction}"  onclick="recargar();"
+															/>
+														<p:commandButton icon="icon-restaurar" styleClass="BlueBack Wid30 NoMargin NoBorder-radius-Left"  process="@this"
+															update="@([id$='vdevol_valorfiltroParent'],[id$='vdevol_valorgraficavalor'],[id$=vdevol_sel_tipoplaza])" 
+															actionListener="#{compChequesDevolucionMaBean.restaurarAction}"  onclick="recargar();">
+														</p:commandButton>
+													</p:outputPanel>
+												</h:form>
+
+											</p:outputPanel>
+
+											<p:outputPanel styleClass="DisplayOnMobile">
+												<h:form styleClass="ui-g-6">
+													<p:outputPanel class="ui-g" style="padding-top: 4px !important">
+														<p:commandButton icon=""
+															styleClass="WhiteBack Black Wid70 NoMargin NoBorder-radius-Right Padding5 Fs14 border-gray-1 TexAlLeft"
+															value="Restaurar" process="@this"
+															update="@([id$='vdevol_valorfiltroParent'],[id$='vdevol_valorgraficavalor'],[id$=vdevol_sel_tipoplaza])"
+															actionListener="#{compChequesDevolucionMaBean.restaurarAction}"  onclick="recargar();"
+															/>
+														<p:commandButton icon="icon-restaurar"
+															styleClass="BlueBack Wid30 NoMargin Padding5 NoBorder-radius-Left"
+															process="@this" immediate="true"
+															update="@([id$='vdevol_valorfiltroParent'],[id$='vdevol_valorgraficavalor'],[id$=vdevol_sel_tipoplaza])"
+															actionListener="#{compChequesDevolucionMaBean.restaurarAction}"  onclick="recargar();"  />
+													</p:outputPanel>
+												</h:form>
+
+												<h:form id="vdevol_frmExportar001" onsubmit="assignValuesCheqDev()"> 
+													<div style="display: none;">
+														<p:inputText widgetVar="vdevol_startVar001" value="#{compChequesDevolucionMaBean.start}"/>
+														<p:inputText widgetVar="vdevol_endVar001" value="#{compChequesDevolucionMaBean.end}"/>
+													</div>
+													<p:outputPanel id="vdevol_panelexportar001"  styleClass="border-left-c ui-g-6  NoPaddingRight">
+														<p:panelGrid columns="1" styleClass="panelgridExportar MarAuto ui-g-12 ui-md-6">
+															<p:selectOneMenu widgetVar="vdevol_exportarG001W"  onchange="exportChartPipe(this.value,'vdevol_chartvalores', 'vdevol_chartcantidad', 'Devoluciones'); restartExportar('vdevol_exportarG001W');" styleClass="selectonemenugrande selectDownload">
+																<f:selectItem itemLabel="Gráfica" itemValue="" />
+																<f:selectItem itemLabel="JPG" itemValue="jpg" />
+																<f:selectItem itemLabel="PDF" itemValue="pdf" />
+															</p:selectOneMenu>
+															<p:selectOneMenu id="vdevol_selectdescargar001" widgetVar="vdevol_selectdescargarW001" value="#{compChequesDevolucionMaBean.tipoaexportar}" styleClass="selectonemenugrande">
+																<f:selectItem itemLabel="Datos" itemValue="" />
+																<f:selectItem itemLabel="CSV" itemValue="csv" />
+																<f:selectItem itemLabel="XLS" itemValue="xls" />
+																<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
+																<p:ajax event="change" onsuccess='$(&apos;[id*="downloadFile001"]&apos;).click();' process="@this" update="@([id$=vdevol_panelexportar001])"/>
+															</p:selectOneMenu>
+															<p:commandButton id="vdevol_downloadFile001" widgetVar="vdevol_downloadFile001W" value="Download" ajax="false" icon="fa fa-fw fa-cloud-download"
+																actionListener="#{compChequesDevolucionMaBean.exportAction}" style="display: none;" onclick="vdevol_updatedescargar001()">
+																<f:attribute name="start" 		value="#{compChequesDevolucionMaBean.start}"/>
+																<f:attribute name="end" 		value="#{compChequesDevolucionMaBean.end}"/>
+																<f:attribute name="tipodeplaza" 	value="#{compChequesDevolucionMaBean.tipodeplaza}"/>
+															</p:commandButton>
+															<p:remoteCommand name="vdevol_updatedescargar001" update="@([id$=vdevol_panelexportar001])" action="#{compChequesDevolucionMaBean.changeTabExportar}" delay="3000"/>
+														</p:panelGrid>
+													</p:outputPanel>
+												</h:form>
+											</p:outputPanel>
+										</p:panelGrid>
+										<p:messages id="vdevol_messageinformationglobal"  showDetail="false" rendered="true">
+											<p:autoUpdate />
+										</p:messages> 
+									</p:panelGrid>
+								</p:outputPanel>
+
+							<h:form id="vdevol_frmExportar0002"  styleClass="DisplayOnDesk border-left-c" onsubmit="assignValuesCheqDev()">
+								<p:outputPanel id="vdevol_panelexportar0002">
+									<div style="display: none;">
+										<p:inputText widgetVar="vdevol_startVar" value="#{compChequesDevolucionMaBean.start}"/>
+										<p:inputText widgetVar="vdevol_endVar" value="#{compChequesDevolucionMaBean.end}"/>
+									</div>
+									
+									<p:panelGrid columns="1" styleClass="panelgridExportar MarginLeft15">
+										<p:selectOneMenu widgetVar="vdevol_exportarG002W" onchange="exportChartPipe(this.value,'vdevol_chartvalores', 'vdevol_chartcantidad', 'Devoluciones'); restartExportar('vdevol_exportarG002W');"  styleClass="selectonemenugrande selectDownload">
+											<f:selectItem itemLabel="Gráfica" itemValue="" />
+											<f:selectItem itemLabel="JPG" itemValue="jpg" />
+											<f:selectItem itemLabel="PDF" itemValue="pdf" />
+										</p:selectOneMenu>
+										<p:selectOneMenu id="vdevol_selectdescargar" widgetVar="vdevol_selectdescargarW" value="#{compChequesDevolucionMaBean.tipoaexportar}" styleClass="selectonemenugrande">
+											<f:selectItem itemLabel="Datos" itemValue="" />
+											<f:selectItem itemLabel="CSV" itemValue="csv" />
+											<f:selectItem itemLabel="XLS" itemValue="xls" />
+											<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
+											<p:ajax event="change" onsuccess='$(&apos;[id*="downloadFile0002"]&apos;).click();' update="@this"/>
+										</p:selectOneMenu>
+										<p:commandButton id="vdevol_downloadFile0002" widgetVar="vdevol_downloadFileW0002" value="Download" ajax="false"
+											icon="fa fa-fw fa-cloud-download" onclick="vdevol_updatedescargar002();" 
+											actionListener="#{compChequesDevolucionMaBean.exportAction}"
+											style="display: none;"
+											>
+											<f:attribute name="start" value="#{compChequesDevolucionMaBean.start}"/>
+											<f:attribute name="end" value="#{compChequesDevolucionMaBean.end}"/>
+											<f:attribute name="tipodeplaza" value="#{compChequesDevolucionMaBean.tipodeplaza}"/>
+										</p:commandButton>
+										<p:remoteCommand name="vdevol_updatedescargar002" update="@([id$=vdevol_panelexportar0002])" action="#{compChequesDevolucionMaBean.changeTabExportar}" delay="3000"/>
+									</p:panelGrid>
+								</p:outputPanel>
+							</h:form>
+						</p:panelGrid>
+					</p:outputPanel>
+					<p:panelGrid id="vdevol_valorgraficavalor" columns="1" styleClass="cleaner2">
+						<h:form prependid="vdevol_false">
+								<div class="ui-g">
+		 						  	<div class="ui-g-12 ui-md-12 ui-lg-6"><div id="vdevol_chartvalores" /></div>
+		 						  	<div class="ui-g-12 ui-md-12 ui-lg-6"><div id="vdevol_chartcantidad"/></div>
+		 						</div>  		
+							<h:outputScript>
+									function assignValuesCheqDev() {
+										var v_start;
+										var v_end;
+										var periodo = PF('vdevol_selFiltroPorValorW').jq.find('option:selected').val();
+										switch (periodo) {
+											case "1":
+												v_start = getDateStartFromDiario('vdevol_valperiodo1')
+												v_end = getDateEndFromDiario('vdevol_valperiodo1')
+												break;										
+											case "2":
+												v_start = getDateStartFromMensual('vdevol_valmensual1')
+												v_end = getDateEndFromMensual('vdevol_valmensual1')
+												break;										
+											case "3":
+												v_start = getDateStartFromTrimestral('vdevol_valtrimestral1')
+												v_end = getDateEndFromTrimestral('vdevol_valtrimestral1')
+												break;
+											case "4": 
+												v_start = getDateStartFromSemestral('vdevol_valsemestral1')
+												v_end = getDateEndFromSemestral('vdevol_valsemestral1')
+												break;										
+											case "5": 
+												v_start = getDateStartFromAnual('vdevol_valanual1')
+												v_end = getDateEndFromAnual('vdevol_valanual1')
+												break;										
+										};//switch	
+										PF('vdevol_startVar').jq.val(v_start);
+										PF('vdevol_endVar').jq.val(v_end);
+										PF('vdevol_startVar001').jq.val(v_start);
+										PF('vdevol_endVar001').jq.val(v_end);
+									}
+							
+							
+									function changeperiodiciorperiododevol() {
+										var periodo = PF('vdevol_selFiltroPorValorW').jq.find('option:selected').val();
+										var tipodeplaza = PF('vdevol_tipoplazaVar').jq.find('option:selected').val();
+										var label = PF('vdevol_tipoplazaVar').jq.find('option:selected').text();
+										$("[id*='vdevol_pValorDiario']").hide();
+										$("[id*='vdevol_pValorMensual']").hide();
+										$("[id*='vdevol_pValorTrimestral']").hide();
+										$("[id*='vdevol_pValorSemestral']").hide();
+										$("[id*='vdevol_pValorAnual']").hide();
+										switch (periodo) {
+										case "1":
+												$("[id*='vdevol_pValorDiario']").show();
+												createChartMinDiarioDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valperiodo1',tipodeplaza,label,'vdevol_messageinformationglobal');
+												break;										
+											case "2":
+												$("[id*='vdevol_pValorMensual']").show();
+												createChartMinMensualDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valmensual1',tipodeplaza,label,'vdevol_messageinformationglobal');
+												break;										
+											case "3":
+												$("[id*='vdevol_pValorTrimestral']").show();
+												createChartMinTrimestralDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valtrimestral1',tipodeplaza,label,'vdevol_messageinformationglobal');
+												break;
+											case "4": 
+												$("[id*='vdevol_pValorSemestral']").show();
+												createChartMinSemestralDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valsemestral1',tipodeplaza,label,'vdevol_messageinformationglobal');
+												break;										
+											case "5": 
+												$("[id*='vdevol_pValorAnual']").show();
+												createChartMinAnualDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valanual1',tipodeplaza,label,'vdevol_messageinformationglobal');
+												break;										
+										};//switch
+									}//function
+									
+									function recargar(){
+									}
+									
+								    $(document).ready(function(){
+								    	changeperiodiciorperiododevol();
+								    	var isIPhone = {
+										   
+										    iOS: function() {
+										        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+										    },
+										    any: function() {
+										        return (isMobile.iOS());
+										    }
+										};
+								     });
+								     
+								    jQuery(window).resize(function() {
+								    	var isIPhone = {
+										   
+										    iOS: function() {
+										        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+										    },
+										    any: function() {
+										        return (isMobile.iOS());
+										    }
+										};
+								    
+								    	if( isIPhone.any() ){
+	         							}else{
+	         								changeperiodiciorperiododevol();
+	         							}
+	      							});
+									
+							</h:outputScript>
+						</h:form>
+					</p:panelGrid>
+				</p:outputPanel>		
+			</p:outputPanel>			
+		</p:panelGrid>
+	</p:outputPanel>
+	<p:dialog widgetVar="vdevol_dlg" showEffect="fade" modal="true" header="Grafica de Transacci&#243;n como Imagen" resizable="false">
+		<p:outputPanel id="vdevol_output" layout="block" style="width:500px;height:300px" />
+	</p:dialog>
+</ui:composition>

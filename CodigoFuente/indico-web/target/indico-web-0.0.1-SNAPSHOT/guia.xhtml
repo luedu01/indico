@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:fado="http://java.sun.com/jsf/composite/customs">
+      
+
+	
+	<b:container fluid="true" id="columnGuia" class="columnGuiaCon">
+			<p:panelGrid columns="2" columnClasses="ui-g-6 ui-md-12 ui-lg-6 ui-sm-12,ui-g-6 ui-md-12 ui-lg-6 ui-sm-12" layout="grid" styleClass="ui-panelgrid-blank BoxSizeBorder">
+			  	<p:outputPanel styleClass="BoxSizeBorderCH">
+				    	<p:graphicImage name="images/guiauso.png" styleClass="imagehelp DisplayOnDesk"/>
+						<p:graphicImage name="images/guiausomini.png" styleClass="imagehelpmini DisplayOnMobile"/>
+				</p:outputPanel>			
+  					<p:outputPanel styleClass="BoxSizeBorderCH" >
+			<p:accordionPanel id="accordionHelp" activeIndex="-1" onTabChange="" styleClass="accordiontabheader" >
+						 	<p:tab titleStyleClass="tabhelp">
+								 	<f:facet name="title">
+								        <p:panelGrid styleClass="ui-no-border panelHelp" columns="2" columnClasses="ui-g-1 ui-md-1 ui-lg-1 ui-sm-1,ui-g-11 ui-md-11 ui-lg-11 ui-sm-11">
+								        	<h:outputText value="1" styleClass="numberPregunta"/>
+							               	<h:outputText value="¿Si quiero cambiar los datos de una gráfica, cómo lo puedo hacer?" styleClass="labelpregunta"/>
+							            </p:panelGrid>   	
+								 	</f:facet>
+								 	<p:outputPanel styleClass="mensajeHelp TexAlLeft BoxSizeBorder">
+								 		<p:outputPanel styleClass="BoxSizeBorderHelp"> 
+									 		<br/> 
+									 		<h:outputText value="Para cada gráfica se muestran unos parámetros con base en los cuales usted puede construir su gráfica, 
+									 		solo basta con desplegar las opciones y seleccionar una. En la parte superior de cada gráfica, en el botón 
+									 		“Descripción y fórmula” encontrará una explicación del indicador la cual le ayudará a seleccionar los parámetros 
+									 		que requiera para su consulta." styleClass="Fs12 PaddingTop5 PaddingBottom5"/>	
+									 		<br/> 
+									 		<br/> 
+								 		</p:outputPanel>
+								 	</p:outputPanel>
+							</p:tab>
+							 <p:tab titleStyleClass="tabhelp">
+							 	<f:facet name="title">
+							        <p:panelGrid styleClass="ui-no-border panelHelp" columns="2" columnClasses="ui-g-1 ui-md-1 ui-lg-1 ui-sm-1,ui-g-11 ui-md-11 ui-lg-11 ui-sm-11">
+							        	<h:outputText value="2" styleClass="numberPregunta"/>
+						               	<h:outputText id="question" value="¿Puedo descargar la imagen de la gráfica en un archivo?" styleClass="labelpregunta"/>
+						            </p:panelGrid>   	
+							 	</f:facet>
+							 	<p:outputPanel styleClass="mensajeHelp TexAlLeft BoxSizeBorder">
+							 		<p:outputPanel styleClass="BoxSizeBorderHelp"> 
+								 		<br/> 
+								 		<h:outputText value="Sí es posible descargarla, para esto se debe seleccionar el formato deseado en la lista desplegable “Gráfica” y a 
+								 		continuación dar clic en el botón descargar." styleClass="Fs12 PaddingTop5 PaddingBottom5"/>																 		
+								 		<br/> 
+								 		<br/> 
+							 		</p:outputPanel>
+							 	</p:outputPanel>
+							 </p:tab>
+							 <p:tab titleStyleClass="tabhelp">
+							 	<f:facet name="title">
+							        <p:panelGrid styleClass="ui-no-border panelHelp" columns="2" columnClasses="ui-g-1 ui-md-1 ui-lg-1 ui-sm-1,ui-g-11 ui-md-11 ui-lg-11 ui-sm-11">
+							        	<h:outputText value="3" styleClass="numberPregunta"/>
+						               	<h:outputText value="¿En qué formatos puedo descargar la imagen de la gráfica?" styleClass="labelpregunta"/>
+						            </p:panelGrid>   	
+							 	</f:facet>
+							 	<p:outputPanel styleClass="mensajeHelp TexAlLeft BoxSizeBorder">
+							 		<p:outputPanel styleClass="BoxSizeBorderHelp"> 
+								 		<br/> 
+								 		<h:outputText value="Se puede seleccionar descargar la imagen en formato JPG o PDF." styleClass="Fs12 PaddingTop5 PaddingBottom5"/>
+								 		<br/> 
+								 		<br/> 																 		
+							 		</p:outputPanel>
+							 	</p:outputPanel>
+							 </p:tab>
+							 <p:tab titleStyleClass="tabhelp">
+							 	<f:facet name="title">
+							        <p:panelGrid styleClass="ui-no-border panelHelp" columns="2" columnClasses="ui-g-1 ui-md-1 ui-lg-1 ui-sm-1,ui-g-11 ui-md-11 ui-lg-11 ui-sm-11">
+							        	<h:outputText value="4" styleClass="numberPregunta"/>
+						               	<h:outputText value="¿Se pueden descargar los datos con los cuales se genera la gráfica?" styleClass="labelpregunta"/>
+						            </p:panelGrid>   	
+							 	</f:facet>
+							 	<p:outputPanel styleClass="mensajeHelp TexAlLeft BoxSizeBorder">
+							 		<p:outputPanel styleClass="BoxSizeBorderHelp"> 
+								 		<br/> 
+								 		<h:outputText value="Sí es posible descargar los datos, para esto se debe seleccionar el formato deseado en la lista 
+								 		desplegable “Datos” y continuación dar clic en el botón descargar." styleClass="Fs12 PaddingTop5 PaddingBottom5"/>
+								 		<br/><br/>
+								 		<h:outputText value="Por defecto los valores num&#233;ricos, usan como separador de miles el punto ( . ) y como separador decimal la coma ( , )." styleClass="Fs12 PaddingTop5 PaddingBottom5"/>															 		
+								 		<br/> 
+								 		<br/> 
+							 		</p:outputPanel>
+							 	</p:outputPanel>
+							 </p:tab>
+							 <p:tab titleStyleClass="tabhelp">
+							 	<f:facet name="title">
+							        <p:panelGrid styleClass="ui-no-border panelHelp" columns="2" columnClasses="ui-g-1 ui-md-1 ui-lg-1 ui-sm-1,ui-g-11 ui-md-11 ui-lg-11 ui-sm-11">
+							        	<h:outputText value="5" styleClass="numberPregunta"/>
+						               	<h:outputText value="¿En qué formatos se pueden descargar los datos?" styleClass="labelpregunta"/>
+						            </p:panelGrid>   	
+							 	</f:facet>
+							 	<p:outputPanel styleClass="mensajeHelp TexAlLeft BoxSizeBorder">
+							 		<p:outputPanel styleClass="BoxSizeBorderHelp"> 
+								 		<br/> 
+								 		<h:outputText value="Se puede seleccionar descargar los datos en formatos Excel o Delimitado por comas (CSV)" styleClass="Fs12 PaddingTop5 PaddingBottom5"/>
+								 		<br/> 
+								 		<br/>
+								 		<h:outputText value="Por defecto los valores num&#233;ricos, usan como separador de miles el punto ( . ) y como separador decimal la coma ( , )." styleClass="Fs12 PaddingTop5 PaddingBottom5"/>
+								 		<br/> 
+								 		<br/>
+							 		</p:outputPanel>
+							 	</p:outputPanel>
+							 </p:tab>
+							</p:accordionPanel>
+				</p:outputPanel>
+			</p:panelGrid>
+	</b:container>	
+</ui:composition>

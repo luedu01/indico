@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:fado="http://java.sun.com/jsf/composite/customs">
+	
+	
+	
+	<h:outputScript library="js" name="chart.js" />
+	<h:outputScript library="js" name="banrep.js" />
+	<h:outputStylesheet library="css" name="iThing.css" />
+	<h:outputStylesheet library="css" name="chart.css" />
+	<h:outputScript library="js" name="pdfmake.min.js" />
+	<h:outputScript library="js" name="vfs_fonts.js" />
+
+	<p:outputPanel id="vval_panelx1" styleClass="cleaner2">
+		<p:panelGrid id="vval_panelx2" columns="1" styleClass="cleaner2" layout="grid">
+			<p:outputPanel id="vval_panelfiltro" columns="1" styleClass="cleaner2" layout="grid">
+				<p:outputPanel id="vval_pvalor" styleClass="cleaner2">
+					<p:outputPanel id="vval_valorfiltro" styleClass="cleaner2">
+						<p:panelGrid columns="2" columnClasses="ui-g-12 ui-md-12 ui-lg-9,ui-g-12 ui-md-3 ui-lg-3" 
+						styleClass="cleaner2 Wid100" layout="grid">
+							<p:outputPanel styleClass="cleaner2 Wid100">
+								<p:panelGrid id="vval_panelFiltros" columns="2" columnClasses="ui-g-12 ui-md-12 ui-lg-8,ui-g-12 ui-md-12 ui-lg-4" styleClass="cleaner2 Wid100">
+									<p:outputPanel>
+										<h:form>
+											<p:outputPanel styleClass="Wid100 ui-g VerticalCenter BoxSizeBorder NoPaddingTopBotton">
+												<p:outputLabel value="Periodo" styleClass="ui-g-3 Fs14"></p:outputLabel>
+												<p:outputLabel styleClass="ui-g-9 NoPaddingTopBotton">
+													<p:selectOneMenu id="vval_selFiltroPorValor" 
+														widgetVar="vval_selFiltroPorValorW" required="true"
+														autoWidth="false"
+														value="#{distribucionValorMaBean.periodicidad}"
+														requiredMessage="Seleccione Periodo" placeholder="Periodo"
+														styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande">
+														<f:selectItem itemLabel="Diario" itemValue="1" />
+														<f:selectItem itemLabel="Mensual" itemValue="2" />
+														<f:selectItem itemLabel="Trimestral" itemValue="3" />
+														<f:selectItem itemLabel="Semestral" itemValue="4" />
+														<f:selectItem itemLabel="Anual" itemValue="5" />
+														<p:ajax process="@this" update="@([id$=vval_panelesValoresDinamic],[id$=vval_valorgraficavalor002])" listener="#{distribucionValorMaBean.changePanelAction}" oncomplete="vval_changeperiodiciorperiodo(); return false;"/>
+													</p:selectOneMenu>
+												</p:outputLabel>
+											</p:outputPanel>
+											<div class="EmptyBox10"></div>
+											<p:panelGrid id="vval_panelesValoresDinamic" columns="1" styleClass="Wid100 ui-g NoPaddingLeft NoPaddingRight border-left-gray-Desk" layout="grid" columnClasses="ui-g-12 NoPaddingLeft NoPaddingRight Wid100">
+												<p:outputPanel id="vval_pValorDiario" styleClass="ui-g" style="display:none;">
+													<fado:slideraniomesdia idg="vval_valperiodo1" tittle="1er Periodo" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold" TextTable="true" />
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideraniomesdia idg="vval_valperiodo2" tittle="2do Periodo" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToLeft FontBold" TextTable="true" />
+												</p:outputPanel>
+												<p:outputPanel id="vval_pValorMensual" styleClass="ui-g" style="display:none;">
+													<fado:slideraniomes idg="vval_valmensual1" tittle="1er Periodo" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold" TextTable="true" />
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideraniomes idg="vval_valmensual2" tittle="2do Periodo" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToLeft FontBold" TextTable="true" />
+												</p:outputPanel>
+												<p:outputPanel id="vval_pValorTrimestral" styleClass="ui-g" style="display:none;">
+													<fado:slideraniotrimestre idg="vval_valtrimestral1" tittle="1er Periodo" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold" TextTable="true" />
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideraniotrimestre idg="vval_valtrimestral2" tittle="2do Periodo" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToLeft FontBold" TextTable="true" />
+												</p:outputPanel>
+												<p:outputPanel id="vval_pValorSemestral" styleClass="ui-g" style="display:none;"> 
+													<fado:slideraniosemestre idg="vval_valsemestral1" tittle="1er Periodo" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold" TextTable="true" />
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideraniosemestre idg="vval_valsemestral2" tittle="2do Periodo" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToLeft FontBold" TextTable="true" />
+												</p:outputPanel>
+												<p:outputPanel id="vval_pValorAnual" styleClass="ui-g" style="display:none;">
+													<fado:slideranio idg="vval_valanual1" tittle="1er Periodo" toUpdate="valorgraficavalor" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold" TextTable="true" />
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" /> 
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideranio idg="vval_valanual2" tittle="2do Periodo" toUpdate="valorgraficavalor" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToLeft FontBold" TextTable="true" />
+												</p:outputPanel>
+											</p:panelGrid>
+										</h:form>
+									</p:outputPanel>
+									<p:outputPanel id="vval_pbotton"> 
+										<h:form>
+											<p:outputPanel class="ui-g DisplayOnDesk Fs14" style="padding-top: 6px !important">
+												<p:commandButton icon="icon-restaurar" styleClass="BlueBack Wid30 NoMargin NoBorder-radius-Right Fs14" process="@this"
+													update="@([id$=vval_panelFiltros],[id$=vval_valorgraficavalor002],[id$=vval_panelesValoresDinamic])"
+													actionListener="#{distribucionValorMaBean.restaurarAction}" onclick="vval_recargar();"/>
+												<p:commandButton icon=""
+													styleClass="WhiteBack Black Wid60 NoMargin  NoBorder-radius-Left  Fs14 border-gray-1 "
+													value="Restaurar" process="@this"
+													update="@([id$=vval_panelFiltros],[id$=vval_valorgraficavalor002])"
+													actionListener="#{distribucionValorMaBean.restaurarAction}" onclick="vval_recargar();"/>
+											</p:outputPanel>
+										</h:form>
+									</p:outputPanel>
+									<p:outputPanel styleClass="DisplayOnMobile ">
+										<h:form styleClass="ui-g-6">
+											<p:outputPanel class="ui-g" style="padding-top: 4px !important">
+												<p:commandButton icon=""
+													styleClass="WhiteBack Black Wid70 NoMargin NoBorder-radius-Right Padding5 Fs14 border-gray-1 TexAlLeft"
+													value="Restaurar" process="@this"
+													update="@([id$=vval_panelFiltros],[id$=vval_valorgraficavalor002],[id$=vval_panelesValoresDinamic])"
+													actionListener="#{distribucionValorMaBean.restaurarAction}" />
+												<p:commandButton icon="icon-restaurar"
+													styleClass="BlueBack Wid30 NoMargin Padding5 NoBorder-radius-Left"
+													process="@this"
+													update="@([id$=vval_panelFiltros],[id$=vval_valorgraficavalor002],[id$=vval_panelesValoresDinamic])"
+													actionListener="#{distribucionValorMaBean.restaurarAction}" />
+											</p:outputPanel>
+										</h:form>
+										
+										<h:form id="vval_frmExportar001" styleClass="ui-g-6 PaddingLeft3" onsubmit="assignValuesVal()">
+											<div style="display: none;">
+												<p:inputText widgetVar="vval_startVar001" value="#{distribucionValorMaBean.start}"/>
+												<p:inputText widgetVar="vval_endVar001" value="#{distribucionValorMaBean.end}"/>
+											</div>
+											<p:outputPanel id="vval_panelexportar2" styleClass="border-left-c PaddingLeft3 NoPaddingRight">
+												<p:panelGrid styleClass="panelgridExportar  Wid100 BoxSizeBorder" columns="1">
+													<p:selectOneMenu widgetVar="vval_selectexport001"
+														onchange="exportChart(this.value,'chartzoomsliderdistribucion','Participación Transacciones - Valor');restartExportar('vval_selectexport001');"
+														styleClass="selectDownload selectonemenugrande">
+														<f:selectItem itemLabel="Gráfica"  itemValue="" />
+														<f:selectItem itemLabel="JPG" itemValue="jpg" />
+														<f:selectItem itemLabel="PDF" itemValue="pdf" />
+													</p:selectOneMenu>
+													<p:selectOneMenu
+														value="#{distribucionValorMaBean.tipoaexportar}"
+														styleClass="selectonemenugrande">
+														<f:selectItem itemLabel="Datos" itemValue="" />
+														<f:selectItem itemLabel="CSV" itemValue="csv" />
+														<f:selectItem itemLabel="XLS" itemValue="xls" />
+														<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
+														<p:ajax event="change" 	onsuccess='$(&apos;[id*="vval_downloadFile001"]&apos;).click();' />
+													</p:selectOneMenu>
+												</p:panelGrid>
+												<p:commandButton id="vval_downloadFile001"
+													widgetVar="vval_downloadFile001W" value="Download" ajax="false" process="@form"
+													icon="fa fa-fw fa-cloud-download" onclick="distupdatedescargar001();"
+													actionListener="#{distribucionValorMaBean.exportAction}"
+													style="display: none;" onstart="PF('vval_dlgW').show()" onsuccess="PF('vval_dlgW').hide()">
+													<f:attribute name="start" value="#{distribucionValorMaBean.start}"/>
+													<f:attribute name="end" value="#{distribucionValorMaBean.end}"/>
+												</p:commandButton>
+												<p:remoteCommand name="distupdatedescargar001" update="@([id$=vval_panelexportar2])" action="#{distribucionValorMaBean.changeTabExportar}" delay="3000"/>
+											</p:outputPanel>
+										</h:form>
+									</p:outputPanel>
+								</p:panelGrid>
+								
+								<p:messages id="vval_messageinformationglobal" showDetail="false">
+									<p:autoUpdate />
+								</p:messages>
+							</p:outputPanel>
+
+							<h:form id="vval_frmExportar002" styleClass="DisplayOnDesk" onsubmit="assignValuesVal()">
+								<div style="display: none;">
+									<p:inputText widgetVar="vval_startVar" value="#{distribucionValorMaBean.start}"/>
+									<p:inputText widgetVar="vval_endVar" value="#{distribucionValorMaBean.end}"/>
+								</div>
+								<p:outputPanel id="vval_panelexportar002"
+									styleClass="border-left-c">
+									<p:panelGrid styleClass="panelgridExportar MarginLeft20" columns="1">
+										<p:selectOneMenu widgetVar="vval_selectexport002" onchange="exportChart(this.value,'chartzoomsliderdistribucion','Participación Transacciones - Valor');restartExportar('vval_selectexport002');"
+											styleClass="selectDownload selectonemenugrande">
+											<f:selectItem itemLabel="Gráfica"  itemValue="" />
+											<f:selectItem itemLabel="JPG" itemValue="jpg" />
+											<f:selectItem itemLabel="PDF" itemValue="pdf" />
+										</p:selectOneMenu>
+										<p:selectOneMenu
+											value="#{distribucionValorMaBean.tipoaexportar}"
+											styleClass="selectonemenugrande">
+											<f:selectItem itemLabel="Datos" itemValue="" />
+											<f:selectItem itemLabel="CSV" itemValue="csv" />
+											<f:selectItem itemLabel="XLS" itemValue="xls" />
+											<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
+											<p:ajax event="change" onsuccess='$(&apos;[id*="vval_downloadFile002"]&apos;).click();' />
+										</p:selectOneMenu>
+									</p:panelGrid>
+									<p:commandButton id="vval_downloadFile002"
+										widgetVar="vval_downloadFileW002" value="Download" process="@form"
+										ajax="false" icon="fa fa-fw fa-cloud-download" onclick="distupdatedescargar002();"
+										actionListener="#{distribucionValorMaBean.exportAction}"
+										style="display: none;">
+											<f:attribute name="start" value="#{distribucionValorMaBean.start}"/>
+											<f:attribute name="end" value="#{distribucionValorMaBean.end}"/>
+									</p:commandButton>
+									<p:remoteCommand name="distupdatedescargar002" update="@([id$=vval_panelexportar002])" action="#{distribucionValorMaBean.changeTabExportar}" delay="3000"/>
+								
+								</p:outputPanel>
+							</h:form>
+						</p:panelGrid>
+					</p:outputPanel>
+					<p:panelGrid id="vval_valorgraficavalor002" columns="1" styleClass="cleaner2">
+						<h:form>
+						  <p:panelGrid id="vval_int_valorgraficavalor002" columns="1" styleClass="cleaner2" layout="grid">
+							<div id="chartzoomsliderdistribucion" class="superzoominternal"/>
+							<h:outputScript>
+									function assignValuesVal() {
+										var periodo = PF('vval_selFiltroPorValorW').jq.find('option:selected').val();
+										var v_start;
+										var v_end;
+										switch (periodo) {
+											case "1":
+												v_start = getDateStartFromDiario('vval_valperiodo1')
+												v_end = getDateEndFromDiario('vval_valperiodo2')
+												break;										
+											case "2":
+												v_start = getDateStartFromMensual('vval_valmensual1')
+												v_end = getDateEndFromMensual('vval_valmensual2')
+												break;										
+											case "3":
+												v_start = getDateStartFromTrimestral('vval_valtrimestral1')
+												v_end = getDateEndFromTrimestral('vval_valtrimestral2')
+												break;
+											case "4": 
+												v_start = getDateStartFromSemestral('vval_valsemestral1')
+												v_end = getDateEndFromSemestral('vval_valsemestral2')
+												break;										
+											case "5": 
+												v_start = getDateStartFromAnual('vval_valanual1')
+												v_end = getDateEndFromAnual('vval_valanual2')
+												break;										
+										};//switch	
+										PF('vval_startVar').jq.val(v_start);
+										PF('vval_endVar').jq.val(v_end);
+										PF('vval_startVar001').jq.val(v_start);
+										PF('vval_endVar001').jq.val(v_end);
+									}
+							
+									function vval_changeperiodiciorperiodo() {
+										var periodo = PF('vval_selFiltroPorValorW').jq.find('option:selected').val();
+										$("[id*='vval_pValorDiario']").hide();
+										$("[id*='vval_pValorMensual']").hide();
+										$("[id*='vval_pValorTrimestral']").hide();
+										$("[id*='vval_pValorSemestral']").hide();
+										$("[id*='vval_pValorAnual']").hide();
+										switch (periodo) {
+											case "1":
+												$("[id*='vval_pValorDiario']").show();
+												createSliderDistriValorMinDiario('chartzoomsliderdistribucion','vval_valperiodo1','vval_valperiodo2','vval_messageinformationglobal');
+												break;										
+											case "2":
+												$("[id*='vval_pValorMensual']").show();
+												createSliderDistriValorMinMensual('chartzoomsliderdistribucion','vval_valmensual1','vval_valmensual2','vval_messageinformationglobal');
+												break;										
+											case "3":
+												$("[id*='vval_pValorTrimestral']").show();
+												createSliderDistriValorMinTrimestral('chartzoomsliderdistribucion','vval_valtrimestral1','vval_valtrimestral2','vval_messageinformationglobal');
+										
+												break;
+											case "4": 
+												$("[id*='vval_pValorSemestral']").show();
+												createSliderDistriValorMinSemestral('chartzoomsliderdistribucion','vval_valsemestral1','vval_valsemestral2','vval_messageinformationglobal');
+											
+												break;										
+											case "5": 
+												$("[id*='vval_pValorAnual']").show();
+												createSliderDistriValorMinAnual('chartzoomsliderdistribucion','vval_valanual1','vval_valanual2','vval_messageinformationglobal');
+											
+												break;										
+										};//switch										
+										
+									}//function
+								     
+						  			function vval_recargar() {
+									}
+									
+									$(document).ready(function(){
+								    	gra = document.getElementById('accoCuentas_active').value;
+								    	if(gra == "1"){
+								    	   	vval_changeperiodiciorperiodo();
+								    	}
+								    });
+								    							     
+								    jQuery(window).resize(function() {
+	         							gra = document.getElementById('accoCuentas_active').value;
+								    	if(gra == "1"){
+								    	   	vval_changeperiodiciorperiodo();
+								    	}
+	      							});
+									
+							</h:outputScript>
+						  </p:panelGrid>	
+						</h:form>
+					</p:panelGrid>
+				</p:outputPanel>
+			</p:outputPanel>
+		</p:panelGrid>
+	</p:outputPanel>
+	<p:dialog widgetVar="vval_dlgW" showEffect="fade" modal="true"
+		header="Grafica de Distribuci&#243;n valor como Imagen" resizable="false">
+		<p:outputPanel id="vval_output" layout="block"
+			style="width:500px;height:300px" />
+	</p:dialog>
+</ui:composition>

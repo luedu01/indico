@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mes:Structure
+	xmlns:mes="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+	xmlns:str="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure"
+	xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+	<mes:Header>
+		<mes:ID>BANREP_IND_DIST_CANT</mes:ID>
+		<mes:Test>false</mes:Test>
+		<mes:Prepared>2018-12-14T07:15:03.107Z</mes:Prepared>
+		<mes:Sender id="DSW" />
+		<mes:Receiver id="unknown" />
+	</mes:Header>
+	<com:Annotations>
+		<com:Annotation>
+			<com:AnnotationTitle>Indicador de distribucion por rango de horas - cantidad</com:AnnotationTitle>
+		</com:Annotation>
+	</com:Annotations>
+	<mes:Attributes>
+		<mes:Value id="VAR_FECHA_O_PERIODO" value="Fecha de las transferencias" />
+		<mes:Value id="VAR_PORCENTAJE" value="Porcentaje por hora" />
+		<mes:Value id="VAR_HORA" value="Hora de la transaccion" />
+	</mes:Attributes>
+	<mes:Obs>
+		<mes:ObsKey>
+			<mes:Value id="DIM_PAIS" value="CO"/>
+		</mes:ObsKey>
+		<mes:ObsValue value="0"/>
+		<mes:Attributes>
+			<mes:Value id="VAR_FECHA_O_PERIODO" value="{0}"/>
+			<mes:Value id="VAR_PORCENTAJE" 	value="{1}" />
+			<mes:Value id="VAR_HORA" 	value="{2}" />
+		</mes:Attributes>
+	</mes:Obs>
+</mes:Structure>
+  

@@ -55,9 +55,12 @@ public class RestServices implements Serializable {
 				vgl = ServiceFacades.getInstance().getTransfElectronicaAltoValorService().getAllConjuntoDiarioByGR(concepto);
 			}
 			Integer dias = ServiceFacades.getInstance().getParametersService().getCantidadDeDias();
+			
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][2];
-			Object[][] cantidad = new  Object[vgl.size()][2];
+			//Object[][] valores = new Object[vgl.size()][2];
+			//Object[][] cantidad = new  Object[vgl.size()][2];
+			Series[] valores = new Series[vgl.size()];
+			Series[] cantidad = new Series[vgl.size()];
 			Object[] ticks = new  Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal minimoCantidad = new BigDecimal(NUMBER_LITERAL);
@@ -66,32 +69,36 @@ public class RestServices implements Serializable {
 			int row=0;
 			for (ValorGraficable vg : vgl) {
 				ticks[row]=vg.getEjeX();
-				//cantidad
-				valores[row][0] = vg.getEjeX();
-				valores[row][1] = vg.getSerieValor();
 				//valores
-				cantidad[row][0] = vg.getEjeX();
-				cantidad[row][1] = vg.getSerieCantidad();
-				//
-	        	if (0>vg.getSerieValor().compareTo(minimoValor)) {
-	        		minimoValor =vg.getSerieValor();
-	        	}
-	        	if (0>vg.getSerieCantidad().compareTo(minimoCantidad)) {
-	        		minimoCantidad =vg.getSerieCantidad();
-	        	}
-	        	if (0<vg.getSerieValor().compareTo(maximoValor)) {
-	        		maximoValor =vg.getSerieValor();
-	        	}
-	        	if (0<vg.getSerieCantidad().compareTo(maximoCantidad)) {
-	        		maximoCantidad =vg.getSerieCantidad();
-	        	}
+				//valores[row][0] = vg.getEjeX();
+				//valores[row][1] = vg.getSerieValor();
+				valores[row] = new Series(vg.getEjeX(), vg.getSerieValor());
+				
+				//cantidad
+				//cantidad[row][0] = vg.getEjeX();
+				//cantidad[row][1] = vg.getSerieCantidad();
+				cantidad[row] = new Series(vg.getEjeX(), vg.getSerieCantidad());
+				
+	        	if (0>vg.getSerieValor().compareTo(minimoValor)) minimoValor =vg.getSerieValor();
+	        	if (0>vg.getSerieCantidad().compareTo(minimoCantidad)) minimoCantidad =vg.getSerieCantidad();
+	        	if (0<vg.getSerieValor().compareTo(maximoValor)) maximoValor =vg.getSerieValor();
+	        	if (0<vg.getSerieCantidad().compareTo(maximoCantidad)) maximoCantidad =vg.getSerieCantidad();
 				row++;
 			}//for
-			//asignacion de valores minimos.
-	        if ((minimoValor.compareTo(BigDecimal.ZERO)>0) && (minimoCantidad.compareTo(BigDecimal.ZERO)>0) ) {
+			//Asignación de valores minimos y maximos.
+			if ((minimoValor.compareTo(BigDecimal.ZERO)>0)) {
 	        	minimoValor = BigDecimal.ZERO;
-	        	minimoCantidad = BigDecimal.ZERO;
 	        }
+			if((minimoCantidad.compareTo(BigDecimal.ZERO)>0)){
+				minimoCantidad = BigDecimal.ZERO;
+			}
+			if(minimoValor.compareTo(maximoValor)==0){
+				maximoValor = maximoValor.add(BigDecimal.ONE);
+			}
+			if(minimoCantidad.compareTo(maximoCantidad)==0){
+				maximoCantidad = maximoCantidad.add(BigDecimal.ONE);
+			}
+			
 	        //minimos y maximos en x
 	        String to = (String)ticks[ticks.length-1];
 	        dias = ticks.length-dias;
@@ -129,9 +136,12 @@ public class RestServices implements Serializable {
 			} else {
 				vgl = ServiceFacades.getInstance().getTransfElectronicaAltoValorService().getConjuntoMensualCompleteByGR(concepto);
 			}
+			
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][2];
-			Object[][] cantidad = new  Object[vgl.size()][2];
+			//Object[][] valores = new Object[vgl.size()][2];
+			//Object[][] cantidad = new  Object[vgl.size()][2];
+			Series[] valores = new Series[vgl.size()];
+			Series[] cantidad = new Series[vgl.size()];
 			Object[] ticks = new  Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal minimoCantidad = new BigDecimal(NUMBER_LITERAL);
@@ -140,24 +150,36 @@ public class RestServices implements Serializable {
 			int row=0;
 			for (ValorGraficable vg : vgl) {
 				ticks[row]=vg.getEjeX();
-				//cantidad
-				valores[row][0] = vg.getEjeX();
-				valores[row][1] = vg.getSerieValor();
 				//valores
-				cantidad[row][0] = vg.getEjeX();
-				cantidad[row][1] = vg.getSerieCantidad();
-				//
+				//valores[row][0] = vg.getEjeX();
+				//valores[row][1] = vg.getSerieValor();
+				valores[row] = new Series(vg.getEjeX(), vg.getSerieValor());
+				
+				//cantidad
+				//cantidad[row][0] = vg.getEjeX();
+				//cantidad[row][1] = vg.getSerieCantidad();
+				cantidad[row] = new Series(vg.getEjeX(), vg.getSerieCantidad());
+				
 	        	if (0>vg.getSerieValor().compareTo(minimoValor)) minimoValor =vg.getSerieValor();
 	        	if (0>vg.getSerieCantidad().compareTo(minimoCantidad)) minimoCantidad =vg.getSerieCantidad();
 	        	if (0<vg.getSerieValor().compareTo(maximoValor)) maximoValor =vg.getSerieValor();
 	        	if (0<vg.getSerieCantidad().compareTo(maximoCantidad)) maximoCantidad =vg.getSerieCantidad();
 				row++;
 			}//for
-			//asignacion de valores minimos.
-	        if ((minimoValor.compareTo(BigDecimal.ZERO)>0) && (minimoCantidad.compareTo(BigDecimal.ZERO)>0) ) {
+			//Asignación de valores minimos y maximos.
+			if ((minimoValor.compareTo(BigDecimal.ZERO)>0)) {
 	        	minimoValor = BigDecimal.ZERO;
-	        	minimoCantidad = BigDecimal.ZERO;
 	        }
+			if((minimoCantidad.compareTo(BigDecimal.ZERO)>0)){
+				minimoCantidad = BigDecimal.ZERO;
+			}
+			if (minimoValor.compareTo(maximoValor)==0 ) {
+	        	maximoValor = maximoValor.add(BigDecimal.ONE) ;
+	        }
+			if (minimoCantidad.compareTo(maximoCantidad)==0 ) {
+	        	maximoCantidad = maximoCantidad.add(BigDecimal.ONE) ;
+	        }
+			
 	        //minimos y maximos en x
 	        String to = (String)ticks[ticks.length-1];
 	        String from = (String)ticks[ticks.length-2];
@@ -195,9 +217,12 @@ public class RestServices implements Serializable {
 			} else {
 				vgl = ServiceFacades.getInstance().getTransfElectronicaAltoValorService().getConjuntoTrimestralByGR(concepto);
 			}
+			
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][2];
-			Object[][] cantidad = new  Object[vgl.size()][2];
+			//Object[][] valores = new Object[vgl.size()][2];
+			//Object[][] cantidad = new  Object[vgl.size()][2];
+			Series[] valores = new Series[vgl.size()];
+			Series[] cantidad = new Series[vgl.size()];
 			Object[] ticks = new  Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal minimoCantidad = new BigDecimal(NUMBER_LITERAL);
@@ -206,24 +231,36 @@ public class RestServices implements Serializable {
 			int row=0;
 			for (ValorGraficable vg : vgl) {
 				ticks[row]=vg.getEjeX();
-				//cantidad
-				valores[row][0] = vg.getEjeX();
-				valores[row][1] = vg.getSerieValor();
 				//valores
-				cantidad[row][0] = vg.getEjeX();
-				cantidad[row][1] = vg.getSerieCantidad();
-				//
+				//valores[row][0] = vg.getEjeX();
+				//valores[row][1] = vg.getSerieValor();
+				valores[row] = new Series(vg.getEjeX(), vg.getSerieValor());
+				
+				//cantidad
+				//cantidad[row][0] = vg.getEjeX();
+				//cantidad[row][1] = vg.getSerieCantidad();
+				cantidad[row] = new Series(vg.getEjeX(), vg.getSerieCantidad());
+				
 	        	if (0>vg.getSerieValor().compareTo(minimoValor)) minimoValor =vg.getSerieValor();
 	        	if (0>vg.getSerieCantidad().compareTo(minimoCantidad)) minimoCantidad =vg.getSerieCantidad();
 	        	if (0<vg.getSerieValor().compareTo(maximoValor)) maximoValor =vg.getSerieValor();
 	        	if (0<vg.getSerieCantidad().compareTo(maximoCantidad)) maximoCantidad =vg.getSerieCantidad();
 				row++;
 			}//for
-			//asignacion de valores minimos.
-	        if ((minimoValor.compareTo(BigDecimal.ZERO)>0) && (minimoCantidad.compareTo(BigDecimal.ZERO)>0) ) {
+			//Asignación de valores minimos y maximos.
+			if ((minimoValor.compareTo(BigDecimal.ZERO)>0)) {
 	        	minimoValor = BigDecimal.ZERO;
-	        	minimoCantidad = BigDecimal.ZERO;
 	        }
+			if((minimoCantidad.compareTo(BigDecimal.ZERO)>0)){
+				minimoCantidad = BigDecimal.ZERO;
+			}
+			if(minimoValor.compareTo(maximoValor)==0){
+				maximoValor = maximoValor.add(BigDecimal.ONE);
+			}
+			if(minimoCantidad.compareTo(maximoCantidad)==0){
+				maximoCantidad = maximoCantidad.add(BigDecimal.ONE);
+			}
+			
 	        //minimos y maximos en x
 	        String to = (String)ticks[ticks.length-1];
 	        String from = (String)ticks[ticks.length-2];
@@ -261,9 +298,12 @@ public class RestServices implements Serializable {
 			} else {
 				vgl = ServiceFacades.getInstance().getTransfElectronicaAltoValorService().getConjuntoSemestralByGR(concepto);
 			}
+			
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][2];
-			Object[][] cantidad = new  Object[vgl.size()][2];
+			//Object[][] valores = new Object[vgl.size()][2];
+			//Object[][] cantidad = new  Object[vgl.size()][2];
+			Series[] valores = new Series[vgl.size()];
+			Series[] cantidad = new Series[vgl.size()];
 			Object[] ticks = new  Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal minimoCantidad = new BigDecimal(NUMBER_LITERAL);
@@ -272,24 +312,36 @@ public class RestServices implements Serializable {
 			int row=0;
 			for (ValorGraficable vg : vgl) {
 				ticks[row]=vg.getEjeX();
-				//cantidad
-				valores[row][0] = vg.getEjeX();
-				valores[row][1] = vg.getSerieValor();
 				//valores
-				cantidad[row][0] = vg.getEjeX();
-				cantidad[row][1] = vg.getSerieCantidad();
-				//
+				//valores[row][0] = vg.getEjeX();
+				//valores[row][1] = vg.getSerieValor();
+				valores[row] = new Series(vg.getEjeX(), vg.getSerieValor());
+				
+				//cantidad
+				//cantidad[row][0] = vg.getEjeX();
+				//cantidad[row][1] = vg.getSerieCantidad();
+				cantidad[row] = new Series(vg.getEjeX(), vg.getSerieCantidad());
+				
 	        	if (0>vg.getSerieValor().compareTo(minimoValor)) minimoValor =vg.getSerieValor();
 	        	if (0>vg.getSerieCantidad().compareTo(minimoCantidad)) minimoCantidad =vg.getSerieCantidad();
 	        	if (0<vg.getSerieValor().compareTo(maximoValor)) maximoValor =vg.getSerieValor();
 	        	if (0<vg.getSerieCantidad().compareTo(maximoCantidad)) maximoCantidad =vg.getSerieCantidad();
 				row++;
 			}//for
-			//asignacion de valores minimos.
-	        if ((minimoValor.compareTo(BigDecimal.ZERO)>0) && (minimoCantidad.compareTo(BigDecimal.ZERO)>0) ) {
+			//Asignación de valores minimos y maximos.
+			if ((minimoValor.compareTo(BigDecimal.ZERO)>0)) {
 	        	minimoValor = BigDecimal.ZERO;
-	        	minimoCantidad = BigDecimal.ZERO;
 	        }
+			if((minimoCantidad.compareTo(BigDecimal.ZERO)>0)){
+				minimoCantidad = BigDecimal.ZERO;
+			}
+			if(minimoValor.compareTo(maximoValor)==0){
+				maximoValor = maximoValor.add(BigDecimal.ONE);
+			}
+			if(minimoCantidad.compareTo(maximoCantidad)==0){
+				maximoCantidad = maximoCantidad.add(BigDecimal.ONE);
+			}
+			
 	        //minimos y maximos en x
 	        String minX = (String)ticks[0];
 	        String maxX = (String)ticks[ticks.length-1];
@@ -326,9 +378,12 @@ public class RestServices implements Serializable {
 			} else {
 				vgl = ServiceFacades.getInstance().getTransfElectronicaAltoValorService().getConjuntoAnualByGR(concepto);
 			}
+			
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][2];
-			Object[][] cantidad = new  Object[vgl.size()][2];
+			//Object[][] valores = new Object[vgl.size()][2];
+			//Object[][] cantidad = new  Object[vgl.size()][2];
+			Series[] valores = new Series[vgl.size()];
+			Series[] cantidad = new Series[vgl.size()];
 			Object[] ticks = new  Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal minimoCantidad = new BigDecimal(NUMBER_LITERAL);
@@ -337,24 +392,36 @@ public class RestServices implements Serializable {
 			int row=0;
 			for (ValorGraficable vg : vgl) {
 				ticks[row]=vg.getEjeX()+DATE_PART_LITERAL;
-				//cantidad
-				valores[row][0] = vg.getEjeX()+DATE_PART_LITERAL;
-				valores[row][1] = vg.getSerieValor();
 				//valores
-				cantidad[row][0] = vg.getEjeX()+DATE_PART_LITERAL;
-				cantidad[row][1] = vg.getSerieCantidad();
-				//
+				//valores[row][0] = vg.getEjeX()+DATE_PART_LITERAL;
+				//valores[row][1] = vg.getSerieValor();
+				valores[row] = new Series(vg.getEjeX()+DATE_PART_LITERAL, vg.getSerieValor());
+				
+				//cantidad
+				//cantidad[row][0] = vg.getEjeX()+DATE_PART_LITERAL;
+				//cantidad[row][1] = vg.getSerieCantidad();
+				cantidad[row] = new Series(vg.getEjeX()+DATE_PART_LITERAL, vg.getSerieCantidad());
+				
 	        	if (0>vg.getSerieValor().compareTo(minimoValor)) minimoValor =vg.getSerieValor();
 	        	if (0>vg.getSerieCantidad().compareTo(minimoCantidad)) minimoCantidad =vg.getSerieCantidad();
 	        	if (0<vg.getSerieValor().compareTo(maximoValor)) maximoValor =vg.getSerieValor();
 	        	if (0<vg.getSerieCantidad().compareTo(maximoCantidad)) maximoCantidad =vg.getSerieCantidad();
 				row++;
 			}//for
-			//asignacion de valores minimos.
-	        if ((minimoValor.compareTo(BigDecimal.ZERO)>0) && (minimoCantidad.compareTo(BigDecimal.ZERO)>0) ) {
+			//Asignación de valores minimos y maximos.
+			if ((minimoValor.compareTo(BigDecimal.ZERO)>0)) {
 	        	minimoValor = BigDecimal.ZERO;
-	        	minimoCantidad = BigDecimal.ZERO;
 	        }
+			if((minimoCantidad.compareTo(BigDecimal.ZERO)>0)){
+				minimoCantidad = BigDecimal.ZERO;
+			}
+			if(minimoValor.compareTo(maximoValor)==0){
+				maximoValor = maximoValor.add(BigDecimal.ONE);
+			}
+			if(minimoCantidad.compareTo(maximoCantidad)==0){
+				maximoCantidad = maximoCantidad.add(BigDecimal.ONE);
+			}
+			
 	        //minimos y maximos en x
 	        String minX = (String)ticks[0] ;
 	        String maxX = (String)ticks[ticks.length-1];
@@ -966,8 +1033,10 @@ public class RestServices implements Serializable {
 			
 			Integer dias = ServiceFacades.getInstance().getParametersService().getCantidadDistribucionDias();
 			//valores y cantidad
-			Object[][] cantidades = new Object[vgl.size()][3];
-			Set<String> ticksA = new  TreeSet<String>();
+			//Object[][] cantidades = new Object[vgl.size()][3];
+			//Set<String> ticksA = new  TreeSet<String>();
+			Series[] cantidades = new Series[vgl.size()];
+			Object[] ticks = new Object[vgl.size()];
 	        BigDecimal minimaCantidad = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal maximaCantidad = new BigDecimal(MINUS_NUMBER_LITERAL);   
 			int row=0;
@@ -975,12 +1044,13 @@ public class RestServices implements Serializable {
 				//System.out.println(vg.getSerieCantidad());
 				//System.out.println("Fecha : "+vg.getEjeX());
 				
-				ticksA.add(vg.getEjeX());
+				ticks[row]=vg.getEjeX();
 				//valores
-				cantidades[row][0] = vg.getEjeX();
-				cantidades[row][1] = vg.getHora();
-				cantidades[row][2] = vg.getSerieCantidad().multiply(new BigDecimal(100));
-				//
+				//cantidades[row][0] = vg.getEjeX();
+				//cantidades[row][1] = vg.getHora();
+				//cantidades[row][2] = vg.getSerieCantidad().multiply(new BigDecimal(100));
+				cantidades[row] = new Series(vg.getEjeX(), vg.getHora(), vg.getSerieCantidad().multiply(new BigDecimal(100)));
+				
 	        	if (0>vg.getSerieCantidad().compareTo(minimaCantidad)) minimaCantidad =vg.getSerieCantidad();
 	        	if (0<vg.getSerieCantidad().compareTo(maximaCantidad)) maximaCantidad =vg.getSerieCantidad();
 				row++;
@@ -989,17 +1059,27 @@ public class RestServices implements Serializable {
 	        if ((minimaCantidad.compareTo(BigDecimal.ZERO)>0) ) {
 	        	minimaCantidad = BigDecimal.ZERO;
 	        }
+			if(minimaCantidad.compareTo(maximaCantidad)==0){
+				maximaCantidad = maximaCantidad.add(BigDecimal.ONE);
+			}
 	        //Asignación de valores procentales al eje vertical de la gráfica
 	        minimaCantidad = minimaCantidad.multiply(new BigDecimal(100));
 	        maximaCantidad = maximaCantidad.multiply(new BigDecimal(100));
-	        String[] ticks = ticksA.toArray(new String[ticksA.size()]);
-	    
+	        
+	        /*String[] ticks = ticksA.toArray(new String[ticksA.size()]);
 	        String minX = ticks[0];
 	        String maxX = ticks[ticks.length-1];
 	        //minimos y maximos en x
 	        String from = ticks[ticks.length-(dias)];
-	        String to   = ticks[ticks.length-1];	
-	        //
+	        String to   = ticks[ticks.length-1];*/	
+	        
+	        String minX = (String)ticks[0] ;
+	        String maxX = (String)ticks[ticks.length-1];
+	        //minimos y maximos en x
+	        String from = (String)ticks[ticks.length-(dias)];
+	        String to = (String)ticks[ticks.length-1];
+	        
+	        
 			resultado.put(TITLE_LITERAL			, PARTICIPACION_CANTIDAD_LITERAL);
 			resultado.put(TICKS_LITERAL			, ticks);
 			resultado.put(MIN_VALOR_LITERAL		, minimaCantidad);
@@ -1024,18 +1104,22 @@ public class RestServices implements Serializable {
 			List<ValorGraficable> vgl = ServiceFacades.getInstance().getAnalisisPagosSaldosXHoraService().getConjuntoMensualCantidadSG();
 			
 			//valores y cantidad
-			Object[][] cantidades = new Object[vgl.size()][3];
-			Set<String> ticksA = new  TreeSet<String>();
+			//Object[][] cantidades = new Object[vgl.size()][3];
+			//Set<String> ticksA = new  TreeSet<String>();
+			Series[] cantidades = new Series[vgl.size()];
+			Object[] ticks = new Object[vgl.size()];
 	        BigDecimal minimaCantidad = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal maximaCantidad = new BigDecimal(MINUS_NUMBER_LITERAL);   
 			int row=0;
 			for (ValorGraficable vg : vgl) {
-				ticksA.add(vg.getEjeX());
+				ticks[row]=vg.getEjeX();
 				//valores
-				cantidades[row][0] = vg.getEjeX();
-				cantidades[row][1] = vg.getHora();
-				cantidades[row][2] = vg.getSerieCantidad().multiply(new BigDecimal(100));
-				//
+				//cantidades[row][0] = vg.getEjeX();
+				//cantidades[row][1] = vg.getHora();
+				//cantidades[row][2] = vg.getSerieCantidad().multiply(new BigDecimal(100));
+				
+				cantidades[row] = new Series(vg.getEjeX(), vg.getHora(), vg.getSerieCantidad().multiply(new BigDecimal(100)));
+				
 	        	if (0>vg.getSerieCantidad().compareTo(minimaCantidad)) minimaCantidad =vg.getSerieCantidad();
 	        	if (0<vg.getSerieCantidad().compareTo(maximaCantidad)) maximaCantidad =vg.getSerieCantidad();
 				row++;
@@ -1044,17 +1128,26 @@ public class RestServices implements Serializable {
 	        if ((minimaCantidad.compareTo(BigDecimal.ZERO)>0) ) {
 	        	minimaCantidad = BigDecimal.ZERO;
 	        }
+			if(minimaCantidad.compareTo(maximaCantidad)==0){
+				maximaCantidad = maximaCantidad.add(BigDecimal.ONE);
+			}
 	        //Asignación de valores procentales al eje vertical de la gráfica
 	        minimaCantidad = minimaCantidad.multiply(new BigDecimal(100));
 	        maximaCantidad = maximaCantidad.multiply(new BigDecimal(100));
-	        String[] ticks = ticksA.toArray(new String[ticksA.size()]);
-
+	        
+	       /* String[] ticks = ticksA.toArray(new String[ticksA.size()]);
 	        String minX = ticks[0];
 	        String maxX = ticks[ticks.length-1];
 	        //minimos y maximos en x
 	        String from = ticks[ticks.length-2];
-	        String to   = ticks[ticks.length-1];	
-	        //
+	        String to   = ticks[ticks.length-1];	*/
+	        
+	        String minX = (String)ticks[0] ;
+	        String maxX = (String)ticks[ticks.length-1];
+	        //minimos y maximos en x
+	        String from = (String)ticks[ticks.length-2];
+	        String to = (String)ticks[ticks.length-1];
+	        
 			resultado.put(TITLE_LITERAL				, PARTICIPACION_VALOR_LITERAL);
 			resultado.put(TICKS_LITERAL				, ticks);
 			resultado.put(MIN_VALOR_LITERAL			, minimaCantidad);
@@ -1079,18 +1172,22 @@ public class RestServices implements Serializable {
 			List<ValorGraficable> vgl = ServiceFacades.getInstance().getAnalisisPagosSaldosXHoraService().getConjuntoTrimestralCantidadSG();
 
 			//valores y cantidad
-			Object[][] cantidades = new Object[vgl.size()][3];
-			Set<String> ticksA = new  TreeSet<String>();
+			//Object[][] cantidades = new Object[vgl.size()][3];
+			//Set<String> ticksA = new  TreeSet<String>();
+			Series[] cantidades = new Series[vgl.size()];
+			Object[] ticks = new Object[vgl.size()];
 	        BigDecimal minimaCantidad = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal maximaCantidad = new BigDecimal(MINUS_NUMBER_LITERAL);   
 			int row=0;
 			for (ValorGraficable vg : vgl) {
-				ticksA.add(vg.getEjeX());
+				ticks[row]=vg.getEjeX();
 				//valores
-				cantidades[row][0] = vg.getEjeX();
-				cantidades[row][1] = vg.getHora();
-				cantidades[row][2] = vg.getSerieCantidad().multiply(new BigDecimal(100));
-				//
+				//cantidades[row][0] = vg.getEjeX();
+				//cantidades[row][1] = vg.getHora();
+				//cantidades[row][2] = vg.getSerieCantidad().multiply(new BigDecimal(100));
+				
+				cantidades[row] = new Series(vg.getEjeX(), vg.getHora(), vg.getSerieCantidad().multiply(new BigDecimal(100)));
+				
 	        	if (0>vg.getSerieCantidad().compareTo(minimaCantidad)) minimaCantidad =vg.getSerieCantidad();
 	        	if (0<vg.getSerieCantidad().compareTo(maximaCantidad)) maximaCantidad =vg.getSerieCantidad();
 				row++;
@@ -1099,17 +1196,27 @@ public class RestServices implements Serializable {
 	        if ((minimaCantidad.compareTo(BigDecimal.ZERO)>0) ) {
 	        	minimaCantidad = BigDecimal.ZERO;
 	        }
+			if(minimaCantidad.compareTo(maximaCantidad)==0){
+				maximaCantidad = maximaCantidad.add(BigDecimal.ONE);
+			}
 	      //Asignación de valores procentales al eje vertical de la gráfica
 	        minimaCantidad = minimaCantidad.multiply(new BigDecimal(100));
 	        maximaCantidad = maximaCantidad.multiply(new BigDecimal(100));
-	        String[] ticks = ticksA.toArray(new String[ticksA.size()]);
+	        
+	        /*String[] ticks = ticksA.toArray(new String[ticksA.size()]);
 	    
 	        String minX = ticks[0];
 	        String maxX = ticks[ticks.length-1];
 	        //minimos y maximos en x
 	        String from = ticks[ticks.length-2];
-	        String to   = ticks[ticks.length-1];	
-	        //
+	        String to   = ticks[ticks.length-1];*/
+	        
+	        String minX = (String)ticks[0] ;
+	        String maxX = (String)ticks[ticks.length-1];
+	        //minimos y maximos en x
+	        String from = (String)ticks[ticks.length-2];
+	        String to = (String)ticks[ticks.length-1];
+	        
 			resultado.put(TITLE_LITERAL			, PARTICIPACION_VALOR_LITERAL);
 			resultado.put(TICKS_LITERAL			, ticks);
 			resultado.put(MIN_VALOR_LITERAL		, minimaCantidad);
@@ -1134,37 +1241,52 @@ public class RestServices implements Serializable {
 			List<ValorGraficable> vgl = ServiceFacades.getInstance().getAnalisisPagosSaldosXHoraService().getConjuntoSemestralCantidadSG();
 
 			//valores y cantidad
-			Object[][] cantidades = new Object[vgl.size()][3];
-			Set<String> ticksA = new  TreeSet<String>();
+			//Object[][] cantidades = new Object[vgl.size()][3];
+			//Set<String> ticksA = new  TreeSet<String>();
+			Series[] cantidades = new Series[vgl.size()];
+			Object[] ticks = new Object[vgl.size()];
 	        BigDecimal minimaCantidad = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal maximaCantidad = new BigDecimal(MINUS_NUMBER_LITERAL);   
 			int row=0;
 			for (ValorGraficable vg : vgl) {
-				ticksA.add(vg.getEjeX());
+				ticks[row]=vg.getEjeX();
 				//valores
-				cantidades[row][0] = vg.getEjeX();
-				cantidades[row][1] = vg.getHora();
-				cantidades[row][2] = vg.getSerieCantidad().multiply(new BigDecimal(100));
-				//
+				//cantidades[row][0] = vg.getEjeX();
+				//cantidades[row][1] = vg.getHora();
+				//cantidades[row][2] = vg.getSerieCantidad().multiply(new BigDecimal(100));
+				
+				cantidades[row] = new Series(vg.getEjeX(), vg.getHora(), vg.getSerieCantidad().multiply(new BigDecimal(100)));
+				
 	        	if (0>vg.getSerieCantidad().compareTo(minimaCantidad)) minimaCantidad =vg.getSerieCantidad();
 	        	if (0<vg.getSerieCantidad().compareTo(maximaCantidad)) maximaCantidad =vg.getSerieCantidad();
 				row++;
 			}//for
 			//asignacion de valores minimos.
+			//REVISAR
 	        if ((minimaCantidad.compareTo(BigDecimal.ZERO)>0) ) {
-	        	maximaCantidad = BigDecimal.ZERO;
+	        	//maximaCantidad = BigDecimal.ZERO;
+				minimaCantidad = BigDecimal.ZERO;
 	        }
+			if(minimaCantidad.compareTo(maximaCantidad)==0){
+				maximaCantidad = maximaCantidad.add(BigDecimal.ONE);
+			}
 	      //Asignación de valores procentales al eje vertical de la gráfica
 	        minimaCantidad = minimaCantidad.multiply(new BigDecimal(100));
 	        maximaCantidad = maximaCantidad.multiply(new BigDecimal(100));
-	        String[] ticks = ticksA.toArray(new String[ticksA.size()]);
-	      
+	        
+	        /*String[] ticks = ticksA.toArray(new String[ticksA.size()]);
 	        String minX = ticks[0];
 	        String maxX = ticks[ticks.length-1];
 	        //minimos y maximos en x
 	        String from = ticks[ticks.length-2];
-	        String to   = ticks[ticks.length-1];	
-	        //
+	        String to   = ticks[ticks.length-1];*/	
+	        
+	        String minX = (String)ticks[0] ;
+	        String maxX = (String)ticks[ticks.length-1];
+	        //minimos y maximos en x
+	        String from = (String)ticks[ticks.length-2];
+	        String to = (String)ticks[ticks.length-1];
+	        
 			resultado.put(TITLE_LITERAL			, PARTICIPACION_VALOR_LITERAL);
 			resultado.put(TICKS_LITERAL			, ticks);
 			resultado.put(MIN_VALOR_LITERAL		, minimaCantidad);
@@ -1189,18 +1311,22 @@ public class RestServices implements Serializable {
 			List<ValorGraficable> vgl = ServiceFacades.getInstance().getAnalisisPagosSaldosXHoraService().getConjuntoAnualCantidadSG();
 		
 			//valores y cantidad
-			Object[][] cantidades = new Object[vgl.size()][3];
-			Set<String> ticksA = new  TreeSet<String>();
+			//Object[][] cantidades = new Object[vgl.size()][3];
+			//Set<String> ticksA = new  TreeSet<String>();
+			Series[] cantidades = new Series[vgl.size()];
+			Object[] ticks = new Object[vgl.size()];
 	        BigDecimal minimaCantidad = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal maximaCantidad = new BigDecimal(MINUS_NUMBER_LITERAL);   
 			int row=0; 
 			for (ValorGraficable vg : vgl) {
-				ticksA.add(vg.getEjeX()+DATE_PART_LITERAL);
+				ticks[row]=vg.getEjeX()+DATE_PART_LITERAL;
 				//valores
-				cantidades[row][0] = vg.getEjeX()+DATE_PART_LITERAL;
-				cantidades[row][1] = vg.getHora();
-				cantidades[row][2] = vg.getSerieCantidad().multiply(new BigDecimal(100));
-				//
+				//cantidades[row][0] = vg.getEjeX()+DATE_PART_LITERAL;
+				//cantidades[row][1] = vg.getHora();
+				//cantidades[row][2] = vg.getSerieCantidad().multiply(new BigDecimal(100));
+				
+				cantidades[row] = new Series(vg.getEjeX()+DATE_PART_LITERAL, vg.getHora(), vg.getSerieCantidad().multiply(new BigDecimal(100)));
+				
 	        	if (0>vg.getSerieCantidad().compareTo(minimaCantidad)) {
 	        		minimaCantidad =vg.getSerieCantidad();
 	        	}
@@ -1213,17 +1339,26 @@ public class RestServices implements Serializable {
 	        if ((minimaCantidad.compareTo(BigDecimal.ZERO)>0) ) {
 	        	minimaCantidad = BigDecimal.ZERO;
 	        }
+			if(minimaCantidad.compareTo(maximaCantidad)==0){
+				maximaCantidad = maximaCantidad.add(BigDecimal.ONE);
+			}
 	        //Asignación de valores procentales al eje vertical de la gráfica
 	        minimaCantidad = minimaCantidad.multiply(new BigDecimal(100));
 	        maximaCantidad = maximaCantidad.multiply(new BigDecimal(100));
-	        String[] ticks = ticksA.toArray(new String[ticksA.size()]);
-	 
+	        
+	      /*String[] ticks = ticksA.toArray(new String[ticksA.size()])
 	        String minX = ticks[0];
 	        String maxX = ticks[ticks.length-1];
 	        //minimos y maximos en x
 	        String from = ticks[ticks.length-2];
-	        String to   = ticks[ticks.length-1];	
-	        //
+	        String to   = ticks[ticks.length-1];*/
+	        
+	        String minX = (String)ticks[0] ;
+	        String maxX = (String)ticks[ticks.length-1];
+	        //minimos y maximos en x
+	        String from = (String)ticks[ticks.length-2];
+	        String to = (String)ticks[ticks.length-1];
+	        
 			resultado.put(TITLE_LITERAL			, PARTICIPACION_VALOR_LITERAL);
 			resultado.put(TICKS_LITERAL			, ticks);
 			resultado.put(MIN_VALOR_LITERAL		, minimaCantidad);

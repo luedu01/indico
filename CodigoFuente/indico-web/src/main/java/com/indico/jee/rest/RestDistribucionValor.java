@@ -14,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.indico.exceptions.IndicoException;
+import com.indico.jee.modelo.Series;
 import com.indico.jee.util.ValorGraficable;
 import com.indico.jndi.ServiceFacades;
 import static com.indico.jee.util.Constants.*;
@@ -40,19 +41,23 @@ public class RestDistribucionValor implements Serializable {
 		try {
 			List<ValorGraficable> vgl = ServiceFacades.getInstance().getAnalisisPagosSaldosXHoraService().getConjuntoDiarioValorSG();
 			Integer dias = ServiceFacades.getInstance().getParametersService().getCantidadDistribucionDias();
+			
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][3];
-			Set<String> ticksA = new  TreeSet<String>();
+			//Object[][] valores = new Object[vgl.size()][3];
+			//Set<String> ticksA = new  TreeSet<String>();
+			Series[] valores = new Series [vgl.size()];
+			Object[] ticks = new Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal maximoValor = new BigDecimal(MINUS_NUMBER_LITERAL);   
 			int row=0;
 			for (ValorGraficable vg : vgl) {
-				ticksA.add(vg.getEjeX());
+				ticks[row]=vg.getEjeX();
 				//valores
-				valores[row][0] = vg.getEjeX();
-				valores[row][1] = vg.getHora();
-				valores[row][2] = vg.getSerieValor().multiply(new BigDecimal(100));
-				//
+				//valores[row][0] = vg.getEjeX();
+				//valores[row][1] = vg.getHora();
+				//valores[row][2] = vg.getSerieValor().multiply(new BigDecimal(100));
+				valores[row] = new Series(vg.getEjeX(), vg.getHora(), vg.getSerieValor().multiply(new BigDecimal(100)));
+				
 	        	if (0>vg.getSerieValor().compareTo(minimoValor)) {
 	        		minimoValor =vg.getSerieValor();
 	        	}
@@ -60,21 +65,33 @@ public class RestDistribucionValor implements Serializable {
 	        		maximoValor =vg.getSerieValor();
 	        	}
 				row++;
-			}//for
+			}
+			//for
 			//asignacion de valores minimos.
 	        if ((minimoValor.compareTo(BigDecimal.ZERO)>0) ) {
 	        	minimoValor = BigDecimal.ZERO;
 	        }
+	        if (minimoValor.compareTo(maximoValor)==0 ) {
+	        	maximoValor = maximoValor.add(BigDecimal.ONE) ;
+	        }
+	        
 	        //Asignación de valores procentales al eje vertical de la gráfica
 	        minimoValor = minimoValor.multiply(new BigDecimal(100));
 	        maximoValor = maximoValor.multiply(new BigDecimal(100));
-	        String[] ticks = ticksA.toArray(new String[ticksA.size()]);
+	        
+	        /*String[] ticks = ticksA.toArray(new String[ticksA.size()]);
 	        String minX = ticks[0];
 	        String maxX = ticks[ticks.length-1];
 	        //minimos y maximos en x
 	        String from = ticks[ticks.length-(dias)];
-	        String to   = ticks[ticks.length-1];	
-	        //
+	        String to   = ticks[ticks.length-1];*/
+	        
+	        String minX = (String)ticks[0] ;
+	        String maxX = (String)ticks[ticks.length-1];
+	        //minimos y maximos en x
+	        String to = (String)ticks[ticks.length-1];
+	        String from = (String)ticks[ticks.length-(dias)];
+	        
 			resultado.put(TITLE_LITERAL			, PARTICIPACION_VALOR_LITERAL);
 			resultado.put(TICKS_LITERAL			, ticks);
 			resultado.put(MIN_VALOR_LITERAL		, minimoValor);
@@ -99,18 +116,21 @@ public class RestDistribucionValor implements Serializable {
 		try {
 			List<ValorGraficable> vgl = ServiceFacades.getInstance().getAnalisisPagosSaldosXHoraService().getConjuntoMensualValorSG();
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][3];
-			Set<String> ticksA = new  TreeSet<String>();
+			//Object[][] valores = new Object[vgl.size()][3];
+			//Set<String> ticksA = new  TreeSet<String>();
+			Series[] valores = new Series [vgl.size()];
+			Object[] ticks = new Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal maximoValor = new BigDecimal(MINUS_NUMBER_LITERAL);   
 			int row=0;
 			for (ValorGraficable vg : vgl) {
-				ticksA.add(vg.getEjeX());
+				ticks[row]=vg.getEjeX();
 				//valores
-				valores[row][0] = vg.getEjeX();
-				valores[row][1] = vg.getHora();
-				valores[row][2] = vg.getSerieValor().multiply(new BigDecimal(100));
-				//
+				//valores[row][0] = vg.getEjeX();
+				//valores[row][1] = vg.getHora();
+				//valores[row][2] = vg.getSerieValor().multiply(new BigDecimal(100));
+				valores[row] = new Series(vg.getEjeX(), vg.getHora(), vg.getSerieValor().multiply(new BigDecimal(100)));
+				
 	        	if (0>vg.getSerieValor().compareTo(minimoValor)) {
 	        		minimoValor =vg.getSerieValor();
 	        	}
@@ -118,21 +138,32 @@ public class RestDistribucionValor implements Serializable {
 	        		maximoValor =vg.getSerieValor();
 	        	}
 				row++;
-			}//for
+			}
+			//for
 			//asignacion de valores minimos.
 	        if ((minimoValor.compareTo(BigDecimal.ZERO)>0) ) {
 	        	minimoValor = BigDecimal.ZERO;
 	        }
+	        if (minimoValor.compareTo(maximoValor)==0 ) {
+	        	maximoValor = maximoValor.add(BigDecimal.ONE) ;
+	        }
 	      //Asignación de valores procentales al eje vertical de la gráfica
 	        minimoValor = minimoValor.multiply(new BigDecimal(100));
 	        maximoValor = maximoValor.multiply(new BigDecimal(100));
-	        String[] ticks = ticksA.toArray(new String[ticksA.size()]);
+	       
+	        /*String[] ticks = ticksA.toArray(new String[ticksA.size()]);
 	        String minX = ticks[0];
 	        String maxX = ticks[ticks.length-1];
 	        //minimos y maximos en x
 	        String from = ticks[ticks.length-2];
-	        String to   = ticks[ticks.length-1];	
-	        //
+	        String to   = ticks[ticks.length-1];*/	
+	        
+	        String minX = (String)ticks[0] ;
+	        String maxX = (String)ticks[ticks.length-1];
+	        //minimos y maximos en x
+	        String to = (String)ticks[ticks.length-1];
+	        String from = (String)ticks[ticks.length-2];
+	        
 			resultado.put(TITLE_LITERAL			, PARTICIPACION_VALOR_LITERAL);
 			resultado.put(TICKS_LITERAL			, ticks);
 			resultado.put(MIN_VALOR_LITERAL		, minimoValor);
@@ -156,18 +187,21 @@ public class RestDistribucionValor implements Serializable {
 		try {
 			List<ValorGraficable> vgl = ServiceFacades.getInstance().getAnalisisPagosSaldosXHoraService().getConjuntoTrimestralValorSG();
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][3];
-			Set<String> ticksA = new  TreeSet<String>();
+			//Object[][] valores = new Object[vgl.size()][3];
+			//Set<String> ticksA = new  TreeSet<String>();
+			Series[] valores = new Series[vgl.size()];
+			Object[] ticks = new Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal maximoValor = new BigDecimal(MINUS_NUMBER_LITERAL);   
 			int row=0;
 			for (ValorGraficable vg : vgl) {
-				ticksA.add(vg.getEjeX());
+				ticks[row]=vg.getEjeX();
 				//valores
-				valores[row][0] = vg.getEjeX();
-				valores[row][1] = vg.getHora();
-				valores[row][2] = vg.getSerieValor().multiply(new BigDecimal(100));
-				//
+				//valores[row][0] = vg.getEjeX();
+				//valores[row][1] = vg.getHora();
+				//valores[row][2] = vg.getSerieValor().multiply(new BigDecimal(100));
+				valores[row] = new Series(vg.getEjeX(), vg.getHora(), vg.getSerieValor().multiply(new BigDecimal(100)));
+				
 	        	if (0>vg.getSerieValor().compareTo(minimoValor)) {
 	        		minimoValor =vg.getSerieValor();
 	        	}
@@ -175,21 +209,32 @@ public class RestDistribucionValor implements Serializable {
 	        		maximoValor =vg.getSerieValor();
 	        	}
 				row++;
-			}//for
+			}
+			//for
 			//asignacion de valores minimos.
 	        if ((minimoValor.compareTo(BigDecimal.ZERO)>0) ) {
 	        	minimoValor = BigDecimal.ZERO;
 	        }
+	        if (minimoValor.compareTo(maximoValor)==0 ) {
+	        	maximoValor = maximoValor.add(BigDecimal.ONE) ;
+	        }
 	      //Asignación de valores procentales al eje vertical de la gráfica
 	        minimoValor = minimoValor.multiply(new BigDecimal(100));
 	        maximoValor = maximoValor.multiply(new BigDecimal(100));
-	        String[] ticks = ticksA.toArray(new String[ticksA.size()]);
+	        
+	        /*String[] ticks = ticksA.toArray(new String[ticksA.size()]);
 	        String minX = ticks[0];
 	        String maxX = ticks[ticks.length-1];
 	        //minimos y maximos en x
 	        String from = ticks[ticks.length-2];
-	        String to   = ticks[ticks.length-1];	
-	        //
+	        String to   = ticks[ticks.length-1];*/
+	        
+	        String minX = (String)ticks[0] ;
+	        String maxX = (String)ticks[ticks.length-1];
+	        //minimos y maximos en x
+	        String from = (String)ticks[ticks.length-2];
+	        String to = (String)ticks[ticks.length-1];
+	        
 			resultado.put(TITLE_LITERAL			, PARTICIPACION_VALOR_LITERAL);
 			resultado.put(TICKS_LITERAL			, ticks);
 			resultado.put(MIN_VALOR_LITERAL		, minimoValor);
@@ -213,18 +258,21 @@ public class RestDistribucionValor implements Serializable {
 		try {
 			List<ValorGraficable> vgl = ServiceFacades.getInstance().getAnalisisPagosSaldosXHoraService().getConjuntoSemestralValorSG();
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][3];
-			Set<String> ticksA = new  TreeSet<String>();
+			//Object[][] valores = new Object[vgl.size()][3];
+			//Set<String> ticksA = new  TreeSet<String>();
+			Series[] valores = new Series [vgl.size()];
+			Object[] ticks = new Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal maximoValor = new BigDecimal(MINUS_NUMBER_LITERAL);   
 			int row=0;
 			for (ValorGraficable vg : vgl) {
-				ticksA.add(vg.getEjeX());
+				ticks[row]=vg.getEjeX();
 				//valores
-				valores[row][0] = vg.getEjeX();
-				valores[row][1] = vg.getHora();
-				valores[row][2] = vg.getSerieValor().multiply(new BigDecimal(100));
-				//
+				//valores[row][0] = vg.getEjeX();
+				//valores[row][1] = vg.getHora();
+				//valores[row][2] = vg.getSerieValor().multiply(new BigDecimal(100));
+				valores[row] = new Series(vg.getEjeX(), vg.getHora(), vg.getSerieValor().multiply(new BigDecimal(100)));
+				
 	        	if (0>vg.getSerieValor().compareTo(minimoValor)) {
 	        		minimoValor =vg.getSerieValor();
 	        	}
@@ -232,21 +280,32 @@ public class RestDistribucionValor implements Serializable {
 	        		maximoValor =vg.getSerieValor();
 	        	}
 				row++;
-			}//for
+			}
+			//for
 			//asignacion de valores minimos.
 	        if ((minimoValor.compareTo(BigDecimal.ZERO)>0) ) {
 	        	minimoValor = BigDecimal.ZERO;
 	        }
+	        if (minimoValor.compareTo(maximoValor)==0 ) {
+	        	maximoValor = maximoValor.add(BigDecimal.ONE) ;
+	        }
 	      //Asignación de valores procentales al eje vertical de la gráfica
 	        minimoValor = minimoValor.multiply(new BigDecimal(100));
 	        maximoValor = maximoValor.multiply(new BigDecimal(100));
-	        String[] ticks = ticksA.toArray(new String[ticksA.size()]);
+	        
+	        /*String[] ticks = ticksA.toArray(new String[ticksA.size()]);
 	        String minX = ticks[0];
 	        String maxX = ticks[ticks.length-1];
 	        //minimos y maximos en x
 	        String from = ticks[ticks.length-2];
-	        String to   = ticks[ticks.length-1];	
-	        //
+	        String to   = ticks[ticks.length-1];*/
+	        
+	        String minX = (String)ticks[0] ;
+	        String maxX = (String)ticks[ticks.length-1];
+	        //minimos y maximos en x
+	        String from = (String)ticks[ticks.length-2];
+	        String to = (String)ticks[ticks.length-1];
+	        
 			resultado.put(TITLE_LITERAL			, PARTICIPACION_VALOR_LITERAL);
 			resultado.put(TICKS_LITERAL			, ticks);
 			resultado.put(MIN_VALOR_LITERAL		, minimoValor);
@@ -270,18 +329,23 @@ public class RestDistribucionValor implements Serializable {
 		try {
 			List<ValorGraficable> vgl = ServiceFacades.getInstance().getAnalisisPagosSaldosXHoraService().getConjuntoAnualValorSG();
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][3];
-			Set<String> ticksA = new  TreeSet<String>();
+			//Object[][] valores = new Object[vgl.size()][3];
+			//Set<String> ticksA = new  TreeSet<String>();
+			Series[] valores = new Series [vgl.size()];
+			Object[] ticks = new Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 	        BigDecimal maximoValor = new BigDecimal(MINUS_NUMBER_LITERAL);   
 			int row=0;
+			
 			for (ValorGraficable vg : vgl) {
-				ticksA.add(vg.getEjeX()+"-01-01");
+				ticks[row]=vg.getEjeX()+DATE_PART_LITERAL;
+				
 				//valores
-				valores[row][0] = vg.getEjeX()+"-01-01";
-				valores[row][1] = vg.getHora();
-				valores[row][2] = vg.getSerieValor().multiply(new BigDecimal(100));
-				//
+				//valores[row][0] = vg.getEjeX()+"-01-01";
+				//valores[row][1] = vg.getHora();
+				//valores[row][2] = vg.getSerieValor().multiply(new BigDecimal(100));
+				valores[row] = new Series(vg.getEjeX()+DATE_PART_LITERAL, vg.getHora(), vg.getSerieValor().multiply(new BigDecimal(100)));
+				
 	        	if (0>vg.getSerieValor().compareTo(minimoValor)) {
 	        		minimoValor =vg.getSerieValor();
 	        	}
@@ -294,16 +358,27 @@ public class RestDistribucionValor implements Serializable {
 	        if ((minimoValor.compareTo(BigDecimal.ZERO)>0) ) {
 	        	minimoValor = BigDecimal.ZERO;
 	        }
+	        if (minimoValor.compareTo(maximoValor)==0 ) {
+	        	maximoValor = maximoValor.add(BigDecimal.ONE) ;
+	        }
 	        //Asignación de valores procentales al eje vertical de la gráfica
 	        minimoValor = minimoValor.multiply(new BigDecimal(100));
 	        maximoValor = maximoValor.multiply(new BigDecimal(100));
-	        String[] ticks = ticksA.toArray(new String[ticksA.size()]);
+
+	        /*String[] ticks = ticksA.toArray(new String[ticksA.size()]);
 	        String minX = ticks[0];
 	        String maxX = ticks[ticks.length-1];
 	        //minimos y maximos en x
 	        String from = ticks[ticks.length-2];
-	        String to   = ticks[ticks.length-1];	
-	        //
+	        String to   = ticks[ticks.length-1];*/
+	        
+			
+	        String minX = (String)ticks[0];
+	        String maxX = (String)ticks[ticks.length-1];
+	        //minimos y maximos en x
+	        String from = (String)ticks[ticks.length-2];
+	        String to = (String)ticks[ticks.length-1];
+
 			resultado.put(TITLE_LITERAL			, PARTICIPACION_VALOR_LITERAL);
 			resultado.put(TICKS_LITERAL			, ticks);
 			resultado.put(MIN_VALOR_LITERAL		, minimoValor);

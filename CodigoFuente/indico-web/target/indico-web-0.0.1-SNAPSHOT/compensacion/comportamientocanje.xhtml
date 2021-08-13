@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:fado="http://java.sun.com/jsf/composite/customs">
+	<h:outputScript library="js" name="pdfmake.min.js"/>
+	<h:outputScript library="js" name="vfs_fonts.js"/>
+	<h:outputStylesheet library="css" name="iThing.css" />
+	<h:outputStylesheet library="css" name="chart.css" />
+
+	<h:outputScript library="js" name="chart.js"/>
+	<h:outputScript library="js" name="chartcheq.js"/>
+	
+	<p:outputPanel id="vcompcanje_panelx1" styleClass="cleaner2">
+		<p:panelGrid id="vcompcanje_panelx2" columns="1" styleClass="cleaner2" layout="grid">
+			<p:outputPanel id="vcompcanje_panelfiltro_parent" columns="1" styleClass="cleaner2" layout="grid">
+				<p:outputPanel id="vcompcanje_pvalor" styleClass="cleaner2">
+					<p:outputPanel id="vcompcanje_valorfiltro" styleClass="cleaner2">
+						<p:panelGrid columns="2"
+							columnClasses="ui-g-12 ui-md-12 ui-lg-9,ui-g-12 ui-md-12 ui-lg-3"
+							styleClass="cleaner2" layout="grid">
+								<p:outputPanel styleClass="cleaner2">
+									<p:panelGrid columns="2"
+										columnClasses="ui-g-12 ui-md-12 ui-lg-7,ui-g-12 ui-md-12 ui-lg-5 NoPaddingRight NoPaddingLeft"
+										styleClass="ui-panelgrid-blank ui-fluid cleaner2"
+										layout="grid">
+										<p:panelGrid id="vcompcanje_panelFiltros" columns="1"
+											styleClass="cleaner2 NoPaddingLeft NoPaddingRight"
+											layout="grid" columnClasses="NoPaddingLeft NoPaddingRight">
+										<h:form >
+											<p:outputPanel styleClass="Wid100 ui-g VerticalCenter BoxSizeBorder">
+												<p:outputLabel value="Periodo" styleClass="ui-g-3 Fs14"></p:outputLabel>
+												<p:outputPanel styleClass="ui-g-9 NoPaddingTopBotton" style="padding-right: 4px !important;">
+												<p:selectOneMenu id="vcompcanje_selFiltroPorValor"  
+													widgetVar="vcompcanje_selFiltroPorValorW" required="true"
+													autoWidth="false"
+													value="#{compComportamientoCanjeMaBean.periodicidad}"
+													requiredMessage="Seleccione Periodo" placeholder="Periodo"
+													styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande"
+													>
+													<f:selectItem itemLabel="Diario" itemValue="1" />
+													<f:selectItem itemLabel="Mensual" itemValue="2" />
+													<f:selectItem itemLabel="Trimestral" itemValue="3" />
+													<f:selectItem itemLabel="Semestral" itemValue="4" />
+													<f:selectItem itemLabel="Anual" itemValue="5" />
+													<p:ajax process="@this" update="@([id$='vcompcanje_panelesValoresDinamic'],[id$='vcompcanje_valorgraficavalor'])" listener="#{compComportamientoCanjeMaBean.changePanelAction}" onsuccess="vcompcanjechangeperiodo(); return false;"/>
+												</p:selectOneMenu>
+												</p:outputPanel>
+											</p:outputPanel>
+											<p:panelGrid id="vcompcanje_panelesValoresDinamic" columns="1"
+												styleClass="cleaner2 NoPaddingLeft NoPaddingRight border-left-gray-Desk "
+												layout="grid" columnClasses="ui-g-12 NoPaddingLeft NoPaddingRight">
+												<p:outputPanel id="vcompcanje_pValorDiario" styleClass="ui-g" style="display:none;">
+													<fado:slideraniomesdia idg="vcompcanje_valperiodo1" tittle="Desde" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideraniomesdia idg="vcompcanje_valperiodo2" tittle="Hasta" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+												<p:outputPanel id="vcompcanje_pValorMensual" styleClass="ui-g" style="display:none;">
+													<fado:slideraniomes idg="vcompcanje_valmensual1" tittle="Desde" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12"  Align="TextToAlRight FontBold"/>
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideraniomes idg="vcompcanje_valmensual2" tittle="Hasta" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+												<p:outputPanel id="vcompcanje_pValorTrimestral" styleClass="ui-g" style="display:none;">
+													<fado:slideraniotrimestre idg="vcompcanje_valtrimestral1" tittle="Desde" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideraniotrimestre idg="vcompcanje_valtrimestral2" tittle="Hasta" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+												<p:outputPanel id="vcompcanje_pValorSemestral" styleClass="ui-g" style="display:none;"> 
+													<fado:slideraniosemestre idg="vcompcanje_valsemestral1" tittle="Desde" toUpdate="vcompcanje_valorgraficavalor" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideraniosemestre idg="vcompcanje_valsemestral2" tittle="Hasta" toUpdate="vcompcanje_valorgraficavalor" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+												<p:outputPanel id="vcompcanje_pValorAnual" styleClass="ui-g" style="display:none;">
+													<fado:slideranio idg="vcompcanje_valanual1" tittle="Desde" toUpdate="vcompcanje_valorgraficavalor" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+													<p:separator styleClass="NoMargin NoPadding DisplayOnDesk Wid100" />
+													<div class="ui-g-2 PosRelative Border-Vertical-1 DisplayOnMobile"></div>
+													<fado:slideranio idg="vcompcanje_valanual2" tittle="Hasta" toUpdate="vcompcanje_valorgraficavalor" StyleClassWidth="ui-g-5 ui-md-5 ui-lg-12" Align="TextToAlRight FontBold"/>
+												</p:outputPanel>
+											</p:panelGrid>
+										</h:form>
+										</p:panelGrid>
+										
+										<p:panelGrid id="vcompcanje_panelSelects" columns="1" layout="grid" styleClass="cleaner2">
+											<p:outputPanel styleClass="cleaner2">
+											  <h:form styleClass="ui-g VerticalCenter">
+												<p:outputLabel value="Tipo de Plaza" styleClass="ui-g-5 Fs14" ></p:outputLabel>
+												<p:outputPanel styleClass="ui-g-7 NoPaddingTopBotton">
+													<p:selectOneMenu id="vcompcanje_tipoplaza" value="#{compComportamientoCanjeMaBean.tipodeplaza}"  valueChangeListener="#{compComportamientoCanjeMaBean.changeTipoPlazaAction}"
+														widgetVar="vcompcanje_tipoplazaVar" styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande NoPadding">
+														<f:selectItem itemValue="todas" itemLabel="Todas"/>
+														<f:selectItems value="#{compComportamientoCanjeMaBean.tiposdeplaza}" var="tp" itemValue="#{tp.idMedioServCompensacion}" itemLabel="#{tp.descMedioServCompensacion}"/>
+														<p:ajax onsuccess="vcompcanjechangeperiodo(); return false;" update="@([id$=vcompcanje_valorgraficavalor],[id$=vcompcanje_messageinformationglobal],[id$=vcompcanje_panelSelects])"/>
+													</p:selectOneMenu>
+												</p:outputPanel>
+											  </h:form>	 
+											</p:outputPanel>
+											<p:outputPanel styleClass="cleaner2" rendered="#{compComportamientoCanjeMaBean.renderedCiudad}">
+											  <h:form styleClass="ui-g VerticalCenter">
+												<p:outputLabel value="Ciudad" styleClass="ui-g-5 Fs14" ></p:outputLabel>
+												<p:outputPanel styleClass="ui-g-7 NoPaddingTopBotton">
+													<p:selectOneMenu id="vcompcanje_ciudad" value="#{compComportamientoCanjeMaBean.ciudadSelected}" 
+															widgetVar="vcompcanje_ciudadVar" styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande NoPadding">
+														<f:selectItem itemValue="todas" itemLabel="Total Ciudades"/>
+														<f:selectItems value="#{compComportamientoCanjeMaBean.ciudades}" var="tp" itemValue="#{tp.value}" itemLabel="#{tp.label}"/>
+														<p:ajax listener="#{compComportamientoCanjeMaBean.changeCiudadAction}" onsuccess="vcompcanjechangeperiodo(); return false;" update="@([id$=vcompcanje_valorgraficavalor],[id$=vcompcanje_messageinformationglobal])"/>
+													</p:selectOneMenu>
+												</p:outputPanel>
+											  </h:form>	 
+											</p:outputPanel>
+											<p:outputPanel styleClass="DisplayOnDesk">
+												<h:form>
+													<p:outputPanel class="ui-g Wid90">
+														<p:commandButton icon="" styleClass="WhiteBack Black Wid60 NoMargin NoBorder-radius-Right Fs14 border-gray-1 " process="@this"
+															value="Restaurar" update="@([id$='vcompcanje_panelfiltro_parent'],[id$='vcompcanje_valorgraficavalor'])" 
+															actionListener="#{compComportamientoCanjeMaBean.restaurarAction}"  onclick="recargarcanje();"
+															/>
+														<p:commandButton icon="icon-restaurar" styleClass="BlueBack Wid30 NoMargin NoBorder-radius-Left"  process="@this"
+															update="@([id$='vcompcanje_panelfiltro_parent'],[id$='vcompcanje_valorgraficavalor'])" 
+															actionListener="#{compComportamientoCanjeMaBean.restaurarAction}"  onclick="recargarcanje();">
+														</p:commandButton>
+													</p:outputPanel>
+												</h:form>
+
+											</p:outputPanel>
+
+											<p:outputPanel styleClass="DisplayOnMobile">
+												<h:form styleClass="ui-g-6">
+													<p:outputPanel class="ui-g" style="padding-top: 4px !important">
+														<p:commandButton icon=""
+															styleClass="WhiteBack Black Wid70 NoMargin NoBorder-radius-Right Padding5 Fs14 border-gray-1 TexAlLeft"
+															value="Restaurar" process="@this"
+															update="@([id$='vcompcanje_panelfiltro_parent'],[id$='vcompcanje_valorgraficavalor'])"
+															actionListener="#{compComportamientoCanjeMaBean.restaurarAction}"  onclick="recargarcanje();"
+															/>
+														<p:commandButton icon="icon-restaurar"
+															styleClass="BlueBack Wid30 NoMargin Padding5 NoBorder-radius-Left"
+															process="@this" immediate="true"
+															update="@([id$='vcompcanje_panelfiltro_parent'],[id$='vcompcanje_valorgraficavalor'])"
+															actionListener="#{compComportamientoCanjeMaBean.restaurarAction}"  onclick="recargarcanje();"  />
+													</p:outputPanel>
+												</h:form>
+
+												<h:form id="vcompcanje_frmExportar001" onsubmit="assignValuesCanje()"> 
+													<div style="display: none;">
+														<p:inputText widgetVar="vcompcanje_startVar001" value="#{compComportamientoCanjeMaBean.start}"/>
+														<p:inputText widgetVar="vcompcanje_endVar001" value="#{compComportamientoCanjeMaBean.end}"/>
+													</div>
+													<p:outputPanel id="vcompcanje_panelexportar001"  styleClass="border-left-c ui-g-6  NoPaddingRight">
+														<p:panelGrid columns="1" styleClass="panelgridExportar MarAuto ui-g-12 ui-md-6">
+															<p:selectOneMenu widgetVar="vchque_exportarG001W" onchange="exportChart(this.value,'vcompcanje_chart', 'Comportamiento Canje al Cobro'); restartExportar('vchque_exportarG001W');" styleClass="selectonemenugrande selectDownload">
+																<f:selectItem itemLabel="Gráfica" itemValue="" />
+																<f:selectItem itemLabel="JPG" itemValue="jpg" />
+																<f:selectItem itemLabel="PDF" itemValue="pdf" />
+															</p:selectOneMenu>
+															<p:selectOneMenu id="vcompcanje_selectdescargar001" widgetVar="vcompcanje_selectdescargarW001" value="#{compComportamientoCanjeMaBean.tipoaexportar}" styleClass="selectonemenugrande">
+																<f:selectItem itemLabel="Datos" itemValue="" />
+																<f:selectItem itemLabel="CSV" itemValue="csv" />
+																<f:selectItem itemLabel="XLS" itemValue="xls" />
+																<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
+																<p:ajax event="change" onsuccess='$(&apos;[id*="vcompcanje_downloadFile001"]&apos;).click();' process="@this" update="@([id$=vcompcanje_panelexportar001])"/>
+															</p:selectOneMenu>
+															<p:commandButton id="vcompcanje_downloadFile001" widgetVar="vcompcanje_downloadFile001W" value="Download" ajax="false" icon="fa fa-fw fa-cloud-download"
+																actionListener="#{compComportamientoCanjeMaBean.exportAction}" style="display: none;" onclick="vcompcanje_updatedescargar001()">
+																<f:attribute name="start" 		value="#{compComportamientoCanjeMaBean.start}"/>
+																<f:attribute name="end" 		value="#{compComportamientoCanjeMaBean.end}"/>
+																<f:attribute name="tipodeplaza" 	value="#{compComportamientoCanjeMaBean.tipodeplaza}"/>
+															</p:commandButton>
+															<p:remoteCommand name="vcompcanje_updatedescargar001" update="@([id$=vcompcanje_panelexportar001])" action="#{compComportamientoCanjeMaBean.changeTabExportar}" delay="3000"/>
+														</p:panelGrid>
+													</p:outputPanel>
+												</h:form>
+											</p:outputPanel>
+										</p:panelGrid>
+										<p:messages id="vcompcanje_messageinformationglobal"  showDetail="false" rendered="true">
+											<p:autoUpdate />
+										</p:messages> 
+									</p:panelGrid>
+								</p:outputPanel>
+
+							<h:form id="vcompcanje_frmExportar0002"  styleClass="DisplayOnDesk border-left-c" onsubmit="assignValuesCanje()">
+								<p:outputPanel id="vcompcanje_panelexportar0002">
+									<div style="display: none;">
+										<p:inputText widgetVar="vcompcanje_startVar" value="#{compComportamientoCanjeMaBean.start}"/>
+										<p:inputText widgetVar="vcompcanje_endVar" value="#{compComportamientoCanjeMaBean.end}"/>
+									</div>
+									
+									<p:panelGrid columns="1" styleClass="panelgridExportar MarginLeft15">
+										<p:selectOneMenu widgetVar="vchque_exportarG002W" onchange="exportChart(this.value,'vcompcanje_chart','Comportamiento Canje al Cobro'); restartExportar('vchque_exportarG002W');"  styleClass="selectonemenugrande selectDownload">
+											<f:selectItem itemLabel="Gráfica" itemValue="" />
+											<f:selectItem itemLabel="JPG" itemValue="jpg" />
+											<f:selectItem itemLabel="PDF" itemValue="pdf" />
+										</p:selectOneMenu>
+										<p:selectOneMenu id="vcompcanje_selectdescargar" widgetVar="vcompcanje_selectdescargarW" value="#{compComportamientoCanjeMaBean.tipoaexportar}" styleClass="selectonemenugrande">
+											<f:selectItem itemLabel="Datos" itemValue="" />
+											<f:selectItem itemLabel="CSV" itemValue="csv" />
+											<f:selectItem itemLabel="XLS" itemValue="xls" />
+											<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
+											<p:ajax event="change" onsuccess='$(&apos;[id*="vcompcanje_downloadFile0002"]&apos;).click();' update="@this"/>
+										</p:selectOneMenu>
+										<p:commandButton id="vcompcanje_downloadFile0002" widgetVar="vcompcanje_downloadFileW0002" value="Download" ajax="false"
+											icon="fa fa-fw fa-cloud-download" onclick="vcompcanje_updatedescargar002();" 
+											actionListener="#{compComportamientoCanjeMaBean.exportAction}"
+											style="display: none;"
+											>
+											<f:attribute name="start" value="#{compComportamientoCanjeMaBean.start}"/>
+											<f:attribute name="end" value="#{compComportamientoCanjeMaBean.end}"/>
+											<f:attribute name="tipodeplaza" value="#{compComportamientoCanjeMaBean.tipodeplaza}"/>
+										</p:commandButton>
+										<p:remoteCommand name="vcompcanje_updatedescargar002" update="@([id$=vcompcanje_panelexportar0002])" action="#{compComportamientoCanjeMaBean.changeTabExportar}" delay="3000"/>
+									</p:panelGrid>
+								</p:outputPanel>
+							</h:form>
+						</p:panelGrid>
+					</p:outputPanel>
+					<p:panelGrid id="vcompcanje_valorgraficavalor" columns="1" styleClass="cleaner2">
+						<h:form prependid="vcompcanje_false">
+								<div class="ui-g">
+		 						  	<div class="ui-g-12 ui-md-12 ui-lg-12"><div id="vcompcanje_chart" class="superzoom"/></div>
+		 						</div>  		
+							<h:outputScript>
+									function assignValuesCanje() {
+										var v_start;
+										var v_end;
+										var periodo = PF('vcompcanje_selFiltroPorValorW').jq.find('option:selected').val();
+										switch (periodo) {
+											case "1":
+												v_start = getDateStartFromDiario('vcompcanje_valperiodo1')
+												v_end = getDateEndFromDiario('vcompcanje_valperiodo2')
+												break;										
+											case "2":
+												v_start = getDateStartFromMensual('vcompcanje_valmensual1')
+												v_end = getDateEndFromMensual('vcompcanje_valmensual2')
+												break;										
+											case "3":
+												v_start = getDateStartFromTrimestral('vcompcanje_valtrimestral1')
+												v_end = getDateEndFromTrimestral('vcompcanje_valtrimestral2')
+												break;
+											case "4": 
+												v_start = getDateStartFromSemestral('vcompcanje_valsemestral1')
+												v_end = getDateEndFromSemestral('vcompcanje_valsemestral2')
+												break;										
+											case "5": 
+												v_start = getDateStartFromAnual('vcompcanje_valanual1')
+												v_end = getDateEndFromAnual('vcompcanje_valanual2')
+												break;										
+										};//switch	
+										PF('vcompcanje_startVar').jq.val(v_start);
+										PF('vcompcanje_endVar').jq.val(v_end);
+										PF('vcompcanje_startVar001').jq.val(v_start);
+										PF('vcompcanje_endVar001').jq.val(v_end);
+									}
+																
+									function vcompcanjechangeperiodo() {
+										var periodo = PF('vcompcanje_selFiltroPorValorW').jq.find('option:selected').val();
+										var tipodeplaza = PF('vcompcanje_tipoplazaVar').jq.find('option:selected').val();
+										var label = PF('vcompcanje_tipoplazaVar').jq.find('option:selected').text();
+										var ciudad;
+										if(PrimeFaces.widgets['vcompcanje_ciudadVar']) {
+										 	ciudad=PF('vcompcanje_ciudadVar').jq.find('option:selected').val();
+										 	label = label + " - " + PF('vcompcanje_ciudadVar').jq.find('option:selected').text();
+										} 
+										
+										if (ciudad === undefined) {
+										   ciudad = 'todas';
+										}
+										
+										if (tipodeplaza === undefined) {
+										   tipodeplaza = 'todas';
+										}
+										
+										$("[id*='vcompcanje_pValorDiario']").hide();
+										$("[id*='vcompcanje_pValorMensual']").hide();
+										$("[id*='vcompcanje_pValorTrimestral']").hide();
+										$("[id*='vcompcanje_pValorSemestral']").hide();
+										$("[id*='vcompcanje_pValorAnual']").hide();
+										switch (periodo) {
+											case "1":
+												$("[id*='vcompcanje_pValorDiario']").show();
+												vcomcanjePeriodo1 = "vcompcanje_valperiodo1";
+												vcomcanjePeriodo2 = "vcompcanje_valperiodo2";
+												break;										
+											case "2":
+												$("[id*='vcompcanje_pValorMensual']").show();
+												vcomcanjePeriodo1 = "vcompcanje_valmensual1";
+												vcomcanjePeriodo2 = "vcompcanje_valmensual2";
+												
+												break;										
+											case "3":
+												$("[id*='vcompcanje_pValorTrimestral']").show();
+												vcomcanjePeriodo1 = "vcompcanje_valtrimestral1";
+												vcomcanjePeriodo2 = "vcompcanje_valtrimestral2";											
+												break;
+											case "4": 
+												$("[id*='vcompcanje_pValorSemestral']").show();
+												vcomcanjePeriodo1 = "vcompcanje_valsemestral1";
+												vcomcanjePeriodo2 = "vcompcanje_valsemestral2";												
+												break;										
+											case "5": 
+												$("[id*='vcompcanje_pValorAnual']").show();
+												vcomcanjePeriodo1 = "vcompcanje_valanual1";
+												vcomcanjePeriodo2 = "vcompcanje_valanual2";												
+												break;										
+										};//switch
+										createSliderComportamientoCanje('vcompcanje_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal');
+									}//function
+									
+									function recargarcanje(){
+									}
+									
+								    $(document).ready(function(){
+								        //restartExportar('vchque_exportarG001W');
+								        //restartExportar('vchque_exportarG002W');
+								    	vcompcanjechangeperiodo();
+								     });
+								     
+								   
+								       jQuery(window).resize(function() {
+	         							
+	         							  if( isMobile.any() ){ 
+								     
+								     } else {
+								      vcompcanjechangeperiodo();
+								     }
+								    
+	      							});
+								     
+								  
+									
+							</h:outputScript>
+						</h:form>
+					</p:panelGrid>
+				</p:outputPanel>		
+			</p:outputPanel>			
+		</p:panelGrid>
+	</p:outputPanel>
+</ui:composition>

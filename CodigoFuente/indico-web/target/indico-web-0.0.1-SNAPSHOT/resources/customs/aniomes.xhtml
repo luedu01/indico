@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions">
+<composite:interface>
+ 	<composite:attribute name="remoteCommandView" method-signature="void action()" required="false"/>
+ 	<composite:attribute name="toUpdate" type="java.lang.String" required="false"/>
+ 	<composite:attribute name="tittle" type="java.lang.String" required="true"/>
+ 	<composite:attribute name="idg" type="java.lang.String" required="true"/>
+ 	<composite:attribute name="bean" type="com.indico.jee.resources.CompAnioMes" required="true"/>
+ 	<composite:attribute name="Align" type="java.lang.String" required="false"/>
+ 	<composite:attribute name="TextTable" type="java.lang.String" required="false"/>
+</composite:interface>
+<composite:implementation>
+    <p:remoteCommand name="#{cc.attrs.idg}_remoteCommand" update="@([id$=#{cc.attrs.toUpdate}])" action="#{cc.attrs.remoteCommandView}" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+
+	<p:panelGrid id="#{cc.attrs.idg}_panelDiario" columns="3" columnClasses="ui-g-12 ui-md-12 ui-lg-3,ui-g-12 ui-md-12 ui-lg-4,ui-g-12 ui-md-12 ui-lg-5" styleClass="ui-g-5 ui-md-5 ui-lg-12 BoxSizeBorder panelaniomesdia">
+		<c:if test="#{cc.attrs.TextTable eq true}">
+			<c:set var="string1" value = "#{fn:substringBefore(cc.attrs.tittle,' ')}" />
+			<c:set var="string2" value = "#{fn:substringAfter(cc.attrs.tittle,' ')}" />
+			<div class="DisplayOnDesk">
+				<span class="border-Bottom-1 labelPanels TexAlCenter">${string1}</span>
+				<span class="labelPanels TexAlCenter">${string2} </span>
+			</div>
+			<div class="ui-g DisplayOnMobile">
+				<span class="Red-4 TexAlCenter">${string1} - ${string2} </span>
+			</div>
+		</c:if>
+		<c:if test="#{not(cc.attrs.TextTable)}">
+			<h:outputLabel value="#{cc.attrs.tittle}" styleClass="labelPanels"/>
+		</c:if>
+		<p:selectOneMenu value="#{cc.attrs.bean.anioSelected}" valueChangeListener="#{cc.attrs.bean.changeAnioAction}" styleClass="aniomesdiaselectone minWidth-0" filter="true" filterMatchMode="startsWith"> 
+			<f:selectItem itemLabel="A&#241;o" itemValue=""/>	
+			<f:selectItems value="#{cc.attrs.bean.anios}" var="anio" itemLabel="#{anio.label}" itemValue="#{anio.value}"/>
+			<p:ajax process="@this" update="@([id$=#{cc.attrs.idg}_panelDiario])" onsuccess="#{cc.attrs.idg}_remoteCommand()"/>
+		</p:selectOneMenu>
+		<p:selectOneMenu value="#{cc.attrs.bean.mesSelected}" valueChangeListener="#{cc.attrs.bean.changeMesAction}" styleClass="aniomesdiaselectone minWidth-0" filter="true" filterMatchMode="startsWith">	
+			<f:selectItem itemLabel="Mes" itemValue=""/>	
+			<f:selectItems value="#{cc.attrs.bean.meses}" var="mes" itemLabel="#{mes.label}" itemValue="#{mes.value}"/>
+			<p:ajax process="@this" update="@([id$=#{cc.attrs.idg}_panelDiario])" onsuccess="#{cc.attrs.idg}_remoteCommand()"/>
+		</p:selectOneMenu> 
+	</p:panelGrid>	
+</composite:implementation>      
+</html> 
