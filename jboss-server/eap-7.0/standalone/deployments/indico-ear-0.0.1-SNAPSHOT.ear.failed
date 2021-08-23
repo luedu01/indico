@@ -1,7 +1,0 @@
-"{\"WFLYCTL0180: Servicios con dependencias que faltan/no disponibles\" => [
-    \"jboss.naming.context.java.comp.\\\"indico-ear-0.0.1-SNAPSHOT\\\".indico-ejb.AniosServiceImpl.DefaultDataSource falta [jboss.naming.context.java.jboss.datasources.ExampleDS]\",
-    \"jboss.naming.context.java.comp.\\\"indico-ear-0.0.1-SNAPSHOT\\\".indico-ejb.TransfElectronicaAltoValorServiceImpl.DefaultDataSource falta [jboss.naming.context.java.jboss.datasources.ExampleDS]\",
-    \"jboss.naming.context.java.module.\\\"indico-ear-0.0.1-SNAPSHOT\\\".\\\"indico-web-0.0.1-SNAPSHOT\\\".DefaultDataSource falta [jboss.naming.context.java.jboss.datasources.ExampleDS]\",
-    \"jboss.naming.context.java.comp.\\\"indico-ear-0.0.1-SNAPSHOT\\\".indico-ejb.ValorAnualIPIBServiceImpl.DefaultDataSource falta [jboss.naming.context.java.jboss.datasources.ExampleDS]\",
-    \"jboss.naming.context.java.comp.\\\"indico-ear-0.0.1-SNAPSHOT\\\".indico-ejb.AnalisisPagosSaldosXHoraServiceImpl.DefaultDataSource falta [jboss.naming.context.java.jboss.datasources.ExampleDS]\"
-]}"
