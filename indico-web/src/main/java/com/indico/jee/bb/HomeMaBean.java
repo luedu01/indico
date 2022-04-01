@@ -9,6 +9,7 @@ import javax.faces.event.ActionEvent;
 import org.primefaces.component.accordionpanel.AccordionPanel;
 import org.primefaces.event.TabChangeEvent;
 
+@SuppressWarnings("deprecation")
 @ManagedBean(name="homeMaBean")
 @ApplicationScoped
 public class HomeMaBean implements Serializable {
@@ -21,7 +22,7 @@ public class HomeMaBean implements Serializable {
 	private static final String URL_GUIA			="guia.xhtml";
 	
 	private String 	src="";
-	private int   	selected=-1;
+	private int   	selected=0;
 	private int 	idTabActive;
 	private boolean ocultarmostrar;
 		

@@ -1,6 +1,5 @@
 package com.indico.jee.bb.compennaciointer;
 
-import static com.indico.jee.util.Constants.FORMAT_LITERAL_3;
 import static com.indico.jee.util.Constants.FORMAT_LITERAL_2;
 import static com.indico.jee.util.Constants.UTF8_LITERAL;
 import static com.indico.jee.util.Constants.CONTENT_DISPOSITION_LITERAL;
@@ -30,18 +29,14 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.primefaces.component.accordionpanel.AccordionPanel;
-import org.primefaces.event.TabChangeEvent;
 
 import com.indico.exceptions.IndicoException;
 import com.indico.jee.bb.GraficaGeneralBean;
-import com.indico.jee.bb.compensacion.CompDevolucionCanjeMaBean;
-import com.indico.jee.modelo.AnalisisChequesCompensa;
 import com.indico.jee.modelo.AnalisisTransaccionCNI;
-import com.indico.jee.modelo.MedioServCompensacion;
 import com.indico.jndi.ServiceFacades;
 import com.indico.util.IndicoUtils;
 
+@SuppressWarnings("deprecation")
 @ManagedBean(name="transfeBajoValorMaBean")
 @ViewScoped
 public class TransfeBajoValorMaBean extends GraficaGeneralBean {

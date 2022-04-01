@@ -1,20 +1,24 @@
 package com.indico.jee.rest;
 
-import static com.indico.jee.util.Constants.*;
+import static com.indico.jee.util.Constants.ENDX_LITERAL;
+import static com.indico.jee.util.Constants.ERROR_LITERAL;
+import static com.indico.jee.util.Constants.MAXX_LITERAL;
+import static com.indico.jee.util.Constants.MAX_VALOR_LITERAL;
+import static com.indico.jee.util.Constants.MINUS_NUMBER_LITERAL;
+import static com.indico.jee.util.Constants.MINX_LITERAL;
+import static com.indico.jee.util.Constants.MIN_VALOR_LITERAL;
+import static com.indico.jee.util.Constants.NUMBER_LITERAL;
+import static com.indico.jee.util.Constants.STARTX_LITERAL;
+import static com.indico.jee.util.Constants.TICKS_LITERAL;
+import static com.indico.jee.util.Constants.TITLE_LITERAL;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.GET;
@@ -23,9 +27,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.collections4.CollectionUtils;
-
 import com.indico.exceptions.IndicoException;
+import com.indico.jee.modelo.CanjeInterbancario;
 import com.indico.jee.modelo.RangoCanjeCompensacion;
 import com.indico.jee.util.ValorGraficable;
 import com.indico.jndi.ServiceFacades;
@@ -36,7 +39,7 @@ public class RestComposicionCanjeServices implements Serializable  {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private SimpleDateFormat receiveFormat = new SimpleDateFormat("yyyy-MM-dd");
+	//private SimpleDateFormat receiveFormat = new SimpleDateFormat("yyyy-MM-dd");
 	
 	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(RestServices.class);
 	
@@ -91,28 +94,41 @@ public class RestComposicionCanjeServices implements Serializable  {
 		        //recorre las fechas de los datos
 		        int fc = 0;
 	        	for(String t : ticks) {
-	        		Object[][] cantidades = new Object[serieTotal][3];
-    				Object[][] valores = new Object[serieTotal][3];
+	        		CanjeInterbancario[] cantidades = new CanjeInterbancario[serieTotal];
+	        		//Object[][] cantidades = new Object[serieTotal][3];
+	        		CanjeInterbancario [] valores = new CanjeInterbancario[serieTotal];
+    				//Object[][] valores = new Object[serieTotal][3];
     				String fecha="";
 	        		for (ValorGraficable vg : vgl) {
 		        		//compara las fechas de las listas
 		        		if(t.equals(vg.getEjeX())) {
 		        			//recorre los rangos de la bd
 		        			int rco = 0;
-		        			if(cantidades[0][2] == null) {
+		        			//if(cantidades[0][2] == null) {
+		        			if(cantidades[0] == null) {
 		        				for(RangoCanjeCompensacion rc : rangoscanje) {
-			    					cantidades[rco][0] = Integer.parseInt(rc.getIdRangoCanje());
-			    					valores[rco][0] = Integer.parseInt(rc.getIdRangoCanje());
+		        					cantidades[rco] = new CanjeInterbancario();
+		        					valores[rco] = new CanjeInterbancario();
+		        					
+			    					//cantidades[rco][0] = Integer.parseInt(rc.getIdRangoCanje());
+			    					cantidades[rco].setIdRangoCanje(Integer.parseInt(rc.getIdRangoCanje()));
+			    					//valores[rco][0] = Integer.parseInt(rc.getIdRangoCanje());
+			    					valores[rco].setIdRangoCanje(Integer.parseInt(rc.getIdRangoCanje()));
 			    					rco++;
 			        			}
 		        			}
 		        			
 		        			for(int i=0; i<cantidades.length; i++) {
-		        				if(cantidades[i][0].equals(Integer.parseInt(vg.getIdRangoCanje()))) {
-		        					cantidades[i][1] = vg.getSerieCantidadPorcentaje();
-									cantidades[i][2] = vg.getEjeX();
-									valores[i][1] = vg.getSerieValorPorcentaje();
-									valores[i][2] = vg.getEjeX();
+		        				//if(cantidades[i][0].equals(Integer.parseInt(vg.getIdRangoCanje()))) {
+		        				if(cantidades[i].getIdRangoCanje().equals(Integer.parseInt(vg.getIdRangoCanje()))) {
+		        					//cantidades[i][1] = vg.getSerieCantidadPorcentaje();
+		        					cantidades[i].setPorcentaje(vg.getSerieCantidadPorcentaje());
+									//cantidades[i][2] = vg.getEjeX();
+		        					cantidades[i].setEjex(vg.getEjeX());
+									//valores[i][1] = vg.getSerieValorPorcentaje();
+		        					valores[i].setPorcentaje(vg.getSerieValorPorcentaje());
+									//valores[i][2] = vg.getEjeX()
+		        					valores[i].setEjex(vg.getEjeX());
 									fecha = vg.getEjeX();
 									break;
 		        				}
@@ -121,13 +137,19 @@ public class RestComposicionCanjeServices implements Serializable  {
 		        	}
 	        		
 	        		for(int i=0; i<cantidades.length; i++) {
-        				if(cantidades[i][1]==null) {
-        					cantidades[i][1] = BigDecimal.ZERO;
-        					cantidades[i][2] = fecha;
+        				//if(cantidades[i][1]==null) {
+	        			if(cantidades[i].getPorcentaje()==null) {
+        					//cantidades[i][1] = BigDecimal.ZERO;
+	        				cantidades[i].setPorcentaje(BigDecimal.ZERO);
+        					//cantidades[i][2] = fecha;
+	        				cantidades[i].setEjex(fecha);
         				}
-        				if(valores[i][1]==null) {
-        					valores[i][1] = BigDecimal.ZERO;
-        					valores[i][2] = fecha;
+        				//if(valores[i][1]==null) {
+	        			if(valores[i].getPorcentaje() ==null) {
+        					//valores[i][1] = BigDecimal.ZERO;
+	        				valores[i].setPorcentaje(BigDecimal.ZERO);
+        					//valores[i][2] = fecha;
+	        				valores[i].setEjex(fecha);
         				}
         			}
 	        		
@@ -191,6 +213,7 @@ public class RestComposicionCanjeServices implements Serializable  {
 		    }
 			
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 			logger.error(e.getMessage());
 			throw new IndicoException(ERROR_LITERAL);

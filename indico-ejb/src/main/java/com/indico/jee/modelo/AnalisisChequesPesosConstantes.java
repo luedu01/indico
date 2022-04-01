@@ -30,7 +30,7 @@ import javax.persistence.Table;
 @Table(name = "C_CCCAgrAnualCanjePesosConst")
 public class AnalisisChequesPesosConstantes {
 	
-	private static final long serialVersionUID = 1L;
+	//private static final long serialVersionUID = 1L;
 	
 	@Id
 	@Column(name = "Anio_Canje")

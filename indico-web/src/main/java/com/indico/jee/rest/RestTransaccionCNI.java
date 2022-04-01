@@ -2,9 +2,6 @@ package com.indico.jee.rest;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
+import com.indico.jee.modelo.Series;
 import com.indico.exceptions.IndicoException;
 import com.indico.jee.util.ValorGraficable;
 import com.indico.jndi.ServiceFacades;
@@ -22,7 +19,6 @@ import com.indico.jndi.ServiceFacades;
 import static com.indico.jee.util.Constants.ERROR_LITERAL;
 import static com.indico.jee.util.Constants.NUMBER_LITERAL;
 import static com.indico.jee.util.Constants.MINUS_NUMBER_LITERAL;
-import static com.indico.jee.util.Constants.MAXGRAFICA;
 import static com.indico.jee.util.Constants.TITLE_LITERAL;
 import static com.indico.jee.util.Constants.TICKS_LITERAL;
 import static com.indico.jee.util.Constants.MIN_VALOR_LITERAL;
@@ -42,7 +38,7 @@ import static com.indico.jee.util.Constants.ENDX_LITERAL;
 public class RestTransaccionCNI  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(RestServices.class);
-	private SimpleDateFormat receiveFormat = new SimpleDateFormat("yyyy-MM-dd");
+	//private SimpleDateFormat receiveFormat = new SimpleDateFormat("yyyy-MM-dd");
 	private static final String TRANSACCION_CNI_LITERAL = "Transferencias electrónicas interbancarias de bajo valor";
 	
 	@GET
@@ -56,9 +52,13 @@ public class RestTransaccionCNI  implements Serializable {
 			if (vgl!=null && !vgl.isEmpty()) {
 			
 				//valores y cantidad
-				Object[][] valores = new Object[vgl.size()][2];
-				Object[][] cantidad = new  Object[vgl.size()][2];
+				//Object[][] valores = new Object[vgl.size()][2];
+				//Object[][] cantidad = new  Object[vgl.size()][2];
+				//Object[] ticks = new  Object[vgl.size()];
+				Series[] valores = new Series[vgl.size()];
+				Series[] cantidad = new Series[vgl.size()];
 				Object[] ticks = new  Object[vgl.size()];
+				
 		        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 		        BigDecimal minimoCantidad = new BigDecimal(NUMBER_LITERAL);
 		        BigDecimal maximoValor = new BigDecimal(MINUS_NUMBER_LITERAL);   
@@ -66,13 +66,17 @@ public class RestTransaccionCNI  implements Serializable {
 				int row=0;
 				for (ValorGraficable vg : vgl) {
 					ticks[row]=vg.getEjeX();
-					//cantidad
-					valores[row][0] = vg.getEjeX();
-					valores[row][1] = vg.getSerieValor();
 					//valores
-					cantidad[row][0] = vg.getEjeX();
-					cantidad[row][1] = vg.getSerieCantidad();
+					//valores[row][0] = vg.getEjeX();
+					//valores[row][1] = vg.getSerieValor();
+					valores[row] = new Series(vg.getEjeX(), vg.getSerieValor());
+
+					
+					//cantidad
+					//cantidad[row][0] = vg.getEjeX();
+					//cantidad[row][1] = vg.getSerieCantidad();
 					//
+					cantidad[row] = new Series(vg.getEjeX(), vg.getSerieCantidad());
 					if (0>vg.getSerieValor().compareTo(minimoValor)) {
 		        		minimoValor =vg.getSerieValor();
 		        	}

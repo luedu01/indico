@@ -36,6 +36,7 @@
 		<h:outputScript library="js" name="vfs_fonts.js" />
 		<h:outputScript library="js" name="chart.js" />
 		<h:outputScript library="js" name="banrep.js"/>
+		<h:outputScript library="js" name="accordion.js" />
 	</h:head>
 
 	<h:body>
@@ -44,10 +45,14 @@
 				<div class='nav'>
 					<b:column col-sm="3" col-md="3" id="column2" class="barIcoHeight">
 						<div class='link btn' id="cud" style="#{homeMaBean.selected==0?'background-color: #7bb9e0;':''}">
+						<!-- 
 						    <div class='small' id="smallCud" style="#{homeMaBean.selected==0?'display: none !important;':''}">
 						    	<img src="./resources/images/sistema de pagos de alto valor.svg" class="imgCud"></img>
 						    </div>
-						    <div class="full" id="fullCud" style="#{homeMaBean.selected==0?'display: block;':''}">
+						 -->
+						     
+						    <div class="full" id="fullCud" style="display: block;">
+						    <!--  <div class="full" id="fullCud" style="#{homeMaBean.selected==0?'display: block;':''}"> -->
 						    	<p:outputPanel styleClass="cardCustonT2">
 									<h:form>
 										<h:commandLink id="cud1" actionListener="#{homeMaBean.iconAction}"
@@ -75,6 +80,8 @@
 									</h:form>
 								</p:outputPanel>
 						    </div>
+						     
+						     
 					  		<div class='mobileBar' style="#{homeMaBean.selected==0?'background-color: #7bb9e0;':''}">
 					  			<h:form>
 									<h:commandLink  id="cud2" actionListener="#{homeMaBean.iconAction2}" update="@([id$=panelGeneral])"
@@ -99,15 +106,18 @@
 									</h:commandLink>
 								</h:form>
 					  		</div>
+					  		 
 					  	</div>
 					</b:column>
 					
 					<b:column  col-sm="3" col-md="3" id="column3" class="barIcoHeight">
 				  		<div class='link btn' id="cheques" style="#{homeMaBean.selected==1?'background-color: #7bb9e0;':''}">
+				  		<!-- 
 				    		<div class='small' style="#{homeMaBean.selected==1?'display: none !important;':''}">
 				    			<img src="./resources/images/Compensacion de Cheques.svg" class="imgCheques" ></img>
 				    		</div>
-				    		<div class='full' id="fullCheques" style="#{homeMaBean.selected==1?'display: block;':''}">
+				    		 -->
+				    		<div class='full' id="fullCheques" style="display: block;">
 				      			<p:outputPanel styleClass="cardCustonT2">
 									<h:form>
 										<h:commandLink id="cheques1" actionListener="#{homeMaBean.iconAction}"
@@ -164,10 +174,12 @@
 				 	
 					<b:column col-sm="3" col-md="3" id="column4" class="barIcoHeight">
 				  		<div class='link btn' id="bajovalor" style="#{homeMaBean.selected==2?'background-color: #7bb9e0;':''}">
+				  		<!-- 
 				    		<div class='small' style="#{homeMaBean.selected==2?'display: none !important;':''}">
 				    			<img src="./resources/images/Compensacion Electronica Interbancaria.svg" class="imgBajo"></img>
 				    		</div>
-				    		<div class='full' id="fullBajo" style="#{homeMaBean.selected==2?'display: block;':''}">
+				    		 -->
+				    		<div class='full' id="fullBajo" style="display: block;">
 				      			<p:outputPanel styleClass="cardCustonT2">
 									<h:form>
 										<h:commandLink id="bajoval1" actionListener="#{homeMaBean.iconAction}"
@@ -176,7 +188,7 @@
 										>
 											<p:outputPanel>
 												<center>
-													<p:graphicImage styleClass="imagecarousel2" style="width:22% !important" id="imgcrs"
+													<p:graphicImage styleClass="imagecarousel2" style="width:21% !important" id="imgcrs"
 														value="./resources/images/Compensacion Electronica Interbancaria.svg" />
 												</center>
 												<div class="EmptyBox10"></div>
@@ -229,7 +241,10 @@
 							<h:commandLink id="guia2" actionListener="#{homeMaBean.iconAction}" 
 								update="@([id$=panelGeneral])" process="@this">
 								<div class='link2 btn' id="guia" style="#{homeMaBean.selected==3?'background-color: #7bb9e0;':''}">
-									<div class='small'><img src="./resources/images/question-mark.svg" class="imgGuia"></img></div>
+									<div class='small'><img src="./resources/images/question-mark.svg" class="imgGuia" style="width:22% !important"></img>
+										<h1 id="titulo4">guía de uso</h1>
+										
+									</div>
 									<f:attribute name="sel" value="3" />					  
 								</div>
 							</h:commandLink>

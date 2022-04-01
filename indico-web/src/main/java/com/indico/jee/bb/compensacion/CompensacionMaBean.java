@@ -3,13 +3,12 @@ package com.indico.jee.bb.compensacion;
 import java.io.Serializable;
 import java.util.Date;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import com.indico.jndi.ServiceFacades;
 
+@SuppressWarnings("deprecation")
 @ManagedBean(name="compensacionMaBean")
 @ViewScoped
 public class CompensacionMaBean implements Serializable {

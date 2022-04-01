@@ -87,6 +87,72 @@
      return anio + "-" + ("0" + (mes)).slice(-2) + "-" +("0" + (dia)).slice(-2);
  }
  
+ function getDateSelect() {
+	
+	var anio, mes, dia;
+	
+	if ($("#vcanje_valperiodo1_sel_anio").val() != null && $("#vcanje_valperiodo1_sel_anio").val() != "undefined"){
+		anio = $("#vcanje_valperiodo1_sel_anio").val();
+		mes = $("#vcanje_valperiodo1_sel_mes").val();
+		dia = $("#vcanje_valperiodo1_sel_dia").val();
+
+	} else if ($("#vcanje_valmensual1_sel_anio").val() != null && $("#vcanje_valmensual1_sel_anio").val() != "undefined") {
+		anio = $("#vcanje_valmensual1_sel_anio").val();
+		mes = $("#vcanje_valmensual1_sel_mes").val();
+		dia = "1";
+
+	} else if ($("#vcanje_valtrimestral1_sel_anio").val() != null && $("#vcanje_valtrimestral1_sel_anio").val() != "undefined") {
+		anio = $("#vcanje_valtrimestral1_sel_anio").val();
+		mes = $("#vcanje_valtrimestral1__sel_trimestre").val();
+		dia = "1";
+	} else if ($("#vcanje_valsemestral1_sel_anio").val() != null && $("#vcanje_valsemestral1_sel_anio").val() != "undefined") {
+		anio = $("#vcanje_valsemestral1_sel_anio").val();
+		mes = $("#vcanje_valsemestral1_sel_semestre").val();
+		dia = "1";
+	} else if ($("#vcanje_valanual1_sel_anio").val() != null && $("#vcanje_valsemestral1_sel_anio").val() != "undefined") {
+		anio = $("#vcanje_valanual1_sel_anio").val();
+		mes = "1";
+		dia = "1";
+	}
+	
+     return anio + "-" + mes + "-" +dia;
+ }
+
+ function setDateSelect(vDate) {
+	
+	var anio, mes, dia;
+	
+	anio = vDate.split('-')[0];
+	mes = vDate.split('-')[1];
+	dia = vDate.split('-')[2];
+	
+	if (mes == "undefined") {
+		mes = "1";
+	}
+	
+	if (dia == "undefined") {
+		dia = "1";
+	}
+
+	$("#vcanje_valperiodo1_sel_anio").val(anio);
+	$("#vcanje_valperiodo1_sel_mes").val(mes);
+	$("#vcanje_valperiodo1_sel_dia").val(dia);
+	
+	
+	$("#vcanje_valmensual1_sel_anio").val(anio);	
+	$("#vcanje_valmensual1_sel_mes").val(mes);
+	
+	$("#vcanje_valtrimestral1_sel_anio").val(anio);	
+	$("#vcanje_valtrimestral1_sel_trimestre").val(mes);
+	
+	$("#vcanje_valsemestral1_sel_anio").val(anio);	
+	$("#vcanje_valsemestral1_sel_semestre").val(mes);
+	
+	$("#vcanje_valanual1_sel_anio").val(anio);
+	
+	localStorage.setItem("dateSelect", vDate);
+	
+ }
  
  var isMobile = {
      Android: function() {
@@ -563,6 +629,7 @@
  }
  
  function updatedataplottimes(plot1,plot2,compdiario1,compdiario2,data,slider,tipo) {
+
      var serieP1 = [];  
      var serieP2 = [];
      var counta = 0;
@@ -613,17 +680,22 @@
      /*****   *****/
      var fec_p1 = anio1 + "-" + "" + mts1 + "-" +  dia1;
      var fec_p2 = anio2 + "-" + "" + mts2 + "-" +  dia2;
+     
      var seriename;
      if (data["SerieValores"]==null){
-         seriename="SerieCantidad";
-     } else { seriename="SerieValores"; }
+        seriename= datosValor(data["SerieCantidad"]);
+     } else {
+          seriename= datosValor(data["SerieValores"]); 
+        }
      
      var horas = hours();
-         
-     for ( var i = 0; i < data[seriename].length; i++) {
-          var fec001 = data[seriename][i][0];
-          var hora 	= parseInt(data[seriename][i][1]);
-          var valor 	= data[seriename][i][2];
+     var serie  =   seriename.length;  
+    
+     for ( var i = 0; i < serie; i++) {
+  
+          var fec001 = seriename[i][0];
+          var hora 	= parseInt(seriename[i][1]);
+          var valor 	= seriename[i][2];
           if (fec001==fec_p1) {
               
               for(var h=0; h<horas.length; h++){
@@ -713,8 +785,6 @@
          }
      }
      
-     
-     
      plot1.series[0].data = serieP1;
      plot1.series[1].data = serieP2;
      plot1.legend.labels= [formatterLabel(tipo,fec_p1),formatterLabel(tipo,fec_p2)];
@@ -726,7 +796,132 @@
      //plot2.resetAxesScale();
      plot2.replot();
  }
- 
+
+ //Update de la gráfica transacción por concepto
+ function updatedataplottimesrangestran(plot1,plot2,compdiario1,compdiario2,data,slider,tipo) {
+    var anio1,mes1,dia1,trimestre1,semestre1; 
+    var anio2,mes2,dia2,trimestre2,semestre2;
+    /*Componente 1*/
+    
+    if ($("#"+compdiario1+"_sel_anio").length) {
+        anio1 	= $("#"+compdiario1+"_sel_anio").val();	
+    }
+    if ($("#"+compdiario1+"_sel_mes").length) {
+        mes1 	= ("0"+$("#"+compdiario1+"_sel_mes").val()).slice(-2);	
+    } 
+    if ($("#"+compdiario1+"_sel_dia").length) {
+        dia1 	= ("0"+$("#"+compdiario1+"_sel_dia").val()).slice(-2);	
+    } else {
+        dia1 ="01";
+    }
+    if ($("#"+compdiario1+"_sel_trimestre").length) {
+        trimestre1 	= ("0"+$("#"+compdiario1+"_sel_trimestre").val()).slice(-2);	
+    } 
+    if ($("#"+compdiario1+"_sel_semestre").length) {
+        semestre1 	= ("0"+$("#"+compdiario1+"_sel_semestre").val()).slice(-2);	
+    } 
+    
+    /*Componente 2*/
+    if ($("#"+compdiario2+"_sel_anio").length) {
+        anio2 	= ("0"+$("#"+compdiario2+"_sel_anio").val()).slice(-4);	
+    } else {
+        anio2 = "2010";
+    }
+    if ($("#"+compdiario2+"_sel_mes").length) {
+        mes2 	= ("0"+$("#"+compdiario2+"_sel_mes").val()).slice(-2);	
+    } 
+    if ($("#"+compdiario2+"_sel_dia").length) {
+        dia2 	= ("0"+$("#"+compdiario2+"_sel_dia").val()).slice(-2);	
+    } else {
+        dia2 ="01";
+    }
+    if ($("#"+compdiario2+"_sel_trimestre").length) {
+        trimestre2 	= ("0"+$("#"+compdiario2+"_sel_trimestre").val()).slice(-2);	
+    } 
+    if ($("#"+compdiario2+"_sel_semestre").length) {
+        semestre2 	= ("0"+$("#"+compdiario2+"_sel_semestre").val()).slice(-2);	
+    } 
+    var mts1 = (semestre1==null?(trimestre1==null?(mes1):trimestre1):semestre1)==null?"01":(semestre1==null?(trimestre1==null?(mes1):trimestre1):semestre1);
+    var mts2 = (semestre2==null?(trimestre2==null?(mes2):trimestre2):semestre2)==null?"01":(semestre2==null?(trimestre2==null?(mes2):trimestre2):semestre2);
+    /*****   *****/
+    var fec_p1 = new Date(anio1 , (parseInt(mts1)-1)  , dia1);
+    var fec_p2 = new Date(anio2 , (parseInt(mts2)-1) ,  dia2);
+    var serieValores = datos(data["SerieValores"]);
+    var serievaloresseleccionada=[[]];
+    if (serieValores!=null) {
+        var j=0;
+        for (var i=0;i<serieValores.length; i++) {
+            var aux = serieValores[i][0];
+            if(aux != null)
+            {
+                var fec001 = aux.split("-");
+                fec001 = new Date(fec001[0],(parseInt(fec001[1])-1),fec001[2])
+                var valor 	= serieValores[i][1];
+                 if (fec_p1<=fec001 && fec_p2>=fec001) {
+                     serievaloresseleccionada[j]=[fec001,valor];
+                     j++;
+                 }
+            }
+            else
+            {
+                var aux = (serieValores[i].valorFecha);
+                var fec001 = aux.split("-");
+                fec001 = new Date(fec001[0],(parseInt(fec001[1])-1),fec001[2])
+                var valor 	= serieValores[i][1];
+                 if (fec_p1<=fec001 && fec_p2>=fec001) {
+                     serievaloresseleccionada[j]=[fec001,valor];
+                     j++;
+                 }
+            }
+            
+        }
+    }
+    
+    var serieCantidad = datos(data["SerieCantidad"]);
+    var seriecantidadsseleccionada=[[]];
+    if (serieCantidad!=null) {
+        var j1=0;
+        for (var i1=0;i1<serieCantidad.length; i1++) {
+            var aux = serieCantidad[i1][0] 
+            if(aux != null)
+            {
+            var fec002 = aux.split("-");
+            fec002 = new Date(fec002[0],(parseInt(fec002[1])-1),fec002[2])
+            var cantidad 	= serieCantidad[i1][1];
+             if (fec_p1<=fec002 && fec_p2>=fec002) {
+                 seriecantidadsseleccionada[j1]=[fec002,cantidad];
+                 j1++;
+             }
+            }
+            else
+            {
+            var aux = (serieCantidad[i1].valorFecha);
+            var fec002 = aux.split("-");
+            fec002 = new Date(fec002[0],(parseInt(fec002[1])-1),fec002[2])
+            var cantidad 	= serieCantidad[i1].serieValor;
+             if (fec_p1<=fec002 && fec_p2>=fec002) {
+                 seriecantidadsseleccionada[j1]=[fec002,cantidad];
+                 j1++;
+             }
+            }
+            
+        }
+    }
+    //actualiza el slider
+    $("#"+slider).dateRangeSlider("values", fec_p1 , fec_p2 );
+    if (slider.length) {
+        var datesinit = {
+                values : {
+                        min: fec_p1,
+                        max: fec_p2,
+                },
+                updateselects_no: true,
+            }
+            $("#"+slider).trigger("valuesChanged",datesinit);
+    }
+}
+
+ // Update para las gráficas Rotación y PIB
  function updatedataplottimesranges(plot1,plot2,compdiario1,compdiario2,data,slider,tipo) {
      var anio1,mes1,dia1,trimestre1,semestre1; 
      var anio2,mes2,dia2,trimestre2,semestre2;
@@ -2191,7 +2386,7 @@
  }
  
  function createSliderMinDiario(divchartzoomslider,compdiario1,compdiario2,concepto,label,errormessage){
-     
+  
      var targetPlot,controllerPlot,idMini,idDivSlider,data;
      try {
          if (!($("#"+divchartzoomslider).length)) return;
@@ -2316,37 +2511,37 @@
          $("#"+compdiario1+"_sel_anio").unbind();
          $("#"+compdiario1+"_sel_anio").change(function(evt) {
              changedatesselectedstimes(compdiario1,compdiario2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compdiario1,compdiario2,data,idDivSlider,1);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compdiario1,compdiario2,data,idDivSlider,1);
          });
          
          $("#"+compdiario1+"_sel_mes").unbind();
          $("#"+compdiario1+"_sel_mes").change(function(evt) {
              changedatesselectedstimes(compdiario1,compdiario2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compdiario1,compdiario2,data,idDivSlider,1);
-         });
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compdiario1,compdiario2,data,idDivSlider,1);
+         });   
          
          $("#"+compdiario1+"_sel_dia").unbind();
          $("#"+compdiario1+"_sel_dia").change(function(evt) {
              changedatesselectedstimes(compdiario1,compdiario2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compdiario1,compdiario2,data,idDivSlider,1);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compdiario1,compdiario2,data,idDivSlider,1);
          });
          
          $("#"+compdiario2+"_sel_anio").unbind();
          $("#"+compdiario2+"_sel_anio").change(function(evt) {
              changedatesselectedstimes(compdiario1,compdiario2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compdiario1,compdiario2,data,idDivSlider,1);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compdiario1,compdiario2,data,idDivSlider,1);
          });
          
          $("#"+compdiario2+"_sel_mes").unbind();
          $("#"+compdiario2+"_sel_mes").change(function(evt) {
              changedatesselectedstimes(compdiario1,compdiario2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compdiario1,compdiario2,data,idDivSlider,1);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compdiario1,compdiario2,data,idDivSlider,1);
          });
          
          $("#"+compdiario2+"_sel_dia").unbind();
          $("#"+compdiario2+"_sel_dia").change(function(evt) {
              changedatesselectedstimes(compdiario1,compdiario2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compdiario1,compdiario2,data,idDivSlider,1);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compdiario1,compdiario2,data,idDivSlider,1);
          });
          
      } catch (err) {
@@ -2402,7 +2597,7 @@
          innerDivSlider.setAttribute("style",styleSlider);
          document.getElementById(divchartzoomslider).appendChild(innerDivSlider);
          
-         var datestart 	= data["MinX"].split("-");
+        var datestart 	= data["MinX"].split("-");
          datestart		= new Date(datestart[0],(parseInt(datestart[1])-1),datestart[2]);
          var dateend 	= data["MaxX"].split("-");;
          dateend			= new Date(dateend[0],(parseInt(dateend[1])-1),dateend[2]);
@@ -2430,7 +2625,7 @@
          
          from2			= new Date(from2[0],(parseInt(from2[1])-1),from2[2]);
          
-         var dateSliderBounds = $("#"+idDivSlider).dateRangeSlider( 
+        var dateSliderBounds = $("#"+idDivSlider).dateRangeSlider( 
                                      {
                                          range:{
                                              min: {days: 30},
@@ -2464,7 +2659,7 @@
                  },
                  updateperiodo: true
          }
-         
+  
          $("#"+idDivSlider).unbind();
          $("#"+idDivSlider).bind("valuesChanged", function(evt,dateSlider){
              valuesPlotChangedTimes(dateSlider,controllerPlot,targetPlot,compmensual1,compmensual2,data,2);
@@ -2481,25 +2676,25 @@
          $("#"+compmensual1+"_sel_anio").unbind();
          $("#"+compmensual1+"_sel_anio").change(function(evt) {
              changedatesselectedstimes(compmensual1,compmensual2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compmensual1,compmensual2,data,idDivSlider,2);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compmensual1,compmensual2,data,idDivSlider,2);
          });
          
          $("#"+compmensual1+"_sel_mes").unbind();
          $("#"+compmensual1+"_sel_mes").change(function(evt) {
              changedatesselectedstimes(compmensual1,compmensual2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compmensual1,compmensual2,data,idDivSlider,2);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compmensual1,compmensual2,data,idDivSlider,2);
          });
          
          $("#"+compmensual2+"_sel_anio").unbind();
          $("#"+compmensual2+"_sel_anio").change(function(evt) {
              changedatesselectedstimes(compmensual1,compmensual2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compmensual1,compmensual2,data,idDivSlider,2);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compmensual1,compmensual2,data,idDivSlider,2);
          });
          
          $("#"+compmensual2+"_sel_mes").unbind();
          $("#"+compmensual2+"_sel_mes").change(function(evt) {
              changedatesselectedstimes(compmensual1,compmensual2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compmensual1,compmensual2,data,idDivSlider,2);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compmensual1,compmensual2,data,idDivSlider,2);
          });
      } catch (err) {
          if (showError) { console.log(err) ;}
@@ -2557,7 +2752,7 @@
          var dateend 	= data["MaxX"].split("-");;
          dateend			= new Date(dateend[0],(parseInt(dateend[1])-1),dateend[2]);
          var from 			= data["startX"].split("-");
-         from			= new Date(from[0],parseInt(from[1])-1,from[2]);
+         var from			= new Date(from[0],parseInt(from[1])-1,from[2]);
          var to				= dateend;
          var dateSliderBounds = $("#"+idDivSlider).dateRangeSlider( 
                                      {
@@ -2599,25 +2794,25 @@
          $("#"+comptrimestral1+"_sel_anio").unbind();
          $("#"+comptrimestral1+"_sel_anio").change(function(evt) {
              changedatesselectedstrimestralestimes(comptrimestral1,comptrimestral2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,comptrimestral1,comptrimestral2,data,idDivSlider,3);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,comptrimestral1,comptrimestral2,data,idDivSlider,3);
          });
          
          $("#"+comptrimestral1+"_sel_trimestre").unbind();
          $("#"+comptrimestral1+"_sel_trimestre").change(function(evt) {
              changedatesselectedstrimestralestimes(comptrimestral1,comptrimestral2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,comptrimestral1,comptrimestral2,data,idDivSlider,3);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,comptrimestral1,comptrimestral2,data,idDivSlider,3);
          });
          
          $("#"+comptrimestral2+"_sel_anio").unbind();
          $("#"+comptrimestral2+"_sel_anio").change(function(evt) {
              changedatesselectedstrimestralestimes(comptrimestral1,comptrimestral2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,comptrimestral1,comptrimestral2,data,idDivSlider,3);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,comptrimestral1,comptrimestral2,data,idDivSlider,3);
          });
          
          $("#"+comptrimestral2+"_sel_trimestre").unbind();
          $("#"+comptrimestral2+"_sel_trimestre").change(function(evt) {
              changedatesselectedstrimestralestimes(comptrimestral1,comptrimestral2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,comptrimestral1,comptrimestral2,data,idDivSlider,3);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,comptrimestral1,comptrimestral2,data,idDivSlider,3);
          });
  
      } catch (err) {
@@ -2718,25 +2913,25 @@
          $("#"+compsemestral1+"_sel_anio").unbind();
          $("#"+compsemestral1+"_sel_anio").change(function(evt) {
              changedatesselectedssemestralestimes(compsemestral1,compsemestral2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compsemestral1,compsemestral2,data,idDivSlider,4);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compsemestral1,compsemestral2,data,idDivSlider,4);
          });
          
          $("#"+compsemestral1+"_sel_semestre").unbind();
          $("#"+compsemestral1+"_sel_semestre").change(function(evt) {
              changedatesselectedssemestralestimes(compsemestral1,compsemestral2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compsemestral1,compsemestral2,data,idDivSlider,4);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compsemestral1,compsemestral2,data,idDivSlider,4);
          });
          
          $("#"+compsemestral2+"_sel_anio").unbind();
          $("#"+compsemestral2+"_sel_anio").change(function(evt) {
              changedatesselectedssemestralestimes(compsemestral1,compsemestral2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compsemestral1,compsemestral2,data,idDivSlider,4);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compsemestral1,compsemestral2,data,idDivSlider,4);
          });
          
          $("#"+compsemestral2+"_sel_semestre").unbind();
          $("#"+compsemestral2+"_sel_semestre").change(function(evt) {
              changedatesselectedssemestralestimes(compsemestral1,compsemestral2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,compsemestral1,compsemestral2,data,idDivSlider,4);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,compsemestral1,compsemestral2,data,idDivSlider,4);
          });
          
      } catch (err) {
@@ -2839,13 +3034,13 @@
          $("#"+companual1+"_sel_anio").unbind();
          $("#"+companual1+"_sel_anio").change(function(evt) {
              changedatesselectedssemestralestimes(companual1,companual2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,companual1,companual2,data,idDivSlider,5);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,companual1,companual2,data,idDivSlider,5);
          });
          
          $("#"+companual2+"_sel_anio").unbind();
          $("#"+companual2+"_sel_anio").change(function(evt) {
              changedatesselectedssemestralestimes(companual1,companual2,data,idDivSlider);
-             updatedataplottimesranges(targetPlot,controllerPlot,companual1,companual2,data,idDivSlider,5);
+             updatedataplottimesrangestran(targetPlot,controllerPlot,companual1,companual2,data,idDivSlider,5);
          });
          
      } catch (err) {
@@ -2857,14 +3052,13 @@
  };
  
  function createplotmaxgeneral(name,data,tipo) {
-     
       var title,serieValores,serieCantidad,minValor,minCantidad;
       title 			= data["Title"];
       //serieValores 	= data["SerieValores"];
       //serieValores = parsedata(serieValores);
-     serieValores = parsedata(datos(data["SerieValores"]));
+     serieValores = datos(data["SerieValores"]);
       //serieCantidad	= data["SerieCantidad"];
-     serieCantidad = datos (data["SerieCantidad"])
+     serieCantidad = datos(data["SerieCantidad"]);
       minValor		= data["MinValor"];
       minCantidad		= data["MinCantidad"];
       var maxValor		= data["MaxValor"];
@@ -3067,13 +3261,12 @@
  }
  
  function createplotmingeneral(name,data,tipo) {
-     
       var serieValores,serieCantidad,minValor,minCantidad;
       //serieValores 	= data["SerieValores"];
       //serieValores = parsedata(serieValores);
      serieValores   = datos(data["SerieValores"]);
       //serieCantidad	= data["SerieCantidad"];
-     serieCantidad = datos (data["SerieCantidad"])
+     serieCantidad = datos(data["SerieCantidad"]);
       minValor		= data["MinValor"];
       minCantidad		= data["MinCantidad"];
       var maxValor		= data["MaxValor"];
@@ -3270,7 +3463,6 @@
  }
  var datarotadiaria;
  function createSliderRotaMinDiario(divchartzoomslider,compdiario1,compdiario2,errormessage){
- 
      var targetPlot,controllerPlot,idMini,idDivSlider,data;
      try {
          if (!($("#"+divchartzoomslider).length)) return;
@@ -3437,7 +3629,6 @@
  
  var datarotamensual;
  function createSliderRotaMinMensual(divchartzoomslider,compmensual1,compmensual2,errormessage){
- 
      var targetPlot,controllerPlot,idMini,idDivSlider,data;
      try {
          if (!($("#"+divchartzoomslider).length)) return;
@@ -3982,7 +4173,6 @@
       return serieValoresF;
  }
  
- 
  function datosValor(serieValores){
      
      var serieValorD =[];
@@ -3997,7 +4187,6 @@
  }
  
  function createplotmaxgeneralRotacion(name,data,tipo) {
-     
       var title,serieValores,serieCantidad,minValor,minCantidad;	
       title 			= data["Title"];
       
@@ -4163,7 +4352,6 @@
  }
  
  function createplotmingeneralRotacion(name,data,tipo) {
-     
      var serieValores,serieCantidad,minValor,minCantidad;
       serieValores 	= datos(data["SerieValores"]);
       //serieValores = parsedata(serieValores);
@@ -5365,7 +5553,8 @@
  
  
  function createSliderDistriValorMinDiario(divchartzoomslider,compdiario1,compdiario2,errormessage) {
-     var targetPlot,controllerPlot,idMini,idDivSlider,data;
+    
+    var targetPlot,controllerPlot,idMini,idDivSlider,data;
      try {
          if (!($("#"+divchartzoomslider).length)) return;
          
@@ -5461,7 +5650,8 @@
  }
  
  function createSliderDistriValorMinMensual(divchartzoomslider,compmensual1,compmensual2,errormessage) {
-     var targetPlot,controllerPlot,idMini,idDivSlider,data;
+    
+    var targetPlot,controllerPlot,idMini,idDivSlider,data;
      try {
          if (!($("#"+divchartzoomslider).length)) return;
          data =  RestDistribucionValor.getDistribucionValorMensual();	
@@ -5543,7 +5733,8 @@
  }
  
  function createSliderDistriValorMinTrimestral(divchartzoomslider,comptrimestral1,comptrimestral2,errormessage) {
-     var targetPlot,controllerPlot,idMini,idDivSlider,data;
+    
+    var targetPlot,controllerPlot,idMini,idDivSlider,data;
      try {
          if (!($("#"+divchartzoomslider).length)) return;
          data =  RestDistribucionValor.getDistribucionValorTrimestral();	
@@ -5625,7 +5816,8 @@
  }
  
  function createSliderDistriValorMinSemestral(divchartzoomslider,compsemestral1,compsemestral2,errormessage) {
-     var targetPlot,controllerPlot,idMini,idDivSlider,data;
+    
+    var targetPlot,controllerPlot,idMini,idDivSlider,data;
      try {
          if (!($("#"+divchartzoomslider).length)) return;
          data =  RestDistribucionValor.getDistribucionValorSemestral();	
@@ -5707,7 +5899,8 @@
  }
  
  function createSliderDistriValorMinAnual(divchartzoomslider,companual1,companual2,errormessage) {
-     var targetPlot,controllerPlot,idMini,idDivSlider,data;
+    
+    var targetPlot,controllerPlot,idMini,idDivSlider,data;
      try {
          if (!($("#"+divchartzoomslider).length)) return;
          data =  RestDistribucionValor.getDistribucionValorAnual();	
@@ -5776,7 +5969,7 @@
  }
  
  function createplotmaxdistribucionvalor(name,data,tipo,periodo1,periodo2) {
- 
+    
      var title,serieValores,serieCantidad,minValor,minCantidad;
       title 			= data["Title"];
       //serieValores 	= data["SerieValores"];
@@ -5790,17 +5983,19 @@
      $.jqplot.sprintf.decimalMark = ',';
      var serieP1 = [];  
      var serieP2 = [];
-     var counta = 0;
+     var counta = datosValor(data["SerieValores"].length);
      var countb = 0; 
      var fec_p1 = "" + periodo1.getFullYear() + "-" + ("0".concat(periodo1.getMonth()+1)).slice(-2) + "-" +  ("0".concat(periodo1.getDate())).slice(-2);
      var fec_p2 = "" + periodo2.getFullYear() + "-" + ("0".concat(periodo2.getMonth()+1)).slice(-2) + "-" +  ("0".concat(periodo2.getDate())).slice(-2) ;
      
      var horas = hours();//[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
      
-     for (var i = 0; i < datosValor(data["SerieValores"].length); i++) {
-          var fec001 = datosValor(data["SerieValores"][i][0]);
-          var hora 	= parseInt(datosValor(data["SerieValores"][i][1]));
-          var valor 	= datosValor(data["SerieValores"][i][2]);
+     
+     
+     for (var i = 0; i < serieValores.length; i++) {
+          var fec001 = serieValores[i][0];
+          var hora 	= parseInt(serieValores[i][1]);
+          var valor 	= serieValores[i][2];
           if (fec001==fec_p1) {
               for(var h=0; h<horas.length; h++){
                   if(hora==horas[h]){
@@ -5816,7 +6011,7 @@
               }
           }
      }//for
-     
+    
      
      var coud1=0;
      var coud2=0;
@@ -5830,7 +6025,8 @@
              
          }
      }
-     
+   
+
      for(var s=0; s<serieP2.length; s++){
          try{
              var datos = serieP2[s].length;
@@ -5841,6 +6037,7 @@
              
          }
      }
+   
      
      if(coud1<24){
          for(var h=0; h<horas.length; h++){
@@ -5862,6 +6059,7 @@
                  serieP1[h]=[ horas[h] , 0 ];
              }
          }
+    
      }
      
      
@@ -5887,13 +6085,17 @@
                  serieP2[h]=[ horas[h] , 0 ];
              }
          }
+
      }
      
      
  
      var label1 = formatterLabel(tipo,fec_p1);
      var label2 = formatterLabel(tipo,fec_p2);
-     var plot2 = $.jqplot(name, [serieP1,serieP2] , {
+     
+     var plot2 = $.jqplot(name, [serieP1,serieP2],
+        
+        {
          //use_excanvas : false,		
          title:title, 
          // Provide a custom seriesColors array to override the default colors.
@@ -6032,11 +6234,12 @@
              },
          },
      });
+ 
      return plot2;
  }
  
  function createplotmindistribucionvalor(name,data,tipo,periodo1,periodo2) {
-      
+
      var title,serieValores,serieCantidad,minValor,minCantidad;
      title 			= data["Title"];
      //
@@ -6054,10 +6257,10 @@
      var fec_p1 = "" + periodo1.getFullYear() + "-" + ("0".concat(periodo1.getMonth()+1)).slice(-2) + "-" +  ("0".concat(periodo1.getDate())).slice(-2);
      var fec_p2 = "" + periodo2.getFullYear() + "-" + ("0".concat(periodo2.getMonth()+1)).slice(-2) + "-" +  ("0".concat(periodo2.getDate())).slice(-2) ;
     
-     for ( var i = 0; i < datosValor(data["SerieValores"].length); i++) {
-          var fec001 = datosValor(data["SerieValores"][i][0]);
-          var hora 	= parseInt(datosValor(data["SerieValores"][i][1]));
-          var valor 	= datosValor(data["SerieValores"][i][2]);
+     for ( var i = 0; i < serieValores.length; i++) {
+          var fec001 = serieValores[i][0];
+          var hora 	= parseInt(serieValores[i][1]);
+          var valor 	= serieValores[i][2];
           if (fec001==fec_p1) {
               serieP1[counta]=[ hora , valor ];
               counta ++;
@@ -6067,6 +6270,7 @@
               countb++;
           }
      }//for 
+
      var plot2 = $.jqplot(name, [serieP1,serieP2] , {
          textColor:  "#003E6C",
          seriesColors:['#850024', '#006fb9'],
@@ -6169,6 +6373,7 @@
              },
          },
      });
+
      return plot2;
  }
  
@@ -6205,6 +6410,7 @@
          }
  }
  function createSliderDistriCantMinDiario(divchartzoomslider,compdiario1,compdiario2,errormessage) {
+
      var targetPlot,controllerPlot,idMini,idDivSlider,data;
      try {
          if (!($("#"+divchartzoomslider).length)) return;
@@ -6300,6 +6506,7 @@
  }
  
  function createSliderDistriCantMinMensual(divchartzoomslider,compmensual1,compmensual2,errormessage) {
+
      var targetPlot,controllerPlot,idMini,idDivSlider,data;
      try {
          if (!($("#"+divchartzoomslider).length)) return;
@@ -6384,7 +6591,8 @@
  }
  
  function createSliderDistriCantMinTrimestral(divchartzoomslider,comptrimestral1,comptrimestral2,errormessage) {
-     var targetPlot,controllerPlot,idMini,idDivSlider,data;
+
+    var targetPlot,controllerPlot,idMini,idDivSlider,data;
      try {
          if (!($("#"+divchartzoomslider).length)) return;
          data =  RestServices.getDistribucionCantidadTrimestal();
@@ -6467,7 +6675,8 @@
  }
  
  function createSliderDistriCantMinSemestral(divchartzoomslider,compsemestral1,compsemestral2,errormessage) {
-     var targetPlot,controllerPlot,idMini,idDivSlider,data;
+ 
+    var targetPlot,controllerPlot,idMini,idDivSlider,data;
      try {
          if (!($("#"+divchartzoomslider).length)) return;
          data =  RestServices.getDistribucionCantidadSemestral();	
@@ -6548,7 +6757,8 @@
  }
  
  function createSliderDistriCantMinAnual(divchartzoomslider,companual1,companual2,errormessage) {
-     var targetPlot,controllerPlot,idMini,idDivSlider,data;
+
+    var targetPlot,controllerPlot,idMini,idDivSlider,data;
      try {
          if (!($("#"+divchartzoomslider).length)) return;
          data =  RestServices.getDistribucionCantidadAnual();	
@@ -6617,7 +6827,8 @@
  }
  
  function createplotmaxdistribucioncantidad(name,data,tipo,periodo1,periodo2) {
-      var title,serieValores,serieCantidad,minValor,minCantidad;
+  
+    var title,serieValores,serieCantidad,minValor,minCantidad;
       title 			= data["Title"];
       //serieCantidad 	= data["SerieCantidad"];
      serieCantidad = datosValor(data["SerieCantidad"]);
@@ -6636,10 +6847,10 @@
     
      var horas = hours();//[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
      
-     for (var i = 0; i < datosValor(data["SerieCantidad"].length); i++) {
-          var fec001 = datosValor(data["SerieCantidad"][i][0]);
-          var hora 	= parseInt(datosValor(data["SerieCantidad"][i][1]));
-          var valor 	= datosValor(data["SerieCantidad"][i][2]);
+     for (var i = 0; i < serieCantidad.length; i++) {
+          var fec001 = serieCantidad[i][0];
+          var hora 	= parseInt(serieCantidad[i][1]);
+          var valor 	= serieCantidad[i][2];
           if (fec001==fec_p1) {
               for(var h=0; h<horas.length; h++){
                   if(hora==horas[h]){
@@ -6655,7 +6866,7 @@
               }
           }
      }//for
-     
+  
      
      var coud1=0;
      var coud2=0;
@@ -6669,7 +6880,7 @@
              
          }
      }
-     
+  
      for(var s=0; s<serieP2.length; s++){
          try{
              var datos = serieP2[s].length;
@@ -6680,7 +6891,7 @@
              
          }
      }
-     
+  
      if(coud1<24){
          for(var h=0; h<horas.length; h++){
              var flag = true;
@@ -6703,7 +6914,7 @@
          }
      }
      
-     
+  
      
      if(coud2<24){
          for(var h=0; h<horas.length; h++){
@@ -6726,6 +6937,7 @@
                  serieP2[h]=[ horas[h] , 0 ];
              }
          }
+ 
      }
      
      
@@ -6885,11 +7097,13 @@
              },
          },
      });
+ 
      return plot2;
  }
  
  function createplotmindistribucioncantidad(name,data,tipo,periodo1,periodo2) {
-      var serieValores,serieCantidad,minValor,minCantidad;
+
+    var serieValores,serieCantidad,minValor,minCantidad;
       //serieCantidad 	= data["SerieCantidad"];
      serieCantidad = datosValor(data["SerieCantidad"]);
       minValor		= data["MinValor"];
@@ -6905,10 +7119,10 @@
      var fec_p1 = "" + periodo1.getFullYear() + "-" + ("0".concat(periodo1.getMonth()+1)).slice(-2) + "-" +  ("0".concat(periodo1.getDate())).slice(-2);
      var fec_p2 = "" + periodo2.getFullYear() + "-" + ("0".concat(periodo2.getMonth()+1)).slice(-2) + "-" +  ("0".concat(periodo2.getDate())).slice(-2) ;
      
-     for (var i = 0; i < datosValor(data["SerieCantidad"].length); i++) {
-          var fec001 = datosValor(data["SerieCantidad"][i][0]);
-          var hora 	= parseInt(datosValor(data["SerieCantidad"][i][1]));
-          var valor 	= datosValor(data["SerieCantidad"][i][2]);
+     for (var i = 0; i < serieCantidad.length; i++) {
+          var fec001 = serieCantidad[i][0];
+          var hora 	= parseInt(serieCantidad[i][1]);
+          var valor 	= serieCantidad[i][2];
           if (fec001==fec_p1) {
               serieP1[counta]=[ hora , valor ];
               counta ++;
@@ -6918,6 +7132,7 @@
               countb++;
           }
      }//for
+
      var plot2 = $.jqplot(name, [serieP1,serieP2] , {
          textColor:  "#003E6C",
          seriesColors:['#850024', '#006fb9'],
@@ -7022,6 +7237,7 @@
              },
          },
      });
+  
      return plot2;
  }
  

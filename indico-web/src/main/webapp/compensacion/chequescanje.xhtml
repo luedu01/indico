@@ -12,6 +12,10 @@
 	<h:outputStylesheet library="css" name="iThing.css" />
 	<h:outputStylesheet library="css" name="chart.css" />
 
+	<h:head>
+		<h:outputScript library="js" name="accordion2.js" />
+	</h:head>
+
 	<h:outputScript library="js" name="chart.js"/>
 	<h:outputScript library="js" name="chartc.js"/>
 	<p:outputPanel id="vcanje_panelx1" styleClass="cleaner2">
@@ -34,11 +38,10 @@
 											<p:outputPanel styleClass="Wid100 ui-g VerticalCenter BoxSizeBorder">
 												<p:outputLabel value="Periodo" styleClass="ui-g-3 Fs14"></p:outputLabel>
 												<p:outputPanel styleClass="ui-g-9 NoPaddingTopBotton" style="padding-right: 4px !important;">
-												<p:selectOneMenu id="vcanje_selFiltroPorValor"  
+												<p:selectOneMenu id="vcanje_selFiltroPorValor"
 													widgetVar="vcanje_selFiltroPorValorW" required="true"
 													autoWidth="false"
 													value="#{compChequesCanjeMaBean.periodicidad}"
-													requiredMessage="Seleccione Periodo" placeholder="Periodo"
 													styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande"
 													>
 													<f:selectItem itemLabel="Diario" itemValue="1" />
@@ -62,7 +65,7 @@
 												<p:outputPanel id="vcanje_pValorTrimestral" styleClass="ui-g" style="display:none;">
 													<fado:slideraniotrimestre idg="vcanje_valtrimestral1" tittle="" StyleClassWidth="ui-g-9 ui-md-9 ui-lg-12 MarAutoLeft" Align="TextToAlRight FontBold"/>
 												</p:outputPanel>
-												<p:outputPanel id="vcanje_pValorSemestral" styleClass="ui-g" style="display:none;"> 
+												<p:outputPanel id="vcanje_pValorSemestral" styleClass="ui-g" style="display:none;">
 													<fado:slideraniosemestre idg="vcanje_valsemestral1" tittle="" StyleClassWidth="ui-g-9 ui-md-9 ui-lg-12 MarAutoLeft" toUpdate="vcanje_valorgraficavalor" Align="TextToAlRight FontBold"/>
 												</p:outputPanel>
 												<p:outputPanel id="vcanje_pValorAnual" styleClass="ui-g" style="display:none;">
@@ -82,17 +85,17 @@
 													<p:ajax onsuccess="changeperiodiciocanje(); return false;" update="@([id$=vcanje_valorgraficavalor],[id$=vcanje_messageinformationglobal])"/>
 												</p:selectOneMenu>
 												</p:outputPanel>
-											  </h:form>	 
+											  </h:form>
 											</p:outputPanel>
 											<p:outputPanel styleClass="DisplayOnDesk">
-												<h:form>
-													<p:outputPanel class="ui-g Wid90">
-														<p:commandButton icon="" styleClass="WhiteBack Black Wid60 NoMargin NoBorder-radius-Right Fs14 border-gray-1 " process="@this"
-															value="Restaurar" update="@([id$='vcanje_panelfiltro_parent'],[id$='vcanje_valorgraficavalor'])" 
+												<h:form id="restaurar1"  styleClass="ui-g-6">
+													<p:outputPanel>
+														<!-- <p:commandButton icon="" styleClass="WhiteBack Black Wid60 NoMargin NoBorder-radius-Right Fs14 border-gray-1 " process="@this"
+															value="Restaurar" update="@([id$='vcanje_panelfiltro_parent'],[id$='vcanje_valorgraficavalor'])"
 															actionListener="#{compChequesCanjeMaBean.restaurarAction}"  onclick="recargarcanje();"
-															/>
-														<p:commandButton icon="icon-restaurar" styleClass="BlueBack Wid30 NoMargin NoBorder-radius-Left"  process="@this"
-															update="@([id$='vcanje_panelfiltro_parent'],[id$='vcanje_valorgraficavalor'])" 
+															/>  -->
+														<p:commandButton value="Restaurar" icon="icon-restaurar"   process="@this"
+															update="@([id$='vcanje_panelfiltro_parent'],[id$='vcanje_valorgraficavalor'])"
 															actionListener="#{compChequesCanjeMaBean.restaurarAction}"  onclick="recargarcanje();">
 														</p:commandButton>
 													</p:outputPanel>
@@ -117,7 +120,7 @@
 													</p:outputPanel>
 												</h:form>
 
-												<h:form id="vcanje_frmExportar001" onsubmit="assignValues()"> 
+												<h:form id="vcanje_frmExportar001" onsubmit="assignValues()">
 													<div style="display: none;">
 														<p:inputText widgetVar="vcanje_startVar001" value="#{compChequesCanjeMaBean.start}"/>
 														<p:inputText widgetVar="vcanje_endVar001" value="#{compChequesCanjeMaBean.end}"/>
@@ -134,7 +137,7 @@
 																<f:selectItem itemLabel="CSV" itemValue="csv" />
 																<f:selectItem itemLabel="XLS" itemValue="xls" />
 																<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
-																<p:ajax event="change" onsuccess='$(&apos;[id*="vcanje_downloadFile001"]&apos;).click();' process="@this" update="@([id$=vcanje_panelexportar001])"/>
+																<p:ajax event="change" onsuccess='$(&apos;[id*="vcanje_downloadFile001"]&apos;)click();' process="@this" update="@([id$=vcanje_panelexportar001])"/>
 															</p:selectOneMenu>
 															<p:commandButton id="vcanje_downloadFile001" widgetVar="vcanje_downloadFile001W" value="Download" ajax="false" icon="fa fa-fw fa-cloud-download"
 																actionListener="#{compChequesCanjeMaBean.exportAction}" style="display: none;" onclick="vcanje_updatedescargar001()">
@@ -150,7 +153,7 @@
 										</p:panelGrid>
 										<p:messages id="vcanje_messageinformationglobal"  showDetail="false" rendered="true">
 											<p:autoUpdate />
-										</p:messages> 
+										</p:messages>
 									</p:panelGrid>
 								</p:outputPanel>
 
@@ -160,7 +163,7 @@
 										<p:inputText widgetVar="vcanje_startVar" value="#{compChequesCanjeMaBean.start}"/>
 										<p:inputText widgetVar="vcanje_endVar" value="#{compChequesCanjeMaBean.end}"/>
 									</div>
-									
+
 									<p:panelGrid columns="1" styleClass="panelgridExportar MarginLeft15">
 										<p:selectOneMenu widgetVar="vchque_exportarG002W" onchange="exportChartPipe(this.value,'vcanje_chartvalores', 'vcanje_chartcantidad', 'Canje Al Cobro'); restartExportar('vchque_exportarG002W');"  styleClass="selectonemenugrande selectDownload">
 											<f:selectItem itemLabel="Gráfica" itemValue="" />
@@ -175,7 +178,7 @@
 											<p:ajax event="change" onsuccess='$(&apos;[id*="vcanje_downloadFile0002"]&apos;).click();' update="@this"/>
 										</p:selectOneMenu>
 										<p:commandButton id="vcanje_downloadFile0002" widgetVar="vcanje_downloadFileW0002" value="Download" ajax="false"
-											icon="fa fa-fw fa-cloud-download" onclick="vcanje_updatedescargar002();" 
+											icon="fa fa-fw fa-cloud-download" onclick="vcanje_updatedescargar002();"
 											actionListener="#{compChequesCanjeMaBean.exportAction}"
 											style="display: none;"
 											>
@@ -194,10 +197,10 @@
 								<div class="ui-g">
 		 						  	<div class="ui-g-12 ui-md-12 ui-lg-6"><div id="vcanje_chartvalores" /></div>
 		 						  	<div class="ui-g-12 ui-md-12 ui-lg-6"><div id="vcanje_chartcantidad"/></div>
-		 						</div>  		
+		 						</div>
 							<h:outputScript>
 									function assignValues() {
-									
+
 										var v_start;
 										var v_end;
 										var periodo = PF('vcanje_selFiltroPorValorW').jq.find('option:selected').val();
@@ -205,30 +208,30 @@
 											case "1":
 												v_start = getDateStartFromDiario('vcanje_valperiodo1')
 												v_end = getDateEndFromDiario('vcanje_valperiodo1')
-												break;										
+												break;
 											case "2":
 												v_start = getDateStartFromMensual('vcanje_valmensual1')
 												v_end = getDateEndFromMensual('vcanje_valmensual1')
-												break;										
+												break;
 											case "3":
 												v_start = getDateStartFromTrimestral('vcanje_valtrimestral1')
 												v_end = getDateEndFromTrimestral('vcanje_valtrimestral1')
 												break;
-											case "4": 
+											case "4":
 												v_start = getDateStartFromSemestral('vcanje_valsemestral1')
 												v_end = getDateEndFromSemestral('vcanje_valsemestral1')
-												break;										
-											case "5": 
+												break;
+											case "5":
 												v_start = getDateStartFromAnual('vcanje_valanual1')
 												v_end = getDateEndFromAnual('vcanje_valanual1')
-												break;										
-										};//switch	
+												break;
+										};//switch
 										PF('vcanje_startVar').jq.val(v_start);
 										PF('vcanje_endVar').jq.val(v_end);
 										PF('vcanje_startVar001').jq.val(v_start);
 										PF('vcanje_endVar001').jq.val(v_end);
 									}
-																
+
 									function changeperiodiciocanje() {
 										var periodo = PF('vcanje_selFiltroPorValorW').jq.find('option:selected').val();
 										var tipodeplaza = PF('vcanje_tipoplazaVar').jq.find('option:selected').val();
@@ -238,40 +241,52 @@
 										$("[id*='vcanje_pValorTrimestral']").hide();
 										$("[id*='vcanje_pValorSemestral']").hide();
 										$("[id*='vcanje_pValorAnual']").hide();
+
+                    var v_date_sel = getDateSelect();
+                    if (v_date_sel == null ){
+                         v_date_sel = localStorage.getItem("dateSelect");
+                    }
+
+                    if ( v_date_sel == "undefined-undefined-undefined") {
+                         v_date_sel = localStorage.getItem("dateSelect");
+                    }
+
 										switch (periodo) {
 											case "1":
 												$("[id*='vcanje_pValorDiario']").show();
 												createChartMinDiario('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valperiodo1',tipodeplaza,label,'vcanje_messageinformationglobal');
-												break;										
+												break;
 											case "2":
 												$("[id*='vcanje_pValorMensual']").show();
 												createChartMinMensual('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valmensual1',tipodeplaza,label,'vcanje_messageinformationglobal');
-												break;										
+												break;
 											case "3":
 												$("[id*='vcanje_pValorTrimestral']").show();
 												createChartMinTrimestral('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valtrimestral1',tipodeplaza,label,'vcanje_messageinformationglobal');
 												break;
-											case "4": 
+											case "4":
 												$("[id*='vcanje_pValorSemestral']").show();
 												createChartMinSemestral('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valsemestral1',tipodeplaza,label,'vcanje_messageinformationglobal');
-												break;										
-											case "5": 
+												break;
+											case "5":
 												$("[id*='vcanje_pValorAnual']").show();
 												createChartMinAnual('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valanual1',tipodeplaza,label,'vcanje_messageinformationglobal');
-												break;										
+												break;
 										};//switch
+
+                    setDateSelect(v_date_sel);
 									}//function
-									
+
 									function recargarcanje(){
 									}
-									
+
 								    $(document).ready(function(){
 								        restartExportar('vchque_exportarG001W');
 								        restartExportar('vchque_exportarG002W');
 								    	changeperiodiciocanje();
-								    	
+
 								    	var isIPhone = {
-										   
+
 										    iOS: function() {
 										        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
 										    },
@@ -280,11 +295,11 @@
 										    }
 										};
 								     });
-								     
-								     
+
+
 								    jQuery(window).resize(function() {
 								    	var isIPhone = {
-										   
+
 										    iOS: function() {
 										        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
 										    },
@@ -292,21 +307,21 @@
 										        return (isMobile.iOS());
 										    }
 										};
-								    	
+
 								    	if( isIPhone.any() ){
 	         							}else{
 	         								changeperiodiciocanje();
 	         							}
 	      							});
-	      							
-	      							
-	      							
-									
+
+
+
+
 							</h:outputScript>
 						</h:form>
 					</p:panelGrid>
-				</p:outputPanel>		
-			</p:outputPanel>			
+				</p:outputPanel>
+			</p:outputPanel>
 		</p:panelGrid>
 	</p:outputPanel>
 	<p:dialog widgetVar="vcanje_dlg" showEffect="fade" modal="true" header="Gr&#225;fica de Transacci&#243;n como Imagen" resizable="false">

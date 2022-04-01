@@ -85,6 +85,35 @@ function getDateEndFromAnual(componenteAnual) {
 	return anio + "-" + ("0" + (mes)).slice(-2) + "-" +("0" + (dia)).slice(-2);
 }
 
+// Parser de objetos a arreglo
+function datosValor(serieValores){
+     
+     var serieValorD =[];
+     
+      for (var i = 0; i < serieValores.length; i++) {
+          var valor2 = serieValores[i].serieValor;
+          var fecha = (serieValores[i].valorFecha);
+         serieValorD.push([fecha, valor2]);
+      }
+      return serieValorD;
+ }
+
+// Parser de objetos a arreglo de 4
+function datosValor4(Valores4){
+     
+     var ValorD =[];
+     
+      for (var i = 0; i < Valores4.length; i++) {
+			var ejex = Valores4[i].ejex;
+			var serie = (Valores4[i].serie);
+			var valoripc = Valores4[i].valoripc;	
+			var variacionpor = (Valores4[i].variacionpor);
+			ValorD.push([ejex, serie, valoripc, variacionpor]);
+      }
+      return ValorD;
+ }
+
+
 /**
  *  Nuevos componentes basados en el tiempo
  **/
@@ -415,7 +444,7 @@ function addsemestretimes(data,selsemestre,selected) {
 
 
 function changedatesselectedstimes(compdiario1,compdiario2,data,slider) {
-	//debugger;
+
 	var mes1,dia1,anio1; 
 	var mes2,dia2,anio2;
 	
@@ -492,7 +521,7 @@ function changedatesselectedstimes(compdiario1,compdiario2,data,slider) {
 	} else {
 		mes2="01";
 	}
-	//debugger;
+
 	if ($("#"+compdiario2+"_sel_dia").length) {
 		dia2 	= $("#"+compdiario2+"_sel_dia").val();
 		if(dia2 == ""){
@@ -668,6 +697,7 @@ function updatedataplottimes(plot1,plot2,compdiario1,compdiario2,data,slider,tip
 }
 
 function updatedataplottimesranges(plot1,plot2,compdiario1,compdiario2,data,slider,tipo) {
+
 	var serieP1 = [[]];  
 	var serieP2 = [[]];
 	var counta = 0;
@@ -718,8 +748,16 @@ function updatedataplottimesranges(plot1,plot2,compdiario1,compdiario2,data,slid
 	/*****   *****/
 	var fec_p1 = new Date(anio1 , (parseInt(mts1)-1)  , dia1);
 	var fec_p2 = new Date(anio2 , (parseInt(mts2)-1) ,  dia2);
+	
 	var serieValores = data["SerieValores"];
+	
+	if (serieValores == undefined) { 
+		serieValores = data["SerieValoresPorcentaje"];
+	}
+	
+	serieValores = datosValor(serieValores);
 	var serievaloresseleccionada=[[]];
+	
 	if (serieValores!=null) {
 		var j=0;
 		for (var i=0;i<serieValores.length; i++) {
@@ -735,6 +773,12 @@ function updatedataplottimesranges(plot1,plot2,compdiario1,compdiario2,data,slid
 	}
 	
 	var serieCantidad = data["SerieCantidad"];
+	
+	if (serieCantidad == undefined) { 
+		serieCantidad = data["SerieCantidadPorcentaje"];
+	}
+	
+	serieCantidad = datosValor(serieCantidad);
 	var seriecantidadsseleccionada=[[]];
 	if (serieCantidad!=null) {
 		var j=0;
@@ -764,7 +808,7 @@ function updatedataplottimesranges(plot1,plot2,compdiario1,compdiario2,data,slid
 }
 
 function changedatesselectedstrimestralestimes(comptrimestral1,comptrimestral2,data,slider) {
-	//debugger;
+
 	var anio1,mes1,dia1,trimestre1,semestre1,anio1; 
 	var anio2,mes2,dia2,trimestre2,semestre2,anio2;
 	
@@ -880,7 +924,7 @@ function changedatesselectedssemestralestimes(compsemestral1,compsemestral2,data
 		var secSemValue = selSem1.options[1].value;
 		var lastSemValue = selSem1.options[selSem1.options.length - 1].value;
 	}
-	//debugger;
+
 	if ($("#"+compsemestral1+"_sel_anio").length) {
 		anio1 	= $("#"+compsemestral1+"_sel_anio").val();
 		if(anio1 == ""){
@@ -918,7 +962,7 @@ function changedatesselectedssemestralestimes(compsemestral1,compsemestral2,data
 	} else {
 		anio2 = "2010";
 	}
-	//debugger;
+
 	if ($("#"+compsemestral2+"_sel_semestre").length) {
 		valor2 = $("#"+compsemestral2+"_sel_semestre").val();
 		
@@ -1358,7 +1402,6 @@ function parsedata(serieValores){
  * COMPORTAMIENTO HISTORICO CANJE
  **/
 function createSliderComportamientoCanje(divchartzoomslider,periodo, compPeriodo1,compPeriodo2,tipodeplaza,ciudad,label,errormessage){
-	
 	
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	var period = parseInt(periodo,10);
@@ -1988,13 +2031,12 @@ function createSliderComportamientoDevolucion(divchartzoomslider,periodo,compPer
  * @returns
  */
 function createplotmaxgeneralCanje(name,data,tipo) {
-debugger;
  	var title,ticks,serieValores,serieCantidad,minValor,minCantidad,maxValor,maxCantidad,minX,maxX;
  	title 			= data["Title"];
  	ticks 			= data["Ticks"];
- 	serieValores 	= data["SerieValores"];
- 	serieValores = parsedata(serieValores);
- 	serieCantidad	= data["SerieCantidad"];
+ 	serieValores 	= datosValor(data["SerieValores"]);
+ 	//serieValores = parsedata(serieValores);
+ 	serieCantidad	= datosValor(data["SerieCantidad"]);
   	minValor		= data["MinValor"];
  	minCantidad		= data["MinCantidad"];
  	maxValor		= data["MaxValor"];
@@ -2209,9 +2251,9 @@ function createplotmingeneralCanje(name,data,tipo) {
 	var title,ticks,serieValores,serieCantidad,minValor,minCantidad,maxValor,maxCantidad,minX,maxX;
  	title 			= data["Title"];
  	ticks 			= data["Ticks"];
- 	serieValores 	= data["SerieValores2"];
- 	serieValores = parsedata(serieValores);
- 	serieCantidad	= data["SerieCantidad2"];
+ 	serieValores 	= datosValor(data["SerieValores2"]);
+ 	//serieValores = parsedata(serieValores);
+ 	serieCantidad	= datosValor(data["SerieCantidad2"]);
   	minValor		= data["MinValor"];
  	minCantidad		= data["MinCantidad"];
  	maxValor		= data["MaxValor"];
@@ -2383,7 +2425,6 @@ function createplotmingeneralCanje(name,data,tipo) {
  * DEVOLUCION CON RESPECTO AL CANJE
  **/
 function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,compPeriodo2,medioservicio,label,errormessage){
-	
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	var period = parseInt(periodo,10);
 
@@ -2668,13 +2709,14 @@ function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,com
 //GRÁFICAS
 
 function createplotmaxgeneralDevolCanje(name,data,tipo) {
- 	debugger;
+
 	var title,ticks,serieValores,serieCantidad,minValor,minCantidad,maxValor,maxCantidad,minX,maxX;
  	title 			= data["Title"];
  	ticks 			= data["Ticks"];
  	serieValores 	= data["SerieValoresPorcentaje"];
- 	serieValores = parsedata(serieValores);
+ 	serieValores = datosValor(serieValores);
  	serieCantidad	= data["SerieCantidadPorcentaje"];
+ 	serieCantidad	= datosValor(serieCantidad);
    
  	minValor		= data["MinValor"];
  	minCantidad		= data["MinCantidad"];
@@ -2879,13 +2921,14 @@ function createplotmaxgeneralDevolCanje(name,data,tipo) {
 }
 
 function createplotmingeneralDevolCanje(name,data,tipo) {
- 	debugger;
+
 	var title,ticks,serieValores,serieCantidad,minValor,minCantidad,maxValor,maxCantidad,minX,maxX;
  	title 			= data["Title"];
  	ticks 			= data["Ticks"];
  	serieValores 	= data["SerieValoresPorcentaje"];
- 	serieValores = parsedata(serieValores);
+ 	serieValores = datosValor(serieValores);
  	serieCantidad	= data["SerieCantidadPorcentaje"];
+	serieValores = datosValor(serieValores);
   	minValor		= data["MinValor"];
  	minCantidad		= data["MinCantidad"];
  	maxValor		= data["MaxValor"];
@@ -3058,6 +3101,7 @@ function createplotmingeneralDevolCanje(name,data,tipo) {
  **/
 
 function createSliderChequesPesos(divchartzoomslider,errormessage){
+
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	var period = 5;
 	
@@ -3191,8 +3235,8 @@ function createplotmaxgeneralAnualidadPesos(name,data,tipo) {
        
     console.log(text + text1);
  	ticks 			= data["Ticks"];
- 	serieValores 	= data["SerieValores"];
- 	serieCantidad	= data["SerieCantidad"];
+ 	serieValores 	= datosValor4(data["SerieValores"]);
+ 	serieCantidad	= datosValor4(data["SerieCantidad"]);
  	minValor		= data["MinValor"];
  	minCantidad		= data["MinCantidad"];
  	maxValor		= data["MaxValor"];

@@ -33,6 +33,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.indico.exceptions.IndicoException;
+import com.indico.jee.modelo.ChequesPesosConstantes;
 import com.indico.jee.util.ValorGraficable;
 import com.indico.jndi.ServiceFacades;
 
@@ -69,8 +70,10 @@ public class RestCompensacionChequesPesosConstantes implements Serializable {
 			if (vgl!=null && !vgl.isEmpty()) {
 				Integer dias = 365;
 				//valores y cantidad
-				Object[][] valores = new Object[vgl.size()][4];
-				Object[][] cantidad = new  Object[vgl.size()][4];
+				//Object[][] valores = new Object[vgl.size()][4];
+				ChequesPesosConstantes[] valores = new ChequesPesosConstantes[vgl.size()];
+				//Object[][] cantidad = new  Object[vgl.size()][4];
+				ChequesPesosConstantes[]  cantidad = new  ChequesPesosConstantes[vgl.size()];
 				Object[] ticks = new  Object[vgl.size()];
 		        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 		        BigDecimal minimoCantidad = new BigDecimal(NUMBER_LITERAL);
@@ -81,22 +84,30 @@ public class RestCompensacionChequesPesosConstantes implements Serializable {
 					ticks[row]=vg.getEjeX();
 					
 					//cantidad
-					valores[row][0] = vg.getEjeX();
-					valores[row][1] = vg.getSerieValor().divide(DIVISORMM);
-					valores[row][2] = vg.getValorIPC();
+					//valores[row][0] = vg.getEjeX();
+					//valores[row][1] = vg.getSerieValor().divide(DIVISORMM);
+					//valores[row][2] = vg.getValorIPC();
+					valores[row] = new ChequesPesosConstantes(vg.getEjeX()
+								, vg.getSerieValor().divide(DIVISORMM)
+								, vg.getValorIPC()
+								, vg.getVariacionPor());
 										
 					//valores
-					cantidad[row][0] = vg.getEjeX();
-					cantidad[row][1] = vg.getSerieCantidad();
-					cantidad[row][2] = vg.getValorIPC();
+					//cantidad[row][0] = vg.getEjeX();
+					//cantidad[row][1] = vg.getSerieCantidad();
+					//cantidad[row][2] = vg.getValorIPC();
+					cantidad[row] = new ChequesPesosConstantes(vg.getEjeX()
+								, vg.getSerieCantidad()
+								, vg.getValorIPC()
+								, vg.getVariacionPor());
 					
-					if(vg.getVariacionPor() ==  null) {
-						valores[row][3] = BigDecimal.ZERO;
-						cantidad[row][3] = BigDecimal.ZERO;
-					}else {
-						valores[row][3] = vg.getVariacionPor();
-						cantidad[row][3] = vg.getVariacionPor();
-					}
+					//if(vg.getVariacionPor() ==  null) {
+					//	valores[row][3] = BigDecimal.ZERO;
+					//	cantidad[row][3] = BigDecimal.ZERO;
+					//}else {
+					//	valores[row][3] = vg.getVariacionPor();
+					//	cantidad[row][3] = vg.getVariacionPor();
+					//}
 					
 					//
 		        	if (0>vg.getSerieValor().divide(DIVISORMM).compareTo(minimoValor)) {

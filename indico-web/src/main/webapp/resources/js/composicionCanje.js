@@ -45,6 +45,7 @@ function scroll (){
 }
 
 function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,compPeriodo2,rangocanjesel,label,errormessage){
+
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	var period = parseInt(periodo,10);
   
@@ -137,7 +138,6 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 		document.getElementById(divchartzoomslider).appendChild(innerDivSlider);
 		
 		
-		//debugger;
 		var ticks = data ["Ticks"];		
 		//Variable de Fecha de inicio
 		var datestart 	= data["MinX"].split("-");
@@ -473,6 +473,7 @@ function updatePlotFromFilters(plot1,plot2,compdiario1,compdiario2,data,slider,t
  * @returns
  */
 function generaSeriesFecha(ArregloObjetosin, fec_p1, fec_p2, plot, tipo){
+
 	var serieCantidad2 = [];
 	var flag=arr = ArregloObjetosin[0][0].length;
 	var size1 = ArregloObjetosin.length;
@@ -483,9 +484,9 @@ function generaSeriesFecha(ArregloObjetosin, fec_p1, fec_p2, plot, tipo){
 		var tickstmp = [];
 		for(var i = 0; i<size1; i++){ 		 
 			var sortedArr = ArregloObjetosin[i][0].sort(comparar);
-			var fechaSerie = sortedArr[n][2];
+			var fechaSerie = sortedArr[n]["ejex"];
 			if (fec_p1<=fechaSerie && fec_p2>=fechaSerie) {
-				serietmp.push(parseFloat(sortedArr[n][1]));
+				serietmp.push(parseFloat(sortedArr[n]["porcentaje"]));
 				tickstmp.push(fechaSerie);
 			}
 		}
@@ -508,6 +509,7 @@ function comparar(a, b) {
  * @returns
  */
 function GeneraSeries(ArregloObjetosin, plotTipe){
+
 	var serieCantidad2 = [];
 	var flag=arr = ArregloObjetosin[0][0].length;
 	var size1 = ArregloObjetosin.length;
@@ -529,7 +531,7 @@ function GeneraSeries(ArregloObjetosin, plotTipe){
 		
 		for(i = rq; i<size1; i++){ 		 
 			var sortedArr = ArregloObjetosin[i][0].sort(comparar);
-			serietmp.push(parseFloat(sortedArr[n][1]));
+			serietmp.push(parseFloat(sortedArr[n]["porcentaje"]));
 		}
 		serieCantidad2.push(serietmp);
 		n++;

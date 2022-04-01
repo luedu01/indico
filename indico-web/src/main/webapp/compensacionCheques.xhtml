@@ -10,87 +10,87 @@
       xmlns:fado="http://java.sun.com/jsf/composite/customs">
 
 		<b:container fluid="true" id="columnCheques" class="columnconInd">
-			<p:panelGrid columns="1" columnClasses="ui-g-6 ui-md-12 ui-lg-12 ui-sm-12" layout="grid" styleClass="ui-panelgrid-blank BoxSizeBorder">			
+			<p:panelGrid columns="1" columnClasses="ui-g-6 ui-md-12 ui-lg-12 ui-sm-12" layout="grid" styleClass="ui-panelgrid-blank BoxSizeBorder">
   				<p:outputPanel styleClass="BoxSizeBorderCH" >
 					<p:accordionPanel id="accoCheques" activeIndex="-1"  cache="false" dynamic="true" styleClass="NoPaddingRight NoPaddingLeft">
-						<p:ajax event="tabChange" update="@([id$=pdistipplaza],[id$=phiscanche],[id$=pdevcanje],[id$=pcompocanje],[id$=ppesoscons])" 
+						<p:ajax event="tabChange" update="@([id$=pdistipplaza],[id$=phiscanche],[id$=pdevcanje],[id$=pcompocanje],[id$=ppesoscons])"
 							listener="#{homeMaBean.onTabChange}" onstart="PF('statusDialogChe').show()" onsuccess="PF('statusDialogChe').hide()"/>
-							
-						<p:tab id="tabdistipplaza" titleStyleClass="tabtittles2">
-					       	<f:facet name="title">
+
+						<p:tab id="tabdistipplaza" titleStyleClass="tabtittles2" >
+					       	<f:facet name="title" >
 					        	<p:outputPanel styleClass="ui-g Wid100 MarginLeft15">
 				               		<p:outputLabel value="Distribución por tipo de plaza" styleClass="fontTabTittle2"/>
-				            	</p:outputPanel>   	
+				            	</p:outputPanel>
 			         		</f:facet>
 				           <p:panel id="pdistipplaza">
 				              <p:outputPanel styleClass="ui-helper-clearfix NoPaddingLeft NoPaddingRight">
 				              	<ui:insert>
 				           	   		<ui:include src="./compensacion/cheques.xhtml"></ui:include>
 				           	   	</ui:insert>
-				           	  </p:outputPanel> 
-					       </p:panel>        	
+				           	  </p:outputPanel>
+					       </p:panel>
 					   	</p:tab>
-					   	
+
 					   	<p:tab id="tabhiscanche" titleStyleClass="tabtittles2">
 					       	<f:facet name="title">
 					        	<p:outputPanel styleClass="ui-g Wid100 MarginLeft15">
 				               		<p:outputLabel value="Comportamiento histórico del canje de cheques" styleClass="fontTabTittle2"/>
-				            	</p:outputPanel>   	
+				            	</p:outputPanel>
 			         		</f:facet>
 				           <p:panel id="phiscanche">
 				              <p:outputPanel styleClass="ui-helper-clearfix NoPaddingLeft NoPaddingRight">
 				              	<ui:insert>
 				           	   		<ui:include src="./compensacion/comportamiento.xhtml"></ui:include>
 				           	   	</ui:insert>
-				           	  </p:outputPanel> 
-					       </p:panel>        	
+				           	  </p:outputPanel>
+					       </p:panel>
 					   	</p:tab>
-					   	
+
 					   	<p:tab id="tabdevcanje" titleStyleClass="tabtittles2">
 					       	<f:facet name="title">
 					        	<p:outputPanel styleClass="ui-g Wid100 MarginLeft15">
 				               		<p:outputLabel value="Devolución con respecto al canje al cobro" styleClass="fontTabTittle2"/>
-				            	</p:outputPanel>   	
+				            	</p:outputPanel>
 			         		</f:facet>
 				           <p:panel id="pdevcanje">
 				              <p:outputPanel styleClass="ui-helper-clearfix NoPaddingLeft NoPaddingRight">
 				              	<ui:insert>
 				           	   		<ui:include src="./compensacion/devolucioncanje.xhtml"></ui:include>
 				           	   	</ui:insert>
-				           	  </p:outputPanel> 
-					       </p:panel>        	
+				           	  </p:outputPanel>
+					       </p:panel>
 					   	</p:tab>
-						
+
 						<p:tab id="tabcompocanje" titleStyleClass="tabtittles2">
 					       	<f:facet name="title">
 					        	<p:outputPanel styleClass="ui-g Wid100 MarginLeft15">
 				               		<p:outputLabel value="Composición del canje interbancario" styleClass="fontTabTittle2"/>
-				            	</p:outputPanel>   	
+				            	</p:outputPanel>
 			         		</f:facet>
 				           <p:panel id="pcompocanje">
 				              <p:outputPanel styleClass="ui-helper-clearfix NoPaddingLeft NoPaddingRight">
 				              	<ui:insert>
 				           	   		<ui:include src="./compensacion/composicioncanje.xhtml"></ui:include>
 				           	   	</ui:insert>
-				           	  </p:outputPanel> 
-					       </p:panel>        	
+				           	  </p:outputPanel>
+					       </p:panel>
 					   	</p:tab>
-						
+
 						<p:tab id="tabpesoscons" titleStyleClass="tabtittles2">
 					       	<f:facet name="title">
 					        	<p:outputPanel styleClass="ui-g Wid100 MarginLeft15">
 				               		<p:outputLabel value="Uso de cheques en pesos constantes" styleClass="fontTabTittle2"/>
-				            	</p:outputPanel>   	
+				            	</p:outputPanel>
 			         		</f:facet>
 				           <p:panel id="ppesoscons">
 				              <p:outputPanel styleClass="ui-helper-clearfix NoPaddingLeft NoPaddingRight">
 				              	<ui:insert>
 				           	   		<ui:include src="./compensacion/chequespesosconstantes.xhtml"></ui:include>
 				           	   	</ui:insert>
-				           	  </p:outputPanel> 
-					       </p:panel>        	
+				           	  </p:outputPanel>
+					       </p:panel>
 					   	</p:tab>
-					   						   	
+
 					</p:accordionPanel>
 				</p:outputPanel>
 			</p:panelGrid>

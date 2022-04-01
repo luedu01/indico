@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.List;
 import org.junit.Test;
 import com.indico.jee.util.CampoSelect;
-import com.indico.jee.web.carga.CargaFiltros;
 
 public class CargaFiltrosTest {
 	

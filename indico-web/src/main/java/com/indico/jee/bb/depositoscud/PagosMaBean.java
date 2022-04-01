@@ -2,14 +2,13 @@ package com.indico.jee.bb.depositoscud;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import org.primefaces.component.accordionpanel.AccordionPanel;
 import org.primefaces.event.TabChangeEvent;
 
+@SuppressWarnings("deprecation")
 @ManagedBean(name="pagosMaBean")
 @ViewScoped
 public class PagosMaBean implements Serializable {

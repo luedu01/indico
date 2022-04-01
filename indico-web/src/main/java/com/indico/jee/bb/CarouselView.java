@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.PrimeFaces;
 
+@SuppressWarnings("deprecation")
 @ManagedBean
 @ViewScoped
 public class CarouselView implements Serializable {

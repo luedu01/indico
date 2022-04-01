@@ -2,7 +2,6 @@ package com.indico.jee.modelo;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import static com.indico.jee.util.Constants.*;
 public class CanjealCobro {
 	
 	private BigDecimal ValorPorcentaje;

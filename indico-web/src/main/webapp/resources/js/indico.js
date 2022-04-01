@@ -19,7 +19,7 @@ function onTabShow(panel) {
 /**/
 
 function exportChartPipe(selection, graficaW) {
-	//debugger;
+
 	var grafica = $("#" + graficaW + "_chart");
 	if (grafica.length) {
 		var options = {
@@ -497,7 +497,7 @@ function exportChart2(selection, graficaW, name) {
 function exportaGraficas(selection, idGrafica, options, name){
 	
 	if (selection == "jpg") {
-		//debugger;
+
 		var image = $("#" + idGrafica).jqplotToImageStr(options);
 		var grafica = $("#" + idGrafica);
 		

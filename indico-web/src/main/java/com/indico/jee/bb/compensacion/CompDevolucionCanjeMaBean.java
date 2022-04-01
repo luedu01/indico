@@ -17,9 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -41,6 +39,7 @@ import com.indico.jndi.ServiceFacades;
 import com.indico.util.IndicoUtils;
 
 
+@SuppressWarnings("deprecation")
 @ManagedBean(name="compDevolucionCanjeMaBean")
 @ViewScoped
 public class CompDevolucionCanjeMaBean extends GraficaGeneralBean {

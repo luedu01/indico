@@ -7,6 +7,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+@SuppressWarnings("deprecation")
 @ManagedBean(name="BreadcrumbBean")
 @SessionScoped
 public class BreadcrumbBean implements Serializable{

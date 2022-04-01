@@ -16,9 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -37,6 +35,7 @@ import com.indico.jee.bb.GraficaGeneralBean;
 import com.indico.jee.modelo.AnalisisComposicionCanje;
 import com.indico.jee.modelo.RangoCanjeCompensacion;
 
+@SuppressWarnings("deprecation")
 @ManagedBean(name="compComposicionCanjeMaBean")
 @ViewScoped
 public class CompComposicionCanjeMaBean extends GraficaGeneralBean {
@@ -269,7 +268,6 @@ public class CompComposicionCanjeMaBean extends GraficaGeneralBean {
 				    		);
 				        	output.write((line + "\r\n").getBytes());
 					} catch (ParseException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 		        }//for
@@ -340,7 +338,6 @@ public class CompComposicionCanjeMaBean extends GraficaGeneralBean {
 					));
 					resultado = resultado.concat("\r\n");
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

@@ -14,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import com.indico.exceptions.IndicoException;
+import com.indico.jee.modelo.Serie;
 import com.indico.jee.util.ValorGraficable;
 import com.indico.jndi.ServiceFacades;
 import static com.indico.jee.util.Constants.*;
@@ -56,10 +57,14 @@ public class RestCompensacionComportamientoServices implements Serializable {
 			if (vgl!=null && !vgl.isEmpty()) {
 				Integer dias = ServiceFacades.getInstance().getParametersService().getCantidadDeDias();
 				//valores y cantidad
-				Object[][] valores = new Object[vgl.size()][2];
-				Object[][] valores2 = new  Object[vgl.size()][2];
-				Object[][] cantidad = new  Object[vgl.size()][2];
-				Object[][] cantidad2 = new  Object[vgl.size()][2];
+				//Object[][] valores = new Object[vgl.size()][2];
+				Serie[] valores = new Serie[vgl.size()];
+				//Object[][] valores2 = new  Object[vgl.size()][2];
+				Serie[] valores2 = new Serie[vgl.size()];
+				//Object[][] cantidad = new  Object[vgl.size()][2];
+				Serie[] cantidad = new Serie[vgl.size()];
+				//Object[][] cantidad2 = new  Object[vgl.size()][2];
+				Serie[] cantidad2 = new Serie[vgl.size()];
 				Object[] ticks = new  Object[vgl.size()];
 		        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 		        BigDecimal minimoCantidad = new BigDecimal(NUMBER_LITERAL);
@@ -69,16 +74,20 @@ public class RestCompensacionComportamientoServices implements Serializable {
 				for (ValorGraficable vg : vgl) {
 					ticks[row]=vg.getEjeX();
 					//cantidad
-					valores[row][0] = vg.getEjeX();
-					valores[row][1] = vg.getSerieValor().divide(DIVISORMM);
-					valores2[row][0] = vg.getEjeX();
-					valores2[row][1] = vg.getSerieValor().divide(DIVISORM);
+					//valores[row][0] = vg.getEjeX();
+					//valores[row][1] = vg.getSerieValor().divide(DIVISORMM);
+					valores[row] = new Serie(vg.getEjeX(), vg.getSerieValor().divide(DIVISORMM));
+					//valores2[row][0] = vg.getEjeX();
+					//valores2[row][1] = vg.getSerieValor().divide(DIVISORM);
+					valores2[row] = new Serie(vg.getEjeX(), vg.getSerieValor().divide(DIVISORM));
 					//valores
-					cantidad[row][0] = vg.getEjeX();
-					cantidad[row][1] = vg.getSerieCantidad();
+					//cantidad[row][0] = vg.getEjeX();
+					//cantidad[row][1] = vg.getSerieCantidad();
+					cantidad[row] = new Serie(vg.getEjeX(), vg.getSerieCantidad());
 					//
-					cantidad2[row][0] = vg.getEjeX();
-					cantidad2[row][1] = vg.getSerieCantidad().divide(DIVISORC);
+					//cantidad2[row][0] = vg.getEjeX();
+					//cantidad2[row][1] = vg.getSerieCantidad().divide(DIVISORC);
+					cantidad2[row] = new Serie(vg.getEjeX(), vg.getSerieCantidad().divide(DIVISORC));
 					
 		        	if (0>vg.getSerieValor().divide(DIVISORMM).compareTo(minimoValor)) {
 		        		minimoValor =vg.getSerieValor().divide(DIVISORMM);
@@ -156,10 +165,10 @@ public class RestCompensacionComportamientoServices implements Serializable {
 			if (vgl!=null && !vgl.isEmpty()) {
 				Integer dias = ServiceFacades.getInstance().getParametersService().getCantidadDeDias();
 				//valores y cantidad
-				Object[][] valores = new Object[vgl.size()][2];
-				Object[][] valores2 = new  Object[vgl.size()][2];
-				Object[][] cantidad = new  Object[vgl.size()][2];
-				Object[][] cantidad2 = new  Object[vgl.size()][2];
+				Serie[] valores = new Serie[vgl.size()];
+				Serie[] valores2 = new  Serie[vgl.size()];
+				Serie[] cantidad = new Serie[vgl.size()];
+				Serie[] cantidad2 = new  Serie[vgl.size()];
 				Object[] ticks = new  Object[vgl.size()];
 		        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 		        BigDecimal minimoCantidad = new BigDecimal(NUMBER_LITERAL);
@@ -168,18 +177,13 @@ public class RestCompensacionComportamientoServices implements Serializable {
 				int row=0;
 				for (ValorGraficable vg : vgl) {
 					ticks[row]=vg.getEjeX();
+					//valores 
+					valores[row] = new Serie(vg.getEjeX(), vg.getSerieValor().divide(DIVISORMM));
+					valores2[row] = new Serie(vg.getEjeX(), vg.getSerieValor().divide(DIVISORM));
+
 					//cantidad
-					valores[row][0] = vg.getEjeX();
-					valores[row][1] = vg.getSerieValor().divide(DIVISORMM);
-					valores2[row][0] = vg.getEjeX();
-					valores2[row][1] = vg.getSerieValor().divide(DIVISORM);
-					//valores
-					cantidad[row][0] = vg.getEjeX();
-					cantidad[row][1] = vg.getSerieCantidad();
-					//
-					cantidad2[row][0] = vg.getEjeX();
-					cantidad2[row][1] = vg.getSerieCantidad().divide(DIVISORC);
-				
+					cantidad[row] = new Serie(vg.getEjeX(), vg.getSerieCantidad());
+					cantidad2[row] = new Serie(vg.getEjeX(), vg.getSerieCantidad().divide(DIVISORC));	
 					
 					//
 		        	if (0>vg.getSerieValor().divide(DIVISORMM).compareTo(minimoValor)) {
@@ -259,22 +263,23 @@ public class RestCompensacionComportamientoServices implements Serializable {
 			if (vgl!=null && !vgl.isEmpty()) {
 				Integer dias = ServiceFacades.getInstance().getParametersService().getCantidadDeDias();
 				//valores y cantidad
-				Object[][] valores = new Object[vgl.size()][2];
-				Object[][] cantidad = new  Object[vgl.size()][2];
+				Serie[] valores = new Serie[vgl.size()];
+				Serie[] cantidad = new Serie[vgl.size()];
 				Object[] ticks = new  Object[vgl.size()];
 		        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
 		        BigDecimal minimoCantidad = new BigDecimal(NUMBER_LITERAL);
 		        BigDecimal maximoValor = new BigDecimal(MINUS_NUMBER_LITERAL);   
 		        BigDecimal maximoCantidad = new BigDecimal(MINUS_NUMBER_LITERAL);  
 				int row=0;
+
 				for (ValorGraficable vg : vgl) {
-					ticks[row]=vg.getEjeX();
+					ticks[row]=vg.getEjeX();			
+					//valores 
+					valores[row] = new Serie(vg.getEjeX(), vg.getSerieValorPorcentaje());
+
 					//cantidad
-					valores[row][0] = vg.getEjeX();
-					valores[row][1] = vg.getSerieValorPorcentaje();
-					//valores
-					cantidad[row][0] = vg.getEjeX();
-					cantidad[row][1] = vg.getSerieCantidadPorcentaje();
+					cantidad[row] = new Serie(vg.getEjeX(), vg.getSerieCantidadPorcentaje());
+					
 					//
 		        	if (0>vg.getSerieValorPorcentaje().compareTo(minimoValor)) {
 		        		minimoValor =vg.getSerieValorPorcentaje();
@@ -290,6 +295,7 @@ public class RestCompensacionComportamientoServices implements Serializable {
 		        	}
 					row++;
 				}//for
+				System.out.println("getCompDevolucionCanje "+1);
 				//asignacion de valores minimos.
 		        if ((minimoValor.compareTo(BigDecimal.ZERO)>0) && (minimoCantidad.compareTo(BigDecimal.ZERO)>0) ) {
 		        	minimoValor = BigDecimal.ZERO;
@@ -298,13 +304,14 @@ public class RestCompensacionComportamientoServices implements Serializable {
 		        
 		        maximoCantidad 	= maximoCantidad.add(MAXGRAFICA);
 		        maximoValor 	= maximoValor.add(MAXGRAFICA);
-		        
+
 		        //minimos y maximos en x
 		        String to = (String)ticks[ticks.length-1];
 		        dias = ticks.length-dias;
 		        String from = (String)ticks[dias<0?0:dias];
 		        String maxX = (String)ticks[ticks.length-1];
 		        String minX = (String)ticks[0];
+
 		        if (to.equals(from)) {
 		        	synchronized (receiveFormat) {
 		            	Calendar cal = Calendar.getInstance();
@@ -315,6 +322,7 @@ public class RestCompensacionComportamientoServices implements Serializable {
 		            	minX = from;
 		        	}
 		        }
+
 		        //
 				resultado.put(TITLE_LITERAL					, DEVOLUCION_CANJE_LITERAL);
 				resultado.put(TICKS_LITERAL					, ticks);

@@ -7132,7 +7132,7 @@
             // handle the standard table legend
 
             else if (tagname === 'table' && $(el).hasClass('jqplot-table-legend')) {
-				//debugger;
+
                 newContext.strokeStyle = $(el).css('border-top-color');
                 newContext.fillStyle = $(el).css('background-color');
                 newContext.fillRect(left, top, $(el).innerWidth(), $(el).innerHeight());
@@ -7142,7 +7142,7 @@
                 var counter=0;
                 // find all the swatches
                 $(el).find('div.jqplot-table-legend-swatch-outline').each(function () {
-                	//debugger;
+
                     // get the first div and stroke it
                     var elem = $(this);
                     newContext.strokeStyle = elem.css('border-top-color');

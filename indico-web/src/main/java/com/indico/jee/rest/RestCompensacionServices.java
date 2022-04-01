@@ -1,5 +1,22 @@
 package com.indico.jee.rest;
 
+import static com.indico.jee.util.Constants.DIVISORMM;
+import static com.indico.jee.util.Constants.ENDX_LITERAL;
+import static com.indico.jee.util.Constants.ERROR_LITERAL;
+import static com.indico.jee.util.Constants.MAXX_LITERAL;
+import static com.indico.jee.util.Constants.MAX_CANTIDAD_LITERAL;
+import static com.indico.jee.util.Constants.MAX_VALOR_LITERAL;
+import static com.indico.jee.util.Constants.MINUS_NUMBER_LITERAL;
+import static com.indico.jee.util.Constants.MINX_LITERAL;
+import static com.indico.jee.util.Constants.MIN_CANTIDAD_LITERAL;
+import static com.indico.jee.util.Constants.MIN_VALOR_LITERAL;
+import static com.indico.jee.util.Constants.NUMBER_LITERAL;
+import static com.indico.jee.util.Constants.SERIE_CANTIDAD_LITERAL;
+import static com.indico.jee.util.Constants.SERIE_VALORES_LITERAL;
+import static com.indico.jee.util.Constants.STARTX_LITERAL;
+import static com.indico.jee.util.Constants.TICKS_LITERAL;
+import static com.indico.jee.util.Constants.TODAS_LITERAL;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -12,12 +29,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 import com.indico.exceptions.IndicoException;
-import com.indico.jee.modelo.Series;
+import com.indico.jee.modelo.CanjealCobro;
 import com.indico.jee.util.ValorGraficable;
 import com.indico.jndi.ServiceFacades;
-import com.indico.jee.modelo.CanjealCobro;
-import static com.indico.jee.util.Constants.*;
+
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -485,22 +502,23 @@ public class RestCompensacionServices implements Serializable {
 			}
 			Integer dias = ServiceFacades.getInstance().getParametersService().getCantidadDeDias();
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][5];
+			CanjealCobro[] valores = new CanjealCobro[vgl.size()];
 			Object[][] cantidad = new  Object[vgl.size()][5];
 			Object[] ticks = new  Object[vgl.size()];
-	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
-	        BigDecimal minimoCantidad = new BigDecimal(NUMBER_LITERAL);
-	        BigDecimal maximoValor = new BigDecimal(MINUS_NUMBER_LITERAL);   
-	        BigDecimal maximoCantidad = new BigDecimal(MINUS_NUMBER_LITERAL);   
+			BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
+			BigDecimal minimoCantidad = new BigDecimal(NUMBER_LITERAL);
+			BigDecimal maximoValor = new BigDecimal(MINUS_NUMBER_LITERAL);   
+			BigDecimal maximoCantidad = new BigDecimal(MINUS_NUMBER_LITERAL);   
 			int row=0;
 			for (ValorGraficable vg : vgl) {
 				ticks[row]=vg.getEjeX();
 				//valores
-				valores[row][0] = vg.getTipo();
-				valores[row][1] = vg.getEjeX();
-				valores[row][2] = vg.getCiudad();
-				valores[row][3] = vg.getSerieValorPorcentaje();				
-				valores[row][4] = vg.getSerieValor().divide(DIVISORMM);
+				valores[row] = new CanjealCobro(vg.getTipo(),
+							vg.getEjeX()
+							,vg.getCiudad()
+							,vg.getSerieValorPorcentaje()
+							,vg.getSerieValor().divide(DIVISORMM));
+				
 				//cantidad
 				cantidad[row][0] = vg.getTipo();
 				cantidad[row][1] = vg.getEjeX();
@@ -565,7 +583,7 @@ public class RestCompensacionServices implements Serializable {
 			}
 			Integer dias = ServiceFacades.getInstance().getParametersService().getCantidadDeDias();
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][5];
+			CanjealCobro[] valores = new CanjealCobro[vgl.size()];
 			Object[][] cantidad = new  Object[vgl.size()][5];
 			Object[] ticks = new  Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
@@ -576,11 +594,12 @@ public class RestCompensacionServices implements Serializable {
 			for (ValorGraficable vg : vgl) {
 				ticks[row]=vg.getEjeX();
 				//valores
-				valores[row][0] = vg.getTipo();
-				valores[row][1] = vg.getEjeX();
-				valores[row][2] = vg.getCiudad();
-				valores[row][3] = vg.getSerieValorPorcentaje();
-				valores[row][4] = vg.getSerieValor().divide(DIVISORMM);
+				valores[row] = new CanjealCobro(vg.getTipo(),
+							vg.getEjeX()
+							,vg.getCiudad()
+							,vg.getSerieValorPorcentaje()
+							,vg.getSerieValor().divide(DIVISORMM));
+				
 				//cantidad
 				cantidad[row][0] = vg.getTipo();
 				cantidad[row][1] = vg.getEjeX();
@@ -645,7 +664,7 @@ public class RestCompensacionServices implements Serializable {
 			}
 			Integer dias = ServiceFacades.getInstance().getParametersService().getCantidadDeDias();
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][5];
+			CanjealCobro[] valores = new CanjealCobro[vgl.size()];
 			Object[][] cantidad = new  Object[vgl.size()][5];
 			Object[] ticks = new  Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
@@ -656,11 +675,12 @@ public class RestCompensacionServices implements Serializable {
 			for (ValorGraficable vg : vgl) {
 				ticks[row]=vg.getEjeX();
 				//valores
-				valores[row][0] = vg.getTipo();
-				valores[row][1] = vg.getEjeX();
-				valores[row][2] = vg.getCiudad();
-				valores[row][3] = vg.getSerieValorPorcentaje();
-				valores[row][4] = vg.getSerieValor().divide(DIVISORMM);
+				valores[row] = new CanjealCobro(vg.getTipo(),
+						vg.getEjeX()
+						,vg.getCiudad()
+						,vg.getSerieValorPorcentaje()
+						,vg.getSerieValor().divide(DIVISORMM));
+				
 				//cantidad
 				cantidad[row][0] = vg.getTipo();
 				cantidad[row][1] = vg.getEjeX();
@@ -725,7 +745,7 @@ public class RestCompensacionServices implements Serializable {
 			}
 			Integer dias = ServiceFacades.getInstance().getParametersService().getCantidadDeDias();
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][5];
+			CanjealCobro[] valores = new CanjealCobro[vgl.size()];
 			Object[][] cantidad = new  Object[vgl.size()][5];
 			Object[] ticks = new  Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
@@ -736,11 +756,12 @@ public class RestCompensacionServices implements Serializable {
 			for (ValorGraficable vg : vgl) {
 				ticks[row]=vg.getEjeX();
 				//valores
-				valores[row][0] = vg.getTipo();
-				valores[row][1] = vg.getEjeX();
-				valores[row][2] = vg.getCiudad();
-				valores[row][3] = vg.getSerieValorPorcentaje();
-				valores[row][4] = vg.getSerieValor().divide(DIVISORMM);
+				valores[row] = new CanjealCobro(vg.getTipo(),
+							vg.getEjeX()
+							,vg.getCiudad()
+							,vg.getSerieValorPorcentaje()
+							,vg.getSerieValor().divide(DIVISORMM));
+				
 				//cantidad
 				cantidad[row][0] = vg.getTipo();
 				cantidad[row][1] = vg.getEjeX();
@@ -805,7 +826,7 @@ public class RestCompensacionServices implements Serializable {
 			}
 			Integer dias = ServiceFacades.getInstance().getParametersService().getCantidadDeDias();
 			//valores y cantidad
-			Object[][] valores = new Object[vgl.size()][5];
+			CanjealCobro[] valores = new CanjealCobro[vgl.size()];
 			Object[][] cantidad = new  Object[vgl.size()][5];
 			Object[] ticks = new  Object[vgl.size()];
 	        BigDecimal minimoValor = new BigDecimal(NUMBER_LITERAL);   
@@ -816,11 +837,12 @@ public class RestCompensacionServices implements Serializable {
 			for (ValorGraficable vg : vgl) {
 				ticks[row]=vg.getEjeX();
 				//valores
-				valores[row][0] = vg.getTipo();
-				valores[row][1] = vg.getEjeX();
-				valores[row][2] = vg.getCiudad();
-				valores[row][3] = vg.getSerieValorPorcentaje();
-				valores[row][4] = vg.getSerieValor().divide(DIVISORMM);
+				valores[row] = new CanjealCobro(vg.getTipo(),
+							vg.getEjeX()
+							,vg.getCiudad()
+							,vg.getSerieValorPorcentaje()
+							,vg.getSerieValor().divide(DIVISORMM));
+				
 				//cantidad
 				cantidad[row][0] = vg.getTipo();
 				cantidad[row][1] = vg.getEjeX();

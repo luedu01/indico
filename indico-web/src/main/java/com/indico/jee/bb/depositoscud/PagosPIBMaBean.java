@@ -10,9 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -29,10 +27,10 @@ import com.indico.exceptions.IndicoException;
 import com.indico.jee.bb.GraficaGeneralBean;
 import com.indico.jee.util.ValorGraficable;
 import com.indico.jndi.ServiceFacades;
-import com.indico.util.IndicoUtils;
 
 import static com.indico.jee.util.Constants.*;
 
+@SuppressWarnings("deprecation")
 @ManagedBean(name="pagosPIBMaBean")
 @ViewScoped
 public class PagosPIBMaBean extends GraficaGeneralBean {
@@ -267,7 +265,6 @@ public class PagosPIBMaBean extends GraficaGeneralBean {
 					//System.out.println( valor.getSerieValor());	
 					resultado = resultado.concat("\r\n");
 				} catch (ParseException e) {
-					// TODO Auto-generated catch blocks
 					e.printStackTrace();
 				}
 			}

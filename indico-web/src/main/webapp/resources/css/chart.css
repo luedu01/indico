@@ -2,7 +2,7 @@
 	position: relative;
 	color: #666;
 	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-	font-size: 1em
+	font-size: 0.80em;
 }
 
 .jqplot-axis {
@@ -132,7 +132,8 @@ table.jqplot-table-legend, table.jqplot-cursor-legend {
 }
 
 td.jqplot-table-legend {
-	vertical-align: middle
+	vertical-align: middle;
+	font-size:12px;
 }
 
 td.jqplot-seriesToggle:hover, td.jqplot-seriesToggle:active {
@@ -140,7 +141,7 @@ td.jqplot-seriesToggle:hover, td.jqplot-seriesToggle:active {
 }
 
 .jqplot-table-legend .jqplot-series-hidden {
-	text-decoration: line-through
+	text-decoration: line-through;
 }
 
 div.jqplot-table-legend-swatch-outline {
@@ -168,8 +169,8 @@ div.jqplot-table-legend-swatch {
 	left: -30px;
 	padding-bottom: .5em;
 	font-size: 1.2em;
-	
-	
+
+
 }
 
 table.jqplot-cursor-tooltip {
@@ -187,7 +188,7 @@ table.jqplot-cursor-tooltip {
 
 .jqplot-highlighter-tooltip, .jqplot-canvasOverlay-tooltip {
 	border: 1px solid #ccc;
-	font-size: .75em;
+	font-size: .80em;
 	white-space: nowrap;
 	background: rgba(208, 208, 208, 0.5);
 	padding: 1px;

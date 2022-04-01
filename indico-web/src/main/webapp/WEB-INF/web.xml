@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-			xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
-			xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" 
-			xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_1.xsd http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_1.xsd" 
-			version="3.1">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_1.xsd http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
   <display-name>Indico</display-name>
   <context-param>
 	<param-name>primefaces.THEME</param-name>
@@ -150,4 +146,8 @@
     <extension>svg#fontawesomeregular</extension>
     <mime-type>image/svg+xml</mime-type>
   </mime-mapping>  
+  <mime-mapping>
+    <extension>xhtml<!--{or the extension of file}--></extension>
+    <mime-type>text/html</mime-type>
+  </mime-mapping>
 </web-app>

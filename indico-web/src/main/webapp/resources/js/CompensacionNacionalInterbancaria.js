@@ -3,32 +3,32 @@
  */
 
 function scroll (){
-	
+
 	 var ua = window.navigator.userAgent;
 	    var msie = ua.indexOf("MSIE ");
 	 if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))  // If Internet Explorer, return version number
 	    {
-		
-		 try 
-		 { 
+
+		 try
+		 {
 			 var bodyheight = document.getElementById('vbajoval_chart').clientHeight;
 		 }
 		 catch(err){
 			var bodyheight = 0;
 		 }
-		 
+
 		 if (bodyheight > 0  ) {
 				window.scrollTo(0,bodyheight);
 		 }
-			
+
 	    } else {
 	    	window.scrollTo(0,300);
-	    	
+
 	    }
 }
 
 function parsedata(serieValores){
-	
+
 	let serieValoresF = [];
  	for (var i = 0; i < serieValores.length; i++) {
  	    var valor2 = parseFloat(serieValores[i][1].toFixed(2));
@@ -38,8 +38,34 @@ function parsedata(serieValores){
  	return serieValoresF;
 }
 
+
+function datos(serieValores){
+
+
+	var  serieValoresF = [];
+
+	 for (var i = 0; i < serieValores.length; i++) {
+		 var valor2 = serieValores[i].serieValor;
+		 var fecha = (serieValores[i].valorFecha);
+		 serieValoresF.push([fecha, valor2]);
+	 }
+	 return serieValoresF;
+}
+
+function datosValor(serieValores){
+
+	var serieValorD =[];
+
+	 for (var i = 0; i < serieValores.length; i++) {
+		 var valor2 = serieValores[i].serieValor;
+		 var fecha = (serieValores[i].valorFecha);
+		serieValorD.push([fecha, valor2]);
+	 }
+	 return serieValorD;
+}
+
 function getDateCounter(fCounter, dateend, period){
-	debugger;
+
 	if(fCounter == 1){
 		switch(period) {
 			case 1:
@@ -67,7 +93,7 @@ function getDateCounter(fCounter, dateend, period){
 }
 
 function startvaluescomponentstimesPeriod(valchanged1,valchanged2,compdiario1,compdiario2,data,period,fCounter) {
-	debugger;
+
 	var inicioX;
 	var endX;
 	if (valchanged1!=null && valchanged2!=null) {
@@ -78,13 +104,13 @@ function startvaluescomponentstimesPeriod(valchanged1,valchanged2,compdiario1,co
 		if (fechaA.length==1) {
 			fechaA[1]="01";
 			fechaA[2]="01";
-		}	
+		}
 		inicioX = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
 		var fechaB = data["endX"].split("-");
 		if (fechaB.length==1) {
 			fechaB[1]="01";
 			fechaB[2]="01";
-		}	
+		}
 		endX = getDateCounter(fCounter, fechaB, period);//new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
 	}
 	var selanio1    	= '#'+compdiario1+"_sel_anio";
@@ -97,13 +123,13 @@ function startvaluescomponentstimesPeriod(valchanged1,valchanged2,compdiario1,co
 	adddiastimes(data,seldia1,inicioX);
 	addtrimestretimes(data,seltrimestre1,inicioX);
 	addsemestretimes(data,selsemestre1,inicioX);
-	
+
 	var selanio2    	= '#'+compdiario2+"_sel_anio";
 	var selmes2 		= '#'+compdiario2+"_sel_mes";
 	var seldia2 		= '#'+compdiario2+"_sel_dia";
 	var seltrimestre2 	= '#'+compdiario2+"_sel_trimestre";
 	var selsemestre2 	= '#'+compdiario2+"_sel_semestre";
-	
+
 	addaniotimes(data,selanio2,endX);
 	addmesestimes(data,selmes2,endX);
 	adddiastimes(data,seldia2,endX);
@@ -113,28 +139,33 @@ function startvaluescomponentstimesPeriod(valchanged1,valchanged2,compdiario1,co
 
 
 function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,compPeriodo2,errormessage){
-	debugger;
+
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	var period = parseInt(periodo,10);
-	
-	try {	
+
+	try {
 		data =  RestTransaccionCNI.getTransaccionCNI({'periodo':period});
-		var fCounter = data['SerieCantidadPorcentaje'].length;
-		
+		//var fCounter = data['SerieCantidadPorcentaje'].length;
+
+		serieCantidad = data["SerieCantidadPorcentaje"];
+		serieCantidad = datosValor(serieCantidad);
+		var fCounter = serieCantidad.length;
+
+
 		$("#"+divchartzoomslider).empty();
 		$("#"+divchartzoomslider)[0].setAttribute("class","superzoom");
-		
+
 		data["Title"] = data["Title"];
-		
+
 		//startvaluescomponentstimes(null,null,compPeriodo1,compPeriodo2,data);
 		startvaluescomponentstimesPeriod(null,null,compPeriodo1,compPeriodo2,data, period, fCounter);
 		var divchartmax = document.createElement('div');
-		
+
 		divchartmax.id=divchartzoomslider+"_chartMax";
 		divchartmax.style="chartcustom"
 		document.getElementById(divchartzoomslider).appendChild(divchartmax);
 		targetPlot 		= createplotmaxgeneralTransaccionCNI (divchartmax.id, data, period);
-		
+
 		var xmin = targetPlot.axes.xaxis.min;
 		var xmax = targetPlot.axes.xaxis.max;
 		var s_left 		= targetPlot._defaultGridPadding.left;
@@ -142,27 +173,27 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 		var left 		= targetPlot._gridPadding.left;
 		var right		= targetPlot._gridPadding.right;
 		var width 		= targetPlot._plotDimensions.width;
-		
+
 		idMini = divchartzoomslider+"_divmini";
-		
+
 		var innerDivMini = document.createElement('div');
-		
+
 		innerDivMini.id =idMini;
-		
+
 		var style =         "width:".concat((width-left)).concat("px !important; ")
 					.concat("left:").concat(0).concat("px !important;")
 					.concat("right:").concat(right-s_right).concat("px !important;")
 					.concat("height:").concat(55).concat("px !important;");
-		
+
 		innerDivMini.setAttribute("style",style);
 		document.getElementById(divchartzoomslider).appendChild(innerDivMini);
-		
+
 		controllerPlot 	= createplotmingeneralTransaccionCNI (idMini, data, period);
-		
+
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider+"_slider";
-		
+
 		var innerDivSlider = document.createElement('div');
 		innerDivSlider.id=idDivSlider;
 		var styleSlider = "width:".concat((width-left-right+s_left+s_right+24)).concat("px !important; ")
@@ -172,17 +203,17 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 								  .concat("position: relative;");
 		innerDivSlider.setAttribute("style",styleSlider);
 		document.getElementById(divchartzoomslider).appendChild(innerDivSlider);
-		
+
 		var datestart 	= data["MinX"].split("-");
 		datestart		= new Date(datestart[0],(parseInt(datestart[1])-1),datestart[2]);
 		var dateend 	= data["MaxX"].split("-");
-		//debugger;
-		dateend 		= getDateCounter(fCounter, dateend, period); 
-		
+
+		dateend 		= getDateCounter(fCounter, dateend, period);
+
 		var from 		= data["startX"].split("-");
 		from			= new Date(from[0],parseInt(from[1])-1,from[2]);
 		var to			= dateend;
-		
+
 		//Rangos del slider de control
 		var minDays;
 		var first;
@@ -191,7 +222,7 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 		var first;
 		var updateperiodo;
 		switch (period) {
-			case 1: 	
+			case 1:
 						minDays = 10;
 						first = true;
 				break;
@@ -210,19 +241,19 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 						updateperiodo = true;
 				break;
 		};
-		
+
 		try{
-			var dateSlider = $("#"+idDivSlider).dateRangeSlider( 
+			var dateSlider = $("#"+idDivSlider).dateRangeSlider(
 	        		{
-	        			range:{ 
-	                	    min: {days: minDays}, 
+	        			range:{
+	                	    min: {days: minDays},
 	        	  		},
 	        	  		bounds: {
-	        	  			min: datestart, 
+	        	  			min: datestart,
 	        	  			max: dateend
 	        	  		},
 	        	  		defaultValues: {
-	        	  			min: from, 
+	        	  			min: from,
 	        	  			max: to
 	        	  		},
 	        	 	}
@@ -240,52 +271,33 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 			first: first,
 			updateperiodo: updateperiodo
 		}
-		
+
 		try{
 		$("#"+idDivSlider).unbind();
 		$("#"+idDivSlider).bind("valuesChanged", function(evt,dateSlider){
-			
+
 			valuesPlotChangedTimes(dateSlider,controllerPlot,targetPlot,compPeriodo1,compPeriodo2,data,period);
 			if (dateSlider.first==null || dateSlider.first==false) {
 				updatevaluescomponentstimesfromslider(dateSlider,compPeriodo1,compPeriodo2,data,period);
 			}
 		});
-		
+
 		$("#"+idDivSlider).trigger("valuesChanged",datesinit);
-		
+
 		} catch (err) {
 			console.log(err);
 		}
-		
+
 		scroll();
 		/**
-		 * 
+		 *
 		 */
-		
-	
+
+
 		//Retira eventos y actualiza datos en años
 		$("#"+compPeriodo1+"_sel_anio").unbind();
 		$("#"+compPeriodo1+"_sel_anio").change(function(evt) {
-			//debugger;
-			switch (period) {
-				case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-					break;
-				case 2: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-					break;
-				case 3: 	changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-					break;
-				case 4: 	changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-					break;
-				case 5: 	changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-					break;
-			};		
-			
-			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
-		});
-		
-		$("#"+compPeriodo2+"_sel_anio").unbind();
-		$("#"+compPeriodo2+"_sel_anio").change(function(evt) {
-			//debugger;
+
 			switch (period) {
 				case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					break;
@@ -298,13 +310,32 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 				case 5: 	changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					break;
 			};
-			
+
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
 		});
-		
+
+		$("#"+compPeriodo2+"_sel_anio").unbind();
+		$("#"+compPeriodo2+"_sel_anio").change(function(evt) {
+
+			switch (period) {
+				case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+				case 2: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+				case 3: 	changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+				case 4: 	changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+				case 5: 	changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+			};
+
+			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
+		});
+
 		//Retira eventos y actualiza datos en mes
 		$("#"+compPeriodo1+"_sel_mes").unbind();
-		
+
 		$("#"+compPeriodo1+"_sel_mes").change(function(evt) {
 			switch (period) {
 				case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
@@ -314,11 +345,11 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
 		});
-		
+
 		$("#"+compPeriodo2+"_sel_mes").unbind();
-		
+
 		$("#"+compPeriodo2+"_sel_mes").change(function(evt) {
-		
+
 			switch (period) {
 				case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					break;
@@ -327,18 +358,18 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
 		});
-		
+
 		//Retira eventos y actualiza datos en dia
 		$("#"+compPeriodo1+"_sel_dia").unbind();
 		$("#"+compPeriodo1+"_sel_dia").change(function(evt) {
-			
+
 			switch (period) {
 				case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					break;
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
 		});
-		
+
 		$("#"+compPeriodo2+"_sel_dia").unbind();
 		$("#"+compPeriodo2+"_sel_dia").change(function(evt) {
 			switch (period) {
@@ -347,7 +378,7 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
 		});
-		
+
 		//Retira eventos y actualiza datos en Semestre
 		$("#"+compPeriodo1+"_sel_semestre").unbind();
 		$("#"+compPeriodo1+"_sel_semestre").change(function(evt) {
@@ -356,25 +387,25 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
 		});
-		
+
 		$("#"+compPeriodo2+"_sel_semestre").unbind();
 		$("#"+compPeriodo2+"_sel_semestre").change(function(evt) {
-			
+
 			if(period == 4){
 				changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
 		});
-		
+
 		//Retira eventos y actualiza datos en trimestre
 		$("#"+compPeriodo1+"_sel_trimestre").unbind();
 		$("#"+compPeriodo1+"_sel_trimestre").change(function(evt) {
 			if(period == 3){
 				changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-			}			
+			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
 		});
-		
+
 		$("#"+compPeriodo2+"_sel_trimestre").unbind();
 		$("#"+compPeriodo2+"_sel_trimestre").change(function(evt) {
 			if(period == 3){
@@ -382,7 +413,7 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
 		});
-	
+
 	} catch (err) {
 		console.log(err);
 		$("[id*='"+errormessage+"'").empty();
@@ -393,14 +424,19 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 //GRÁFICAS
 
 function createplotmaxgeneralTransaccionCNI(name,data,tipo) {
-	debugger;
-	var fCounter = data['SerieCantidadPorcentaje'].length;
+
+	//var fCounter = data['SerieCantidadPorcentaje'].length;
  	var title,ticks,serieValores,serieCantidad,minValor,minCantidad,maxValor,maxCantidad,minX,maxX;
  	title 			= data["Title"];
  	ticks 			= data["Ticks"];
  	serieValores 	= data["SerieValoresPorcentaje"];
- 	serieValores = parsedata(serieValores);
+ 	//serieValores = parsedata(serieValores);
+	 serieValores = datosValor(serieValores);
  	serieCantidad	= data["SerieCantidadPorcentaje"];
+ 	serieCantidad	= datosValor(serieCantidad);
+	//
+	var fCounter = serieCantidad.length;
+
  	minValor		= data["MinValor"];
  	minCantidad		= data["MinCantidad"];
  	maxValor		= data["MaxValor"];
@@ -419,9 +455,9 @@ function createplotmaxgeneralTransaccionCNI(name,data,tipo) {
         title:title,
         textColor:  "#003E6C",
         seriesColors:['#850024', '#006fb9'],
-		seriesDefaults:{ 
+		seriesDefaults:{
 			renderer:$.jqplot.BlockRenderer,
-			showMarker: true, 
+			showMarker: true,
 			rendererOptions: {
 				smooth: false,
 				fillToZero: true,
@@ -452,9 +488,9 @@ function createplotmaxgeneralTransaccionCNI(name,data,tipo) {
             }
         },
         series:[
-			{	color: '#850024', 
-				lineWidth: 0.5, 
-				shadow: true, 
+			{	color: '#850024',
+				lineWidth: 0.5,
+				shadow: true,
 				label:'Valor',
 				markerOptions: { size:4, style:'filledCircle' },
 				rendererOptions: {
@@ -464,13 +500,13 @@ function createplotmaxgeneralTransaccionCNI(name,data,tipo) {
 		               }
 		        }
 			},
-		    {	yaxis: 'y2axis', 
-				lineWidth: 0.5, 
-				shadow: true, 
-				label:'Cantidad' , 
-				markerOptions: { 
-						size:4, 
-						style:'filledCircle' 
+		    {	yaxis: 'y2axis',
+				lineWidth: 0.5,
+				shadow: true,
+				label:'Cantidad' ,
+				markerOptions: {
+						size:4,
+						style:'filledCircle'
 				},
 				rendererOptions: {
 					smooth: false,
@@ -512,13 +548,13 @@ function createplotmaxgeneralTransaccionCNI(name,data,tipo) {
     		tooltipSeparator : ', ',
     		useAxesFormatters : true,
 	    },
-	    axesDefaults: { 
+	    axesDefaults: {
         	showTickMarks:true,
-        	useSeriesColor:true, 
+        	useSeriesColor:true,
         	rendererOptions: {
         		alignTicks: true,
-        	} 
-	    },	
+        	}
+	    },
         axes:{
             xaxis:{
             	numberTicks: getTicks(minX,maxX,tipo),
@@ -529,17 +565,17 @@ function createplotmaxgeneralTransaccionCNI(name,data,tipo) {
             	pad: 1,
             	tickInterval: getTickInterval(tipo),
             	renderer:$.jqplot.DateAxisRenderer,
-				rendererOptions:{ 
+				rendererOptions:{
 					tickRenderer:$.jqplot.CanvasAxisTickRenderer ,
-				}, 
+				},
                 tickOptions: {
-                	showTicks: true, 
+                	showTicks: true,
                 	angle: -45,
                 	showLabel:true,
                 	showMark:true,
 	            	showGridline:true,
 	            	fontFamily:'"Roboto", sans-serif',
-	            	fontSize: '7pt',
+	            	fontSize: '9pt',
 	            	show:true,
 	            	size:4,
 	            	markSize:4,
@@ -549,21 +585,21 @@ function createplotmaxgeneralTransaccionCNI(name,data,tipo) {
             yaxis:{
             	min:minValor,
             	max:maxValor,
-            	label:'<div>Valor (Miles de Millones)</div>',
+				label: '<div style="padding-rigth: 24px;font-size:14px;">Valor (Miles de Millones)</div>',
             	showLabel:true,
             	textColor: "#850024",
             	show:true,
-				rendererOptions:{ 
+				rendererOptions:{
 				  tickRenderer:$.jqplot.CanvasAxisTickRenderer,
 				  forceTickAt0: true,
-				}, 
+				},
                 tickOptions: {
-                	showTicks: true, 
+                	showTicks: true,
                 	angle: 0,
                 	showLabel:true,
                 	showMark:true,
 	            	showGridline:true,
-	            	fontSize: "7pt",
+	            	fontSize: "10pt",
 	            	size:4,
 	            	markSize:6,
 	            	show:true,
@@ -577,15 +613,15 @@ function createplotmaxgeneralTransaccionCNI(name,data,tipo) {
             	min:minCantidad,
             	max:maxCantidad,
             	showLabel:true,
-            	label: '<div style="padding-left: 24px;">Número de Transacciones</div>',
+            	label: '<div style="padding-left: 24px;font-size:14px;">Número de Transacciones</div>',
             	textColor: "#006fb9",
-				rendererOptions:{ 
+				rendererOptions:{
 				  tickRenderer:$.jqplot.CanvasAxisTickRenderer,
 				  forceTickAt0: true,
-				}, 
+				},
                 tickOptions: {
-                	showTicks: true, 
-	            	fontSize: "7pt",
+                	showTicks: true,
+	            	fontSize: "10pt",
                 	angle: 0,
                 	showLabel:true,
                 	showMark:true,
@@ -609,8 +645,10 @@ function createplotmingeneralTransaccionCNI(name,data,tipo) {
  	title 			= data["Title"];
  	ticks 			= data["Ticks"];
  	serieValores 	= data["SerieValoresPorcentaje"];
- 	serieValores = parsedata(serieValores);
+ 	//serieValores = parsedata(serieValores);
+	serieValores = datosValor(serieValores);
  	serieCantidad	= data["SerieCantidadPorcentaje"];
+	serieCantidad	= datosValor(serieCantidad);
  	minValor		= data["MinValor"];
  	minCantidad		= data["MinCantidad"];
  	maxValor		= data["MaxValor"];
@@ -621,13 +659,13 @@ function createplotmingeneralTransaccionCNI(name,data,tipo) {
 	minX = new Date(fecha1[0],(parseInt(fecha1[1])-1),fecha1[2])
 	var fecha2 = maxX.split("-");
 	maxX = new Date(fecha2[0],(parseInt(fecha2[1])-1),fecha2[2]);
-	
+
  	$.jqplot.sprintf.thousandsSeparator = '.';
  	$.jqplot.sprintf.decimalMark = ',';
 	var plot2 = $.jqplot(name, [serieValores,serieCantidad] , {
         textColor:  "#003E6C",
         seriesColors:['#850024', '#006fb9'],
-		seriesDefaults:{ 
+		seriesDefaults:{
 			renderer:$.jqplot.BlockRenderer,
 			lineWidth: 0.5,
 			showMarker: false,
@@ -640,12 +678,12 @@ function createplotmingeneralTransaccionCNI(name,data,tipo) {
 				barMargin: 1,
 				shadowDepth: 5,
 			},
-			labels: ['',''],			
+			labels: ['',''],
             animation: {
                 show: false
             },
         },
-        
+
         legend: {
             show: false,
             label:'',
@@ -663,7 +701,7 @@ function createplotmingeneralTransaccionCNI(name,data,tipo) {
                 }
             }
         },
-        
+
 	    grid: {
     		background : '#ffffff',
     		borderColor : '#eeeeee',
@@ -680,19 +718,19 @@ function createplotmingeneralTransaccionCNI(name,data,tipo) {
 	    	showTooltip:true,
 	    	constrainZoomTo: 'x',
 	    	dblClickReset: false,
-	    	
+
 	    },
 	    highlighter : {
     		show : false,
 	    },
-	    axesDefaults: { 
+	    axesDefaults: {
         	showTickMarks:false,
-        	useSeriesColor:false, 
+        	useSeriesColor:false,
         	rendererOptions: {
         		alignTicks: true,
-        	} 
-	    },	
-        
+        	}
+	    },
+
         axes:{
             xaxis:{
             	numberTicks: getTicks(minX,maxX,tipo),
@@ -703,17 +741,17 @@ function createplotmingeneralTransaccionCNI(name,data,tipo) {
             	pad: 1,
             	renderer:$.jqplot.DateAxisRenderer,
             	tickInterval: getTickInterval(tipo),
-				rendererOptions:{ 
+				rendererOptions:{
 				  tickRenderer:$.jqplot.CanvasAxisTickRenderer ,
-				}, 
+				},
                 tickOptions: {
-                	showTicks: false, 
+                	showTicks: false,
                 	angle: -45,
                 	showLabel:false,
                 	showMark:false,
 	            	showGridline:false,
 	            	fontFamily:'"Roboto", sans-serif',
-	            	fontSize: '7pt',
+	            	fontSize: '9pt',
 	            	show:false,
 	            	size:0,
 	            	markSize:0,
@@ -726,17 +764,17 @@ function createplotmingeneralTransaccionCNI(name,data,tipo) {
             	showLabel:false,
             	label:'Cantidad',
             	show:false,
-				rendererOptions:{ 
+				rendererOptions:{
 					  tickRenderer:$.jqplot.CanvasAxisTickRenderer,
 					  forceTickAt0: true,
-					}, 
+					},
                 tickOptions: {
-                	showTicks: false, 
+                	showTicks: false,
                 	angle: 0,
                 	showLabel:false,
                 	showMark:false,
 	            	showGridline:false,
-	            	fontSize: "7pt",
+	            	fontSize: "9pt",
 	            	size:0,
 	            	markSize:0,
 	            	show:false,
@@ -751,14 +789,14 @@ function createplotmingeneralTransaccionCNI(name,data,tipo) {
             	showLabel:true,
             	label: '<div><div>Número </div><div style="color: gray;">Operaciones</div></div>',
             	textColor: "#006fb9",
-				rendererOptions:{ 
+				rendererOptions:{
 				  tickRenderer:$.jqplot.CanvasAxisTickRenderer,
 				  forceTickAt0: false,
 				  forceTickAt100: false,
-				}, 
+				},
                 tickOptions: {
-                	showTicks: false, 
-	            	fontSize: "7pt",
+                	showTicks: false,
+	            	fontSize: "9pt",
                 	angle: 0,
                 	showLabel:false,
                 	showMark:false,

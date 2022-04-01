@@ -9,6 +9,7 @@ import javax.faces.event.ActionEvent;
 
 import com.indico.jndi.ServiceFacades;
 
+@SuppressWarnings("deprecation")
 @ManagedBean(name="sispagosMaBean")
 @SessionScoped
 public class SispagosMaBean implements Serializable {

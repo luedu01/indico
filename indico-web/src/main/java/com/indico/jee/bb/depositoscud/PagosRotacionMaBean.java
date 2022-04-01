@@ -10,9 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -32,6 +30,7 @@ import com.indico.jndi.ServiceFacades;
 import com.indico.util.IndicoUtils;
 import static com.indico.jee.util.Constants.*;
 
+@SuppressWarnings("deprecation")
 @ManagedBean(name="pagosRotacionMaBean")
 @ViewScoped
 public class PagosRotacionMaBean extends GraficaGeneralBean {
@@ -264,7 +263,6 @@ public class PagosRotacionMaBean extends GraficaGeneralBean {
 							formatter3.format(dateRotacion),
 							valor.getSerieValor() ));
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

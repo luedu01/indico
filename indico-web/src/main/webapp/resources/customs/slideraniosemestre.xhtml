@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"   
+<html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
@@ -34,16 +34,33 @@
 		</c:if>
 		<p:outputPanel>
 			<div id="#{cc.attrs.idg}_container_anio" class="containerselectslider" style="min-width: 65px;">
-				<select id="#{cc.attrs.idg}_sel_anio" class="minWidth-0 selectonslider">
+				<label id="#{cc.attrs.idg}_sel_anio_label" for="#{cc.attrs.idg}_sel_anio" class="selectFechasLabel"></label>
+				<select id="#{cc.attrs.idg}_sel_anio" class="minWidth-0 selectonslider" onchange="document.getElementById(this.id + '_label').innerHTML = this.value">
 				</select>
 			</div>
-		</p:outputPanel>			
+		</p:outputPanel>
 		<p:outputPanel>
 			<div id="#{cc.attrs.idg}_container_semestre" class="containerselectslider" style="min-width: 65px;">
-				<select id="#{cc.attrs.idg}_sel_semestre" class="minWidth-0 selectonslider">
+				<label id="#{cc.attrs.idg}_sel_semestre_label" for="#{cc.attrs.idg}_sel_semestre" class="selectFechasLabel"></label>
+				<select id="#{cc.attrs.idg}_sel_semestre" class="minWidth-0 selectonslider" onchange="document.getElementById(this.id + '_label').innerHTML = this.options[this.selectedIndex].text">
 				</select>
 			</div>
-		</p:outputPanel>	
-	</p:panelGrid>	
-</composite:implementation>      
-</html> 
+		</p:outputPanel>
+		<h:form prependid="vcanje_false_1">
+			<h:outputScript>
+				$(document).ready(function(){
+					// Cuando inicializa los select
+					$("select").each(function() {
+						var idElem = $(this).attr("id");
+						if(idElem.indexOf("vcanje_valsemestral1_sel_anio") != -1 || idElem.indexOf("vcanje_valsemestral1_sel_semestre") != -1) {
+							setTimeout(() => {
+								$("label[id*=" + idElem + "_label" + "]").html($( "#" + idElem + " option:selected" ).text());
+							  }, 10);
+						}
+					});
+				});
+			</h:outputScript>
+		</h:form>
+	</p:panelGrid>
+</composite:implementation>
+</html>

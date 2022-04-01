@@ -9,6 +9,7 @@ import javax.faces.bean.ManagedBean;
 
 import static com.indico.jee.util.Constants.*;
 
+@SuppressWarnings("deprecation")
 @ManagedBean(name = "indicadorService")
 @ApplicationScoped
 public class IndicadorService implements Serializable {
