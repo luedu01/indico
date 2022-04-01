@@ -1,0 +1,482 @@
+2021-10-11 09:07:08,218 INFO  [org.jboss.modules] (main) JBoss Modules version 1.9.1.Final-redhat-00001
+2021-10-11 09:07:08,730 INFO  [org.jboss.msc] (main) JBoss MSC version 1.4.11.Final-redhat-00001
+2021-10-11 09:07:08,730 INFO  [org.jboss.threads] (main) JBoss Threads version 2.3.3.Final-redhat-00001
+2021-10-11 09:07:08,886 INFO  [org.jboss.as] (MSC service thread 1-2) WFLYSRV0049: JBoss EAP 7.3.0.GA (WildFly Core 10.1.2.Final-redhat-00001) starting
+2021-10-11 09:07:08,902 DEBUG [org.jboss.as.config] (MSC service thread 1-2) Configured system properties:
+	awt.toolkit = sun.awt.windows.WToolkit
+	file.encoding = Cp1252
+	file.encoding.pkg = sun.io
+	file.separator = \
+	java.awt.graphicsenv = sun.awt.Win32GraphicsEnvironment
+	java.awt.printerjob = sun.awt.windows.WPrinterJob
+	java.class.path = C:\Users\luedu\Desktop\jboss-eap-7.3\jboss-modules.jar
+	java.class.version = 52.0
+	java.endorsed.dirs = C:\Program Files\Java\jdk1.8.0_281\jre\lib\endorsed
+	java.ext.dirs = C:\Program Files\Java\jdk1.8.0_281\jre\lib\ext;C:\Windows\Sun\Java\lib\ext
+	java.home = C:\Program Files\Java\jdk1.8.0_281\jre
+	java.io.tmpdir = C:\Users\luedu\AppData\Local\Temp\
+	java.library.path = C:\Program Files\Java\jdk1.8.0_281\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\Informatica\10.4.0\clients\tools\datadirect;C:\Informatica\10.4.0\clients\tools\odbcdrv;C:\Informatica\10.4.0\clients\tools\jdbcdrv;C:\Informatica\10.4.0\clients\tools\sharedlibs;C:\Program Files\Teradata\Client\17.00\bin;C:\Users\luedu;C:\Informatica\10.2.0\clients\tools\datadirect;C:\Informatica\10.2.0\clients\tools\odbcdrv;C:\Informatica\10.2.0\clients\tools\jdbcdrv;C:\Informatica\10.2.0\clients\tools\sharedlibs;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\TortoiseSVN\bin;C:\Program Files (x86)\Pulse Secure\VC142.CRT\X64\;C:\Program Files (x86)\Pulse Secure\VC142.CRT\X86\;C:\Program Files\Java\jdk1.8.0_281\bin;C:\Users\luedu\AppData\Local\Microsoft\WindowsApps;;.
+	java.net.preferIPv4Stack = true
+	java.runtime.name = Java(TM) SE Runtime Environment
+	java.runtime.version = 1.8.0_281-b09
+	java.specification.name = Java Platform API Specification
+	java.specification.vendor = Oracle Corporation
+	java.specification.version = 1.8
+	java.util.logging.manager = org.jboss.logmanager.LogManager
+	java.vendor = Oracle Corporation
+	java.vendor.url = http://java.oracle.com/
+	java.vendor.url.bug = http://bugreport.sun.com/bugreport/
+	java.version = 1.8.0_281
+	java.vm.info = mixed mode
+	java.vm.name = Java HotSpot(TM) 64-Bit Server VM
+	java.vm.specification.name = Java Virtual Machine Specification
+	java.vm.specification.vendor = Oracle Corporation
+	java.vm.specification.version = 1.8
+	java.vm.vendor = Oracle Corporation
+	java.vm.version = 25.281-b09
+	javax.management.builder.initial = org.jboss.as.jmx.PluggableMBeanServerBuilder
+	jboss.home.dir = C:\Users\luedu\Desktop\jboss-eap-7.3
+	jboss.host.name = nckqk9p
+	jboss.modules.dir = C:\Users\luedu\Desktop\jboss-eap-7.3\modules
+	jboss.modules.system.pkgs = org.jboss.byteman
+	jboss.node.name = nckqk9p
+	jboss.qualified.host.name = nckqk9p
+	jboss.server.base.dir = C:\Users\luedu\Desktop\jboss-eap-7.3\standalone
+	jboss.server.config.dir = C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\configuration
+	jboss.server.data.dir = C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\data
+	jboss.server.deploy.dir = C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\data\content
+	jboss.server.log.dir = C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\log
+	jboss.server.name = nckqk9p
+	jboss.server.persist.config = true
+	jboss.server.temp.dir = C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\tmp
+	line.separator = 
+
+	logging.configuration = file:C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\configuration/logging.properties
+	module.path = C:\Users\luedu\Desktop\jboss-eap-7.3\modules
+	org.jboss.boot.log.file = C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\log\server.log
+	org.jboss.resolver.warning = true
+	os.arch = amd64
+	os.name = Windows 10
+	os.version = 10.0
+	path.separator = ;
+	program.name = standalone.bat
+	sun.arch.data.model = 64
+	sun.boot.class.path = C:\Program Files\Java\jdk1.8.0_281\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_281\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_281\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.8.0_281\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_281\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_281\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_281\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_281\jre\classes
+	sun.boot.library.path = C:\Program Files\Java\jdk1.8.0_281\jre\bin
+	sun.cpu.endian = little
+	sun.cpu.isalist = amd64
+	sun.desktop = windows
+	sun.io.unicode.encoding = UnicodeLittle
+	sun.java.command = C:\Users\luedu\Desktop\jboss-eap-7.3\jboss-modules.jar -mp C:\Users\luedu\Desktop\jboss-eap-7.3\modules org.jboss.as.standalone -Djboss.home.dir=C:\Users\luedu\Desktop\jboss-eap-7.3
+	sun.java.launcher = SUN_STANDARD
+	sun.jnu.encoding = Cp1252
+	sun.management.compiler = HotSpot 64-Bit Tiered Compilers
+	sun.os.patch.level = 
+	sun.stderr.encoding = cp437
+	sun.stdout.encoding = cp437
+	user.country = US
+	user.dir = C:\Users\luedu\Desktop\jboss-eap-7.3\bin
+	user.home = C:\Users\luedu
+	user.language = en
+	user.name = luedu
+	user.script = 
+	user.timezone = America/Bogota
+	user.variant = 
+2021-10-11 09:07:08,902 DEBUG [org.jboss.as.config] (MSC service thread 1-2) VM Arguments: -Dprogram.name=standalone.bat -Xms1G -Xmx1G -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -verbose:gc -Xloggc:C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\log\gc.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=3M -XX:-TraceClassUnloading -Dorg.jboss.boot.log.file=C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\log\server.log -Dlogging.configuration=file:C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\configuration/logging.properties 
+2021-10-11 09:07:10,199 INFO  [org.jboss.as.controller.management-deprecated] (Controller Boot Thread) WFLYCTL0028: Attribute 'security-realm' in the resource at address '/core-service=management/management-interface=http-interface' is deprecated, and may be removed in a future version. See the attribute description in the output of the read-resource-description operation to learn more about the deprecation.
+2021-10-11 09:07:10,481 INFO  [org.jboss.as.repository] (ServerService Thread Pool -- 10) WFLYDR0001: Content added at location C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\data\content\3e\f18318b89742abd5ff512a02075852a9c10a24\content
+2021-10-11 09:07:10,512 INFO  [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0039: Creating http management service using socket-binding (management-http)
+2021-10-11 09:07:10,527 INFO  [org.xnio] (MSC service thread 1-5) XNIO version 3.7.7.Final-redhat-00001
+2021-10-11 09:07:10,527 INFO  [org.xnio.nio] (MSC service thread 1-5) XNIO NIO Implementation Version 3.7.7.Final-redhat-00001
+2021-10-11 09:07:10,574 WARN  [org.jboss.as.txn] (ServerService Thread Pool -- 54) WFLYTX0013: The node-identifier attribute on the /subsystem=transactions is set to the default value. This is a danger for environments running multiple servers. Please make sure the attribute value is unique.
+2021-10-11 09:07:10,590 INFO  [org.jboss.as.clustering.infinispan] (ServerService Thread Pool -- 37) WFLYCLINF0001: Activating Infinispan subsystem.
+2021-10-11 09:07:10,606 INFO  [org.jboss.as.webservices] (ServerService Thread Pool -- 56) WFLYWS0002: Activating WebServices Extension
+2021-10-11 09:07:10,606 INFO  [org.jboss.as.naming] (ServerService Thread Pool -- 46) WFLYNAM0001: Activating Naming Subsystem
+2021-10-11 09:07:10,621 INFO  [org.jboss.as.security] (ServerService Thread Pool -- 52) WFLYSEC0002: Activating Security Subsystem
+2021-10-11 09:07:10,668 INFO  [org.jboss.as.connector] (MSC service thread 1-6) WFLYJCA0009: Starting JCA Subsystem (WildFly/IronJacamar 1.4.19.Final-redhat-00001)
+2021-10-11 09:07:10,684 INFO  [org.jboss.as.jsf] (ServerService Thread Pool -- 44) WFLYJSF0007: Activated the following JSF Implementations: [main]
+2021-10-11 09:07:10,700 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-7) WFLYUT0003: Undertow 2.0.28.SP1-redhat-00001 starting
+2021-10-11 09:07:10,766 INFO  [org.jboss.as.jaxrs] (ServerService Thread Pool -- 39) WFLYRS0016: RESTEasy version 3.9.3.SP1-redhat-00001
+2021-10-11 09:07:10,773 WARN  [org.wildfly.clustering.web.undertow] (ServerService Thread Pool -- 55) WFLYCLWEBUT0007: No routing provider found for default-server; using legacy provider based on static configuration
+2021-10-11 09:07:10,859 INFO  [org.jboss.as.connector.subsystems.datasources] (ServerService Thread Pool -- 33) WFLYJCA0004: Deploying JDBC-compliant driver class org.h2.Driver (version 1.4)
+2021-10-11 09:07:10,859 INFO  [org.wildfly.extension.io] (ServerService Thread Pool -- 38) WFLYIO001: Worker 'default' has auto-configured to 8 core threads with 64 task threads based on your 4 available processors
+2021-10-11 09:07:10,953 INFO  [org.jboss.as.security] (MSC service thread 1-6) WFLYSEC0001: Current PicketBox version=5.0.3.Final-redhat-00005
+2021-10-11 09:07:10,969 INFO  [org.jboss.as.naming] (MSC service thread 1-2) WFLYNAM0003: Starting Naming Service
+2021-10-11 09:07:11,063 INFO  [org.jboss.as.mail.extension] (MSC service thread 1-4) WFLYMAIL0001: Bound mail session [java:jboss/mail/Default]
+2021-10-11 09:07:11,063 INFO  [org.jboss.as.connector.deployers.jdbc] (MSC service thread 1-1) WFLYJCA0018: Started Driver service with driver-name = h2
+2021-10-11 09:07:11,110 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 55) WFLYUT0014: Creating file handler for path 'C:\Users\luedu\Desktop\jboss-eap-7.3/welcome-content' with options [directory-listing: 'false', follow-symlink: 'false', case-sensitive: 'true', safe-symlink-paths: '[]']
+2021-10-11 09:07:11,204 INFO  [org.jboss.as.connector.subsystems.datasources] (ServerService Thread Pool -- 33) WFLYJCA0005: Deploying non-JDBC-compliant driver class com.teradata.jdbc.TeraDriver (version 17.10)
+2021-10-11 09:07:11,204 INFO  [org.jboss.remoting] (MSC service thread 1-4) JBoss Remoting version 5.0.16.Final-redhat-00001
+2021-10-11 09:07:11,250 INFO  [org.jboss.as.connector.deployers.jdbc] (MSC service thread 1-5) WFLYJCA0018: Started Driver service with driver-name = teradata
+2021-10-11 09:07:11,375 INFO  [org.jboss.as.ejb3] (MSC service thread 1-5) WFLYEJB0481: Strict pool slsb-strict-max-pool is using a max instance size of 64 (per class), which is derived from thread worker pool sizing.
+2021-10-11 09:07:11,375 INFO  [org.jboss.as.ejb3] (MSC service thread 1-2) WFLYEJB0482: Strict pool mdb-strict-max-pool is using a max instance size of 16 (per class), which is derived from the number of CPUs on this host.
+2021-10-11 09:07:11,422 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-4) WFLYUT0012: Started server default-server.
+2021-10-11 09:07:11,485 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-4) WFLYUT0018: Host default-host starting
+2021-10-11 09:07:11,641 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-7) WFLYUT0006: Undertow HTTP listener default listening on 127.0.0.1:8080
+2021-10-11 09:07:11,759 INFO  [org.jboss.as.ejb3] (MSC service thread 1-5) WFLYEJB0493: EJB subsystem suspension complete
+2021-10-11 09:07:11,894 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-2) WFLYJCA0001: Bound data source [java:jboss/datasources/ExampleDS]
+2021-10-11 09:07:11,909 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-8) WFLYJCA0001: Bound data source [java:jboss/jdbc/BanrepDS]
+2021-10-11 09:07:12,003 INFO  [org.jboss.as.patching] (MSC service thread 1-2) WFLYPAT0050: JBoss EAP cumulative patch ID is: base, one-off patches include: none
+2021-10-11 09:07:12,034 INFO  [org.jboss.as.server.deployment.scanner] (MSC service thread 1-7) WFLYDS0013: Started FileSystemDeploymentService for directory C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\deployments
+2021-10-11 09:07:12,050 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-4) WFLYSRV0027: Starting deployment of "indico-ear.ear" (runtime-name: "indico-ear.ear")
+2021-10-11 09:07:12,315 INFO  [org.jboss.ws.common.management] (MSC service thread 1-1) JBWS022052: Starting JBossWS 5.3.0.Final-redhat-00001 (Apache CXF 3.3.4.redhat-00001) 
+2021-10-11 09:07:12,922 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-7) WFLYSRV0207: Starting subdeployment (runtime-name: "indico-ejb-0.0.1-SNAPSHOT.jar")
+2021-10-11 09:07:12,922 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-8) WFLYSRV0207: Starting subdeployment (runtime-name: "indico-web-0.0.1-SNAPSHOT.war")
+2021-10-11 09:07:13,610 INFO  [org.jboss.as.jpa] (MSC service thread 1-2) WFLYJPA0002: Read persistence.xml for BanrepPU
+2021-10-11 09:07:13,740 INFO  [org.jboss.as.jpa] (MSC service thread 1-1) WFLYJPA0002: Read persistence.xml for BanrepPU
+2021-10-11 09:07:13,921 INFO  [org.jboss.weld.deployer] (MSC service thread 1-3) WFLYWELD0003: Processing weld deployment indico-ear.ear
+2021-10-11 09:07:14,140 INFO  [org.hibernate.validator.internal.util.Version] (MSC service thread 1-3) HV000001: Hibernate Validator 6.0.18.Final-redhat-00001
+2021-10-11 09:07:14,265 INFO  [org.infinispan.factories.GlobalComponentRegistry] (MSC service thread 1-5) ISPN000128: Infinispan version: Red Hat Data Grid 'Infinity Minus ONE +2' 9.4.16.Final-redhat-00002
+2021-10-11 09:07:14,624 INFO  [org.jboss.weld.deployer] (MSC service thread 1-4) WFLYWELD0003: Processing weld deployment indico-ejb-0.0.1-SNAPSHOT.jar
+2021-10-11 09:07:14,656 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-4) WFLYEJB0473: JNDI bindings for session bean named 'ParametersServiceImpl' in deployment unit 'subdeployment "indico-ejb-0.0.1-SNAPSHOT.jar" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-ejb/ParametersServiceImpl!com.indico.jee.servicesi.ParametersService
+	java:app/indico-ejb/ParametersServiceImpl!com.indico.jee.servicesi.ParametersService
+	java:module/ParametersServiceImpl!com.indico.jee.servicesi.ParametersService
+	ejb:indico-ear/indico-ejb/ParametersServiceImpl!com.indico.jee.servicesi.ParametersService
+	java:global/indico-ear/indico-ejb/ParametersServiceImpl
+	java:app/indico-ejb/ParametersServiceImpl
+	java:module/ParametersServiceImpl
+
+2021-10-11 09:07:14,656 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-4) WFLYEJB0473: JNDI bindings for session bean named 'ValorAnualIPIBServiceImpl' in deployment unit 'subdeployment "indico-ejb-0.0.1-SNAPSHOT.jar" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-ejb/ValorAnualIPIBServiceImpl!com.indico.jee.servicesi.ValorAnualIPIBService
+	java:app/indico-ejb/ValorAnualIPIBServiceImpl!com.indico.jee.servicesi.ValorAnualIPIBService
+	java:module/ValorAnualIPIBServiceImpl!com.indico.jee.servicesi.ValorAnualIPIBService
+	ejb:indico-ear/indico-ejb/ValorAnualIPIBServiceImpl!com.indico.jee.servicesi.ValorAnualIPIBService
+	java:global/indico-ear/indico-ejb/ValorAnualIPIBServiceImpl
+	java:app/indico-ejb/ValorAnualIPIBServiceImpl
+	java:module/ValorAnualIPIBServiceImpl
+
+2021-10-11 09:07:14,671 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-4) WFLYEJB0473: JNDI bindings for session bean named 'AnalisisComposicionCanjeServiceImpl' in deployment unit 'subdeployment "indico-ejb-0.0.1-SNAPSHOT.jar" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-ejb/AnalisisComposicionCanjeServiceImpl!com.indico.jee.servicesi.AnalisisComposicionCanjeService
+	java:app/indico-ejb/AnalisisComposicionCanjeServiceImpl!com.indico.jee.servicesi.AnalisisComposicionCanjeService
+	java:module/AnalisisComposicionCanjeServiceImpl!com.indico.jee.servicesi.AnalisisComposicionCanjeService
+	ejb:indico-ear/indico-ejb/AnalisisComposicionCanjeServiceImpl!com.indico.jee.servicesi.AnalisisComposicionCanjeService
+	java:global/indico-ear/indico-ejb/AnalisisComposicionCanjeServiceImpl
+	java:app/indico-ejb/AnalisisComposicionCanjeServiceImpl
+	java:module/AnalisisComposicionCanjeServiceImpl
+
+2021-10-11 09:07:14,671 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-4) WFLYEJB0473: JNDI bindings for session bean named 'RangoCanjeCompensacionImpl' in deployment unit 'subdeployment "indico-ejb-0.0.1-SNAPSHOT.jar" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-ejb/RangoCanjeCompensacionImpl!com.indico.jee.servicesi.RangoCanjeCompensacionService
+	java:app/indico-ejb/RangoCanjeCompensacionImpl!com.indico.jee.servicesi.RangoCanjeCompensacionService
+	java:module/RangoCanjeCompensacionImpl!com.indico.jee.servicesi.RangoCanjeCompensacionService
+	ejb:indico-ear/indico-ejb/RangoCanjeCompensacionImpl!com.indico.jee.servicesi.RangoCanjeCompensacionService
+	java:global/indico-ear/indico-ejb/RangoCanjeCompensacionImpl
+	java:app/indico-ejb/RangoCanjeCompensacionImpl
+	java:module/RangoCanjeCompensacionImpl
+
+2021-10-11 09:07:14,671 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-4) WFLYEJB0473: JNDI bindings for session bean named 'AnalisisTransaccionCNIServiceImpl' in deployment unit 'subdeployment "indico-ejb-0.0.1-SNAPSHOT.jar" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-ejb/AnalisisTransaccionCNIServiceImpl!com.indico.jee.servicesi.AnalisisTransaccionCNIService
+	java:app/indico-ejb/AnalisisTransaccionCNIServiceImpl!com.indico.jee.servicesi.AnalisisTransaccionCNIService
+	java:module/AnalisisTransaccionCNIServiceImpl!com.indico.jee.servicesi.AnalisisTransaccionCNIService
+	ejb:indico-ear/indico-ejb/AnalisisTransaccionCNIServiceImpl!com.indico.jee.servicesi.AnalisisTransaccionCNIService
+	java:global/indico-ear/indico-ejb/AnalisisTransaccionCNIServiceImpl
+	java:app/indico-ejb/AnalisisTransaccionCNIServiceImpl
+	java:module/AnalisisTransaccionCNIServiceImpl
+
+2021-10-11 09:07:14,671 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-4) WFLYEJB0473: JNDI bindings for session bean named 'MedioServCompensacionImpl' in deployment unit 'subdeployment "indico-ejb-0.0.1-SNAPSHOT.jar" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-ejb/MedioServCompensacionImpl!com.indico.jee.servicesi.MedioServCompensacionService
+	java:app/indico-ejb/MedioServCompensacionImpl!com.indico.jee.servicesi.MedioServCompensacionService
+	java:module/MedioServCompensacionImpl!com.indico.jee.servicesi.MedioServCompensacionService
+	ejb:indico-ear/indico-ejb/MedioServCompensacionImpl!com.indico.jee.servicesi.MedioServCompensacionService
+	java:global/indico-ear/indico-ejb/MedioServCompensacionImpl
+	java:app/indico-ejb/MedioServCompensacionImpl
+	java:module/MedioServCompensacionImpl
+
+2021-10-11 09:07:14,671 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-4) WFLYEJB0473: JNDI bindings for session bean named 'AnalisisChequesCompensaServiceImpl' in deployment unit 'subdeployment "indico-ejb-0.0.1-SNAPSHOT.jar" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-ejb/AnalisisChequesCompensaServiceImpl!com.indico.jee.servicesi.AnalisisChequesCompensaService
+	java:app/indico-ejb/AnalisisChequesCompensaServiceImpl!com.indico.jee.servicesi.AnalisisChequesCompensaService
+	java:module/AnalisisChequesCompensaServiceImpl!com.indico.jee.servicesi.AnalisisChequesCompensaService
+	ejb:indico-ear/indico-ejb/AnalisisChequesCompensaServiceImpl!com.indico.jee.servicesi.AnalisisChequesCompensaService
+	java:global/indico-ear/indico-ejb/AnalisisChequesCompensaServiceImpl
+	java:app/indico-ejb/AnalisisChequesCompensaServiceImpl
+	java:module/AnalisisChequesCompensaServiceImpl
+
+2021-10-11 09:07:14,671 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-4) WFLYEJB0473: JNDI bindings for session bean named 'AnalisisPagosSaldosXHoraServiceImpl' in deployment unit 'subdeployment "indico-ejb-0.0.1-SNAPSHOT.jar" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-ejb/AnalisisPagosSaldosXHoraServiceImpl!com.indico.jee.servicesi.AnalisisPagosSaldosXHoraService
+	java:app/indico-ejb/AnalisisPagosSaldosXHoraServiceImpl!com.indico.jee.servicesi.AnalisisPagosSaldosXHoraService
+	java:module/AnalisisPagosSaldosXHoraServiceImpl!com.indico.jee.servicesi.AnalisisPagosSaldosXHoraService
+	ejb:indico-ear/indico-ejb/AnalisisPagosSaldosXHoraServiceImpl!com.indico.jee.servicesi.AnalisisPagosSaldosXHoraService
+	java:global/indico-ear/indico-ejb/AnalisisPagosSaldosXHoraServiceImpl
+	java:app/indico-ejb/AnalisisPagosSaldosXHoraServiceImpl
+	java:module/AnalisisPagosSaldosXHoraServiceImpl
+
+2021-10-11 09:07:14,671 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-4) WFLYEJB0473: JNDI bindings for session bean named 'AnalisisPesosConstantesServiceImpl' in deployment unit 'subdeployment "indico-ejb-0.0.1-SNAPSHOT.jar" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-ejb/AnalisisPesosConstantesServiceImpl!com.indico.jee.servicesi.AnalisisPesoContantesService
+	java:app/indico-ejb/AnalisisPesosConstantesServiceImpl!com.indico.jee.servicesi.AnalisisPesoContantesService
+	java:module/AnalisisPesosConstantesServiceImpl!com.indico.jee.servicesi.AnalisisPesoContantesService
+	ejb:indico-ear/indico-ejb/AnalisisPesosConstantesServiceImpl!com.indico.jee.servicesi.AnalisisPesoContantesService
+	java:global/indico-ear/indico-ejb/AnalisisPesosConstantesServiceImpl
+	java:app/indico-ejb/AnalisisPesosConstantesServiceImpl
+	java:module/AnalisisPesosConstantesServiceImpl
+
+2021-10-11 09:07:14,703 INFO  [org.jboss.weld.deployer] (MSC service thread 1-2) WFLYWELD0003: Processing weld deployment indico-web-0.0.1-SNAPSHOT.war
+2021-10-11 09:07:14,719 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-4) WFLYEJB0473: JNDI bindings for session bean named 'TransfElectronicaAltoValorServiceImpl' in deployment unit 'subdeployment "indico-ejb-0.0.1-SNAPSHOT.jar" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-ejb/TransfElectronicaAltoValorServiceImpl!com.indico.jee.servicesi.TransfElectronicaAltoValorService
+	java:app/indico-ejb/TransfElectronicaAltoValorServiceImpl!com.indico.jee.servicesi.TransfElectronicaAltoValorService
+	java:module/TransfElectronicaAltoValorServiceImpl!com.indico.jee.servicesi.TransfElectronicaAltoValorService
+	ejb:indico-ear/indico-ejb/TransfElectronicaAltoValorServiceImpl!com.indico.jee.servicesi.TransfElectronicaAltoValorService
+	java:global/indico-ear/indico-ejb/TransfElectronicaAltoValorServiceImpl
+	java:app/indico-ejb/TransfElectronicaAltoValorServiceImpl
+	java:module/TransfElectronicaAltoValorServiceImpl
+
+2021-10-11 09:07:14,726 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-4) WFLYEJB0473: JNDI bindings for session bean named 'AniosServiceImpl' in deployment unit 'subdeployment "indico-ejb-0.0.1-SNAPSHOT.jar" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-ejb/AniosServiceImpl!com.indico.jee.servicesi.AniosService
+	java:app/indico-ejb/AniosServiceImpl!com.indico.jee.servicesi.AniosService
+	java:module/AniosServiceImpl!com.indico.jee.servicesi.AniosService
+	ejb:indico-ear/indico-ejb/AniosServiceImpl!com.indico.jee.servicesi.AniosService
+	java:global/indico-ear/indico-ejb/AniosServiceImpl
+	java:app/indico-ejb/AniosServiceImpl
+	java:module/AniosServiceImpl
+
+2021-10-11 09:07:14,827 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-2) WFLYEJB0473: JNDI bindings for session bean named 'ValorAnualIPIBServiceImpl' in deployment unit 'subdeployment "indico-web-0.0.1-SNAPSHOT.war" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/ValorAnualIPIBServiceImpl!com.indico.jee.servicesi.ValorAnualIPIBService
+	java:app/indico-web-0.0.1-SNAPSHOT/ValorAnualIPIBServiceImpl!com.indico.jee.servicesi.ValorAnualIPIBService
+	java:module/ValorAnualIPIBServiceImpl!com.indico.jee.servicesi.ValorAnualIPIBService
+	ejb:indico-ear/indico-web-0.0.1-SNAPSHOT/ValorAnualIPIBServiceImpl!com.indico.jee.servicesi.ValorAnualIPIBService
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/ValorAnualIPIBServiceImpl
+	java:app/indico-web-0.0.1-SNAPSHOT/ValorAnualIPIBServiceImpl
+	java:module/ValorAnualIPIBServiceImpl
+
+2021-10-11 09:07:14,827 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-2) WFLYEJB0473: JNDI bindings for session bean named 'ParametersServiceImpl' in deployment unit 'subdeployment "indico-web-0.0.1-SNAPSHOT.war" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/ParametersServiceImpl!com.indico.jee.servicesi.ParametersService
+	java:app/indico-web-0.0.1-SNAPSHOT/ParametersServiceImpl!com.indico.jee.servicesi.ParametersService
+	java:module/ParametersServiceImpl!com.indico.jee.servicesi.ParametersService
+	ejb:indico-ear/indico-web-0.0.1-SNAPSHOT/ParametersServiceImpl!com.indico.jee.servicesi.ParametersService
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/ParametersServiceImpl
+	java:app/indico-web-0.0.1-SNAPSHOT/ParametersServiceImpl
+	java:module/ParametersServiceImpl
+
+2021-10-11 09:07:14,842 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-2) WFLYEJB0473: JNDI bindings for session bean named 'AnalisisComposicionCanjeServiceImpl' in deployment unit 'subdeployment "indico-web-0.0.1-SNAPSHOT.war" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisComposicionCanjeServiceImpl!com.indico.jee.servicesi.AnalisisComposicionCanjeService
+	java:app/indico-web-0.0.1-SNAPSHOT/AnalisisComposicionCanjeServiceImpl!com.indico.jee.servicesi.AnalisisComposicionCanjeService
+	java:module/AnalisisComposicionCanjeServiceImpl!com.indico.jee.servicesi.AnalisisComposicionCanjeService
+	ejb:indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisComposicionCanjeServiceImpl!com.indico.jee.servicesi.AnalisisComposicionCanjeService
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisComposicionCanjeServiceImpl
+	java:app/indico-web-0.0.1-SNAPSHOT/AnalisisComposicionCanjeServiceImpl
+	java:module/AnalisisComposicionCanjeServiceImpl
+
+2021-10-11 09:07:14,842 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-2) WFLYEJB0473: JNDI bindings for session bean named 'AnalisisPesosConstantesServiceImpl' in deployment unit 'subdeployment "indico-web-0.0.1-SNAPSHOT.war" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisPesosConstantesServiceImpl!com.indico.jee.servicesi.AnalisisPesoContantesService
+	java:app/indico-web-0.0.1-SNAPSHOT/AnalisisPesosConstantesServiceImpl!com.indico.jee.servicesi.AnalisisPesoContantesService
+	java:module/AnalisisPesosConstantesServiceImpl!com.indico.jee.servicesi.AnalisisPesoContantesService
+	ejb:indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisPesosConstantesServiceImpl!com.indico.jee.servicesi.AnalisisPesoContantesService
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisPesosConstantesServiceImpl
+	java:app/indico-web-0.0.1-SNAPSHOT/AnalisisPesosConstantesServiceImpl
+	java:module/AnalisisPesosConstantesServiceImpl
+
+2021-10-11 09:07:14,842 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-2) WFLYEJB0473: JNDI bindings for session bean named 'AnalisisPagosSaldosXHoraServiceImpl' in deployment unit 'subdeployment "indico-web-0.0.1-SNAPSHOT.war" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisPagosSaldosXHoraServiceImpl!com.indico.jee.servicesi.AnalisisPagosSaldosXHoraService
+	java:app/indico-web-0.0.1-SNAPSHOT/AnalisisPagosSaldosXHoraServiceImpl!com.indico.jee.servicesi.AnalisisPagosSaldosXHoraService
+	java:module/AnalisisPagosSaldosXHoraServiceImpl!com.indico.jee.servicesi.AnalisisPagosSaldosXHoraService
+	ejb:indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisPagosSaldosXHoraServiceImpl!com.indico.jee.servicesi.AnalisisPagosSaldosXHoraService
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisPagosSaldosXHoraServiceImpl
+	java:app/indico-web-0.0.1-SNAPSHOT/AnalisisPagosSaldosXHoraServiceImpl
+	java:module/AnalisisPagosSaldosXHoraServiceImpl
+
+2021-10-11 09:07:14,858 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-2) WFLYEJB0473: JNDI bindings for session bean named 'TransfElectronicaAltoValorServiceImpl' in deployment unit 'subdeployment "indico-web-0.0.1-SNAPSHOT.war" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/TransfElectronicaAltoValorServiceImpl!com.indico.jee.servicesi.TransfElectronicaAltoValorService
+	java:app/indico-web-0.0.1-SNAPSHOT/TransfElectronicaAltoValorServiceImpl!com.indico.jee.servicesi.TransfElectronicaAltoValorService
+	java:module/TransfElectronicaAltoValorServiceImpl!com.indico.jee.servicesi.TransfElectronicaAltoValorService
+	ejb:indico-ear/indico-web-0.0.1-SNAPSHOT/TransfElectronicaAltoValorServiceImpl!com.indico.jee.servicesi.TransfElectronicaAltoValorService
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/TransfElectronicaAltoValorServiceImpl
+	java:app/indico-web-0.0.1-SNAPSHOT/TransfElectronicaAltoValorServiceImpl
+	java:module/TransfElectronicaAltoValorServiceImpl
+
+2021-10-11 09:07:14,858 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-2) WFLYEJB0473: JNDI bindings for session bean named 'MedioServCompensacionImpl' in deployment unit 'subdeployment "indico-web-0.0.1-SNAPSHOT.war" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/MedioServCompensacionImpl!com.indico.jee.servicesi.MedioServCompensacionService
+	java:app/indico-web-0.0.1-SNAPSHOT/MedioServCompensacionImpl!com.indico.jee.servicesi.MedioServCompensacionService
+	java:module/MedioServCompensacionImpl!com.indico.jee.servicesi.MedioServCompensacionService
+	ejb:indico-ear/indico-web-0.0.1-SNAPSHOT/MedioServCompensacionImpl!com.indico.jee.servicesi.MedioServCompensacionService
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/MedioServCompensacionImpl
+	java:app/indico-web-0.0.1-SNAPSHOT/MedioServCompensacionImpl
+	java:module/MedioServCompensacionImpl
+
+2021-10-11 09:07:14,858 INFO  [org.jboss.as.jpa] (ServerService Thread Pool -- 58) WFLYJPA0010: Starting Persistence Unit (phase 1 of 2) Service 'indico-ear.ear/indico-web-0.0.1-SNAPSHOT.war#BanrepPU'
+2021-10-11 09:07:14,858 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-2) WFLYEJB0473: JNDI bindings for session bean named 'AnalisisChequesCompensaServiceImpl' in deployment unit 'subdeployment "indico-web-0.0.1-SNAPSHOT.war" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisChequesCompensaServiceImpl!com.indico.jee.servicesi.AnalisisChequesCompensaService
+	java:app/indico-web-0.0.1-SNAPSHOT/AnalisisChequesCompensaServiceImpl!com.indico.jee.servicesi.AnalisisChequesCompensaService
+	java:module/AnalisisChequesCompensaServiceImpl!com.indico.jee.servicesi.AnalisisChequesCompensaService
+	ejb:indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisChequesCompensaServiceImpl!com.indico.jee.servicesi.AnalisisChequesCompensaService
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisChequesCompensaServiceImpl
+	java:app/indico-web-0.0.1-SNAPSHOT/AnalisisChequesCompensaServiceImpl
+	java:module/AnalisisChequesCompensaServiceImpl
+
+2021-10-11 09:07:14,858 INFO  [org.jboss.as.jpa] (ServerService Thread Pool -- 59) WFLYJPA0010: Starting Persistence Unit (phase 1 of 2) Service 'indico-ear.ear/indico-ejb-0.0.1-SNAPSHOT.jar#BanrepPU'
+2021-10-11 09:07:14,858 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-2) WFLYEJB0473: JNDI bindings for session bean named 'AniosServiceImpl' in deployment unit 'subdeployment "indico-web-0.0.1-SNAPSHOT.war" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/AniosServiceImpl!com.indico.jee.servicesi.AniosService
+	java:app/indico-web-0.0.1-SNAPSHOT/AniosServiceImpl!com.indico.jee.servicesi.AniosService
+	java:module/AniosServiceImpl!com.indico.jee.servicesi.AniosService
+	ejb:indico-ear/indico-web-0.0.1-SNAPSHOT/AniosServiceImpl!com.indico.jee.servicesi.AniosService
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/AniosServiceImpl
+	java:app/indico-web-0.0.1-SNAPSHOT/AniosServiceImpl
+	java:module/AniosServiceImpl
+
+2021-10-11 09:07:14,858 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-2) WFLYEJB0473: JNDI bindings for session bean named 'RangoCanjeCompensacionImpl' in deployment unit 'subdeployment "indico-web-0.0.1-SNAPSHOT.war" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/RangoCanjeCompensacionImpl!com.indico.jee.servicesi.RangoCanjeCompensacionService
+	java:app/indico-web-0.0.1-SNAPSHOT/RangoCanjeCompensacionImpl!com.indico.jee.servicesi.RangoCanjeCompensacionService
+	java:module/RangoCanjeCompensacionImpl!com.indico.jee.servicesi.RangoCanjeCompensacionService
+	ejb:indico-ear/indico-web-0.0.1-SNAPSHOT/RangoCanjeCompensacionImpl!com.indico.jee.servicesi.RangoCanjeCompensacionService
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/RangoCanjeCompensacionImpl
+	java:app/indico-web-0.0.1-SNAPSHOT/RangoCanjeCompensacionImpl
+	java:module/RangoCanjeCompensacionImpl
+
+2021-10-11 09:07:14,874 INFO  [org.jboss.as.ejb3.deployment] (MSC service thread 1-2) WFLYEJB0473: JNDI bindings for session bean named 'AnalisisTransaccionCNIServiceImpl' in deployment unit 'subdeployment "indico-web-0.0.1-SNAPSHOT.war" of deployment "indico-ear.ear"' are as follows:
+
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisTransaccionCNIServiceImpl!com.indico.jee.servicesi.AnalisisTransaccionCNIService
+	java:app/indico-web-0.0.1-SNAPSHOT/AnalisisTransaccionCNIServiceImpl!com.indico.jee.servicesi.AnalisisTransaccionCNIService
+	java:module/AnalisisTransaccionCNIServiceImpl!com.indico.jee.servicesi.AnalisisTransaccionCNIService
+	ejb:indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisTransaccionCNIServiceImpl!com.indico.jee.servicesi.AnalisisTransaccionCNIService
+	java:global/indico-ear/indico-web-0.0.1-SNAPSHOT/AnalisisTransaccionCNIServiceImpl
+	java:app/indico-web-0.0.1-SNAPSHOT/AnalisisTransaccionCNIServiceImpl
+	java:module/AnalisisTransaccionCNIServiceImpl
+
+2021-10-11 09:07:14,952 INFO  [org.hibernate.jpa.internal.util.LogHelper] (ServerService Thread Pool -- 59) HHH000204: Processing PersistenceUnitInfo [
+	name: BanrepPU
+	...]
+2021-10-11 09:07:14,984 INFO  [org.hibernate.jpa.internal.util.LogHelper] (ServerService Thread Pool -- 58) HHH000204: Processing PersistenceUnitInfo [
+	name: BanrepPU
+	...]
+2021-10-11 09:07:15,202 INFO  [org.hibernate.Version] (ServerService Thread Pool -- 59) HHH000412: Hibernate Core {5.3.14.Final-redhat-00001}
+2021-10-11 09:07:15,202 INFO  [org.hibernate.cfg.Environment] (ServerService Thread Pool -- 59) HHH000206: hibernate.properties not found
+2021-10-11 09:07:15,217 INFO  [org.jboss.weld.Version] (MSC service thread 1-2) WELD-000900: 3.1.2 (redhat)
+2021-10-11 09:07:15,358 INFO  [org.jboss.as.clustering.infinispan] (ServerService Thread Pool -- 60) WFLYCLINF0002: Started client-mappings cache from ejb container
+2021-10-11 09:07:15,498 INFO  [org.wildfly.security] (MSC service thread 1-7) ELY00001: WildFly Elytron version 1.10.4.Final-redhat-00001
+2021-10-11 09:07:15,778 INFO  [org.hibernate.annotations.common.Version] (ServerService Thread Pool -- 58) HCANN000001: Hibernate Commons Annotations {5.0.5.Final-redhat-00002}
+2021-10-11 09:07:16,185 INFO  [org.jboss.as.jpa] (ServerService Thread Pool -- 58) WFLYJPA0010: Starting Persistence Unit (phase 2 of 2) Service 'indico-ear.ear/indico-web-0.0.1-SNAPSHOT.war#BanrepPU'
+2021-10-11 09:07:16,200 INFO  [org.jboss.as.jpa] (ServerService Thread Pool -- 59) WFLYJPA0010: Starting Persistence Unit (phase 2 of 2) Service 'indico-ear.ear/indico-ejb-0.0.1-SNAPSHOT.jar#BanrepPU'
+2021-10-11 09:07:26,620 INFO  [org.hibernate.dialect.Dialect] (ServerService Thread Pool -- 59) HHH000400: Using dialect: org.hibernate.dialect.TeradataDialect
+2021-10-11 09:07:26,651 INFO  [org.hibernate.dialect.Dialect] (ServerService Thread Pool -- 58) HHH000400: Using dialect: org.hibernate.dialect.TeradataDialect
+2021-10-11 09:07:26,901 INFO  [org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl] (ServerService Thread Pool -- 58) HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+2021-10-11 09:07:26,901 INFO  [org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl] (ServerService Thread Pool -- 59) HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+2021-10-11 09:07:26,917 INFO  [org.hibernate.envers.boot.internal.EnversServiceImpl] (ServerService Thread Pool -- 59) Envers integration enabled? : true
+2021-10-11 09:07:26,917 INFO  [org.hibernate.envers.boot.internal.EnversServiceImpl] (ServerService Thread Pool -- 58) Envers integration enabled? : true
+2021-10-11 09:07:27,198 WARN  [org.hibernate.mapping.RootClass] (ServerService Thread Pool -- 58) HHH000038: Composite-id class does not override equals(): com.indico.jee.modelo.AnalisisComposicionCanjePK
+2021-10-11 09:07:27,198 WARN  [org.hibernate.mapping.RootClass] (ServerService Thread Pool -- 59) HHH000038: Composite-id class does not override equals(): com.indico.jee.modelo.AnalisisComposicionCanjePK
+2021-10-11 09:07:27,198 WARN  [org.hibernate.mapping.RootClass] (ServerService Thread Pool -- 58) HHH000039: Composite-id class does not override hashCode(): com.indico.jee.modelo.AnalisisComposicionCanjePK
+2021-10-11 09:07:27,198 WARN  [org.hibernate.mapping.RootClass] (ServerService Thread Pool -- 59) HHH000039: Composite-id class does not override hashCode(): com.indico.jee.modelo.AnalisisComposicionCanjePK
+2021-10-11 09:07:27,198 WARN  [org.hibernate.mapping.RootClass] (ServerService Thread Pool -- 58) HHH000038: Composite-id class does not override equals(): com.indico.jee.modelo.AnalisisChequesCompensaPK
+2021-10-11 09:07:27,198 WARN  [org.hibernate.mapping.RootClass] (ServerService Thread Pool -- 58) HHH000039: Composite-id class does not override hashCode(): com.indico.jee.modelo.AnalisisChequesCompensaPK
+2021-10-11 09:07:27,198 WARN  [org.hibernate.mapping.RootClass] (ServerService Thread Pool -- 59) HHH000038: Composite-id class does not override equals(): com.indico.jee.modelo.AnalisisChequesCompensaPK
+2021-10-11 09:07:27,198 WARN  [org.hibernate.mapping.RootClass] (ServerService Thread Pool -- 59) HHH000039: Composite-id class does not override hashCode(): com.indico.jee.modelo.AnalisisChequesCompensaPK
+2021-10-11 09:07:27,323 WARN  [org.infinispan.hibernate.cache.v53.InfinispanRegionFactory] (ServerService Thread Pool -- 58) HHH025030: Transactional caches are not supported. The configuration option will be ignored; please unset.
+2021-10-11 09:07:27,323 WARN  [org.infinispan.hibernate.cache.v53.InfinispanRegionFactory] (ServerService Thread Pool -- 59) HHH025030: Transactional caches are not supported. The configuration option will be ignored; please unset.
+2021-10-11 09:07:27,323 WARN  [org.infinispan.hibernate.cache.v53.InfinispanRegionFactory] (ServerService Thread Pool -- 58) HHH025030: Transactional caches are not supported. The configuration option will be ignored; please unset.
+2021-10-11 09:07:27,339 WARN  [org.infinispan.hibernate.cache.v53.InfinispanRegionFactory] (ServerService Thread Pool -- 59) HHH025030: Transactional caches are not supported. The configuration option will be ignored; please unset.
+2021-10-11 09:07:27,339 WARN  [org.infinispan.hibernate.cache.v53.InfinispanRegionFactory] (ServerService Thread Pool -- 59) HHH025030: Transactional caches are not supported. The configuration option will be ignored; please unset.
+2021-10-11 09:07:27,339 WARN  [org.infinispan.hibernate.cache.v53.InfinispanRegionFactory] (ServerService Thread Pool -- 58) HHH025030: Transactional caches are not supported. The configuration option will be ignored; please unset.
+2021-10-11 09:07:27,339 WARN  [org.infinispan.hibernate.cache.v53.InfinispanRegionFactory] (ServerService Thread Pool -- 59) HHH025030: Transactional caches are not supported. The configuration option will be ignored; please unset.
+2021-10-11 09:07:27,339 WARN  [org.infinispan.hibernate.cache.v53.InfinispanRegionFactory] (ServerService Thread Pool -- 58) HHH025030: Transactional caches are not supported. The configuration option will be ignored; please unset.
+2021-10-11 09:07:27,886 INFO  [org.hibernate.hql.internal.QueryTranslatorFactoryInitiator] (ServerService Thread Pool -- 59) HHH000397: Using ASTQueryTranslatorFactory
+2021-10-11 09:07:27,886 INFO  [org.hibernate.hql.internal.QueryTranslatorFactoryInitiator] (ServerService Thread Pool -- 58) HHH000397: Using ASTQueryTranslatorFactory
+2021-10-11 09:07:28,324 WARN  [org.jboss.weld.Bootstrap] (MSC service thread 1-1) WELD-000146: BeforeBeanDiscovery.addAnnotatedType(AnnotatedType<?>) used for class com.sun.faces.flow.FlowDiscoveryCDIHelper is deprecated from CDI 1.1!
+2021-10-11 09:07:28,668 SEVERE [javax.enterprise.resource.webcontainer.jsf.flow] (MSC service thread 1-1) Unable to obtain CDI 1.1 utilities for Mojarra
+2021-10-11 09:07:28,668 SEVERE [javax.enterprise.resource.webcontainer.jsf.application.view] (MSC service thread 1-1) Unable to obtain CDI 1.1 utilities for Mojarra
+2021-10-11 09:07:29,030 INFO  [javax.enterprise.resource.webcontainer.jsf.config] (ServerService Thread Pool -- 59) Initializing Mojarra 2.3.9.SP05 for context '/indico-web'
+2021-10-11 09:07:29,593 INFO  [net.bootsfaces.listeners.AddResourcesListener] (ServerService Thread Pool -- 59) This application is running on BootsFaces1.3.0-
+2021-10-11 09:07:29,624 WARNING [javax.enterprise.resource.webcontainer.jsf.application] (ServerService Thread Pool -- 59) @FacesConverter is using both value and forClass, only value will be applied.
+2021-10-11 09:07:30,435 INFO  [javax.enterprise.resource.webcontainer.jsf.config] (ServerService Thread Pool -- 59) Monitoring file:/C:/Users/luedu/Desktop/jboss-eap-7.3/standalone/tmp/vfs/deployment/deploymentbc0a1ba456cbe2c7/indico-web-0.0.1-SNAPSHOT.war-610ff51897c69690/WEB-INF/faces-config.xml for modifications
+2021-10-11 09:07:30,654 INFO  [org.primefaces.webapp.PostConstructApplicationEventListener] (ServerService Thread Pool -- 59) Running on PrimeFaces 7.0
+2021-10-11 09:07:31,218 INFO  [org.jboss.resteasy.resteasy_jaxrs.i18n] (ServerService Thread Pool -- 59) RESTEASY002225: Deploying javax.ws.rs.core.Application: class com.indico.jee.rest.RestActivator$Proxy$_$$_WeldClientProxy
+2021-10-11 09:07:31,327 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 59) WFLYUT0021: Registered web context: '/indico-web' for server 'default-server'
+2021-10-11 09:07:31,343 INFO  [org.jboss.as.server] (ServerService Thread Pool -- 34) WFLYSRV0010: Deployed "indico-ear.ear" (runtime-name : "indico-ear.ear")
+2021-10-11 09:07:31,437 INFO  [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0212: Resuming server
+2021-10-11 09:07:31,437 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0060: Http management interface listening on http://127.0.0.1:9990/management
+2021-10-11 09:07:31,437 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0051: Admin console listening on http://127.0.0.1:9990
+2021-10-11 09:07:31,437 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: JBoss EAP 7.3.0.GA (WildFly Core 10.1.2.Final-redhat-00001) started in 23808ms - Started 1220 of 1449 services (390 services are lazy, passive or on-demand)
+2021-10-11 09:08:05,351 INFO  [javax.enterprise.resource.webcontainer.jsf.renderkit] (default task-2) outputScript or outputStylesheet with name attribute and nested content. Ignoring nested content.
+2021-10-11 09:08:11,237 INFO  [javax.enterprise.resource.webcontainer.jsf.renderkit] (default task-5) outputScript or outputStylesheet with name attribute and nested content. Ignoring nested content.
+2021-10-11 09:08:11,347 INFO  [org.primefaces.util.AjaxRequestBuilder] (default task-5) Component 'accoCheques' should be inside a form or should reference a form via its form attribute. We will try to find a fallback form on the client side.
+2021-10-11 09:08:14,344 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-2) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:08:14,345 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-2) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:08:14,381 INFO  [org.primefaces.util.AjaxRequestBuilder] (default task-2) Component 'accoCheques:accordionCh' should be inside a form or should reference a form via its form attribute. We will try to find a fallback form on the client side.
+2021-10-11 09:08:14,408 WARNING [javax.enterprise.resource.webcontainer.jsf.application.view] (default task-2) Unable to save dynamic action with clientId 'j_id9' because the UIComponent cannot be found
+2021-10-11 09:08:14,411 WARNING [javax.enterprise.resource.webcontainer.jsf.application.view] (default task-2) Unable to save dynamic action with clientId 'j_id8' because the UIComponent cannot be found
+2021-10-11 09:08:14,414 WARNING [javax.enterprise.resource.webcontainer.jsf.application.view] (default task-2) Unable to save dynamic action with clientId 'j_id8' because the UIComponent cannot be found
+2021-10-11 09:08:14,417 WARNING [javax.enterprise.resource.webcontainer.jsf.application.view] (default task-2) Unable to save dynamic action with clientId 'j_id9' because the UIComponent cannot be found
+2021-10-11 09:08:16,167 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-2) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:08:16,167 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-2) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:08:16,229 INFO  [com.indico.jee.services.MedioServCompensacionImpl] (default task-2) Created MedioServCompensacionImpl
+2021-10-11 09:08:17,142 INFO  [com.indico.jee.servicesi.RangoCanjeCompensacionService] (default task-2) Created RangoCanjeCompensacionService
+2021-10-11 09:08:17,708 INFO  [com.indico.jee.services.AnalisisChequesCompensaServiceImpl] (default task-7) Created AnalisisChequesCompensaServiceImpl
+2021-10-11 09:08:23,309 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-7) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:08:23,309 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-7) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:14:04,998 INFO  [javax.enterprise.resource.webcontainer.jsf.renderkit] (default task-7) outputScript or outputStylesheet with name attribute and nested content. Ignoring nested content.
+2021-10-11 09:14:05,128 INFO  [org.primefaces.util.AjaxRequestBuilder] (default task-7) Component 'accoCheques' should be inside a form or should reference a form via its form attribute. We will try to find a fallback form on the client side.
+2021-10-11 09:17:09,299 INFO  [org.jboss.as.repository] (ServerService Thread Pool -- 1) WFLYDR0009: Content C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\data\content\d8\b89f01ce509bb6ae311772baeba2c95be7c5c4 is obsolete and will be removed
+2021-10-11 09:17:09,299 INFO  [org.jboss.as.repository] (ServerService Thread Pool -- 1) WFLYDR0002: Content removed from location C:\Users\luedu\Desktop\jboss-eap-7.3\standalone\data\content\d8\b89f01ce509bb6ae311772baeba2c95be7c5c4\content
+2021-10-11 09:21:42,562 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-7) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:21:42,562 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-7) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:21:42,581 INFO  [org.primefaces.util.AjaxRequestBuilder] (default task-7) Component 'accoCheques:accordionCh' should be inside a form or should reference a form via its form attribute. We will try to find a fallback form on the client side.
+2021-10-11 09:21:44,463 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-7) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:21:44,463 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-7) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:21:45,388 WARNING [javax.enterprise.resource.webcontainer.jsf.application.view] (default task-7) Unable to save dynamic action with clientId 'j_id9' because the UIComponent cannot be found
+2021-10-11 09:21:45,390 WARNING [javax.enterprise.resource.webcontainer.jsf.application.view] (default task-7) Unable to save dynamic action with clientId 'j_id8' because the UIComponent cannot be found
+2021-10-11 09:21:45,394 WARNING [javax.enterprise.resource.webcontainer.jsf.application.view] (default task-7) Unable to save dynamic action with clientId 'j_id8' because the UIComponent cannot be found
+2021-10-11 09:21:45,394 WARNING [javax.enterprise.resource.webcontainer.jsf.application.view] (default task-7) Unable to save dynamic action with clientId 'j_id9' because the UIComponent cannot be found
+2021-10-11 09:23:39,227 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-7) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:23:39,228 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-7) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:23:39,242 INFO  [org.primefaces.util.AjaxRequestBuilder] (default task-7) Component 'accoCheques:accordionC' should be inside a form or should reference a form via its form attribute. We will try to find a fallback form on the client side.
+2021-10-11 09:23:40,843 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-7) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:23:40,844 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-7) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:23:48,374 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-12) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:23:48,374 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-12) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:32:26,453 INFO  [javax.enterprise.resource.webcontainer.jsf.renderkit] (default task-12) outputScript or outputStylesheet with name attribute and nested content. Ignoring nested content.
+2021-10-11 09:32:26,495 INFO  [org.primefaces.util.AjaxRequestBuilder] (default task-12) Component 'accoCheques' should be inside a form or should reference a form via its form attribute. We will try to find a fallback form on the client side.
+2021-10-11 09:36:34,555 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-15) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:36:34,556 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-15) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:36:35,870 INFO  [stdout] (default task-15) getCompDevolucionCanje 1
+2021-10-11 09:37:58,027 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-15) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:37:58,027 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-15) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:37:58,293 WARNING [javax.enterprise.resource.webcontainer.jsf.application.view] (default task-15) Unable to save dynamic action with clientId 'j_id9' because the UIComponent cannot be found
+2021-10-11 09:37:58,294 WARNING [javax.enterprise.resource.webcontainer.jsf.application.view] (default task-15) Unable to save dynamic action with clientId 'j_id8' because the UIComponent cannot be found
+2021-10-11 09:37:58,312 WARNING [javax.enterprise.resource.webcontainer.jsf.application.view] (default task-15) Unable to save dynamic action with clientId 'j_id8' because the UIComponent cannot be found
+2021-10-11 09:37:58,313 WARNING [javax.enterprise.resource.webcontainer.jsf.application.view] (default task-15) Unable to save dynamic action with clientId 'j_id9' because the UIComponent cannot be found
+2021-10-11 09:37:58,494 INFO  [com.indico.jee.services.AnalisisChequesCompensaServiceImpl] (default task-15) Created AnalisisComposicionCanjeServiceImpl
+2021-10-11 09:39:43,539 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-15) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:39:43,540 WARNING [javax.enterprise.resource.webcontainer.jsf.context] (default task-15) JSF1091: No mime type could be found for file null.  To resolve this, add a mime-type mapping to the applications web.xml.
+2021-10-11 09:39:43,995 INFO  [com.indico.jee.services.AnalisisPesosConstantesServiceImpl] (default task-15) Created AnalisisPesosConstantesServiceImpl
+2021-10-11 09:40:44,246 INFO  [org.jboss.as.server] (Thread-2) WFLYSRV0272: Suspending server
+2021-10-11 09:40:44,246 INFO  [org.jboss.as.ejb3] (Thread-2) WFLYEJB0493: EJB subsystem suspension complete
+2021-10-11 09:40:44,246 INFO  [org.jboss.as.server] (Thread-2) WFLYSRV0220: Server shutdown has been requested via an OS signal
+2021-10-11 09:40:44,293 INFO  [org.jboss.as.mail.extension] (MSC service thread 1-8) WFLYMAIL0002: Unbound mail session [java:jboss/mail/Default]
+2021-10-11 09:40:44,324 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 88) WFLYUT0022: Unregistered web context: '/indico-web' from server 'default-server'
+2021-10-11 09:40:44,418 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-4) WFLYUT0019: Host default-host stopping
+2021-10-11 09:40:44,496 INFO  [org.jboss.as.clustering.infinispan] (ServerService Thread Pool -- 124) WFLYCLINF0003: Stopped client-mappings cache from ejb container
+2021-10-11 09:40:44,527 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-7) WFLYJCA0010: Unbound data source [java:jboss/datasources/ExampleDS]
+2021-10-11 09:40:44,527 INFO  [org.jboss.as.jpa] (ServerService Thread Pool -- 124) WFLYJPA0011: Stopping Persistence Unit (phase 2 of 2) Service 'indico-ear.ear/indico-web-0.0.1-SNAPSHOT.war#BanrepPU'
+2021-10-11 09:40:44,527 INFO  [org.jboss.as.jpa] (ServerService Thread Pool -- 123) WFLYJPA0011: Stopping Persistence Unit (phase 2 of 2) Service 'indico-ear.ear/indico-ejb-0.0.1-SNAPSHOT.jar#BanrepPU'
+2021-10-11 09:40:44,559 INFO  [org.jboss.as.connector.deployers.jdbc] (MSC service thread 1-2) WFLYJCA0019: Stopped Driver service with driver-name = h2
+2021-10-11 09:40:44,590 INFO  [org.hibernate.orm.beans] (ServerService Thread Pool -- 123) HHH10005004: Stopping BeanContainer : org.hibernate.resource.beans.container.internal.CdiBeanContainerExtendedAccessImpl@df53571
+2021-10-11 09:40:44,590 INFO  [org.hibernate.orm.beans] (ServerService Thread Pool -- 124) HHH10005004: Stopping BeanContainer : org.hibernate.resource.beans.container.internal.CdiBeanContainerExtendedAccessImpl@3b6d2898
+2021-10-11 09:40:44,590 INFO  [org.jboss.as.jpa] (ServerService Thread Pool -- 124) WFLYJPA0011: Stopping Persistence Unit (phase 1 of 2) Service 'indico-ear.ear/indico-ejb-0.0.1-SNAPSHOT.jar#BanrepPU'
+2021-10-11 09:40:44,590 INFO  [org.jboss.as.jpa] (ServerService Thread Pool -- 123) WFLYJPA0011: Stopping Persistence Unit (phase 1 of 2) Service 'indico-ear.ear/indico-web-0.0.1-SNAPSHOT.war#BanrepPU'
+2021-10-11 09:40:44,668 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-6) WFLYJCA0010: Unbound data source [java:jboss/jdbc/BanrepDS]
+2021-10-11 09:40:44,762 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-3) WFLYUT0008: Undertow HTTP listener default suspending
+2021-10-11 09:40:44,762 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-8) WFLYSRV0208: Stopped subdeployment (runtime-name: indico-ejb-0.0.1-SNAPSHOT.jar) in 504ms
+2021-10-11 09:40:44,762 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-3) WFLYUT0007: Undertow HTTP listener default stopped, was bound to 127.0.0.1:8080
+2021-10-11 09:40:44,778 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-2) WFLYUT0004: Undertow 2.0.28.SP1-redhat-00001 stopping
+2021-10-11 09:40:45,027 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-5) WFLYSRV0208: Stopped subdeployment (runtime-name: indico-web-0.0.1-SNAPSHOT.war) in 768ms
+2021-10-11 09:40:45,043 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-5) WFLYSRV0028: Stopped deployment indico-ear.ear (runtime-name: indico-ear.ear) in 787ms
+2021-10-11 09:40:45,309 INFO  [org.jboss.as.connector.deployers.jdbc] (MSC service thread 1-7) WFLYJCA0019: Stopped Driver service with driver-name = teradata
+2021-10-11 09:40:45,324 INFO  [org.jboss.as] (MSC service thread 1-6) WFLYSRV0050: JBoss EAP 7.3.0.GA (WildFly Core 10.1.2.Final-redhat-00001) stopped in 1058ms
