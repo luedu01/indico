@@ -29,11 +29,10 @@
 						value="Descripci&#243;n y f&#243;rmula" />
 					<p:outputPanel styleClass="DispInlBlock Wid10 TexAlCenter">
 						<h:form>
-							<h:commandLink
-								actionListener="#{transfeBajoValorMaBean.showHideMessageInformation}">
-								<h:graphicImage value="./resources/images/17-MAS-01.svg"
-									styleClass="MarAuto" rendered="true" height="24" width="24" />
-								<p:ajax update="@([id$=panelInformacionBV])" />
+							<h:commandLink actionListener="#{transfeBajoValorMaBean.showHideMessageInformation}">
+								<h:graphicImage id="changeImage" value="./resources/images/#{transfeBajoValorMaBean.ocultarmostrar?'remove_circle_white_24dp.svg':'add_circle_white_24dp.svg'}"
+									styleClass="MarAuto" rendered="true" height="24" width="24" title="#{transfeBajoValorMaBean.ocultarmostrar?'Contraer Descripción y Fórmula':'Desplegar Descripción y Fórmula'}" />
+								<p:ajax update="@([id$=panelInformacionBV],[id$=changeImage])" />
 							</h:commandLink>
 						</h:form>
 					</p:outputPanel>
