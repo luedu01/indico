@@ -74,7 +74,7 @@ public class CompComposicionCanjeMaBean extends GraficaGeneralBean {
 									"				</generic:Attributes>	\r\n"; 
 	
 	//ocultar mostrar mensaje
-    private boolean 						ocultarmostrar;
+    private boolean 						ocultarmostrar = true;
 	private List<RangoCanjeCompensacion> 	rangoscanje;
 	private String 							rango;
 	private List<RangoCanjeCompensacion>	selectedRangos;

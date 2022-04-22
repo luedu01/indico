@@ -15,7 +15,6 @@
  	<composite:attribute name="Align" type="java.lang.String" required="false"/>
  	<composite:attribute name="TextTable" type="java.lang.String" required="false"/>
  	<composite:attribute name="StyleClassWidth" type="java.lang.String" required="false"/>
-
 </composite:interface>
 <composite:implementation>
     <p:remoteCommand name="#{cc.attrs.idg}_remoteCommand" update="@([id$=#{cc.attrs.toUpdate}])" action="#{cc.attrs.remoteCommandView}" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
@@ -38,38 +37,48 @@
 		</c:if>
 		<p:outputPanel>
 			<div id="#{cc.attrs.idg}_container_anio" class="containerselectslider" style="min-width: 65px;">
-				<label id="#{cc.attrs.idg}_sel_anio_label" for="#{cc.attrs.idg}_sel_anio" class="selectFechasLabel"></label>
-				<select id="#{cc.attrs.idg}_sel_anio" class="minWidth-0 selectonslider" onchange="document.getElementById(this.id + '_label').innerHTML = this.value">
+				<select id="#{cc.attrs.idg}_sel_anio" class="minWidth-0 selectonslider" onchange="updateLabelValue('#{cc.attrs.idg}_sel_anio_label', this.value); return false;" >
 				</select>
+				<label id="#{cc.attrs.idg}_sel_anio_label" for="#{cc.attrs.idg}_sel_anio" class="selectFechasLabel"></label>
 			</div>
 		</p:outputPanel>
 		<p:outputPanel>
 			<div id="#{cc.attrs.idg}_container_mes" class="containerselectslider" style="min-width: 65px;">
-				<label id="#{cc.attrs.idg}_sel_mes_label" for="#{cc.attrs.idg}_sel_mes" class="selectFechasLabel"></label>
-				<select id="#{cc.attrs.idg}_sel_mes" class="minWidth-0 selectonslider" onchange="document.getElementById(this.id + '_label').innerHTML = this.options[this.selectedIndex].text">
+				<select id="#{cc.attrs.idg}_sel_mes" class="minWidth-0 selectonslider" onchange="updateLabelValue('#{cc.attrs.idg}_sel_mes_label', this.options[this.selectedIndex].text)">
 				</select>
+				<label id="#{cc.attrs.idg}_sel_mes_label" for="#{cc.attrs.idg}_sel_mes" class="selectFechasLabel"></label>
 			</div>
 		</p:outputPanel>
 		<p:outputPanel>
 			<div id="#{cc.attrs.idg}_container_dia" class="containerselectslider" style="min-width: 65px;">
-				<label id="#{cc.attrs.idg}_sel_dia_label" for="#{cc.attrs.idg}_sel_dia" class="selectFechasLabel"></label>
-				<select id="#{cc.attrs.idg}_sel_dia" class="minWidth-0 selectonslider" onchange="document.getElementById(this.id + '_label').innerHTML = this.value">
+				<select id="#{cc.attrs.idg}_sel_dia" class="minWidth-0 selectonslider" onchange="updateLabelValue('#{cc.attrs.idg}_sel_dia_label', this.value)">
 				</select>
+				<label id="#{cc.attrs.idg}_sel_dia_label" for="#{cc.attrs.idg}_sel_dia" class="selectFechasLabel"></label>
 			</div>
 		</p:outputPanel>
 		<h:form prependid="vcanje_false_1">
 			<h:outputScript>
 				$(document).ready(function(){
-					// Cuando inicializa los select
-					$("select").each(function() {
-						var idElem = $(this).attr("id");
-						if(idElem.indexOf("vcanje_valperiodo1_sel_anio") != -1 || idElem.indexOf("vcanje_valperiodo1_sel_mes") != -1 || idElem.indexOf("vcanje_valperiodo1_sel_dia") != -1) {
-							setTimeout(() => {
-								$("label[id*=" + idElem + "_label" + "]").html($( "#" + idElem + " option:selected" ).text());
-							  }, 10);
-						}
+					$(document).ready(function(){
+							$("select").each(function() {
+								let idElem = $(this).attr("id");
+								let idLabel = idElem+"_label";
+								e  = document.getElementById(idElem);
+								if (e.options.selectedIndex >= 0){
+									text   = e.options[e.selectedIndex].text;
+									lab  = document.getElementById(idLabel);
+									if(lab != undefined){
+									   lab.innerHTML=text;
+									}
+								}
+							});
 					});
 				});
+				
+				function updateLabelValue(id,valor) {
+					document.getElementById(id).innerHTML=valor;
+				}
+				
 			</h:outputScript>
 		</h:form>
 	</p:panelGrid>

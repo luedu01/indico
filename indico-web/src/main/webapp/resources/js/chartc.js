@@ -534,6 +534,8 @@ function updatedatapieplottimesranges(leftplot,rigthplot,componente,divvalores,d
 	}//
 	var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
 	var datoscantidad = getDataCountFiltered(data["SerieCantidad"],dateselected);
+	
+	
 
 	if (datosvalores[0].length && datoscantidad[0].length) {
 		$("#"+chartvaloresid).show();
@@ -1019,9 +1021,6 @@ function createlegend(titulo,valor,plot,tipodatototal) {
 		 "		</td>								" +
 		 "	</tr>									" ;
 	if (plot.data[0].length) {
-		plot.data[0].sort(function(a, b) {
-			return b[1] - a[1];
-		  });
 		for (var i=0; i<plot.data[0].length;i++) {
 			var porcentaje;
 			//if(parseFloat(plot.data[0][i][1]) < parseFloat(0.001)){
@@ -1046,7 +1045,7 @@ function createlegend(titulo,valor,plot,tipodatototal) {
 }
 
 function getDataFiltered(datos,dateselected) {
-
+	
 	var datasel=[];
 	var datossumados=[];
 	var totalesParse=[];
@@ -1065,7 +1064,7 @@ function getDataFiltered(datos,dateselected) {
 	}
 
 	var datosseleccionados = [[]];
-	datosseleccionados[0] = datasel;
+	datosseleccionados[0] = datasel.sort(ordenar);
 	datosseleccionados[1] = totales;
 	var totalvalorsumado = totalS;
 
@@ -1074,7 +1073,7 @@ function getDataFiltered(datos,dateselected) {
 
 //Cantidades
 function getDataCountFiltered(datos,dateselected) {
-
+    //linea 1077
 	var datasel=[];
 	var datossumados=[];
 	var totalesParse=[];
@@ -1093,11 +1092,23 @@ function getDataCountFiltered(datos,dateselected) {
 	}
 
 	var datosseleccionados = [[]];
-	datosseleccionados[0] = datasel;
+	//ordenar datase1 
+	
+	datosseleccionados[0] = datasel.sort(ordenar);
 	datosseleccionados[1] = totales;
 	var totalvalorsumado = totalS;
-
 	return datosseleccionados;
+}
+
+function ordenar(a,b) {
+	  if (a[1] < b[1]) {
+	    return 1;
+	  }
+	  if (a[1] > b[1]) {
+	    return -1;
+	  }
+	  // a must be equal to b
+	  return 0;
 }
 
 /**
@@ -1135,7 +1146,6 @@ function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDiaria({'tipodeplaza':tipodeplaza});
-
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
 		$("#"+chartcantidad).empty();
@@ -1151,6 +1161,7 @@ function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza
 		var datasel = [[]];
 		var dateselected = data["endX"];
 		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
+		
 		var leftPlot 		= createplotpieleft ( chartvaloresid		,	datosvalores[0] , _DIARIO);
 		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
 		var divlegendvalores = document.createElement('div');
@@ -1483,10 +1494,9 @@ function getDataFiltereCompensacion(datos,dateselected) {
 	}
 
 	var datosseleccionados = [[]];
-	datosseleccionados[0] = datasel;
+	datosseleccionados[0] = datasel.sort(ordenar);
 	datosseleccionados[1] = totales;
 	var totalvalorsumado = totalS;
-
 	return datosseleccionados;
 }
 
@@ -2177,6 +2187,7 @@ function createChartMinAnualDevol(chartvalores,chartcantidad,companual1,tipodepl
 		var datasel = [[]];
 		var dateselected = data["endX"];
 		var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
+		
 		var leftPlot 		= createplotpieleftdevol ( chartvaloresid		,	datosvalores[0] , _ANUAL);
 		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
 		var divlegendvalores = document.createElement('div');

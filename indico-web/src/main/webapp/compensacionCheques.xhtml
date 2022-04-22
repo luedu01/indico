@@ -12,7 +12,9 @@
 		<b:container fluid="true" id="columnCheques" class="columnconInd">
 			<p:panelGrid columns="1" columnClasses="ui-g-6 ui-md-12 ui-lg-12 ui-sm-12" layout="grid" styleClass="ui-panelgrid-blank BoxSizeBorder">
   				<p:outputPanel styleClass="BoxSizeBorderCH" >
+  				  
 					<p:accordionPanel id="accoCheques" activeIndex="-1"  cache="false" dynamic="true" styleClass="NoPaddingRight NoPaddingLeft">
+					
 						<p:ajax event="tabChange" update="@([id$=pdistipplaza],[id$=phiscanche],[id$=pdevcanje],[id$=pcompocanje],[id$=ppesoscons])"
 							listener="#{homeMaBean.onTabChange}" onstart="PF('statusDialogChe').show()" onsuccess="PF('statusDialogChe').hide()"/>
 
@@ -92,6 +94,7 @@
 					   	</p:tab>
 
 					</p:accordionPanel>
+				  
 				</p:outputPanel>
 			</p:panelGrid>
 	</b:container>

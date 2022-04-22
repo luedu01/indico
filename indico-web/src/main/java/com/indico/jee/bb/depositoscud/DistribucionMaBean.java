@@ -4,9 +4,11 @@ import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import org.primefaces.component.accordionpanel.AccordionPanel;
 import org.primefaces.event.TabChangeEvent;
+import org.primefaces.event.TabCloseEvent;
 
 @SuppressWarnings("deprecation")
 @ManagedBean(name="distribucionMaBean")
@@ -17,16 +19,34 @@ public class DistribucionMaBean implements Serializable {
 	
 	private int idTabActive;
 	
-	private boolean ocultarmostrar;
+	private boolean ocultarmostrar = true;
+
+	private String titleValor = "Desplegar Gráfica";
+	private String titleCantidad = "Desplegar Gráfica";
 
        	
     @PostConstruct
     public void init() {
     	idTabActive = -1;
     }
+
+    public void onTabClose(TabCloseEvent event) {
+        idTabActive = ((AccordionPanel) event.getComponent()).getChildren().indexOf(event.getTab());
+        if (event.getTab().getTitletip()!=null && event.getTab().getTitletip().equals("Desplegar Gráfica")) {
+        	event.getTab().setTitletip("Contraer Gráfica");
+        } else {
+        	event.getTab().setTitletip("Desplegar Gráfica");
+        }
+        //FacesContext.getCurrentInstance();
+    }
     
     public void onTabChange(TabChangeEvent event) {
         idTabActive = ((AccordionPanel) event.getComponent()).getChildren().indexOf(event.getTab());
+        if (event.getTab().getTitletip()!=null && event.getTab().getTitletip().equals("Desplegar Gráfica")) {
+        	event.getTab().setTitletip("Contraer Gráfica");
+        } else {
+        	event.getTab().setTitletip("Desplegar Gráfica");
+        }
     }
 
     
@@ -48,6 +68,22 @@ public class DistribucionMaBean implements Serializable {
 
 	public void setIdTabActive(int idTabActive) {
 		this.idTabActive = idTabActive;
+	}
+
+	public String getTitleValor() {
+		return titleValor;
+	}
+
+	public void setTitleValor(String titleValor) {
+		this.titleValor = titleValor;
+	}
+
+	public String getTitleCantidad() {
+		return titleCantidad;
+	}
+
+	public void setTitleCantidad(String titleCantidad) {
+		this.titleCantidad = titleCantidad;
 	}
 
 }

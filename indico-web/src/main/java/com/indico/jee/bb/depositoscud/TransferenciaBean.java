@@ -78,7 +78,7 @@ public class TransferenciaBean extends GraficaGeneralBean {
 	
 	
     //ocultar mostrar mensaje
-    private boolean 			ocultarmostrar;
+    private boolean 			ocultarmostrar = true;
     private String 				tipoPeriodoSelected;
     private List<CampoSelect> 	conceptos;
     private String 				concepto;

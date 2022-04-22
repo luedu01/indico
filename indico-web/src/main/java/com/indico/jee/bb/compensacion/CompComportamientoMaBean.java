@@ -17,7 +17,7 @@ public class CompComportamientoMaBean implements Serializable {
 	
 	private int idTabActive = -1;
 	
-	private boolean ocultarmostrar;
+	private boolean ocultarmostrar = true;
 	
    
 	@PostConstruct

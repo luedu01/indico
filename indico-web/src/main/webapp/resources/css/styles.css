@@ -853,7 +853,7 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only
 }
 
 .jqplot-highlighter-tooltip {
-	background: #d0a126 !important;
+	background-color: #00416A !important;
 	color: #522525;
 	font-size: 13px;
 }
@@ -2360,7 +2360,7 @@ td {
 
 .DispTable {
 	display: table;
-	vertical-align: middle;-
+	vertical-align: middle;
 }
 
 .DispTableCell {
@@ -2756,7 +2756,8 @@ td {
 }
 
 .containerselectslider {
-	background: #fff;right
+	background: #fff; 
+	text-align: right;
 	color: #222;
 	padding-right: 0em;
 }
@@ -2769,7 +2770,7 @@ td {
 	float: left;
 	height: 24px !important;
 	border: 1px solid #d6d6d6;
-	color; #555;
+	color: #555;
 	border-radius: 3px;
 	background-image: none !important;
 	background: url('../resources/images/selectblue2.png') no-repeat !important;
@@ -2989,7 +2990,7 @@ coloresseries{	​
 }
 
 .fa-lg {
-	color:#00000;
+	color: #00000;
     font-size: 4em;
     line-height: 0.75em;
     vertical-align: -15%;
@@ -3247,3 +3248,18 @@ coloresseries{	​
 
 }
 
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
+	outline: 2px solid black !important;
+}
+
+select:hover {
+	outline: 2px solid black !important;
+}
+
+ui-accordion-header.ui-helper-reset.ui-state-default.tabtittles2.ui-corner-all div:hover{
+	outline: 2px solid black !important;
+}
+
+.ui-tabs-outline {
+	outline: 2px solid black !important;
+}

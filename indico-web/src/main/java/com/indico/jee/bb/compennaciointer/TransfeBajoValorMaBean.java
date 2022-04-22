@@ -78,7 +78,7 @@ public class TransfeBajoValorMaBean extends GraficaGeneralBean {
 			"				</generic:Attributes>	\r\n"; 
 
 	//ocultar mostrar mensaje
-	private boolean ocultarmostrar;
+	private boolean ocultarmostrar = true;
 
 
 	@PostConstruct

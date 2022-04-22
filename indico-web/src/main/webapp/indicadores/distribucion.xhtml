@@ -7,9 +7,9 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:fado="http://java.sun.com/jsf/composite/customs">
-      
-
-     
+<h:head>      
+	<h:outputScript library="js" name="accordion.js" />
+</h:head>     
 <p:outputPanel>
 			<p:outputPanel styleClass="BlueBack">
 				<div class="EmptyBox10 DisplayOnDesk"></div>
@@ -23,7 +23,7 @@
 							<h:commandLink actionListener="#{distribucionMaBean.showHideMessageInformation}">
 								<h:graphicImage id="changeImage" value="./resources/images/#{distribucionMaBean.ocultarmostrar?'remove_circle_white_24dp.svg':'add_circle_white_24dp.svg'}"
 									styleClass="MarAuto" rendered="true" height="24" width="24" title="#{distribucionMaBean.ocultarmostrar?'Contraer Descripción y Fórmula':'Desplegar Descripción y Fórmula'}" />
-								<p:ajax update="@([id$=panelInformacion],[id$=changeImage])" />
+								<p:ajax update="@([id$=panelInformacion],[id$=changeImage])"/>
 							</h:commandLink>
 						</h:form>
 					</p:outputPanel>
@@ -59,15 +59,18 @@
 			<!-- 		finalbarratop  -->
 	<p:panelGrid id="panelx2-1" columns="1" styleClass="cleaner2">
 	    
-		<p:accordionPanel id="accordionD" activeIndex="-1"  cache="false" dynamic="true" styleClass="NoPaddingRight NoPaddingLeft" multiple="true">
-			<p:ajax event="tabChange" update="@([id$=pcantidadD],[id$=pvalorD])" listener="#{distribucionMaBean.onTabChange}" onstart="PF('statusDialogCD').show()" onsuccess="PF('statusDialogCD').hide()"/> 
-		   	<p:tab id="tabValor" titleStyleClass="tabtittles ">
+		<p:accordionPanel id="accordionD" widgetVar="accordionDvar" activeIndex="-1"  cache="false" dynamic="true" styleClass="NoPaddingRight NoPaddingLeft" multiple="true">
+			
+			<p:ajax event="tabChange" update="@([id$=pvalorDistribucion],[id$=pcantidadDistribucion])" listener="#{distribucionMaBean.onTabChange}" onstart="PF('statusDialogCD').show();" onsuccess="PF('statusDialogCD').hide();" /> 
+			<p:ajax event="tabClose" update="@([id$=pvalorDistribucion],[id$=pcantidadDistribucion])" listener="#{distribucionMaBean.onTabClose}" onstart="PF('statusDialogCD').show();" onsuccess="PF('statusDialogCD').hide();" /> 
+		   	
+		   	<p:tab id="tabValor" titleStyleClass="tabtittles">
 		       	<f:facet name="title">
 		        	<p:outputPanel styleClass="ui-g Wid100 MarginLeft15">
 	               		<p:outputLabel value="Valor" styleClass="fontTabTittle"/>
 	            	</p:outputPanel>   	
          		</f:facet>
-	           <p:panel id="pcantidadD">
+	           <p:panel id="pvalorDistribucion" widgetVar="pvalorDistribucionVar" >
 	              <p:outputPanel styleClass="ui-helper-clearfix NoPaddingLeft NoPaddingRight">
 	           	   	<ui:include src="distribucionvalor.xhtml"></ui:include>
 	           	  </p:outputPanel>
@@ -76,17 +79,18 @@
 		   
 		   <p:tab id="tabCantidad" titleStyleClass="tabtittles">
 		       <f:facet name="title">
-		        <p:outputPanel styleClass="ui-g Wid100 MarginLeft15">
-	               	<p:outputLabel value="Cantidad" styleClass="fontTabTittle"/>
-	            </p:outputPanel>   	
-            </f:facet>
-	           <p:panel id="pvalorD">
+			        <p:outputPanel styleClass="ui-g Wid100 MarginLeft15">
+		               	<p:outputLabel value="Cantidad" styleClass="fontTabTittle"/>
+		            </p:outputPanel>   	
+            	</f:facet>
+	           <p:panel id="pcantidadDistribucion" widgetVar="pcantidadDistribucionVar">
 	              <p:outputPanel styleClass="ui-helper-clearfix NoPaddingLeft NoPaddingRight">
 					<ui:include src="distribucioncantidad.xhtml"></ui:include>
 	           	  </p:outputPanel> 
 		       </p:panel>        	
 		   </p:tab>	
 		</p:accordionPanel>
+		
 	</p:panelGrid>
 </p:outputPanel>
 </ui:composition>	    

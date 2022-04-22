@@ -189,7 +189,7 @@
   **/
  
  function startvaluescomponentstimes(valchanged1,valchanged2,compdiario1,compdiario2,data) {
-     
+
      var inicioX;
      var endX;
      if (valchanged1!=null && valchanged2!=null) {
@@ -274,10 +274,17 @@
          var option = $('<option/>').val("").text("Año").attr('disabled','disabled');
          option.appendTo(selectanio);
          for (var anio=aniostart; anio<=anioend; anio++) {
-             option = $('<option/>').val(anio).text(anio);
+	         if(anio==selected.getFullYear())  {
+				option = $('<option selected="selected"/>').val(anio).text(anio);
+			 } else {
+	             option = $('<option/>').val(anio).text(anio);
+			}
              option.appendTo(selectanio);
          }
-         selectanio.val(selected.getFullYear());
+         selectaniolabel= $(selanio+"_label");
+         if (selectaniolabel != undefined)  {
+			selectaniolabel.text(selected.getFullYear());
+		}         
      }	
  }
  
@@ -299,63 +306,80 @@
          if (anioend==selected.getFullYear()){
              mesFinal = maxXdistValor.getMonth() + 1 ;
          } 
+         var messeleccionado = selected.getMonth()+1;
+         if ((messeleccionado<mesInicial) || (messeleccionado>mesFinal)){
+             messeleccionado=mesInicial;
+         }         
+         
          //
          var option = $('<option/>').val("").text("Mes").attr('disabled','disabled');
          option.appendTo(selectmeses);
-         
+         mesTexto="";
          if (mesInicial<=1 && mesFinal>=1) {
              option = $('<option/>').val("1").text("Enero");
+             if(messeleccionado==1) {option.attr("selected", "true");mesTexto="Enero";}
              option.appendTo(selectmeses);
          }
          if (mesInicial<=2 && mesFinal>=2) {
              option = $('<option/>').val("2").text("Febrero");
+             if(messeleccionado==2) {option.attr("selected", "true");mesTexto="Febrero";}
              option.appendTo(selectmeses);
          }
          if (mesInicial<=3 && mesFinal>=3) {
              option = $('<option/>').val("3").text("Marzo");
+             if(messeleccionado==3) {option.attr("selected", "true");mesTexto="Marzo";}
              option.appendTo(selectmeses);
          }
          if (mesInicial<=4 && mesFinal>=4) {
              option = $('<option/>').val("4").text("Abril");
+             if(messeleccionado==4) {option.attr("selected", "true");mesTexto="Abril";}
              option.appendTo(selectmeses);
          }
          if (mesInicial<=5 && mesFinal>=5) {
              option = $('<option/>').val("5").text("Mayo");
+             if(messeleccionado==5) {option.attr("selected", "true");mesTexto="Mayo";}
              option.appendTo(selectmeses);
          }
          if (mesInicial<=6 && mesFinal>=6){
              option = $('<option/>').val("6").text("Junio");
+             if(messeleccionado==6) {option.attr("selected", "true");mesTexto="Junio";}
              option.appendTo(selectmeses);
          }
          if (mesInicial<=7 && mesFinal>=7){
              option = $('<option/>').val("7").text("Julio");
+             if(messeleccionado==7) {option.attr("selected", "true");mesTexto="Julio";}
              option.appendTo(selectmeses);
          }
          if (mesInicial<=8 && mesFinal>=8){
              option = $('<option/>').val("8").text("Agosto");
+             if(messeleccionado==8) {option.attr("selected", "true");mesTexto="Agosto";}
              option.appendTo(selectmeses);
          }
          if (mesInicial<=9 && mesFinal>=9){
              option = $('<option/>').val("9").text("Septiembre");
+             if(messeleccionado==9) {option.attr("selected", "true");mesTexto="Septiembre";}
              option.appendTo(selectmeses);
          }
          if (mesInicial<=10 && mesFinal>=10){
              option = $('<option/>').val("10").text("Octubre");
+             if(messeleccionado==10) {option.attr("selected", "true");mesTexto="Octubre";}
              option.appendTo(selectmeses);
          }
          if (mesInicial<=11 && mesFinal>=11) {
              option = $('<option/>').val("11").text("Noviembre");
+             if(messeleccionado==11) {option.attr("selected", "true");mesTexto="Noviembre";}
              option.appendTo(selectmeses);
          }
          if (mesInicial<=12 && mesFinal>=12) {
              option = $('<option/>').val("12").text("Diciembre");
+             if(messeleccionado==12) {option.attr("selected", "true");mesTexto="Diciembre";}
              option.appendTo(selectmeses);
          }
-         var messeleccionado = selected.getMonth()+1;
-         if ((messeleccionado<mesInicial) || (messeleccionado>mesFinal)){
-             messeleccionado=mesInicial;
-         }
-         selectmeses.val(messeleccionado);
+         selectmeseslabel= $(selmeses+"_label");
+         if (selectmeseslabel != undefined)  {
+			selectmeseslabel.text(mesTexto);
+		}
+         
      }
  }
  
@@ -369,6 +393,10 @@
          var maxXdistValor = new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
          var diaInicial=1;
          var diaFinal= (new Date(selected.getFullYear(),selected.getMonth()+1, 0)).getDate() ;
+         var diaseleccionado = selected.getDate();
+         if ((diaseleccionado<diaInicial) || (diaseleccionado>diaFinal)){
+             diaseleccionado=diaInicial;
+         }         
          if (selected.getFullYear()==minXdistValor.getFullYear() && selected.getMonth()+1==minXdistValor.getMonth()+1) {
              diaInicial = minXdistValor.getDate();
          }
@@ -378,14 +406,17 @@
          var option = $('<option/>').val("").text("Día").attr('disabled','disabled');
          option.appendTo(selectdias);
          for (var i=diaInicial ; i<=diaFinal; i++) {
+			if (i==diaseleccionado) {
+             option = $('<option selected="selected"/>').val(i).text(i);
+			} else {
              option = $('<option/>').val(i).text(i);
+			}
              option.appendTo(selectdias);
          };
-         var diaseleccionado = selected.getDate();
-         if ((diaseleccionado<diaInicial) || (diaseleccionado>diaFinal)){
-             diaseleccionado=diaInicial;
-         }
-         selectdias.val(diaseleccionado);
+         selectdiaslabel= $(seldia+"_label");
+         if (selectdiaslabel != undefined)  {
+			selectdiaslabel.text(diaseleccionado);
+		}
      }
  }
  
@@ -393,6 +424,7 @@
      if ($(seltrimestre).length) {
          var selecttrimestre = $(seltrimestre);
          selecttrimestre.empty();
+
          var fechaA = data["MinX"].split("-");
          var minXdistValor = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
          var fechaB = data["MaxX"].split("-");
@@ -401,36 +433,63 @@
          var periodoFinal = 10;
          var aniostart = minXdistValor.getFullYear();
          var anioend = maxXdistValor.getFullYear();
+
+         var trimestreseleccionado = selected.getMonth()+1;
+         if ((trimestreseleccionado<periodoInicial) || (trimestreseleccionado>periodoFinal)){
+             trimestreseleccionado=periodoInicial;
+         }
          if (aniostart==selected.getFullYear()) {
              periodoInicial = minXdistValor.getMonth() + 1 ;
          } 
          if (anioend==selected.getFullYear()){
              periodoFinal = maxXdistValor.getMonth() + 1 ;
          } 
+         var trimestreLabel="";
          var option = $('<option/>').val("").text("Trimestre").attr('disabled','disabled');
          option.appendTo(selecttrimestre);
          if (periodoInicial<=1 && periodoFinal>=1) {
-             option = $('<option/>').val("1").text("I");
-             option.appendTo(selecttrimestre);
+			if (trimestreseleccionado <= 1 && trimestreseleccionado >= 1) {
+				option = $('<option selected="selected"/>').val("1").text("I");
+				trimestreLabel="I";	
+			} else {
+				option = $('<option/>').val("1").text("I");
+			}
+            	option.appendTo(selecttrimestre);
          }
          if (periodoInicial<=4 && periodoFinal>=4) {
-             option = $('<option/>').val("4").text("II");
-             option.appendTo(selecttrimestre);
+			if (trimestreseleccionado <= 4 && trimestreseleccionado >= 4) {
+             	option = $('<option selected="selected"/>').val("4").text("II");
+				trimestreLabel="II";	
+			} else {
+				option = $('<option/>').val("4").text("II");
+			}
+             	option.appendTo(selecttrimestre);
          }
          if (periodoInicial<=7 && periodoFinal>=7) {
-             option = $('<option/>').val("7").text("III");
-             option.appendTo(selecttrimestre);
+			if (trimestreseleccionado <= 7 && trimestreseleccionado >= 7) {
+             	option = $('<option selected="selected"/>').val("7").text("III");
+				trimestreLabel="III";	
+			} else {
+				option = $('<option/>').val("7").text("III");
+			}
+            	option.appendTo(selecttrimestre);
          }
          if (periodoInicial<=10 && periodoFinal>=10) {
-             option = $('<option/>').val("10").text("IV");
-             option.appendTo(selecttrimestre);
+			if (trimestreseleccionado <= 10 && trimestreseleccionado >= 10) {
+	            option = $('<option selected="selected"/>').val("10").text("IV");
+				trimestreLabel="IV";	
+			} else {
+				option = $('<option/>').val("10").text("IV");
+			}
+             	option.appendTo(selecttrimestre);
          }
          //
-         var trimestreseleccionado = selected.getMonth()+1;
-         if ((trimestreseleccionado<periodoInicial) || (trimestreseleccionado>periodoFinal)){
-             trimestreseleccionado=periodoInicial;
-         }
-         selecttrimestre.val(""+trimestreseleccionado+"");
+         
+         selecttriemstrelabel= $(seltrimestre+"_label");
+         if (selecttriemstrelabel != undefined)  {
+			selecttriemstrelabel.text(trimestreLabel);
+		}
+         
      }
  }
  
@@ -446,27 +505,47 @@
          var periodoFinal = 7;
          var aniostart = minXdistValor.getFullYear();
          var anioend = maxXdistValor.getFullYear();
-         if (aniostart==selected.getFullYear()) {
-             periodoInicial = minXdistValor.getMonth() + 1 ;
-         } 
-         if (anioend==selected.getFullYear()){
-             periodoFinal = maxXdistValor.getMonth() + 1 ;
-         } 
-         var option = $('<option/>').val("").text("Semestre").attr('disabled','disabled');
-         option.appendTo(selectsemestre);
-         if (periodoInicial<=1 && periodoFinal>=1) {
-             option = $('<option/>').val("1").text("I");
-             option.appendTo(selectsemestre);
-         }
-         if (periodoInicial<=7 && periodoFinal>=7) {
-             option = $('<option/>').val("7").text("II");
-             option.appendTo(selectsemestre);
-         }
+         
          var semestreseleccionado = selected.getMonth()+1;
          if ((semestreseleccionado<periodoInicial) || (semestreseleccionado>periodoFinal)){
              semestreseleccionado=periodoInicial;
          }
-         selectsemestre.val(""+semestreseleccionado+"");
+         
+         if (aniostart==selected.getFullYear()) {
+             periodoInicial = minXdistValor.getMonth() + 1 ;
+         } 
+         
+         if (anioend==selected.getFullYear()){
+             periodoFinal = maxXdistValor.getMonth() + 1 ;
+         } 
+         
+         var option = $('<option/>').val("").text("Semestre").attr('disabled','disabled');
+         option.appendTo(selectsemestre);
+         semestreLabel="";
+         if (periodoInicial<=1 && periodoFinal>=1) {
+			if(semestreseleccionado <= 6 ){
+	             option = $('<option selected="selected"/>').val("1").text("I");
+	             semestreLabel="I";
+			} else {
+	             option = $('<option/>').val("1").text("I");
+			}
+             option.appendTo(selectsemestre);
+         }
+         if (periodoInicial<=7 && periodoFinal>=7) {
+			if(semestreseleccionado >= 7 ){
+	             option = $('<option selected="selected"/>').val("7").text("II");
+	             semestreLabel="II";
+			} else {
+             	option = $('<option/>').val("7").text("II");
+			}
+             option.appendTo(selectsemestre);
+         }
+		
+        selectsemestrelabel= $(selsemestre+"_label");
+        if (selectsemestrelabel != undefined)  {
+			selectsemestrelabel.text(semestreLabel);
+		}
+         
      }
  }
  
@@ -622,6 +701,7 @@
      addaniotimes(data	,"#"+compdiario1+"_sel_anio",inicio);
      addmesestimes(data	,"#"+compdiario1+"_sel_mes",inicio);
      adddiastimes(data	,"#"+compdiario1+"_sel_dia",inicio);
+     
      addaniotimes(data	,"#"+compdiario2+"_sel_anio",fin);
      addmesestimes(data	,"#"+compdiario2+"_sel_mes",fin);
      adddiastimes(data	,"#"+compdiario2+"_sel_dia",fin);
@@ -801,8 +881,8 @@
  function updatedataplottimesrangestran(plot1,plot2,compdiario1,compdiario2,data,slider,tipo) {
     var anio1,mes1,dia1,trimestre1,semestre1; 
     var anio2,mes2,dia2,trimestre2,semestre2;
-    /*Componente 1*/
     
+    /*Componente 1*/
     if ($("#"+compdiario1+"_sel_anio").length) {
         anio1 	= $("#"+compdiario1+"_sel_anio").val();	
     }
@@ -917,7 +997,7 @@
                 },
                 updateselects_no: true,
             }
-            $("#"+slider).trigger("valuesChanged",datesinit);
+			$("#"+slider).trigger("valuesChanged",datesinit);
     }
 }
 
@@ -1151,6 +1231,7 @@
  }
  
  function changedatesselectedssemestralestimes(compsemestral1,compsemestral2,data,slider) {
+	
      //var fCount = data.
      var anio1,mes1,dia1,anio1; 
      var anio2,mes2,dia2,anio2;

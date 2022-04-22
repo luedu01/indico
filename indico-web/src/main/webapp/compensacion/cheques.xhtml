@@ -8,8 +8,9 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:fado="http://java.sun.com/jsf/composite/customs">
 	  <h:head>
+		<h:outputScript library="js" name="accordion.js" />
 		<h:outputScript library="js" name="accordion2.js" />
-</h:head>
+	</h:head>
 
 
 
@@ -73,6 +74,7 @@
 
 		<p:accordionPanel id="accordionCh" activeIndex="-1" cache="false" dynamic="true" styleClass="NoPaddingRight NoPaddingLeft" multiple="true">
 			<p:ajax event="tabChange" update="@([id$=pacanje],[id$=padevoluciones])" listener="#{compChequesMaBean.onTabChange}"/>
+			
 			<p:tab id="tabCanje" titleStyleClass="tabtittles ">
 		    	<f:facet name="title">
 			        <p:outputPanel styleClass="ui-g Wid100 MarginLeft15">

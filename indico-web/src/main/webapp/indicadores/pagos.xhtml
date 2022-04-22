@@ -8,14 +8,16 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:fado="http://java.sun.com/jsf/composite/customs">
 
-	
+<h:head>      
+	<h:outputScript library="js" name="accordion.js" />
+</h:head>     
 
 <p:outputPanel>
 			<p:outputPanel styleClass="BlueBack">
 				<div class="EmptyBox10 DisplayOnDesk"></div>
 				<div class="EmptyBox10 DisplayOnMobile"></div>
 				<div class="ui-g">
-					<h:outputText
+					<h:outputText 
 						styleClass="Fs20 Wid90  DispInlBlock TexAlRight  White PaddingRight10 BoxSizeBorder TextTitle"
 						value="Descripci&#243;n y f&#243;rmula" />
 					<p:outputPanel styleClass="DispInlBlock Wid10 TexAlCenter">
@@ -23,7 +25,7 @@
 							<h:commandLink actionListener="#{pagosMaBean.showHideMessageInformation}">
 								<h:graphicImage id="changeImage" value="./resources/images/#{pagosMaBean.ocultarmostrar?'remove_circle_white_24dp.svg':'add_circle_white_24dp.svg'}"
 									styleClass="MarAuto" rendered="true" height="24" width="24" title="#{pagosMaBean.ocultarmostrar?'Contraer Descripción y Fórmula':'Desplegar Descripción y Fórmula'}" />
-								<p:ajax update="@([id$=panelInformacion2],[id$=changeImage])" />
+								<p:ajax update="@([id$=panelInformacion2],[id$=changeImage])" onstart="PF('statusDialogBV').show()" onsuccess="PF('statusDialogBV').hide()"/>
 							</h:commandLink>
 						</h:form>
 					</p:outputPanel>
@@ -72,26 +74,26 @@
 			dynamic="true" 
 			styleClass="NoPaddingRight NoPaddingLeft" multiple="true" 
 			 >
-			<p:ajax event="tabChange" update="@([id$=pcantidad],[id$=pvalor])"  listener="#{pagosMaBean.onTabChange}"/> 
-		   <p:tab id="tabValor" titleStyleClass="tabtittles">
+			<p:ajax event="tabChange" update="@([id$=protacion],[id$=ppagos])"  listener="#{pagosMaBean.onTabChange}"/> 
+		   <p:tab id="tabRotacion" titleStyleClass="tabtittles">
 		       <f:facet name="title">
 		        <p:outputPanel styleClass="ui-g Wid100 MarginLeft15">
 	               	<p:outputLabel value="Rotaci&#243;n" styleClass="fontTabTittle"/>
 	            </p:outputPanel>   	
             </f:facet>
-	           <p:panel id="pcantidad">
+	           <p:panel id="protacion">
 	              <p:outputPanel styleClass="ui-helper-clearfix NoPaddingLeft NoPaddingRight ">
 		           	   <ui:include src="pagosrotacion.xhtml"></ui:include>
 	           	  </p:outputPanel> 
 		       </p:panel>        	
 		   </p:tab>	
-		   <p:tab id="tabCantidad" titleStyleClass="tabtittles">
+		   <p:tab id="tabpagos" titleStyleClass="tabtittles">
 		       <f:facet name="title">
 		        <p:outputPanel styleClass="ui-g Wid100 MarginLeft15">
 	               	<p:outputLabel value="PIB" styleClass="fontTabTittle"  />
 	            </p:outputPanel>   	
 	           </f:facet>
-	           <p:panel id="pvalor" styleClass="cleaner2">
+	           <p:panel id="ppagos" styleClass="cleaner2">
 	              <p:outputPanel styleClass="ui-helper-clearfix">
 	           	   <ui:include src="pagospib.xhtml"></ui:include>
 	           	  </p:outputPanel> 

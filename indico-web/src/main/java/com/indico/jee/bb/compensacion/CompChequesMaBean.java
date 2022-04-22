@@ -17,7 +17,7 @@ public class CompChequesMaBean implements Serializable {
 	
 	private int idTabActive;
 	
-	private boolean ocultarmostrar;
+	private boolean ocultarmostrar = true;
 	
         	
     @PostConstruct

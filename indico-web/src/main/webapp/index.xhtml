@@ -57,7 +57,8 @@
 									<h:form>
 										<h:commandLink id="cud1" actionListener="#{homeMaBean.iconAction}"
 											update="@([id$=panelGeneral])"
-											process="@this"	>
+											process="@this"
+											>
 											<p:outputPanel>
 												<center>
 													<p:graphicImage styleClass="imagecarousel2" id="imgcrs"
@@ -122,7 +123,8 @@
 									<h:form>
 										<h:commandLink id="cheques1" actionListener="#{homeMaBean.iconAction}"
 											update="@([id$=panelGeneral])"
-											process="@this"	>
+											process="@this"
+											>
 											<p:outputPanel>
 												<center>
 													<p:graphicImage styleClass="imagecarousel2" style="width:22% !important" id="imgcrs"
@@ -185,6 +187,7 @@
 										<h:commandLink id="bajoval1" actionListener="#{homeMaBean.iconAction}"
 											update="@([id$=panelGeneral])"
 											process="@this"
+											
 										>
 											<p:outputPanel>
 												<center>
@@ -213,6 +216,7 @@
 										<h:commandLink id="bajoval2" actionListener="#{homeMaBean.iconAction2}"
 											update="@([id$=panelGeneral])"
 											process="@this"
+											
 										>
 											<div class="EmptyBox">
 												<p:outputPanel styleClass="textbelow">
@@ -237,8 +241,8 @@
 					</b:column>
 				
 					<b:column col-sm="3" col-md="3" id="column5" class="barIcoHeight">
-						<h:form  id="fguia">
-							<h:commandLink id="guia2" actionListener="#{homeMaBean.iconAction}" 
+						<h:form  id="fguia"  >
+							<h:commandLink id="guia2" actionListener="#{homeMaBean.iconAction}"  
 								update="@([id$=panelGeneral])" process="@this">
 								<div class='link2 btn' id="guia" style="#{homeMaBean.selected==3?'background-color: #7bb9e0;':''}">
 									<div class='small'><img src="./resources/images/question-mark.svg" class="imgGuia" style="width:22% !important"></img>

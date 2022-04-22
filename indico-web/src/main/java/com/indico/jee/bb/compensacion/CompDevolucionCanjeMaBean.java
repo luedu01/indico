@@ -81,7 +81,7 @@ public class CompDevolucionCanjeMaBean extends GraficaGeneralBean {
 									"				</generic:Attributes>	\r\n"; 
 	
 		//ocultar mostrar mensaje
-    private boolean 					ocultarmostrar;
+    private boolean 					ocultarmostrar = true;
 	private List<MedioServCompensacion> mediosdeservicio;
 	private String 						medioservicio;
 	

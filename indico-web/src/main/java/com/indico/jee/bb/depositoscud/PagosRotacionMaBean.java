@@ -39,7 +39,7 @@ public class PagosRotacionMaBean extends GraficaGeneralBean {
 
 	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(PagosRotacionMaBean.class);
 	
-    private boolean ocultarmostrar;
+    private boolean ocultarmostrar = true;
     
 	Date date = new Date();
 	SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
