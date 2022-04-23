@@ -6,3 +6,13 @@ CodigoFuente/indico-web/src/.DS_Store
 CodigoFuente/indico-web/src/main/.DS_Store
 .DS_Store
 /.metadata/
+./RemoteSystemsTempFiles/
+./Servers/
+indico-ear/.gitignore
+.settings/
+.classpath
+.gitignore
+.project
+.settings/
+.classpath
+.metadata/
