@@ -37,14 +37,14 @@
 		</c:if>
 		<p:outputPanel>
 			<div id="#{cc.attrs.idg}_container_anio" class="containerselectslider" style="min-width: 65px;">
-				<select id="#{cc.attrs.idg}_sel_anio" class="minWidth-0 selectonslider" onchange="updateLabelValue('#{cc.attrs.idg}_sel_anio_label',this.value)">
+				<select id="#{cc.attrs.idg}_sel_anio" class="minWidth-0 selectonslider" onchange="updateLabelValue('#{cc.attrs.idg}_sel_anio_label',this.value,this.value,'#{cc.attrs.idg}_sel_anio')">
 				</select>
 				<label id="#{cc.attrs.idg}_sel_anio_label" for="#{cc.attrs.idg}_sel_anio" class="selectFechasLabel"></label>
 			</div>
 		</p:outputPanel>
 		<p:outputPanel>
 			<div id="#{cc.attrs.idg}_container_mes" class="containerselectslider" style="min-width: 65px;">
-				<select id="#{cc.attrs.idg}_sel_mes" class="minWidth-0 selectonslider" onchange="updateLabelValue('#{cc.attrs.idg}_sel_mes_label',this.options[this.selectedIndex].text)">
+				<select id="#{cc.attrs.idg}_sel_mes" class="minWidth-0 selectonslider" onchange="updateLabelValue('#{cc.attrs.idg}_sel_mes_label',this.options[this.selectedIndex].text,'#{cc.attrs.idg}_sel_mes')">
 				</select>
 				<label id="#{cc.attrs.idg}_sel_mes_label" for="#{cc.attrs.idg}_sel_mes" class="selectFechasLabel"></label>
 			</div>
@@ -69,8 +69,9 @@
 					});
 				});
 				
-				function updateLabelValue(id,valor) {
-					document.getElementById(id).innerHTML=valor;
+				function updateLabelValue(idLabel,valor,id) {
+					document.getElementById(idLabel).innerHTML=valor;
+					localStorage.setItem(id,valor);
 				}
 			</h:outputScript>
 		</h:form>

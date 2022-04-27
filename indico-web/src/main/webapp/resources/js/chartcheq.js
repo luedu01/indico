@@ -3107,8 +3107,6 @@ function createSliderChequesPesos(divchartzoomslider,errormessage){
 	
 	try {	
 		data =  RestCompensacionChequesPesosConstantes.getCompChequesPesos();
-		console.log(data.Title);
-		
 		
 		$("#"+divchartzoomslider).empty();
 		$("#"+divchartzoomslider)[0].setAttribute("class","superzoom");
@@ -3233,7 +3231,6 @@ function createplotmaxgeneralAnualidadPesos(name,data,tipo) {
        
     }
        
-    console.log(text + text1);
  	ticks 			= data["Ticks"];
  	serieValores 	= datosValor4(data["SerieValores"]);
  	serieCantidad	= datosValor4(data["SerieCantidad"]);

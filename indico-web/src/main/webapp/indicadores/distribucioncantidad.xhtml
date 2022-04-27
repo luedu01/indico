@@ -44,7 +44,7 @@
 														<f:selectItem itemLabel="Trimestral" itemValue="3" />
 														<f:selectItem itemLabel="Semestral" itemValue="4" />
 														<f:selectItem itemLabel="Anual" itemValue="5" />
-														<p:ajax process="@this" update="@([id$=vcan_panelesValoresDinamic],[id$=vcan_valorgraficavalor002])" listener="#{distribucionCantidadMaBean.changePanelAction}" oncomplete="vcan_changeperiodiciorperiodo(); return false;"/>
+														<p:ajax process="@this" update="@([id$=vcan_panelesValoresDinamic],[id$=vcan_valorgraficavalor002])" listener="#{distribucionCantidadMaBean.changePanelAction}"  onstart="vcan_savedperidoselected(this.value);" oncomplete="vcan_changeperiodiciorperiodo(); return false;"/>
 													</p:selectOneMenu>
 													</p:outputLabel>
 													</p:outputPanel>
@@ -200,6 +200,7 @@
 						  <p:panelGrid id="vcan_int_valorgraficavalor002" columns="1" styleClass="cleaner2" layout="grid">
 							<div id="chartzoomslidercantidad" class="superzoominternal"/>
 							<h:outputScript>
+									var almacen="distribucioncantidad";
 									function assignValuesCant() {
 										var periodo = PF('vcan_selFiltroPorValorW').jq.find('option:selected').val();
 										var v_start;
@@ -232,36 +233,69 @@
 										PF('vcan_endVar001').jq.val(v_end);
 									}
 							
-									function vcan_changeperiodiciorperiodo() {
+									function vcan_savedperidoselected() {
+										var idsel = localStorage.getItem("distribucionCantidadOld");
 										var periodo = PF('vcan_selFiltroPorValorW').jq.find('option:selected').val();
-										$("[id*='vcan_pValorDiario']").hide();
-										$("[id*='vcan_pValorMensual']").hide();
-										$("[id*='vcan_pValorTrimestral']").hide();
-										$("[id*='vcan_pValorSemestral']").hide();
-										$("[id*='vcan_pValorAnual']").hide();
-										switch (periodo) {
-											case "1":
-												$("[id*='vcan_pValorDiario']").show();
-												createSliderDistriCantMinDiario('chartzoomslidercantidad','vcan_valperiodo1','vcan_valperiodo2','vcan_messageinformationglobal');
-												break;										
-											case "2":
-												$("[id*='vcan_pValorMensual']").show();
-												createSliderDistriCantMinMensual('chartzoomslidercantidad','vcan_valmensual1','vcan_valmensual2','vcan_messageinformationglobal');
-												break;										
-											case "3":
-												$("[id*='vcan_pValorTrimestral']").show();
-												createSliderDistriCantMinTrimestral('chartzoomslidercantidad','vcan_valtrimestral1','vcan_valtrimestral2','vcan_messageinformationglobal');
-												break;
-											case "4": 
-												$("[id*='vcan_pValorSemestral']").show();
-												createSliderDistriCantMinSemestral('chartzoomslidercantidad','vcan_valsemestral1','vcan_valsemestral2','vcan_messageinformationglobal');
-												break;										
-											case "5": 
-												$("[id*='vcan_pValorAnual']").show();
-												createSliderDistriCantMinAnual('chartzoomslidercantidad','vcan_valanual1','vcan_valanual2','vcan_messageinformationglobal');
-												break;										
-										};//switch										
-										
+									    switch(idsel) {
+									    	case "1":
+												savedOldDatesStoStorage(almacen,'vcan_valperiodo1','vcan_valperiodo2',idsel);
+									    		break;
+									    	case "2":
+												savedOldDatesStoStorage(almacen,'vcan_valmensual1','vcan_valmensual2',idsel);
+									    		break;
+									    	case "3":
+												savedOldDatesStoStorage(almacen,'vcan_valtrimestral1','vcan_valtrimestral2',idsel);
+									    		break;
+									    	case "4":
+												savedOldDatesStoStorage(almacen,'vcan_valsemestral1','vcan_valsemestral2',idsel);
+									    		break;
+									    	case "5":
+												savedOldDatesStoStorage(almacen,'vcan_valanual1','vcan_valanual2',idsel);
+									    		break;
+									    } 
+									}
+																
+									function vcan_changeperiodiciorperiodo() {
+										let idsel = localStorage.getItem("distribucionCantidadOld");
+										$(document).ready(function(){
+										  try {
+												var periodo = PF('vcan_selFiltroPorValorW').jq.find('option:selected').val();
+												$("[id*='vcan_pValorDiario']").hide();
+												$("[id*='vcan_pValorMensual']").hide();
+												$("[id*='vcan_pValorTrimestral']").hide();
+												$("[id*='vcan_pValorSemestral']").hide();
+												$("[id*='vcan_pValorAnual']").hide();
+												switch (periodo) {
+													case "1":
+														createSliderDistriCantMinDiario('chartzoomslidercantidad','vcan_valperiodo1','vcan_valperiodo2','vcan_messageinformationglobal',almacen);
+														$("[id*='vcan_pValorDiario']").show();
+														localStorage.setItem("distribucionCantidadOld","1");
+														break;										
+													case "2":
+														createSliderDistriCantMinMensual('chartzoomslidercantidad','vcan_valmensual1','vcan_valmensual2','vcan_messageinformationglobal',almacen);
+														$("[id*='vcan_pValorMensual']").show();
+														localStorage.setItem("distribucionCantidadOld","2");
+														break;										
+													case "3":
+														createSliderDistriCantMinTrimestral('chartzoomslidercantidad','vcan_valtrimestral1','vcan_valtrimestral2','vcan_messageinformationglobal',almacen);
+														$("[id*='vcan_pValorTrimestral']").show();
+														localStorage.setItem("distribucionCantidadOld","3");
+														break;
+													case "4": 
+														createSliderDistriCantMinSemestral('chartzoomslidercantidad','vcan_valsemestral1','vcan_valsemestral2','vcan_messageinformationglobal',almacen);
+														$("[id*='vcan_pValorSemestral']").show();
+														localStorage.setItem("distribucionCantidadOld","4");
+														break;										
+													case "5": 
+														createSliderDistriCantMinAnual('chartzoomslidercantidad','vcan_valanual1','vcan_valanual2','vcan_messageinformationglobal',almacen);
+														$("[id*='vcan_pValorAnual']").show();
+														localStorage.setItem("distribucionCantidadOld","5");
+														break;										
+												}//switch
+										} catch(err) {
+										  	console.log(err);
+										}
+									  });
 									}//function
 								     
 						  			function recargar() {
@@ -272,6 +306,9 @@
 								    	if(gra == "1"){
 								    	   	vcan_changeperiodiciorperiodo();
 								    	}
+								    	setTimeout(() => {
+								    		vcan_savedperidoselected();
+								    	},2000);														
 								    });
 								    							     
 								    jQuery(window).resize(function() {

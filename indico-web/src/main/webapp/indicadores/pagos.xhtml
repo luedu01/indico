@@ -25,7 +25,7 @@
 							<h:commandLink actionListener="#{pagosMaBean.showHideMessageInformation}">
 								<h:graphicImage id="changeImage" value="./resources/images/#{pagosMaBean.ocultarmostrar?'remove_circle_white_24dp.svg':'add_circle_white_24dp.svg'}"
 									styleClass="MarAuto" rendered="true" height="24" width="24" title="#{pagosMaBean.ocultarmostrar?'Contraer Descripción y Fórmula':'Desplegar Descripción y Fórmula'}" />
-								<p:ajax update="@([id$=panelInformacion2],[id$=changeImage])" onstart="PF('statusDialogBV').show()" onsuccess="PF('statusDialogBV').hide()"/>
+								<p:ajax update="@([id$=panelInformacion2],[id$=changeImage])" onstart="PF('statusDialogCD').show()" onsuccess="PF('statusDialogCD').hide()"/>
 							</h:commandLink>
 						</h:form>
 					</p:outputPanel>

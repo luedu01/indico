@@ -43,7 +43,7 @@
 														<f:selectItem itemLabel="Trimestral" itemValue="3" />
 														<f:selectItem itemLabel="Semestral" itemValue="4" />
 														<f:selectItem itemLabel="Anual" itemValue="5" />
-														<p:ajax process="@this" update="@([id$=vval_panelesValoresDinamic],[id$=vval_valorgraficavalor002])" listener="#{distribucionValorMaBean.changePanelAction}" oncomplete="vval_changeperiodiciorperiodo(); return false;"/>
+														<p:ajax process="@this" update="@([id$=vval_panelesValoresDinamic],[id$=vval_valorgraficavalor002])" listener="#{distribucionValorMaBean.changePanelAction}" onstart="vval_savedperidoselected(this.value);" oncomplete="vval_changeperiodiciorperiodo(); return false;"/>
 													</p:selectOneMenu>
 												</p:outputLabel>
 											</p:outputPanel>
@@ -198,6 +198,7 @@
 						  <p:panelGrid id="vval_int_valorgraficavalor002" columns="1" styleClass="cleaner2" layout="grid">
 							<div id="chartzoomsliderdistribucion" class="superzoominternal"/>
 							<h:outputScript>
+									var almacen="distribucionvalor";
 									function assignValuesVal() {
 										var periodo = PF('vval_selFiltroPorValorW').jq.find('option:selected').val();
 										var v_start;
@@ -230,6 +231,28 @@
 										PF('vval_endVar001').jq.val(v_end);
 									}
 							
+									function vval_savedperidoselected() {
+										var idsel = localStorage.getItem("distribucionValorOld");
+										var periodo = PF('vval_selFiltroPorValorW').jq.find('option:selected').val();
+									    switch(idsel) {
+									    	case "1":
+												savedOldDatesStoStorage(almacen,'vval_valperiodo1','vval_valperiodo2',idsel);
+									    		break;
+									    	case "2":
+												savedOldDatesStoStorage(almacen,'vval_valmensual1','vval_valmensual2',idsel);
+									    		break;
+									    	case "3":
+												savedOldDatesStoStorage(almacen,'vval_valtrimestral1','vval_valtrimestral2',idsel);
+									    		break;
+									    	case "4":
+												savedOldDatesStoStorage(almacen,'vval_valsemestral1','vval_valsemestral2',idsel);
+									    		break;
+									    	case "5":
+												savedOldDatesStoStorage(almacen,'vval_valanual1','vval_valanual2',idsel);
+									    		break;
+									    } 
+									}															
+							
 									function vval_changeperiodiciorperiodo() {
 										var periodo = PF('vval_selFiltroPorValorW').jq.find('option:selected').val();
 										$("[id*='vval_pValorDiario']").hide();
@@ -239,27 +262,29 @@
 										$("[id*='vval_pValorAnual']").hide();
 										switch (periodo) {
 											case "1":
+												createSliderDistriValorMinDiario('chartzoomsliderdistribucion','vval_valperiodo1','vval_valperiodo2','vval_messageinformationglobal',almacen);
 												$("[id*='vval_pValorDiario']").show();
-												createSliderDistriValorMinDiario('chartzoomsliderdistribucion','vval_valperiodo1','vval_valperiodo2','vval_messageinformationglobal');
+												localStorage.setItem("distribucionValorOld","1");
 												break;										
 											case "2":
+												createSliderDistriValorMinMensual('chartzoomsliderdistribucion','vval_valmensual1','vval_valmensual2','vval_messageinformationglobal',almacen);
 												$("[id*='vval_pValorMensual']").show();
-												createSliderDistriValorMinMensual('chartzoomsliderdistribucion','vval_valmensual1','vval_valmensual2','vval_messageinformationglobal');
+												localStorage.setItem("distribucionValorOld","2");
 												break;										
 											case "3":
+												createSliderDistriValorMinTrimestral('chartzoomsliderdistribucion','vval_valtrimestral1','vval_valtrimestral2','vval_messageinformationglobal',almacen);
 												$("[id*='vval_pValorTrimestral']").show();
-												createSliderDistriValorMinTrimestral('chartzoomsliderdistribucion','vval_valtrimestral1','vval_valtrimestral2','vval_messageinformationglobal');
-										
+												localStorage.setItem("distribucionValorOld","3");
 												break;
 											case "4": 
+												createSliderDistriValorMinSemestral('chartzoomsliderdistribucion','vval_valsemestral1','vval_valsemestral2','vval_messageinformationglobal',almacen);
 												$("[id*='vval_pValorSemestral']").show();
-												createSliderDistriValorMinSemestral('chartzoomsliderdistribucion','vval_valsemestral1','vval_valsemestral2','vval_messageinformationglobal');
-											
+												localStorage.setItem("distribucionValorOld","4");
 												break;										
 											case "5": 
+												createSliderDistriValorMinAnual('chartzoomsliderdistribucion','vval_valanual1','vval_valanual2','vval_messageinformationglobal',almacen);
 												$("[id*='vval_pValorAnual']").show();
-												createSliderDistriValorMinAnual('chartzoomsliderdistribucion','vval_valanual1','vval_valanual2','vval_messageinformationglobal');
-											
+												localStorage.setItem("distribucionValorOld","5");
 												break;										
 										};//switch										
 										
@@ -273,6 +298,10 @@
 								    	if(gra == "1"){
 								    	   	vval_changeperiodiciorperiodo();
 								    	}
+								    	setTimeout(() => {
+								    		vval_savedperidoselected();
+								    	},2000);														
+								    	
 								    });
 								    							     
 								    jQuery(window).resize(function() {

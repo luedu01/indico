@@ -8,8 +8,6 @@
 	xmlns:b="http://bootsfaces.net/ui"
 	xmlns:fado="http://java.sun.com/jsf/composite/customs">
 	
-	
-	
 	<h:outputScript library="js" name="chart.js" />
 	<h:outputScript library="js" name="banrep.js" />
 	<h:outputStylesheet library="css" name="iThing.css" />
@@ -46,6 +44,7 @@
 														<p:ajax process="@this"
 															update="@([id$=ppib_panelesValoresDinamic],[id$=ppib_valorgraficavalor002])"
 															listener="#{pagosPIBMaBean.changePanelAction}"
+															onstart="ppib_savedperidoselected(this.value);"
 															onsuccess="ppib_changeperiodiciorperiodo(); return false;" 
 															 />
 													</p:selectOneMenu>
@@ -258,6 +257,7 @@
 								styleClass="cleaner2" layout="grid">
 								<div id="chartzoomsliderrotacionpib" class="superzoominternal" />
 								<h:outputScript>
+									var almacen="PagosPIB";
 									function ppib_assignValues() {
 										var periodo = PF('ppib_selFiltroPorValorW').jq.find('option:selected').val();
 										
@@ -291,7 +291,30 @@
 										PF('ppib_endVar001').jq.val(v_end);
 									}
 						  		
+									function ppib_savedperidoselected() {
+										var idsel = localStorage.getItem("pagospibOld");
+										var periodo = PF('ppib_selFiltroPorValorW').jq.find('option:selected').val();
+									    switch(idsel) {
+									    	case "1":
+												savedOldDatesStoStorage(almacen,'ppib_valperiodo1','ppib_valperiodo2',idsel);
+									    		break;
+									    	case "2":
+												savedOldDatesStoStorage(almacen,'ppib_valmensual1','ppib_valmensual2',idsel);
+									    		break;
+									    	case "3":
+												savedOldDatesStoStorage(almacen,'ppib_valtrimestral1','ppib_valtrimestral2',idsel);
+									    		break;
+									    	case "4":
+												savedOldDatesStoStorage(almacen,'ppib_valsemestral1','ppib_valsemestral2',idsel);
+									    		break;
+									    	case "5":
+												savedOldDatesStoStorage(almacen,'ppib_valanual1','ppib_valanual2',idsel);
+									    		break;
+									    } 
+									}
+						  		
 									function ppib_changeperiodiciorperiodo() {
+										let idsel = localStorage.getItem("pagospibOld");
 										var periodo = PF('ppib_selFiltroPorValorW').jq.find('option:selected').val();
 										$("[id*='ppib_pValorDiario']").hide();
 										$("[id*='ppib_pValorMensual']").hide();
@@ -300,24 +323,29 @@
 										$("[id*='ppib_pValorAnual']").hide();
 										switch (periodo) {
 											case "1":
+												createSliderRotaMinDiarioPib('chartzoomsliderrotacionpib','ppib_valperiodo1','ppib_valperiodo2','ppib_messageinformationglobal',almacen);
 												$("[id*='ppib_pValorDiario']").show();
-												createSliderRotaMinDiarioPib('chartzoomsliderrotacionpib','ppib_valperiodo1','ppib_valperiodo2','ppib_messageinformationglobal');
+												localStorage.setItem("pagospibOld","1");
 												break;										
 											case "2":
+												createSliderRotaMinMensualPib('chartzoomsliderrotacionpib','ppib_valmensual1','ppib_valmensual2','ppib_messageinformationglobal',almacen);
 												$("[id*='ppib_pValorMensual']").show();
-												createSliderRotaMinMensualPib('chartzoomsliderrotacionpib','ppib_valmensual1','ppib_valmensual2','ppib_messageinformationglobal');
+												localStorage.setItem("pagospibOld","2");
 												break;										
 											case "3":
+												createSliderRotaMinTrimestralPib('chartzoomsliderrotacionpib','ppib_valtrimestral1','ppib_valtrimestral2','ppib_messageinformationglobal',almacen);
 												$("[id*='ppib_pValorTrimestral']").show();
-												createSliderRotaMinTrimestralPib('chartzoomsliderrotacionpib','ppib_valtrimestral1','ppib_valtrimestral2','ppib_messageinformationglobal');
+												localStorage.setItem("pagospibOld","3");
 												break;
 											case "4": 
+												createSliderRotaMinSemestralPib ('chartzoomsliderrotacionpib','ppib_valsemestral1','ppib_valsemestral2','ppib_messageinformationglobal',almacen);
 												$("[id*='ppib_pValorSemestral']").show();
-												createSliderRotaMinSemestralPib ('chartzoomsliderrotacionpib','ppib_valsemestral1','ppib_valsemestral2','ppib_messageinformationglobal');
+												localStorage.setItem("pagospibOld","4");
 												break;										
 											case "5": 
+												createSliderRotaMinAnualPib('chartzoomsliderrotacionpib','ppib_valanual1','ppib_valanual2','ppib_messageinformationglobal',almacen);
 												$("[id*='ppib_pValorAnual']").show();
-												createSliderRotaMinAnualPib('chartzoomsliderrotacionpib','ppib_valanual1','ppib_valanual2','ppib_messageinformationglobal');
+												localStorage.setItem("pagospibOld","5");
 												break;										
 										};//switch										
 										
@@ -332,6 +360,11 @@
 								    	if(gra == "2"){
 								    	   	ppib_changeperiodiciorperiodo();
 								    	}
+								    	
+								    	setTimeout(() => {
+								    		ppib_savedperidoselected();
+								    	},2000);									    	
+								    	
 								    });
 								    							     
 								    jQuery(window).resize(function() {

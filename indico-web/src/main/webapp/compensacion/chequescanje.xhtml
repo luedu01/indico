@@ -241,15 +241,15 @@
 										$("[id*='vcanje_pValorTrimestral']").hide();
 										$("[id*='vcanje_pValorSemestral']").hide();
 										$("[id*='vcanje_pValorAnual']").hide();
-
-                    var v_date_sel = getDateSelect();
-                    if (v_date_sel == null ){
-                         v_date_sel = localStorage.getItem("dateSelect");
-                    }
-
-                    if ( v_date_sel == "undefined-undefined-undefined") {
-                         v_date_sel = localStorage.getItem("dateSelect");
-                    }
+										//CARGA LA FECHA SELECCIONADA
+					                    var v_date_sel = getDateSelect();
+					                    if (v_date_sel == null ){
+					                         v_date_sel = localStorage.getItem("dateSelect");
+					                    }
+					
+					                    if ( v_date_sel == "undefined-undefined-undefined") {
+					                         v_date_sel = localStorage.getItem("dateSelect");
+					                    }
 
 										switch (periodo) {
 											case "1":
@@ -273,8 +273,9 @@
 												createChartMinAnual('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valanual1',tipodeplaza,label,'vcanje_messageinformationglobal');
 												break;
 										};//switch
-
-                    setDateSelect(v_date_sel);
+										//ALMACENA LA FECHA SELECCIONADA
+                    					setDateSelect(v_date_sel);
+                    					
 									}//function
 
 									function recargarcanje(){

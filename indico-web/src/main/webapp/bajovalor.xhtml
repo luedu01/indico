@@ -14,7 +14,7 @@
  				<p:outputPanel styleClass="BoxSizeBorderCH" >
  					<p:accordionPanel id="accoBajoVal" activeIndex="-1"  cache="false" dynamic="true" styleClass="NoPaddingRight NoPaddingLeft">
  						<p:ajax event="tabChange" update="@([id$=ptransbajoval])" 
-							listener="#{homeMaBean.onTabChange}" onstart="PF('statusDialogBV').show()" onsuccess="PF('statusDialogBV').hide()"/>
+							listener="#{homeMaBean.onTabChange}" onstart="PF('statusDialogCD').show()" onsuccess="PF('statusDialogCD').hide()"/>
 						
 						<p:tab id="tabtransbajoval" titleStyleClass="tabtittles2">
 					       	<f:facet name="title">
@@ -35,7 +35,7 @@
  				</p:outputPanel>
  		</p:panelGrid>
  	</b:container>
- 	<p:dialog widgetVar="statusDialogBV" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+ 	<p:dialog widgetVar="statusDialogCD" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
 		<p:graphicImage  library="images" name="loading-animation.gif" width="16px" height="16px"/>
 	</p:dialog>
 </ui:composition>
