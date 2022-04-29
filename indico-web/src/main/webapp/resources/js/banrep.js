@@ -3760,9 +3760,9 @@ function createSliderRotaMinDiario(divchartzoomslider, compdiario1, compdiario2,
 		$("#" + idDivSlider).unbind();
 		$("#" + idDivSlider).bind("valuesChanged", function(evt, dateSlider) {
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, compdiario1, compdiario2, data, 1);
-			if (dateSlider.first == null || dateSlider.first == false) {
+			//if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, compdiario1, compdiario2, data, 1);
-			}
+			//}
 		});
 
 		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
@@ -4852,9 +4852,9 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 		$("#" + idDivSlider).bind("valuesChanged", function(evt, dateSlider) {
 
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, compdiario1, compdiario2, data, 1);
-			if (dateSlider.first == null || dateSlider.first == false) {
+			//if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, compdiario1, compdiario2, data, 1);
-			}
+			//}
 		});
 
 		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
