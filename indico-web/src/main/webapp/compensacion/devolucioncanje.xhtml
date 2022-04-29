@@ -86,7 +86,7 @@
 													<f:selectItem itemLabel="Trimestral" itemValue="3" />
 													<f:selectItem itemLabel="Semestral" itemValue="4" />
 													<f:selectItem itemLabel="Anual" itemValue="5" />
-													<p:ajax process="@this" update="@([id$='vdevcanje_panelesValoresDinamic'],[id$='vdevcanje_valorgraficavalor'])" listener="#{compDevolucionCanjeMaBean.changePanelAction}" onsuccess="vdevcanjechangeperiodo(); return false;"/>
+													<p:ajax process="@this" update="@([id$='vdevcanje_panelesValoresDinamic'],[id$='vdevcanje_valorgraficavalor'])" listener="#{compDevolucionCanjeMaBean.changePanelAction}" onstart="vdev_savedperidoselected(this.value);"   onsuccess="vdevcanjechangeperiodo(); return false;"/>
 												</p:selectOneMenu>
 												</p:outputPanel>
 											</p:outputPanel>
@@ -251,6 +251,8 @@
 		 						  	<div class="ui-g-12 ui-md-12 ui-lg-12"><div id="vdevcanje_chart" class="superzoom"/></div>
 		 						</div>  		
 							<h:outputScript>
+									var almacen="CanjeDevoluciones";
+									localStorage.setItem("CanjeDevolucionesOneTime","1")
 									function assignValuesDevolCanje() {
 										var v_start;
 										var v_end;
@@ -282,8 +284,31 @@
 										PF('vdevcanje_startVar001').jq.val(v_start);
 										PF('vdevcanje_endVar001').jq.val(v_end);
 									}
+									
+									function vdev_savedperidoselected() {
+										var idsel = localStorage.getItem("devolucionescanjeOld");
+										var periodo = PF('vdevcanje_selFiltroPorValorW').jq.find('option:selected').val();
+									    switch(idsel) {
+									    	case "1":
+												savedOldDatesStoStorage(almacen,'vdevcanje_valperiodo1','vdevcanje_valperiodo2',idsel);
+									    		break;
+									    	case "2":
+												savedOldDatesStoStorage(almacen,'vdevcanje_valmensual1','vdevcanje_valmensual2',idsel);
+									    		break;
+									    	case "3":
+												savedOldDatesStoStorage(almacen,'vdevcanje_valtrimestral1','vdevcanje_valtrimestral2',idsel);
+									    		break;
+									    	case "4":
+												savedOldDatesStoStorage(almacen,'vdevcanje_valsemestral1','vdevcanje_valsemestral2',idsel);
+									    		break;
+									    	case "5":
+												savedOldDatesStoStorage(almacen,'vdevcanje_valanual1','vdevcanje_valanual2',idsel);
+									    		break;
+									    } 
+									}									
 																
 									function vdevcanjechangeperiodo() {
+										let idsel = localStorage.getItem("devolucionescanjeOld");
 										var periodo = PF('vdevcanje_selFiltroPorValorW').jq.find('option:selected').val();
 										var medioservicio = PF('vdevcanje_medioservicioVar').jq.find('option:selected').val();
 										var label = PF('vdevcanje_medioservicioVar').jq.find('option:selected').text();
@@ -297,6 +322,7 @@
 										$("[id*='vdevcanje_pValorTrimestral']").hide();
 										$("[id*='vdevcanje_pValorSemestral']").hide();
 										$("[id*='vdevcanje_pValorAnual']").hide();
+										localStorage.setItem("devolucionescanjeOld",periodo);
 										switch (periodo) {
 											case "1":
 												$("[id*='vdevcanje_pValorDiario']").show();
@@ -324,7 +350,9 @@
 												vcomcanjePeriodo2 = "vdevcanje_valanual2";												
 												break;										
 										};//switch
-										createSliderDevolucionCanje('vdevcanje_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,medioservicio,label,'vdevcanje_messageinformationglobal')
+										$(document).ready(function(){
+											createSliderDevolucionCanje('vdevcanje_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,medioservicio,label,'vdevcanje_messageinformationglobal',almacen)
+										});	
 									}//function
 									
 									function recargarcanje(){
@@ -334,6 +362,14 @@
 								        //restartExportar('vchque_exportarG001W');
 								        //restartExportar('vchque_exportarG002W');
 								    	vdevcanjechangeperiodo();
+								    	
+								    	var onetime = localStorage.getItem("CanjeDevolucionesOneTime");
+								    	if (onetime=="1") {
+									    	setTimeout(() => {
+									    		vdev_savedperidoselected();
+									    	},2000);	
+								    		onetime="0";
+								    	}
 								     });
 								     
 								    jQuery(window).resize(function() {

@@ -2,6 +2,109 @@
  *  GENERAL FUNCTIONS
  **/
 
+function completarFechaStart(fecha,sticks) {
+	if (fecha == null) return null;
+	var anio = fecha.split('-')[0];
+	if (anio == null) return null;
+	var mes = fecha.split('-')[1];
+	var dia = fecha.split('-')[2];
+	
+	if (mes === undefined) { mes = "01"; }
+	if (dia === undefined) { dia = "01"; }
+
+	fecha = new Date(anio, mes - 1, dia);
+	if (isNaN(fecha) == true) {
+  		fecha=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
+	} else {
+		let anterior=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
+		for (let i=0 ; i<sticks.length ; i++ ) {
+			let currentValue = sticks[i]; 
+			let actualdate = new Date(currentValue.split('-')[0],currentValue.split('-')[1]-1,currentValue.split('-')[2]);
+			if (fecha>=actualdate) {
+				anterior=actualdate;
+			}else{
+				//fecha=anterior;
+				break;
+			}
+		}
+	}
+	return fecha;
+}
+
+function completarFechaEnd(fecha,sticks) {
+	if (fecha == null) return null;
+	var anio = fecha.split('-')[0];
+	if (anio == null) return null;
+	var mes = fecha.split('-')[1];
+	var dia = fecha.split('-')[2];
+
+	if (mes === undefined) { mes = "01"; }
+	if (dia === undefined) { dia = "01"; }
+	dia = new Date(anio, (parseInt(mes)), 0).getDate(); 
+
+	var fecha = new Date(anio, mes-1, dia);
+	if (isNaN(fecha) == true) {
+		fecha = sticks[sticks.length-1];
+  		fecha=new Date(fecha.split('-')[0],fecha.split('-')[1]-1,fecha.split('-')[2]);
+	} else {
+		let anterior = sticks[0];
+		anterior=new Date(anterior.split('-')[0],(anterior.split('-')[1]-1),anterior.split('-')[2]);
+		for (let i=0 ; i<sticks.length ; i++ ) {
+			let currentValue = sticks[i]; 
+			let actualdate = new Date(currentValue.split('-')[0],(currentValue.split('-')[1]-1),currentValue.split('-')[2]);
+			if (fecha>=actualdate) {
+				anterior=actualdate;
+			}else{
+				fecha=anterior;
+				break;
+			}
+		}
+		if (fecha>anterior) {
+			fecha=anterior;
+		}
+	}	
+	return fecha;
+}
+
+
+function savedOldDatesStoStorage(almacen, componente1, componente2, anterior) {
+
+	var vfecStart;
+	var vfecEnd;
+
+
+	switch (anterior) {
+		case "1":
+			vfecStart = getDateStartFromDiario(componente1);
+			vfecEnd = getDateEndFromDiario(componente2);
+			break;
+		case "2":
+			vfecStart = getDateStartFromMensual(componente1);
+			vfecEnd = getDateEndFromMensual(componente2);
+			break;
+		case "3":
+			vfecStart = getDateStartFromTrimestral(componente1);
+			vfecEnd = getDateEndFromTrimestral(componente2);
+			break;
+		case "4":
+			vfecStart = getDateStartFromSemestral(componente1);
+			vfecEnd = getDateEndFromSemestral(componente2);
+			break;
+		case "5":
+			vfecStart = getDateStartFromAnual(componente1);
+			vfecEnd = getDateStartFromAnual(componente2);
+			break;
+	}
+
+	localStorage.setItem(almacen + "_fecStart", vfecStart);
+	localStorage.setItem(almacen + "_fecEnd", vfecEnd);
+	
+}
+
+
+
+
+
 function restartExportar(selectname){
 	 setTimeout(function () {
 			PF(''+selectname+'').selectValue("");
@@ -119,11 +222,12 @@ function datosValor4(Valores4){
  **/
 
 function startvaluescomponentstimes(valchanged1,valchanged2,compdiario1,compdiario2,data) {
+
 	var inicioX;
 	var endX;
-	if (valchanged1!=null && valchanged2!=null) {
+	if (valchanged1 != null && valchanged2 != null) {
 		inicioX = valchanged1;
-		endX 	= valchanged2;
+		endX = valchanged2;
 	} else {
 		inicioX = data["startX"];
 		endX = data["endX"];
@@ -140,6 +244,7 @@ function startvaluescomponentstimes(valchanged1,valchanged2,compdiario1,compdiar
 		}	
 		endX = new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
 	}
+	
 	var selanio1    	= '#'+compdiario1+"_sel_anio";
 	var selmes1 		= '#'+compdiario1+"_sel_mes";
 	var seldia1 		= '#'+compdiario1+"_sel_dia";
@@ -167,6 +272,7 @@ function startvaluescomponentstimes(valchanged1,valchanged2,compdiario1,compdiar
 }
 
 function updatevaluescomponentstimesfromslider(slider,compdiario1,compdiario2,data,tipo) {
+	
 	if  (isNaN(slider.values.min.getTime())) return;
 	if  (isNaN(slider.values.max.getTime())) return;
 	var inicioX 	= new Date((slider.values.min.getTime()+(60*60*1000*5)));
@@ -178,6 +284,7 @@ function updatevaluescomponentstimesfromslider(slider,compdiario1,compdiario2,da
 	var seldia1 		= '#'+compdiario1+"_sel_dia";
 	var seltrimestre1 	= '#'+compdiario1+"_sel_trimestre";
 	var selsemestre1 	= '#'+compdiario1+"_sel_semestre";
+	
 	addaniotimes(data,selanio1,inicioX);
 	addmesestimes(data,selmes1,inicioX);
 	adddiastimes(data,seldia1,inicioX);
@@ -208,19 +315,29 @@ function addaniotimes(data,selanio,selected) {
 		var selectanio = $(selanio);
 		selectanio.empty();
 		var fechaA = data["MinX"].split("-");
-		var minXdistValor = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
+		var minXdistValor = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["MaxX"].split("-");
-		var maxXdistValor = new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
+		var maxXdistValor = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
 		var aniostart = minXdistValor.getFullYear();
 		var anioend = maxXdistValor.getFullYear();
-		var option = $('<option/>').val("").text("Año").attr('disabled','disabled');
+		var option = $('<option/>').val("").text("Año").attr('disabled', 'disabled');
 		option.appendTo(selectanio);
-		for (var anio=aniostart; anio<=anioend; anio++) {
-			option = $('<option/>').val(anio).text(anio);
+		var index = 0;
+		for (var anio = aniostart; anio <= anioend; anio++) {
+			index = index + 1;
+			if (anio == selected.getFullYear()) {
+				option = $('<option selected="selected"/>').val(anio).text(anio);
+				option.attr("tabindex", index);
+			} else {
+				option = $('<option/>').val(anio).text(anio);
+			}
 			option.appendTo(selectanio);
 		}
-		selectanio.val(selected.getFullYear());
-	}	
+		selectaniolabel = $(selanio + "_label");
+		if (selectaniolabel != undefined) {
+			selectaniolabel.text(selected.getFullYear());
+		}
+	}
 }
 
 /**
@@ -230,83 +347,102 @@ function addaniotimes(data,selanio,selected) {
  * @param selected
  * @returns
  */
-function addmesestimes(data,selmeses,selected) {
+function addmesestimes(data, selmeses, selected) {
 	if ($(selmeses).length) {
-		var selectmeses= $(selmeses);
+		var selectmeses = $(selmeses);
 		selectmeses.empty();
 		var fechaA = data["MinX"].split("-");
-		var minXdistValor = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
+		var minXdistValor = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["MaxX"].split("-");
-		var maxXdistValor = new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
+		var maxXdistValor = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
 		var aniostart = minXdistValor.getFullYear();
 		var anioend = maxXdistValor.getFullYear();
-		var mesInicial=1;
-		var mesFinal=12;
-		if (aniostart==selected.getFullYear()) {
-			mesInicial = minXdistValor.getMonth() + 1 ;
-		} 
-		if (anioend==selected.getFullYear()){
-			mesFinal = maxXdistValor.getMonth() + 1 ;
-		} 
+		var mesInicial = 1;
+		var mesFinal = 12;
+		if (aniostart == selected.getFullYear()) {
+			mesInicial = minXdistValor.getMonth() + 1;
+		}
+		if (anioend == selected.getFullYear()) {
+			mesFinal = maxXdistValor.getMonth() + 1;
+		}
+		var messeleccionado = selected.getMonth() + 1;
+		if ((messeleccionado < mesInicial) || (messeleccionado > mesFinal)) {
+			messeleccionado = mesInicial;
+		}
+
 		//
-		var option = $('<option/>').val("").text("Mes").attr('disabled','disabled');
+		var option = $('<option/>').val("").text("Mes").attr('disabled', 'disabled');
 		option.appendTo(selectmeses);
-		
-		if (mesInicial<=1 && mesFinal>=1) {
+		mesTexto = "";
+
+		if (mesInicial <= 1 && mesFinal >= 1) {
 			option = $('<option/>').val("1").text("Enero");
+			if (messeleccionado == 1) { option.attr("selected", "true"); mesTexto = "Enero"; }
 			option.appendTo(selectmeses);
 		}
-		if (mesInicial<=2 && mesFinal>=2) {
+		if (mesInicial <= 2 && mesFinal >= 2) {
 			option = $('<option/>').val("2").text("Febrero");
+			if (messeleccionado == 2) { option.attr("selected", "true"); mesTexto = "Febrero"; }
 			option.appendTo(selectmeses);
 		}
-		if (mesInicial<=3 && mesFinal>=3) {
+		if (mesInicial <= 3 && mesFinal >= 3) {
 			option = $('<option/>').val("3").text("Marzo");
+			if (messeleccionado == 3) { option.attr("selected", "true"); mesTexto = "Marzo"; }
 			option.appendTo(selectmeses);
 		}
-		if (mesInicial<=4 && mesFinal>=4) {
+		if (mesInicial <= 4 && mesFinal >= 4) {
 			option = $('<option/>').val("4").text("Abril");
+			if (messeleccionado == 4) { option.attr("selected", "true"); mesTexto = "Abril"; }
 			option.appendTo(selectmeses);
 		}
-		if (mesInicial<=5 && mesFinal>=5) {
+		if (mesInicial <= 5 && mesFinal >= 5) {
 			option = $('<option/>').val("5").text("Mayo");
+			if (messeleccionado == 5) { option.attr("selected", "true"); mesTexto = "Mayo"; }
 			option.appendTo(selectmeses);
 		}
-		if (mesInicial<=6 && mesFinal>=6){
+		if (mesInicial <= 6 && mesFinal >= 6) {
 			option = $('<option/>').val("6").text("Junio");
+			if (messeleccionado == 6) { option.attr("selected", "true"); mesTexto = "Junio"; }
 			option.appendTo(selectmeses);
 		}
-		if (mesInicial<=7 && mesFinal>=7){
+		if (mesInicial <= 7 && mesFinal >= 7) {
 			option = $('<option/>').val("7").text("Julio");
+			if (messeleccionado == 7) { option.attr("selected", "true"); mesTexto = "Julio"; }
 			option.appendTo(selectmeses);
 		}
-		if (mesInicial<=8 && mesFinal>=8){
+		if (mesInicial <= 8 && mesFinal >= 8) {
 			option = $('<option/>').val("8").text("Agosto");
+			if (messeleccionado == 8) { option.attr("selected", "true"); mesTexto = "Agosto"; }
 			option.appendTo(selectmeses);
 		}
-		if (mesInicial<=9 && mesFinal>=9){
+		if (mesInicial <= 9 && mesFinal >= 9) {
 			option = $('<option/>').val("9").text("Septiembre");
+			if (messeleccionado == 9) { option.attr("selected", "true"); mesTexto = "Septiembre"; }
 			option.appendTo(selectmeses);
 		}
-		if (mesInicial<=10 && mesFinal>=10){
+		if (mesInicial <= 10 && mesFinal >= 10) {
 			option = $('<option/>').val("10").text("Octubre");
+			if (messeleccionado == 10) { option.attr("selected", "true"); mesTexto = "Octubre"; }
 			option.appendTo(selectmeses);
 		}
-		if (mesInicial<=11 && mesFinal>=11) {
+		if (mesInicial <= 11 && mesFinal >= 11) {
 			option = $('<option/>').val("11").text("Noviembre");
+			if (messeleccionado == 11) { option.attr("selected", "true"); mesTexto = "Noviembre"; }
 			option.appendTo(selectmeses);
 		}
-		if (mesInicial<=12 && mesFinal>=12) {
+		if (mesInicial <= 12 && mesFinal >= 12) {
 			option = $('<option/>').val("12").text("Diciembre");
+			if (messeleccionado == 12) { option.attr("selected", "true"); mesTexto = "Diciembre"; }
 			option.appendTo(selectmeses);
 		}
-		var messeleccionado = selected.getMonth()+1;
-		if ((messeleccionado<mesInicial) || (messeleccionado>mesFinal)){
-			messeleccionado=mesInicial;
+		selectmeseslabel = $(selmeses + "_label");
+		if (selectmeseslabel != undefined) {
+			selectmeseslabel.text(mesTexto);
 		}
-		selectmeses.val(messeleccionado);
+
 	}
 }
+
 
 /**
  * Función que agrega los días
@@ -315,35 +451,41 @@ function addmesestimes(data,selmeses,selected) {
  * @param selected
  * @returns
  */
-function adddiastimes(data,seldia,selected) {
+function adddiastimes(data, seldia, selected) {
 	if ($(seldia).length) {
-		var selectdias= $(seldia);
+		var selectdias = $(seldia);
 		selectdias.empty();
 		var fechaA = data["MinX"].split("-");
-		var minXdistValor = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
+		var minXdistValor = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["MaxX"].split("-");
-		var maxXdistValor = new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
-		var aniostart = minXdistValor.getFullYear();
-		var anioend = maxXdistValor.getFullYear();
-		var diaInicial=1;
-		var diaFinal= (new Date(selected.getFullYear(),selected.getMonth()+1, 0)).getDate() ;
-		if (selected.getFullYear()==minXdistValor.getFullYear() && selected.getMonth()+1==minXdistValor.getMonth()+1) {
+		var maxXdistValor = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
+		var diaInicial = 1;
+		var diaFinal = (new Date(selected.getFullYear(), selected.getMonth() + 1, 0)).getDate();
+		var diaseleccionado = selected.getDate();
+		if ((diaseleccionado < diaInicial) || (diaseleccionado > diaFinal)) {
+			diaseleccionado = diaInicial;
+		}
+		if (selected.getFullYear() == minXdistValor.getFullYear() && selected.getMonth() + 1 == minXdistValor.getMonth() + 1) {
 			diaInicial = minXdistValor.getDate();
 		}
-		if (selected.getFullYear()==maxXdistValor.getFullYear() && selected.getMonth()+1==maxXdistValor.getMonth()+1) {
+		if (selected.getFullYear() == maxXdistValor.getFullYear() && selected.getMonth() + 1 == maxXdistValor.getMonth() + 1) {
 			diaFinal = maxXdistValor.getDate();
 		}
-		var option = $('<option/>').val("").text("Día").attr('disabled','disabled');;
+		var option = $('<option/>').val("").text("Día").attr('disabled', 'disabled');
 		option.appendTo(selectdias);
-		for (var i=diaInicial ; i<=diaFinal; i++) {
-			option = $('<option/>').val(i).text(i);
+		for (var i = diaInicial; i <= diaFinal; i++) {
+			if (i == diaseleccionado) {
+				option = $('<option selected="selected"/>').val(i).text(i);
+				option.attr("selected", "true");
+			} else {
+				option = $('<option/>').val(i).text(i);
+			}
 			option.appendTo(selectdias);
 		};
-		var diaseleccionado = selected.getDate();
-		if ((diaseleccionado<diaInicial) || (diaseleccionado>diaFinal)){
-			diaseleccionado=diaInicial;
+		selectdiaslabel = $(seldia + "_label");
+		if (selectdiaslabel != undefined) {
+			selectdiaslabel.text(diaseleccionado);
 		}
-		selectdias.val(diaseleccionado);
 	}
 }
 
@@ -354,48 +496,80 @@ function adddiastimes(data,seldia,selected) {
  * @param selected
  * @returns
  */
-function addtrimestretimes(data,seltrimestre,selected) {
+function addtrimestretimes(data, seltrimestre, selected) {
 	if ($(seltrimestre).length) {
 		var selecttrimestre = $(seltrimestre);
 		selecttrimestre.empty();
+
 		var fechaA = data["MinX"].split("-");
-		var minXdistValor = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
+		var minXdistValor = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["MaxX"].split("-");
-		var maxXdistValor = new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
+		var maxXdistValor = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
 		var periodoInicial = 1;
 		var periodoFinal = 10;
 		var aniostart = minXdistValor.getFullYear();
 		var anioend = maxXdistValor.getFullYear();
-		if (aniostart==selected.getFullYear()) {
-			periodoInicial = minXdistValor.getMonth() + 1 ;
-		} 
-		if (anioend==selected.getFullYear()){
-			periodoFinal = maxXdistValor.getMonth() + 1 ;
-		} 
-		var option = $('<option/>').val("").text("Trimestre").attr('disabled','disabled');;
+
+		var trimestreseleccionado = selected.getMonth() + 1;
+		if ((trimestreseleccionado < periodoInicial) || (trimestreseleccionado > periodoFinal)) {
+			trimestreseleccionado = periodoInicial;
+		}
+		if (aniostart == selected.getFullYear()) {
+			periodoInicial = minXdistValor.getMonth() + 1;
+		}
+		if (anioend == selected.getFullYear()) {
+			periodoFinal = maxXdistValor.getMonth() + 1;
+		}
+		var trimestreLabel = "";
+		var option = $('<option/>').val("").text("Trimestre").attr('disabled', 'disabled');
 		option.appendTo(selecttrimestre);
-		if (periodoInicial<=1 && periodoFinal>=1) {
-			option = $('<option/>').val("1").text("I");
+		if (periodoInicial <= 1 && periodoFinal >= 1) {
+			if (trimestreseleccionado <= 1 && trimestreseleccionado >= 1) {
+				option = $('<option selected="selected"/>').val("1").text("I");
+				option.attr("selected", "true")
+				trimestreLabel = "I";
+			} else {
+				option = $('<option/>').val("1").text("I");
+			}
 			option.appendTo(selecttrimestre);
 		}
-		if (periodoInicial<=4 && periodoFinal>=4) {
-			option = $('<option/>').val("4").text("II");
+		if (periodoInicial <= 4 && periodoFinal >= 4) {
+			if (trimestreseleccionado <= 4 && trimestreseleccionado >= 4) {
+				option = $('<option selected="selected"/>').val("4").text("II");
+				option.attr("selected", "true")
+				trimestreLabel = "II";
+			} else {
+				option = $('<option/>').val("4").text("II");
+			}
 			option.appendTo(selecttrimestre);
 		}
-		if (periodoInicial<=7 && periodoFinal>=7) {
-			option = $('<option/>').val("7").text("III");
+		if (periodoInicial <= 7 && periodoFinal >= 7) {
+			if (trimestreseleccionado <= 7 && trimestreseleccionado >= 7) {
+				option = $('<option selected="selected"/>').val("7").text("III");
+				option.attr("selected", "true")
+				trimestreLabel = "III";
+			} else {
+				option = $('<option/>').val("7").text("III");
+			}
 			option.appendTo(selecttrimestre);
 		}
-		if (periodoInicial<=10 && periodoFinal>=10) {
-			option = $('<option/>').val("10").text("IV");
+		if (periodoInicial <= 10 && periodoFinal >= 10) {
+			if (trimestreseleccionado <= 10 && trimestreseleccionado >= 10) {
+				option = $('<option selected="selected"/>').val("10").text("IV");
+				option.attr("selected", "true")
+				trimestreLabel = "IV";
+			} else {
+				option = $('<option/>').val("10").text("IV");
+			}
 			option.appendTo(selecttrimestre);
 		}
 		//
-		var trimestreseleccionado = selected.getMonth()+1;
-		if ((trimestreseleccionado<periodoInicial) || (trimestreseleccionado>periodoFinal)){
-			trimestreseleccionado=periodoInicial;
+
+		selecttriemstrelabel = $(seltrimestre + "_label");
+		if (selecttriemstrelabel != undefined) {
+			selecttriemstrelabel.text(trimestreLabel);
 		}
-		selecttrimestre.val(""+trimestreseleccionado+"");
+
 	}
 }
 
@@ -406,39 +580,60 @@ function addtrimestretimes(data,seltrimestre,selected) {
  * @param selected
  * @returns
  */
-function addsemestretimes(data,selsemestre,selected) {
+function addsemestretimes(data, selsemestre, selected) {
 	if ($(selsemestre).length) {
 		var selectsemestre = $(selsemestre);
 		selectsemestre.empty();
 		var fechaA = data["MinX"].split("-");
-		var minXdistValor = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
+		var minXdistValor = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["MaxX"].split("-");
-		var maxXdistValor = new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
+		var maxXdistValor = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
 		var periodoInicial = 1;
 		var periodoFinal = 7;
 		var aniostart = minXdistValor.getFullYear();
 		var anioend = maxXdistValor.getFullYear();
-		if (aniostart==selected.getFullYear()) {
-			periodoInicial = minXdistValor.getMonth() + 1 ;
-		} 
-		if (anioend==selected.getFullYear()){
-			periodoFinal = maxXdistValor.getMonth() + 1 ;
-		} 
-		var option = $('<option/>').val("").text("Semestre").attr('disabled','disabled');;
+
+		var semestreseleccionado = selected.getMonth() + 1;
+		if ((semestreseleccionado < periodoInicial) || (semestreseleccionado > periodoFinal)) {
+			semestreseleccionado = periodoInicial;
+		}
+
+		if (aniostart == selected.getFullYear()) {
+			periodoInicial = minXdistValor.getMonth() + 1;
+		}
+
+		if (anioend == selected.getFullYear()) {
+			periodoFinal = maxXdistValor.getMonth() + 1;
+		}
+
+		var option = $('<option/>').val("").text("Semestre").attr('disabled', 'disabled');
 		option.appendTo(selectsemestre);
-		if (periodoInicial<=1 && periodoFinal>=1) {
-			option = $('<option/>').val("1").text("I");
+		semestreLabel = "";
+		if (periodoInicial <= 1 && periodoFinal >= 1) {
+			if (semestreseleccionado <= 6) {
+				option = $('<option selected="selected"/>').val("1").text("I");
+				semestreLabel = "I";
+			} else {
+				option = $('<option/>').val("1").text("I");
+			}
 			option.appendTo(selectsemestre);
 		}
-		if (periodoInicial<=7 && periodoFinal>=7) {
-			option = $('<option/>').val("7").text("II");
+		if (periodoInicial <= 7 && periodoFinal >= 7) {
+			if (semestreseleccionado >= 7) {
+				option = $('<option selected="selected"/>').val("7").text("II");
+				option.attr("selected", "true")
+				semestreLabel = "II";
+			} else {
+				option = $('<option/>').val("7").text("II");
+			}
 			option.appendTo(selectsemestre);
 		}
-		var semestreseleccionado = selected.getMonth()+1;
-		if ((semestreseleccionado<periodoInicial) || (semestreseleccionado>periodoFinal)){
-			semestreseleccionado=periodoInicial;
+
+		selectsemestrelabel = $(selsemestre + "_label");
+		if (selectsemestrelabel != undefined) {
+			selectsemestrelabel.text(semestreLabel);
 		}
-		selectsemestre.val(""+semestreseleccionado+"");
+
 	}
 }
 
@@ -1401,7 +1596,7 @@ function parsedata(serieValores){
 /**
  * COMPORTAMIENTO HISTORICO CANJE
  **/
-function createSliderComportamientoCanje(divchartzoomslider,periodo, compPeriodo1,compPeriodo2,tipodeplaza,ciudad,label,errormessage){
+function createSliderComportamientoCanje(divchartzoomslider,periodo, compPeriodo1,compPeriodo2,tipodeplaza,ciudad,label,errormessage,almacen){
 	
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	var period = parseInt(periodo,10);
@@ -1412,9 +1607,15 @@ function createSliderComportamientoCanje(divchartzoomslider,periodo, compPeriodo
 		$("#"+divchartzoomslider)[0].setAttribute("class","superzoom");
 		
 		if (label==null || label =="undefined") label = "Todos";
-		
 		data["Title"] = data["Title"] + " - " + label;
-		startvaluescomponentstimes (null,null,compPeriodo1,compPeriodo2,data);
+		
+		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
+		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
+
+		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
+		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+
+		startvaluescomponentstimes (vStorageFecStart,vStorageFecEnd,compPeriodo1,compPeriodo2,data);
 		
 		var divchartmax = document.createElement('div');
 		
@@ -1527,8 +1728,8 @@ function createSliderComportamientoCanje(divchartzoomslider,periodo, compPeriodo
         	  			max: dateend
         	  		},
         	  		defaultValues: {
-        	  			min: from, 
-        	  			max: to
+        	  			min: vStorageFecStart, 
+        	  			max: vStorageFecEnd
         	  		},
         	 	}
 		);
@@ -1537,8 +1738,8 @@ function createSliderComportamientoCanje(divchartzoomslider,periodo, compPeriodo
 		var datesinit = {
 				label: dateSlider,
 				values : {
-					min: from2,
-					max: to,
+					min: vStorageFecStart,
+					max: vStorageFecEnd,
 				},
 				first: first,
 				updateperiodo: updateperiodo
@@ -1548,8 +1749,8 @@ function createSliderComportamientoCanje(divchartzoomslider,periodo, compPeriodo
 		var datesinit2 = {
 				label: dateSlider,
 				values : {
-					min: from,
-					max: to,
+					min: vStorageFecStart,
+					max: vStorageFecEnd,
 				},
 				first: first,
 				updateperiodo: updateperiodo
@@ -1704,18 +1905,23 @@ function createSliderComportamientoCanje(divchartzoomslider,periodo, compPeriodo
 /**
  * COMPORTAMIENTO HISTORICO DEVOLUCION 
  **/
-function createSliderComportamientoDevolucion(divchartzoomslider,periodo,compPeriodo1,compPeriodo2,tipodeplaza,ciudad,label,errormessage){
+function createSliderComportamientoDevolucion(divchartzoomslider,periodo,compPeriodo1,compPeriodo2,tipodeplaza,ciudad,label,errormessage,almacen){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	var period = parseInt(periodo,10);
 	try {
 		data =  RestCompensacionComportamientoServices.getComportamientoDevolucion({'tipodeplaza':tipodeplaza,'ciudad':ciudad,'periodo':period});
-		
 		$("#"+divchartzoomslider).empty();
 		$("#"+divchartzoomslider)[0].setAttribute("class","superzoom");
 		if (label==null || label =="undefined") label = "Todos";
-		
 		data["Title"] = data["Title"] + " - " + label;
-		startvaluescomponentstimes (null,null,compPeriodo1,compPeriodo2,data);
+		
+		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
+		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
+
+		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
+		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		startvaluescomponentstimes (vStorageFecStart,vStorageFecEnd,compPeriodo1,compPeriodo2,data);
+		
 		var divchartmax = document.createElement('div');
 		divchartmax.id=divchartzoomslider+"_chartMax";
 		divchartmax.style="chartcustom"
@@ -1821,8 +2027,8 @@ function createSliderComportamientoDevolucion(divchartzoomslider,periodo,compPer
                     	  			max: dateend
                     	  		},
                     	  		defaultValues: {
-                    	  			min: from, 
-                    	  			max: to
+                    	  			min: vStorageFecStart, 
+                    	  			max: vStorageFecEnd
                     	  		},
                     	 	}
 		);
@@ -1830,8 +2036,8 @@ function createSliderComportamientoDevolucion(divchartzoomslider,periodo,compPer
 		var datesinit = {
 				label: dateSlider,
 				values : {
-					min: from2,
-					max: to,
+					min: vStorageFecStart,
+					max: vStorageFecEnd,
 				},
 				first: first,
 				updateperiodo: updateperiodo
@@ -1841,8 +2047,8 @@ function createSliderComportamientoDevolucion(divchartzoomslider,periodo,compPer
 		var datesinit2 = {
 				label: dateSlider,
 				values : {
-					min: from,
-					max: to,
+					min: vStorageFecStart,
+					max: vStorageFecEnd,
 				},
 				first: first,
 				updateperiodo: updateperiodo
@@ -2424,10 +2630,9 @@ function createplotmingeneralCanje(name,data,tipo) {
 /**
  * DEVOLUCION CON RESPECTO AL CANJE
  **/
-function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,compPeriodo2,medioservicio,label,errormessage){
+function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,compPeriodo2,medioservicio,label,errormessage,almacen){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	var period = parseInt(periodo,10);
-
 	try {	
 		data =  RestCompensacionComportamientoServices.getCompDevolucionCanje({'medioservicio':medioservicio,'periodo':period});
 		
@@ -2435,9 +2640,15 @@ function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,com
 		$("#"+divchartzoomslider)[0].setAttribute("class","superzoom");
 		
 		if (label==null || label =="undefined") label = "Todas";
-		
 		data["Title"] = data["Title"] + " - " + label;
-		startvaluescomponentstimes (null,null,compPeriodo1,compPeriodo2,data);
+		
+		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
+		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
+
+		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
+		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		
+		startvaluescomponentstimes (vStorageFecStart,vStorageFecEnd,compPeriodo1,compPeriodo2,data);
 		
 		var divchartmax = document.createElement('div');
 		
@@ -2543,8 +2754,8 @@ function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,com
         	  			max: dateend
         	  		},
         	  		defaultValues: {
-        	  			min: from, 
-        	  			max: to
+        	  			min: vStorageFecStart, 
+        	  			max: vStorageFecEnd
         	  		},
         	 	}
 		);
@@ -2552,8 +2763,8 @@ function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,com
 		var datesinit = {
 			label: dateSlider,
 			values : {
-				min: from2,
-				max: to,
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			first: first,
 			updateperiodo: updateperiodo
@@ -2563,8 +2774,8 @@ function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,com
 		var datesinit2 = {
 			label: dateSlider,
 			values : {
-				min: from,
-				max: to,
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			first: first,
 			updateperiodo: updateperiodo

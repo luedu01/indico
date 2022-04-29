@@ -2,6 +2,105 @@
  * Crea las gráficas para Transacción CNI
  */
 
+function completarFechaStart(fecha,sticks) {
+	if (fecha == null) return null;
+	var anio = fecha.split('-')[0];
+	if (anio == null) return null;
+	var mes = fecha.split('-')[1];
+	var dia = fecha.split('-')[2];
+	
+	if (mes === undefined) { mes = "01"; }
+	if (dia === undefined) { dia = "01"; }
+
+	fecha = new Date(anio, mes - 1, dia);
+	if (isNaN(fecha) == true) {
+  		fecha=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
+	} else {
+		let anterior=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
+		for (let i=0 ; i<sticks.length ; i++ ) {
+			let currentValue = sticks[i]; 
+			let actualdate = new Date(currentValue.split('-')[0],currentValue.split('-')[1]-1,currentValue.split('-')[2]);
+			if (fecha>=actualdate) {
+				anterior=actualdate;
+			}else{
+				//fecha=anterior;
+				break;
+			}
+		}
+	}
+	return fecha;
+}
+
+function completarFechaEnd(fecha,sticks) {
+	if (fecha == null) return null;
+	var anio = fecha.split('-')[0];
+	if (anio == null) return null;
+	var mes = fecha.split('-')[1];
+	var dia = fecha.split('-')[2];
+
+	if (mes === undefined) { mes = "01"; }
+	if (dia === undefined) { dia = "01"; }
+	dia = new Date(anio, (parseInt(mes)), 0).getDate(); 
+
+	var fecha = new Date(anio, mes-1, dia);
+	if (isNaN(fecha) == true) {
+		fecha = sticks[sticks.length-1];
+  		fecha=new Date(fecha.split('-')[0],fecha.split('-')[1]-1,fecha.split('-')[2]);
+	} else {
+		let anterior = sticks[0];
+		anterior=new Date(anterior.split('-')[0],(anterior.split('-')[1]-1),anterior.split('-')[2]);
+		for (let i=0 ; i<sticks.length ; i++ ) {
+			let currentValue = sticks[i]; 
+			let actualdate = new Date(currentValue.split('-')[0],(currentValue.split('-')[1]-1),currentValue.split('-')[2]);
+			if (fecha>=actualdate) {
+				anterior=actualdate;
+			}else{
+				fecha=anterior;
+				break;
+			}
+		}
+		if (fecha>anterior) {
+			fecha=anterior;
+		}
+	}	
+	return fecha;
+}
+
+
+
+function vbajo_savedOldDatesStoStorage(almacen, componente1, componente2, anterior) {
+	var vfecStart;
+	var vfecEnd;
+
+	switch (anterior) {
+		case "1":
+			vfecStart = getDateStartFromDiario(componente1);
+			vfecEnd = getDateEndFromDiario(componente2);
+			break;
+		case "2":
+			vfecStart = getDateStartFromMensual(componente1);
+			vfecEnd = getDateEndFromMensual(componente2);
+			break;
+		case "3":
+			vfecStart = getDateStartFromTrimestral(componente1);
+			vfecEnd = getDateEndFromTrimestral(componente2);
+			break;
+		case "4":
+			vfecStart = getDateStartFromSemestral(componente1);
+			vfecEnd = getDateEndFromSemestral(componente2);
+			break;
+		case "5":
+			vfecStart = getDateStartFromAnual(componente1);
+			vfecEnd = getDateStartFromAnual(componente2);
+			break;
+	}
+
+	localStorage.setItem(almacen + "_fecStart", vfecStart);
+	localStorage.setItem(almacen + "_fecEnd", vfecEnd);
+	
+}
+
+
 function scroll (){
 
 	 var ua = window.navigator.userAgent;
@@ -96,28 +195,30 @@ function startvaluescomponentstimesPeriod(valchanged1,valchanged2,compdiario1,co
 
 	var inicioX;
 	var endX;
-	if (valchanged1!=null && valchanged2!=null) {
+	if (valchanged1 != null && valchanged2 != null) {
 		inicioX = valchanged1;
-		endX 	= valchanged2;
+		endX = valchanged2;
 	} else {
 		var fechaA = data["startX"].split("-");
-		if (fechaA.length==1) {
-			fechaA[1]="01";
-			fechaA[2]="01";
+		if (fechaA.length == 1) {
+			fechaA[1] = "01";
+			fechaA[2] = "01";
 		}
-		inicioX = new Date(fechaA[0],parseInt(fechaA[1])-1,fechaA[2]);
+		inicioX = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["endX"].split("-");
-		if (fechaB.length==1) {
-			fechaB[1]="01";
-			fechaB[2]="01";
+		if (fechaB.length == 1) {
+			fechaB[1] = "01";
+			fechaB[2] = "01";
 		}
-		endX = getDateCounter(fCounter, fechaB, period);//new Date(fechaB[0],parseInt(fechaB[1])-1,fechaB[2]);
-	}
+		endX = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
+	}	
+	
 	var selanio1    	= '#'+compdiario1+"_sel_anio";
 	var selmes1 		= '#'+compdiario1+"_sel_mes";
 	var seldia1 		= '#'+compdiario1+"_sel_dia";
 	var seltrimestre1 	= '#'+compdiario1+"_sel_trimestre";
 	var selsemestre1 	= '#'+compdiario1+"_sel_semestre";
+	
 	addaniotimes(data,selanio1,inicioX);
 	addmesestimes(data,selmes1,inicioX);
 	adddiastimes(data,seldia1,inicioX);
@@ -138,7 +239,7 @@ function startvaluescomponentstimesPeriod(valchanged1,valchanged2,compdiario1,co
 }
 
 
-function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,compPeriodo2,errormessage){
+function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,compPeriodo2,errormessage,almacen){
 
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	var period = parseInt(periodo,10);
@@ -157,8 +258,15 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 
 		data["Title"] = data["Title"];
 
+		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
+		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
+
+		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
+		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+
 		//startvaluescomponentstimes(null,null,compPeriodo1,compPeriodo2,data);
-		startvaluescomponentstimesPeriod(null,null,compPeriodo1,compPeriodo2,data, period, fCounter);
+		startvaluescomponentstimesPeriod(vStorageFecStart,vStorageFecEnd,compPeriodo1,compPeriodo2,data, period, fCounter);
+
 		var divchartmax = document.createElement('div');
 
 		divchartmax.id=divchartzoomslider+"_chartMax";
@@ -253,8 +361,8 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 	        	  			max: dateend
 	        	  		},
 	        	  		defaultValues: {
-	        	  			min: from,
-	        	  			max: to
+	        	  			min: vStorageFecStart,
+	        	  			max: vStorageFecEnd
 	        	  		},
 	        	 	}
 			);
@@ -265,8 +373,8 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 		var datesinit = {
 			label: dateSlider,
 			values : {
-				min: from,
-				max: to,
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			first: first,
 			updateperiodo: updateperiodo

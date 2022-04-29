@@ -199,6 +199,8 @@
 							<div id="chartzoomsliderdistribucion" class="superzoominternal"/>
 							<h:outputScript>
 									var almacen="distribucionvalor";
+									localStorage.setItem("distribucionvalorOneTime","1")
+									
 									function assignValuesVal() {
 										var periodo = PF('vval_selFiltroPorValorW').jq.find('option:selected').val();
 										var v_start;
@@ -298,10 +300,15 @@
 								    	if(gra == "1"){
 								    	   	vval_changeperiodiciorperiodo();
 								    	}
-								    	setTimeout(() => {
-								    		vval_savedperidoselected();
-								    	},2000);														
 								    	
+								    	var onetime = localStorage.getItem("distribucionvalorOneTime");
+								    	if (onetime=="1") {
+									    	setTimeout(() => {
+									    		vval_savedperidoselected();
+									    	},2000);	
+								    		onetime="0";
+								    	}
+
 								    });
 								    							     
 								    jQuery(window).resize(function() {

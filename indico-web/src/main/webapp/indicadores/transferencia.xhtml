@@ -260,6 +260,7 @@
 						 
 								<h:outputScript>
 								    var almacen="Transferencia";  
+								    localStorage.setItem("TransferenciaOneTime","1")
 									function assignValues() {
 										periodo = PF('selFiltroPorValorW').jq.find('option:selected').val();
 										concepto = PF('conceptoVar').jq.find('option:selected').val();
@@ -376,9 +377,14 @@
 									    	if(gra == "0"){
 									    	   	changeperiodiciorperiodo();
 									    	}
-								    	setTimeout(() => {
-								    		tran_savedperidoselected();
-								    	},2000);														
+									    	
+									    	var onetime = localStorage.getItem("TransferenciaOneTime");
+									    	if (onetime=="1") {
+										    	setTimeout(() => {
+										    		tran_savedperidoselected();
+										    	},2000);	
+									    		onetime="0";
+									    	}									    	
 									    	
 								    });
 								    							     

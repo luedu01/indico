@@ -14,10 +14,10 @@
 
 	<h:head>
 		<h:outputScript library="js" name="accordion2.js" />
+		<h:outputScript library="js" name="chart.js"/>
+		<h:outputScript library="js" name="chartc.js"/>
 	</h:head>
 
-	<h:outputScript library="js" name="chart.js"/>
-	<h:outputScript library="js" name="chartc.js"/>
 	<p:outputPanel id="vcanje_panelx1" styleClass="cleaner2">
 		<p:panelGrid id="vcanje_panelx2" columns="1" styleClass="cleaner2" layout="grid">
 			<p:outputPanel id="vcanje_panelfiltro_parent" columns="1" styleClass="cleaner2" layout="grid">
@@ -49,7 +49,7 @@
 													<f:selectItem itemLabel="Trimestral" itemValue="3" />
 													<f:selectItem itemLabel="Semestral" itemValue="4" />
 													<f:selectItem itemLabel="Anual" itemValue="5" />
-													<p:ajax process="@this" update="@([id$='vcanje_panelesValoresDinamic'],[id$='vcanje_valorgraficavalor'])" listener="#{compChequesCanjeMaBean.changePanelAction}" onsuccess="changeperiodiciocanje(); return false;"/>
+													<p:ajax process="@this" update="@([id$='vcanje_panelesValoresDinamic'],[id$='vcanje_valorgraficavalor'])" listener="#{compChequesCanjeMaBean.changePanelAction}" onsuccess="changeperiodiciocanje(); return false;" onstart="vcheqcanje_savedperidoselected();"/>
 												</p:selectOneMenu>
 												</p:outputPanel>
 											</p:outputPanel>
@@ -88,14 +88,14 @@
 											  </h:form>
 											</p:outputPanel>
 											<p:outputPanel styleClass="DisplayOnDesk">
-												<h:form id="restaurar1"  styleClass="ui-g-6">
-													<p:outputPanel>
-														<!-- <p:commandButton icon="" styleClass="WhiteBack Black Wid60 NoMargin NoBorder-radius-Right Fs14 border-gray-1 " process="@this"
+												<h:form>
+													<p:outputPanel class="ui-g Wid90">
+														<p:commandButton icon="" styleClass="WhiteBack Black Wid60 NoMargin NoBorder-radius-Right Fs14 border-gray-1" process="@this"
 															value="Restaurar" update="@([id$='vcanje_panelfiltro_parent'],[id$='vcanje_valorgraficavalor'])"
-															actionListener="#{compChequesCanjeMaBean.restaurarAction}"  onclick="recargarcanje();"
-															/>  -->
-														<p:commandButton value="Restaurar" icon="icon-restaurar"   process="@this"
-															update="@([id$='vcanje_panelfiltro_parent'],[id$='vcanje_valorgraficavalor'])"
+															actionListener="#{compChequesCanjeMaBean.restaurarAction}"  onclick="recargarcanje();">
+														</p:commandButton>	 
+														<p:commandButton icon="icon-restaurar" styleClass="BlueBack Wid30 NoMargin NoBorder-radius-Left"  process="@this"
+															update="@([id$='vcanje_panelfiltro_parent'],[id$='vcanje_valorgraficavalor'])" 
 															actionListener="#{compChequesCanjeMaBean.restaurarAction}"  onclick="recargarcanje();">
 														</p:commandButton>
 													</p:outputPanel>
@@ -137,7 +137,7 @@
 																<f:selectItem itemLabel="CSV" itemValue="csv" />
 																<f:selectItem itemLabel="XLS" itemValue="xls" />
 																<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
-																<p:ajax event="change" onsuccess='$(&apos;[id*="vcanje_downloadFile001"]&apos;)click();' process="@this" update="@([id$=vcanje_panelexportar001])"/>
+																<p:ajax event="change" onsuccess='$(&apos;[id*="vcanje_downloadFile001"]&apos;).click();' process="@this" update="@([id$=vcanje_panelexportar001])"/>
 															</p:selectOneMenu>
 															<p:commandButton id="vcanje_downloadFile001" widgetVar="vcanje_downloadFile001W" value="Download" ajax="false" icon="fa fa-fw fa-cloud-download"
 																actionListener="#{compChequesCanjeMaBean.exportAction}" style="display: none;" onclick="vcanje_updatedescargar001()">
@@ -199,6 +199,8 @@
 		 						  	<div class="ui-g-12 ui-md-12 ui-lg-6"><div id="vcanje_chartcantidad"/></div>
 		 						</div>
 							<h:outputScript>
+									var almacen='canjealcobro';
+									localStorage.setItem("canjealcobroOneTime","1")
 									function assignValues() {
 
 										var v_start;
@@ -232,8 +234,31 @@
 										PF('vcanje_endVar001').jq.val(v_end);
 									}
 
+									function vcheqcanje_savedperidoselected() {
+										var idsel = localStorage.getItem("ChequeCanjeOld");
+									    switch(idsel) {
+									    	case "1":
+												savedOldDatesStoStorage(almacen,'vcanje_valperiodo1',idsel);
+									    		break;
+									    	case "2":
+												savedOldDatesStoStorage(almacen,'vcanje_valmensual1',idsel);
+									    		break;
+									    	case "3":
+												savedOldDatesStoStorage(almacen,'vcanje_valtrimestral1',idsel);
+									    		break;
+									    	case "4":
+												savedOldDatesStoStorage(almacen,'vcanje_valsemestral1',idsel);
+									    		break;
+									    	case "5":
+												savedOldDatesStoStorage(almacen,'vcanje_valanual1',idsel);
+									    		break;
+									    } 
+									}										
+
+
 									function changeperiodiciocanje() {
 										var periodo = PF('vcanje_selFiltroPorValorW').jq.find('option:selected').val();
+										localStorage.setItem("ChequeCanjeOld",periodo);
 										var tipodeplaza = PF('vcanje_tipoplazaVar').jq.find('option:selected').val();
 										var label = PF('vcanje_tipoplazaVar').jq.find('option:selected').text();
 										$("[id*='vcanje_pValorDiario']").hide();
@@ -241,41 +266,29 @@
 										$("[id*='vcanje_pValorTrimestral']").hide();
 										$("[id*='vcanje_pValorSemestral']").hide();
 										$("[id*='vcanje_pValorAnual']").hide();
-										//CARGA LA FECHA SELECCIONADA
-					                    var v_date_sel = getDateSelect();
-					                    if (v_date_sel == null ){
-					                         v_date_sel = localStorage.getItem("dateSelect");
-					                    }
-					
-					                    if ( v_date_sel == "undefined-undefined-undefined") {
-					                         v_date_sel = localStorage.getItem("dateSelect");
-					                    }
 
 										switch (periodo) {
 											case "1":
 												$("[id*='vcanje_pValorDiario']").show();
-												createChartMinDiario('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valperiodo1',tipodeplaza,label,'vcanje_messageinformationglobal');
+												createChartMinDiario('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valperiodo1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen);
 												break;
 											case "2":
 												$("[id*='vcanje_pValorMensual']").show();
-												createChartMinMensual('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valmensual1',tipodeplaza,label,'vcanje_messageinformationglobal');
+												createChartMinMensual('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valmensual1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen);
 												break;
 											case "3":
 												$("[id*='vcanje_pValorTrimestral']").show();
-												createChartMinTrimestral('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valtrimestral1',tipodeplaza,label,'vcanje_messageinformationglobal');
+												createChartMinTrimestral('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valtrimestral1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen);
 												break;
 											case "4":
 												$("[id*='vcanje_pValorSemestral']").show();
-												createChartMinSemestral('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valsemestral1',tipodeplaza,label,'vcanje_messageinformationglobal');
+												createChartMinSemestral('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valsemestral1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen);
 												break;
 											case "5":
 												$("[id*='vcanje_pValorAnual']").show();
-												createChartMinAnual('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valanual1',tipodeplaza,label,'vcanje_messageinformationglobal');
+												createChartMinAnual('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valanual1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen);
 												break;
 										};//switch
-										//ALMACENA LA FECHA SELECCIONADA
-                    					setDateSelect(v_date_sel);
-                    					
 									}//function
 
 									function recargarcanje(){
@@ -285,6 +298,14 @@
 								        restartExportar('vchque_exportarG001W');
 								        restartExportar('vchque_exportarG002W');
 								    	changeperiodiciocanje();
+								    	
+								    	var onetime = localStorage.getItem("canjealcobroOneTime");
+								    	if (onetime=="1") {
+									    	setTimeout(() => {
+										    		vcheqcanje_savedperidoselected();
+									    	},2000);	
+								    		onetime="0";
+								    	}
 
 								    	var isIPhone = {
 

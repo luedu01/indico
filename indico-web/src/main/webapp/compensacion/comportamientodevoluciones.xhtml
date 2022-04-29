@@ -46,7 +46,7 @@
 													<f:selectItem itemLabel="Trimestral" itemValue="3" />
 													<f:selectItem itemLabel="Semestral" itemValue="4" />
 													<f:selectItem itemLabel="Anual" itemValue="5" />
-													<p:ajax process="@this" update="@([id$='vcompdevol_panelesValoresDinamic'],[id$='vcompdevol_valorgraficavalor'])" listener="#{compComportamientoDevolucionMaBean.changePanelAction}" onsuccess="vcompdevolchangeperiodo(); return false;"/>
+													<p:ajax process="@this" update="@([id$='vcompdevol_panelesValoresDinamic'],[id$='vcompdevol_valorgraficavalor'])" listener="#{compComportamientoDevolucionMaBean.changePanelAction}" onstart="vcompdevol_savedperidoselected(this.value);"   onsuccess="vcompdevolchangeperiodo(); return false;"/>
 												</p:selectOneMenu>
 												</p:outputPanel>
 											</p:outputPanel>
@@ -223,6 +223,8 @@
 		 						  	<div class="ui-g-12 ui-md-12 ui-lg-12"><div id="vcompdevol_chart" class="superzoom"/></div>
 		 						</div>  		
 							<h:outputScript>
+									var almacen="CanjeComportamientoDevoluciones";
+									localStorage.setItem("CanjeComportamientoDevolucionesOneTime","1")
 									function assignValuesDevol() {
 										var v_start;
 										var v_end;
@@ -254,9 +256,33 @@
 										PF('vcompdevol_startVar001').jq.val(v_start);
 										PF('vcompdevol_endVar001').jq.val(v_end);
 									}
+									
+									function vcompdevol_savedperidoselected() {
+										var idsel = localStorage.getItem("comportamientoDevolucionesOld");
+										var periodo = PF('vcompdevol_selFiltroPorValorW').jq.find('option:selected').val();
+									    switch(idsel) {
+									    	case "1":
+												savedOldDatesStoStorage(almacen,'vcompdevol_valperiodo1','vcompdevol_valperiodo2',idsel);
+									    		break;
+									    	case "2":
+												savedOldDatesStoStorage(almacen,'vcompdevol_valmensual1','vcompdevol_valmensual2',idsel);
+									    		break;
+									    	case "3":
+												savedOldDatesStoStorage(almacen,'vcompdevol_valtrimestral1','vcompdevol_valtrimestral2',idsel);
+									    		break;
+									    	case "4":
+												savedOldDatesStoStorage(almacen,'vcompdevol_valsemestral1','vcompdevol_valsemestral2',idsel);
+									    		break;
+									    	case "5":
+												savedOldDatesStoStorage(almacen,'vcompdevol_valanual1','vcompdevol_valanual2',idsel);
+									    		break;
+									    } 
+									}									
 																
 									function vcompdevolchangeperiodo() {
+										let idsel = localStorage.getItem("comportamientoDevolucionesOld");
 										var periodo = PF('vcompdevol_selFiltroPorValorW').jq.find('option:selected').val();
+										localStorage.setItem("comportamientoDevolucionesOld",periodo);
 										var tipodeplaza = PF('vcompdevol_tipoplazaVar').jq.find('option:selected').val();
 										var label = PF('vcompdevol_tipoplazaVar').jq.find('option:selected').text();
 										var ciudad;
@@ -305,7 +331,9 @@
 												vcomcanjePeriodo2 = "vcompdevol_valanual2";
 												break;										
 										};//switch
-										createSliderComportamientoDevolucion('vcompdevol_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,tipodeplaza,ciudad,label,'vcompdevol_messageinformationglobal');
+										$(document).ready(function(){
+											createSliderComportamientoDevolucion('vcompdevol_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,tipodeplaza,ciudad,label,'vcompdevol_messageinformationglobal',almacen);
+										});	
 									}//function
 									
 									function recargarcanje(){
@@ -315,6 +343,14 @@
 								        //restartExportar('vchque_exportarG001W');
 								        //restartExportar('vchque_exportarG002W');
 								    	vcompdevolchangeperiodo();
+
+								    	var onetime = localStorage.getItem("CanjeComportamientoDevolucionesOneTime");
+								    	if (onetime=="1") {
+									    	setTimeout(() => {
+									    		vcompdevol_savedperidoselected();
+									    	},2000);	
+								    		onetime="0";
+								    	}
 								     });
 								     
 								    jQuery(window).resize(function() {

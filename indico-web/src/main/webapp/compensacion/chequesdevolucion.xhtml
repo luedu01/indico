@@ -46,7 +46,7 @@
 													<f:selectItem itemLabel="Trimestral" itemValue="3" />
 													<f:selectItem itemLabel="Semestral" itemValue="4" />
 													<f:selectItem itemLabel="Anual" itemValue="5" />
-													<p:ajax process="@this" update="@([id$='vdevol_panelesValoresDinamic'],[id$='vdevol_valorgraficavalor'])" listener="#{compChequesDevolucionMaBean.changePanelAction}" onsuccess="changeperiodiciorperiododevol(); return false;"/>
+													<p:ajax process="@this" update="@([id$='vdevol_panelesValoresDinamic'],[id$='vdevol_valorgraficavalor'])" listener="#{compChequesDevolucionMaBean.changePanelAction}" onsuccess="changeperiodiciorperiododevol(); return false;" onstart="vdevol_savedperidoselected()"/>
 												</p:selectOneMenu>
 												</p:outputPanel>
 											</p:outputPanel>
@@ -87,7 +87,7 @@
 											<p:outputPanel styleClass="DisplayOnDesk">
 												<h:form>
 													<p:outputPanel class="ui-g Wid90">
-														<p:commandButton icon="" styleClass="WhiteBack Black Wid60 NoMargin NoBorder-radius-Right Fs14 border-gray-1 " process="@this"
+														<p:commandButton icon="" styleClass="WhiteBack Black Wid60 NoMargin NoBorder-radius-Right Fs14 border-gray-1" process="@this"
 															value="Restaurar" update="@([id$='vdevol_valorfiltroParent'],[id$='vdevol_valorgraficavalor'],[id$=vdevol_sel_tipoplaza])" 
 															actionListener="#{compChequesDevolucionMaBean.restaurarAction}"  onclick="recargar();"
 															/>
@@ -97,7 +97,6 @@
 														</p:commandButton>
 													</p:outputPanel>
 												</h:form>
-
 											</p:outputPanel>
 
 											<p:outputPanel styleClass="DisplayOnMobile">
@@ -196,6 +195,8 @@
 		 						  	<div class="ui-g-12 ui-md-12 ui-lg-6"><div id="vdevol_chartcantidad"/></div>
 		 						</div>  		
 							<h:outputScript>
+									var almacen='canjedevolucioncheques';
+									localStorage.setItem("canjedevolucionchequesOneTime","1")
 									function assignValuesCheqDev() {
 										var v_start;
 										var v_end;
@@ -228,9 +229,30 @@
 										PF('vdevol_endVar001').jq.val(v_end);
 									}
 							
+									function vdevol_savedperidoselected() {
+										var idsel = localStorage.getItem("ChequeDevolOld");
+									    switch(idsel) {
+									    	case "1":
+												savedOldDatesStoStorage(almacen,'vdevol_valperiodo1',idsel);
+									    		break;
+									    	case "2":
+												savedOldDatesStoStorage(almacen,'vdevol_valmensual1',idsel);
+									    		break;
+									    	case "3":
+												savedOldDatesStoStorage(almacen,'vdevol_valtrimestral1',idsel);
+									    		break;
+									    	case "4":
+												savedOldDatesStoStorage(almacen,'vdevol_valsemestral1',idsel);
+									    		break;
+									    	case "5":
+												savedOldDatesStoStorage(almacen,'vdevol_valanual1',idsel);
+									    		break;
+									    } 
+									}								
 							
 									function changeperiodiciorperiododevol() {
 										var periodo = PF('vdevol_selFiltroPorValorW').jq.find('option:selected').val();
+										localStorage.setItem("ChequeDevolOld",periodo);
 										var tipodeplaza = PF('vdevol_tipoplazaVar').jq.find('option:selected').val();
 										var label = PF('vdevol_tipoplazaVar').jq.find('option:selected').text();
 										$("[id*='vdevol_pValorDiario']").hide();
@@ -238,28 +260,30 @@
 										$("[id*='vdevol_pValorTrimestral']").hide();
 										$("[id*='vdevol_pValorSemestral']").hide();
 										$("[id*='vdevol_pValorAnual']").hide();
-										switch (periodo) {
-										case "1":
-												$("[id*='vdevol_pValorDiario']").show();
-												createChartMinDiarioDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valperiodo1',tipodeplaza,label,'vdevol_messageinformationglobal');
-												break;										
-											case "2":
-												$("[id*='vdevol_pValorMensual']").show();
-												createChartMinMensualDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valmensual1',tipodeplaza,label,'vdevol_messageinformationglobal');
-												break;										
-											case "3":
-												$("[id*='vdevol_pValorTrimestral']").show();
-												createChartMinTrimestralDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valtrimestral1',tipodeplaza,label,'vdevol_messageinformationglobal');
-												break;
-											case "4": 
-												$("[id*='vdevol_pValorSemestral']").show();
-												createChartMinSemestralDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valsemestral1',tipodeplaza,label,'vdevol_messageinformationglobal');
-												break;										
-											case "5": 
-												$("[id*='vdevol_pValorAnual']").show();
-												createChartMinAnualDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valanual1',tipodeplaza,label,'vdevol_messageinformationglobal');
-												break;										
-										};//switch
+										$(document).ready(function(){
+											switch (periodo) {
+											case "1":
+													$("[id*='vdevol_pValorDiario']").show();
+													createChartMinDiarioDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valperiodo1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen);
+													break;										
+												case "2":
+													$("[id*='vdevol_pValorMensual']").show();
+													createChartMinMensualDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valmensual1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen);
+													break;										
+												case "3":
+													$("[id*='vdevol_pValorTrimestral']").show();
+													createChartMinTrimestralDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valtrimestral1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen);
+													break;
+												case "4": 
+													$("[id*='vdevol_pValorSemestral']").show();
+													createChartMinSemestralDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valsemestral1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen);
+													break;										
+												case "5": 
+													$("[id*='vdevol_pValorAnual']").show();
+													createChartMinAnualDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valanual1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen);
+													break;										
+											};//switch
+										});	
 									}//function
 									
 									function recargar(){
@@ -267,8 +291,16 @@
 									
 								    $(document).ready(function(){
 								    	changeperiodiciorperiododevol();
+								    	
+								    	var onetime = localStorage.getItem("canjedevolucionchequesOneTime");
+								    	if (onetime=="1") {
+									    	setTimeout(() => {
+										    		vdevol_savedperidoselected();
+									    	},2000);	
+								    		onetime="0";
+								    	}								    	
+								    	
 								    	var isIPhone = {
-										   
 										    iOS: function() {
 										        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
 										    },

@@ -83,7 +83,7 @@
 													<f:selectItem itemLabel="Trimestral" itemValue="3" />
 													<f:selectItem itemLabel="Semestral" itemValue="4" />
 													<f:selectItem itemLabel="Anual" itemValue="5" />
-													<p:ajax process="@this" update="@([id$='vcomcanje_panelesValoresDinamic'],[id$='vcomcanje_valorgraficavalor'])" listener="#{compComposicionCanjeMaBean.changePanelAction}" onsuccess="vcomcanjechangeperiodo(); return false;"/>
+													<p:ajax process="@this" update="@([id$='vcomcanje_panelesValoresDinamic'],[id$='vcomcanje_valorgraficavalor'])" listener="#{compComposicionCanjeMaBean.changePanelAction}" onstart="vcomcanje_savedperidoselected(this.value);"   onsuccess="vcomcanjechangeperiodo(); return false;"/>
 												</p:selectOneMenu>
 												</p:outputPanel>
 											</p:outputPanel>
@@ -252,10 +252,12 @@
 		 						  	<div class="ui-g-12 ui-md-12 ui-lg-12"><div id="vcomcanje_chart" class="superzoom"/></div>
 		 						</div>  		
 							<h:outputScript>
+									var almacen="CanjeComposicion";
+									localStorage.setItem("CanjeComposicionOneTime","1")
 									function assignValuesCompoCanje() {
 										var v_start;
 										var v_end;
-											var periodo = PF('vcomcanje_selFiltroPorValorW').jq.find('option:selected').val();
+										var periodo = PF('vcomcanje_selFiltroPorValorW').jq.find('option:selected').val();
 										switch (periodo) {
 											case "2":
 												v_start = getDateStartFromMensual('vcomcanje_valmensual1')
@@ -273,7 +275,8 @@
 												v_start = getDateStartFromAnual('vcomcanje_valanual1')
 												v_end = getDateEndFromAnual('vcomcanje_valanual2')
 												break;										
-										};//switch	
+										};//switch
+											
 										PF('vcomcanje_startVar').jq.val(v_start);
 										PF('vcomcanje_endVar').jq.val(v_end);
 										PF('vcomcanje_startVar001').jq.val(v_start);
@@ -295,8 +298,31 @@
 										//document.getElementById('hidden1').value = v_start;
 										//document.getElementById('hidden2').value = v_end;
 									}
+									
+									function vcomcanje_savedperidoselected() {
+										var idsel = localStorage.getItem("composicioncanjeoldOld");
+										var periodo = PF('vcomcanje_selFiltroPorValorW').jq.find('option:selected').val();
+									    switch(idsel) {
+									    	case "1":
+												savedOldDatesStoStorage(almacen,'vcomcanje_valperiodo1','vcomcanje_valperiodo2',idsel);
+									    		break;
+									    	case "2":
+												savedOldDatesStoStorage(almacen,'vcomcanje_valmensual1','vcomcanje_valmensual2',idsel);
+									    		break;
+									    	case "3":
+												savedOldDatesStoStorage(almacen,'vcomcanje_valtrimestral1','vcomcanje_valtrimestral2',idsel);
+									    		break;
+									    	case "4":
+												savedOldDatesStoStorage(almacen,'vcomcanje_valsemestral1','vcomcanje_valsemestral2',idsel);
+									    		break;
+									    	case "5":
+												savedOldDatesStoStorage(almacen,'vcomcanje_valanual1','vcomcanje_valanual2',idsel);
+									    		break;
+									    } 
+									}									
 															
 									function vcomcanjechangeperiodo() {
+										let idsel = localStorage.getItem("composicioncanjeoldOld");
 										
 										var rangocanjesel = [];
 										PF('vcomcanje_rangoVar').inputs.filter(':checked').each(function(){
@@ -316,6 +342,8 @@
 										$("[id*='vcomcanje_pValorTrimestral']").hide();
 										$("[id*='vcomcanje_pValorSemestral']").hide();
 										$("[id*='vcomcanje_pValorAnual']").hide();
+										
+										localStorage.setItem("composicioncanjeoldOld",periodo);
 										switch (periodo) {
 											case "2":
 												$("[id*='vcomcanje_pValorMensual']").show();
@@ -337,20 +365,24 @@
 												vcomcanjePeriodo1 = "vcomcanje_valanual1";
 												vcomcanjePeriodo2 = "vcomcanje_valanual2";
 												break;										
-										};//switch
-										createSliderComposicionCanje('vcomcanje_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,rangocanjesel,label,'vcomcanje_messageinformationglobal');
-									
+										}
+
 										//console.log($(".jqplot-target table")[0]);
+										
 										var styleLegend = "width:20% !important; "
 											.concat("position: relative;")
 											.concat("z-index: 3; ")
 											.concat("left: 100%; ");
 											
-										$(".jqplot-table-legend")[0].id="tableComLeg";
-										document.getElementById("tableComLeg").setAttribute("style",styleLegend);
-										
-										$(".jqplot-table-legend")[40].id="tableComLeg2";
-										document.getElementById("tableComLeg2").setAttribute("style",styleLegend);
+										$(document).ready(function(){
+											createSliderComposicionCanje('vcomcanje_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,rangocanjesel,label,'vcomcanje_messageinformationglobal',almacen);
+																				
+											$(".jqplot-table-legend")[0].id="tableComLeg";
+											document.getElementById("tableComLeg").setAttribute("style",styleLegend);
+												
+											$(".jqplot-table-legend")[40].id="tableComLeg2";
+											document.getElementById("tableComLeg2").setAttribute("style",styleLegend);
+										});										
 		
 									}//function
 									
@@ -358,7 +390,17 @@
 									}
 									
 								    $(document).ready(function(){
+								    
 								    	vcomcanjechangeperiodo();
+
+								    	var onetime = localStorage.getItem("CanjeComposicionOneTime");
+								    	if (onetime=="1") {
+									    	setTimeout(() => {
+									    		vcomcanje_savedperidoselected();
+									    	},2000);	
+								    		onetime="0";
+								    	}
+
 								    	var isIPhone = {
 										   
 										    iOS: function() {
@@ -368,6 +410,7 @@
 										        return (isMobile.iOS());
 										    }
 										};
+										
 								     });
 								     
 								    jQuery(window).resize(function() {

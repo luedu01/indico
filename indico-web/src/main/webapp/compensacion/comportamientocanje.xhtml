@@ -47,7 +47,7 @@
 													<f:selectItem itemLabel="Trimestral" itemValue="3" />
 													<f:selectItem itemLabel="Semestral" itemValue="4" />
 													<f:selectItem itemLabel="Anual" itemValue="5" />
-													<p:ajax process="@this" update="@([id$='vcompcanje_panelesValoresDinamic'],[id$='vcompcanje_valorgraficavalor'])" listener="#{compComportamientoCanjeMaBean.changePanelAction}" onsuccess="vcompcanjechangeperiodo(); return false;"/>
+													<p:ajax process="@this" update="@([id$='vcompcanje_panelesValoresDinamic'],[id$='vcompcanje_valorgraficavalor'])" listener="#{compComportamientoCanjeMaBean.changePanelAction}" onsuccess="vcompcanjechangeperiodo(); return false;"  onstart="vcompcanje_savedperidoselected(this.value);"  />
 												</p:selectOneMenu>
 												</p:outputPanel>
 											</p:outputPanel>
@@ -226,6 +226,9 @@
 		 						  	<div class="ui-g-12 ui-md-12 ui-lg-12"><div id="vcompcanje_chart" class="superzoom"/></div>
 		 						</div>  		
 							<h:outputScript>
+									var almacen="ComportamientoCanje";
+									localStorage.setItem("ComportamientoCanjeOneTime","1")
+									
 									function assignValuesCanje() {
 										var v_start;
 										var v_end;
@@ -257,9 +260,32 @@
 										PF('vcompcanje_startVar001').jq.val(v_start);
 										PF('vcompcanje_endVar001').jq.val(v_end);
 									}
+									
+									function vcompcanje_savedperidoselected() {
+										var idsel = localStorage.getItem("comportamientoCanjeOld");
+										var periodo = PF('vcompcanje_selFiltroPorValorW').jq.find('option:selected').val();
+									    switch(idsel) {
+									    	case "1":
+												savedOldDatesStoStorage(almacen,'vcompcanje_valperiodo1','vcompcanje_valperiodo2',idsel);
+									    		break;
+									    	case "2":
+												savedOldDatesStoStorage(almacen,'vcompcanje_valmensual1','vcompcanje_valmensual2',idsel);
+									    		break;
+									    	case "3":
+												savedOldDatesStoStorage(almacen,'vcompcanje_valtrimestral1','vcompcanje_valtrimestral2',idsel);
+									    		break;
+									    	case "4":
+												savedOldDatesStoStorage(almacen,'vcompcanje_valsemestral1','vcompcanje_valsemestral2',idsel);
+									    		break;
+									    	case "5":
+												savedOldDatesStoStorage(almacen,'vcompcanje_valanual1','vcompcanje_valanual2',idsel);
+									    		break;
+									    } 
+									}										
 																
 									function vcompcanjechangeperiodo() {
 										var periodo = PF('vcompcanje_selFiltroPorValorW').jq.find('option:selected').val();
+										localStorage.setItem("comportamientoCanjeOld",periodo);
 										var tipodeplaza = PF('vcompcanje_tipoplazaVar').jq.find('option:selected').val();
 										var label = PF('vcompcanje_tipoplazaVar').jq.find('option:selected').text();
 										var ciudad;
@@ -281,35 +307,31 @@
 										$("[id*='vcompcanje_pValorTrimestral']").hide();
 										$("[id*='vcompcanje_pValorSemestral']").hide();
 										$("[id*='vcompcanje_pValorAnual']").hide();
-										switch (periodo) {
-											case "1":
-												$("[id*='vcompcanje_pValorDiario']").show();
-												vcomcanjePeriodo1 = "vcompcanje_valperiodo1";
-												vcomcanjePeriodo2 = "vcompcanje_valperiodo2";
-												break;										
-											case "2":
-												$("[id*='vcompcanje_pValorMensual']").show();
-												vcomcanjePeriodo1 = "vcompcanje_valmensual1";
-												vcomcanjePeriodo2 = "vcompcanje_valmensual2";
-												
-												break;										
-											case "3":
-												$("[id*='vcompcanje_pValorTrimestral']").show();
-												vcomcanjePeriodo1 = "vcompcanje_valtrimestral1";
-												vcomcanjePeriodo2 = "vcompcanje_valtrimestral2";											
-												break;
-											case "4": 
-												$("[id*='vcompcanje_pValorSemestral']").show();
-												vcomcanjePeriodo1 = "vcompcanje_valsemestral1";
-												vcomcanjePeriodo2 = "vcompcanje_valsemestral2";												
-												break;										
-											case "5": 
-												$("[id*='vcompcanje_pValorAnual']").show();
-												vcomcanjePeriodo1 = "vcompcanje_valanual1";
-												vcomcanjePeriodo2 = "vcompcanje_valanual2";												
-												break;										
-										};//switch
-										createSliderComportamientoCanje('vcompcanje_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal');
+
+										$(document).ready(function(){
+											switch (periodo) {
+												case "1":
+													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valperiodo1','vcompcanje_valperiodo2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen);												
+													$("[id*='vcompcanje_pValorDiario']").show();
+													break;										
+												case "2":
+													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valmensual1','vcompcanje_valmensual2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen);												
+													$("[id*='vcompcanje_pValorMensual']").show();
+													break;										
+												case "3":
+													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valtrimestral1','vcompcanje_valtrimestral2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen);												
+													$("[id*='vcompcanje_pValorTrimestral']").show();
+													break;
+												case "4": 
+													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valsemestral1','vcompcanje_valsemestral2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen);												
+													$("[id*='vcompcanje_pValorSemestral']").show();
+													break;										
+												case "5": 
+													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valanual1','vcompcanje_valanual2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen);												
+													$("[id*='vcompcanje_pValorAnual']").show();
+													break;										
+											};//switch
+										});	
 									}//function
 									
 									function recargarcanje(){
@@ -319,17 +341,21 @@
 								        //restartExportar('vchque_exportarG001W');
 								        //restartExportar('vchque_exportarG002W');
 								    	vcompcanjechangeperiodo();
-								     });
-								     
+								    	
+								    	var onetime = localStorage.getItem("ComportamientoCanjeOneTime");
+								    	if (onetime=="1") {
+									    	setTimeout(() => {
+									    		vcompcanje_savedperidoselected();
+									    	},2000);	
+								    		onetime="0";
+								    	}
+								   });
 								   
-								       jQuery(window).resize(function() {
-	         							
-	         							  if( isMobile.any() ){ 
-								     
-								     } else {
-								      vcompcanjechangeperiodo();
-								     }
-								    
+							       jQuery(window).resize(function() {
+         							  if( isMobile.any() ){ 
+									  } else {
+									     vcompcanjechangeperiodo();
+									  }
 	      							});
 								     
 								  

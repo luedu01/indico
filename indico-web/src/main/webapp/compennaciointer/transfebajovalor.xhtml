@@ -13,7 +13,7 @@
 	<h:outputStylesheet library="css" name="chart.css" />
 
 	<h:outputScript library="js" name="chart.js"/>
-	<h:outputScript library="js" name="banrep.js"/>
+	<!-- h:outputScript library="js" name="banrep.js"/-->
 	<h:outputScript library="js" name="CompensacionNacionalInterbancaria.js"/>
 	
 	<p:outputPanel id="panelx1_bv" styleClass="ui-panelgrid-blank">
@@ -85,7 +85,7 @@ Las cifras se presentan en miles de millones de pesos</p>
 														<f:selectItem itemLabel="Trimestral" itemValue="3" />
 														<f:selectItem itemLabel="Semestral" itemValue="4" />
 														<f:selectItem itemLabel="Anual" itemValue="5" />
-														<p:ajax process="@this" update="@([id$='vbajoval_panelesValoresDinamic'],[id$='vbajoval_valorgraficavalor'])" listener="#{transfeBajoValorMaBean.changePanelAction}" onsuccess="vbajovalchangeperiodo(); return false;"/>
+														<p:ajax process="@this" update="@([id$='vbajoval_panelesValoresDinamic'],[id$='vbajoval_valorgraficavalor'])" listener="#{transfeBajoValorMaBean.changePanelAction}" onstart="vbajo_savedperidoselected(this.value);" onsuccess="vbajovalchangeperiodo(); return false;"/>
 													</p:selectOneMenu>
 												</p:outputPanel>
 											</p:outputPanel>
@@ -232,6 +232,8 @@ Las cifras se presentan en miles de millones de pesos</p>
 		 						  	<div class="ui-g-12 ui-md-12 ui-lg-12"><div id="vbajoval_chart" class="superzoom"/></div>
 		 						</div>  		
 								<h:outputScript>
+								var almacen="TransferenciaBajoValor"; 
+								localStorage.setItem("TransferenciaBajoValorOneTime","1")
 								function assignValuesceni() {
 										
 										var v_start;
@@ -265,9 +267,32 @@ Las cifras se presentan en miles de millones de pesos</p>
 										PF('vbajoval_endVar001').jq.val(v_end);
 									}
 																
+									function vbajo_savedperidoselected() {
+										let idsel = localStorage.getItem("TransferenciaBajoValor");
+										var periodo = PF('vbajoval_selFiltroPorValorW').jq.find('option:selected').val();
+									    switch(idsel) {
+									    	case "1":
+												vbajo_savedOldDatesStoStorage(almacen,'vbajoval_valperiodo1','vbajoval_valperiodo2',idsel);
+									    		break;
+									    	case "2":
+												vbajo_savedOldDatesStoStorage(almacen,'vbajoval_valmensual1','vbajoval_valmensual2',idsel);
+									    		break;
+									    	case "3":
+												vbajo_savedOldDatesStoStorage(almacen,'vbajoval_valtrimestral1','vbajoval_valtrimestral2',idsel);
+									    		break;
+									    	case "4":
+												vbajo_savedOldDatesStoStorage(almacen,'vbajoval_valsemestral1','vbajoval_valsemestral2',idsel);
+									    		break;
+									    	case "5":
+												vbajo_savedOldDatesStoStorage(almacen,'vbajoval_valanual1','vbajoval_valanual2',idsel);
+									    		break;
+									    } 
+									}																
+																
 									function vbajovalchangeperiodo() {
 									
 										var periodo = PF('vbajoval_selFiltroPorValorW').jq.find('option:selected').val();
+										localStorage.setItem("TransferenciaBajoValor",periodo);
 										
 										$("[id*='vbajoval_pValorDiario']").hide();
 										$("[id*='vbajoval_pValorMensual']").hide();
@@ -284,7 +309,6 @@ Las cifras se presentan en miles de millones de pesos</p>
 												$("[id*='vbajoval_pValorMensual']").show();
 												vcomcanjePeriodo1 = "vbajoval_valmensual1";
 												vcomcanjePeriodo2 = "vbajoval_valmensual2";
-												
 												break;										
 											case "3":
 												$("[id*='vbajoval_pValorTrimestral']").show();
@@ -302,7 +326,10 @@ Las cifras se presentan en miles de millones de pesos</p>
 												vcomcanjePeriodo2 = "vbajoval_valanual2";												
 												break;										
 										};//switch
-										createSliderTransBajoValor('vbajoval_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,'vbajoval_messageinformationglobal');
+										$(document).ready(function(){
+											createSliderTransBajoValor('vbajoval_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,'vbajoval_messageinformationglobal',almacen);
+										});
+										
 									}//function
 									
 									function recargarcanje(){
@@ -310,6 +337,15 @@ Las cifras se presentan en miles de millones de pesos</p>
 									
 								    $(document).ready(function(){
 								    	vbajovalchangeperiodo();
+								    	
+								    	var onetime = localStorage.getItem("TransferenciaBajoValorOneTime");
+								    	if (onetime=="1") {
+									    	setTimeout(() => {
+								    			vbajo_savedperidoselected();
+									    	},2000);	
+								    		onetime="0";
+								    	}
+								    	
 								    	var isIPhone = {
 										   
 										    iOS: function() {

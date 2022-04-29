@@ -16,18 +16,6 @@ function formatdate(val) {
 	return days + "/" + month + "/" + year;
 }
 
-function seleccionaFechaInicial(fec1,fec2) {
-	if (fec1==null) {return fec2;}
-	if (fec2==null) {return fec1;}
-	return (fec1<fec2)?fec1:fec2;
-}
-
-function seleccionaFechaFinal(fec1,fec2) {
-	if (fec1==null) {return fec2;}
-	if (fec2==null) {return fec1;}
-	return (fec1>fec2)?fec1:fec2;
-}
-
 function completarFechaStart(fecha,sticks) {
 	if (fecha == null) return null;
 	var anio = fecha.split('-')[0];
@@ -37,18 +25,21 @@ function completarFechaStart(fecha,sticks) {
 	
 	if (mes === undefined) { mes = "01"; }
 	if (dia === undefined) { dia = "01"; }
-	
-	fecha = new Date(anio, mes - 1, dia);
 
-	let anterior=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
-	for (let i=0 ; i<sticks.length ; i++ ) {
-		let currentValue = sticks[i]; 
-		let actualdate = new Date(currentValue.split('-')[0],currentValue.split('-')[1]-1,currentValue.split('-')[2]);
-		if (fecha>=actualdate) {
-			anterior=actualdate;
-		}else{
-			fecha=anterior;
-			break;
+	fecha = new Date(anio, mes - 1, dia);
+	if (isNaN(fecha) == true) {
+  		fecha=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
+	} else {
+		let anterior=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
+		for (let i=0 ; i<sticks.length ; i++ ) {
+			let currentValue = sticks[i]; 
+			let actualdate = new Date(currentValue.split('-')[0],currentValue.split('-')[1]-1,currentValue.split('-')[2]);
+			if (fecha>=actualdate) {
+				anterior=actualdate;
+			}else{
+				//fecha=anterior;
+				break;
+			}
 		}
 	}
 	return fecha;
@@ -66,29 +57,36 @@ function completarFechaEnd(fecha,sticks) {
 	dia = new Date(anio, (parseInt(mes)), 0).getDate(); 
 
 	var fecha = new Date(anio, mes-1, dia);
-	let anterior = sticks[0];
-	anterior=new Date(anterior.split('-')[0],(anterior.split('-')[1]-1),anterior.split('-')[2]);
-	for (let i=0 ; i<sticks.length ; i++ ) {
-		let currentValue = sticks[i]; 
-		let actualdate = new Date(currentValue.split('-')[0],(currentValue.split('-')[1]-1),currentValue.split('-')[2]);
-		if (fecha>actualdate) {
-			anterior=actualdate;
-		}else{
-			fecha=actualdate;
-			break;
+	if (isNaN(fecha) == true) {
+		fecha = sticks[sticks.length-1];
+  		fecha=new Date(fecha.split('-')[0],fecha.split('-')[1]-1,fecha.split('-')[2]);
+	} else {
+		let anterior = sticks[0];
+		anterior=new Date(anterior.split('-')[0],(anterior.split('-')[1]-1),anterior.split('-')[2]);
+		for (let i=0 ; i<sticks.length ; i++ ) {
+			let currentValue = sticks[i]; 
+			let actualdate = new Date(currentValue.split('-')[0],(currentValue.split('-')[1]-1),currentValue.split('-')[2]);
+			if (fecha>=actualdate) {
+				anterior=actualdate;
+			}else{
+				fecha=anterior;
+				break;
+			}
 		}
-	}
-	if (fecha>anterior) {
-		fecha=anterior;
-	}
+		if (fecha>anterior) {
+			fecha=anterior;
+		}
+	}	
 	return fecha;
 }
+
 
 
 function savedOldDatesStoStorage(almacen, componente1, componente2, anterior) {
 
 	var vfecStart;
 	var vfecEnd;
+
 
 	switch (anterior) {
 		case "1":
@@ -115,7 +113,7 @@ function savedOldDatesStoStorage(almacen, componente1, componente2, anterior) {
 
 	localStorage.setItem(almacen + "_fecStart", vfecStart);
 	localStorage.setItem(almacen + "_fecEnd", vfecEnd);
-
+	
 }
 
 function getDateStartFromDiario(compDiario) {
@@ -187,73 +185,6 @@ function getDateEndFromAnual(componenteAnual) {
 	var mes = "12";
 	var dia = "31";
 	return anio + "-" + ("0" + (mes)).slice(-2) + "-" + ("0" + (dia)).slice(-2);
-}
-
-function getDateSelect() {
-
-	var anio, mes, dia;
-
-	if ($("#vcanje_valperiodo1_sel_anio").val() != null && $("#vcanje_valperiodo1_sel_anio").val() != "undefined") {
-		anio = $("#vcanje_valperiodo1_sel_anio").val();
-		mes = $("#vcanje_valperiodo1_sel_mes").val();
-		dia = $("#vcanje_valperiodo1_sel_dia").val();
-
-	} else if ($("#vcanje_valmensual1_sel_anio").val() != null && $("#vcanje_valmensual1_sel_anio").val() != "undefined") {
-		anio = $("#vcanje_valmensual1_sel_anio").val();
-		mes = $("#vcanje_valmensual1_sel_mes").val();
-		dia = "1";
-
-	} else if ($("#vcanje_valtrimestral1_sel_anio").val() != null && $("#vcanje_valtrimestral1_sel_anio").val() != "undefined") {
-		anio = $("#vcanje_valtrimestral1_sel_anio").val();
-		mes = $("#vcanje_valtrimestral1__sel_trimestre").val();
-		dia = "1";
-	} else if ($("#vcanje_valsemestral1_sel_anio").val() != null && $("#vcanje_valsemestral1_sel_anio").val() != "undefined") {
-		anio = $("#vcanje_valsemestral1_sel_anio").val();
-		mes = $("#vcanje_valsemestral1_sel_semestre").val();
-		dia = "1";
-	} else if ($("#vcanje_valanual1_sel_anio").val() != null && $("#vcanje_valsemestral1_sel_anio").val() != "undefined") {
-		anio = $("#vcanje_valanual1_sel_anio").val();
-		mes = "1";
-		dia = "1";
-	}
-
-	return anio + "-" + mes + "-" + dia;
-}
-
-function setDateSelect(vDate) {
-
-	var anio, mes, dia;
-
-	anio = vDate.split('-')[0];
-	mes = vDate.split('-')[1];
-	dia = vDate.split('-')[2];
-
-	if (mes == "undefined") {
-		mes = "1";
-	}
-
-	if (dia == "undefined") {
-		dia = "1";
-	}
-
-	$("#vcanje_valperiodo1_sel_anio").val(anio);
-	$("#vcanje_valperiodo1_sel_mes").val(mes);
-	$("#vcanje_valperiodo1_sel_dia").val(dia);
-
-
-	$("#vcanje_valmensual1_sel_anio").val(anio);
-	$("#vcanje_valmensual1_sel_mes").val(mes);
-
-	$("#vcanje_valtrimestral1_sel_anio").val(anio);
-	$("#vcanje_valtrimestral1_sel_trimestre").val(mes);
-
-	$("#vcanje_valsemestral1_sel_anio").val(anio);
-	$("#vcanje_valsemestral1_sel_semestre").val(mes);
-
-	$("#vcanje_valanual1_sel_anio").val(anio);
-
-	localStorage.setItem("dateSelect", vDate);
-
 }
 
 var isMobile = {
@@ -6839,14 +6770,8 @@ function createSliderDistriCantMinMensual(divchartzoomslider, compmensual1, comp
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		
-		console.log("****"+vStorageFecStart);		
-		console.log("****"+vStorageFecEnd);		
-		
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-				
-		console.log(vStorageFecStart);		
-		console.log(vStorageFecEnd);		
 				
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compmensual1, compmensual2, data);
 		var divchartmax = document.createElement('div');
