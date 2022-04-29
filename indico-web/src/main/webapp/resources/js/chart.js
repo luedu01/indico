@@ -7153,13 +7153,13 @@
                    var containerOffset = elem.parent().parent().offset();
 
                    var rowOffset = elem.offset();
-                   console.log(containerOffset.top);
+                   //console.log(containerOffset.top);
 
                    /*var position = {
                               top: ((rowOffset.top - containerOffset.top) * 5) == 0 ? 3 : (rowOffset.top - containerOffset.top) * 5,
                               left: rowOffset.left - containerOffset.left
                                              };
-                   console.log(position);
+                   //console.log(position);
 
                    var l = left + position.left;
                    var t = top + position.top;*/
@@ -7170,7 +7170,7 @@
                            left: rowOffset.left - containerOffset.left
                                           };
                    counter=counter+4;
-                   console.log(position);
+                   //console.log(position);
 
                    var l = left + position.left;
                    var t = top + position.top;                 
@@ -7185,7 +7185,7 @@
                    var swatch = elem.children('div.jqplot-table-legend-swatch');
                    newContext.fillStyle = swatch.css('background-color');
                    newContext.fillRect(l, t, w, h);
-                   console.log(t);
+                   //console.log(t);
                });
 
                 // now add text

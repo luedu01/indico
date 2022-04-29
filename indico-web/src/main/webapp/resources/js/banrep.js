@@ -17,15 +17,18 @@ function formatdate(val) {
 }
 
 function completarFechaStart(fecha,sticks) {
-	if (fecha == null) return null;
-	var anio = fecha.split('-')[0];
-	if (anio == null) return null;
-	var mes = fecha.split('-')[1];
-	var dia = fecha.split('-')[2];
-	
-	if (mes === undefined) { mes = "01"; }
-	if (dia === undefined) { dia = "01"; }
+	if (fecha == null && (sticks==null || sticks.length==0)) return null;
 
+	var anio,mes,dia;
+	if (fecha!=null){
+		anio = fecha.split('-')[0];
+		mes = fecha.split('-')[1];
+		dia = fecha.split('-')[2];
+
+		if (mes === undefined) { mes = "01"; }
+		if (dia === undefined) { dia = "01"; }
+	}
+	
 	fecha = new Date(anio, mes - 1, dia);
 	if (isNaN(fecha) == true) {
   		fecha=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
@@ -46,16 +49,18 @@ function completarFechaStart(fecha,sticks) {
 }
 
 function completarFechaEnd(fecha,sticks) {
-	if (fecha == null) return null;
-	var anio = fecha.split('-')[0];
-	if (anio == null) return null;
-	var mes = fecha.split('-')[1];
-	var dia = fecha.split('-')[2];
+	if (fecha == null && (sticks ==null || sticks.length==0)) return null;
+	
+	var anio,mes,dia;
+	if (fecha!=null){
+		anio = fecha.split('-')[0];
+		mes = fecha.split('-')[1];
+		dia = fecha.split('-')[2];
 
-	if (mes === undefined) { mes = "01"; }
-	if (dia === undefined) { dia = "01"; }
+		if (mes === undefined) { mes = "01"; }
+		if (dia === undefined) { dia = "01"; }
+	}
 	dia = new Date(anio, (parseInt(mes)), 0).getDate(); 
-
 	var fecha = new Date(anio, mes-1, dia);
 	if (isNaN(fecha) == true) {
 		fecha = sticks[sticks.length-1];
@@ -2522,10 +2527,9 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-
+		var onetime =vStorageFecEnd; 
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compdiario1, compdiario2, data);
 
 		var divchartmax = document.createElement('div');
@@ -2591,6 +2595,9 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 		}
 
 		from2 = new Date(from2[0], (parseInt(from2[1]) - 1), from2[2]);
+		if (onetime!=null) {
+			from2=vStorageFecStart;
+		}
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
 		//from=datestart;
@@ -2606,7 +2613,7 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 					max: dateend
 				},
 				defaultValues: {
-					min: vStorageFecStart,
+					min: from2,
 					max: vStorageFecEnd
 				},
 			}
@@ -2616,7 +2623,7 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 		var datesinit = {
 			label: dateSlider,
 			values: {
-				min: vStorageFecStart,
+				min: from2,
 				max: vStorageFecEnd,
 			},
 			first: true
@@ -2626,19 +2633,19 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 		var datesinit2 = {
 			label: dateSlider,
 			values: {
-				min: vStorageFecStart,
+				min: from2,
 				max: vStorageFecEnd,
 			},
 			first: true
 		}
-
+		
 		$("#" + idDivSlider).unbind();
 		$("#" + idDivSlider).bind("valuesChanged", function(evt, dateSlider) {
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, compdiario1, compdiario2, data, 1);
-			if (dateSlider.first == null || dateSlider.first == false) {
+			//if (dateSlider.first == null || dateSlider.first == false) {
 				changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 				updatevaluescomponentstimesfromslider(dateSlider, compdiario1, compdiario2, data, 1);
-			}
+			//}
 		});
 		
 		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
@@ -3640,10 +3647,10 @@ function createSliderRotaMinDiario(divchartzoomslider, compdiario1, compdiario2,
 
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-
+		var onetine=vStorageFecStart;
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-
+		
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compdiario1, compdiario2, data);
@@ -3708,7 +3715,9 @@ function createSliderRotaMinDiario(divchartzoomslider, compdiario1, compdiario2,
 
 		//var from2	 	= ticks[ticks.length-60].split("-");
 		from2 = new Date(from2[0], (parseInt(from2[1]) - 1), from2[2]);
-
+		if(onetine!=null){
+			from2=vStorageFecStart;
+		}
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
 		var to = dateend;
@@ -3723,7 +3732,7 @@ function createSliderRotaMinDiario(divchartzoomslider, compdiario1, compdiario2,
 					max: dateend
 				},
 				defaultValues: {
-					min: vStorageFecStart,
+					min: from2,
 					max: vStorageFecEnd
 				},
 			}
@@ -3732,7 +3741,7 @@ function createSliderRotaMinDiario(divchartzoomslider, compdiario1, compdiario2,
 		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-				min: vStorageFecStart,
+				min: from2,
 				max: vStorageFecEnd,
 			},
 			first: true
@@ -3742,7 +3751,7 @@ function createSliderRotaMinDiario(divchartzoomslider, compdiario1, compdiario2,
 		var datesinit2 = {
 			label: dateSliderBounds,
 			values: {
-				min: vStorageFecStart,
+				min: from2,
 				max: vStorageFecEnd,
 			},
 			first: true
@@ -4734,6 +4743,7 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 		$("#" + divchartzoomslider).empty();
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
+		var onetine=vStorageFecStart;
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
 		
@@ -4796,7 +4806,9 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 
 		//var from2	 	= ticks[ticks.length-60].split("-");
 		from2 = new Date(from2[0], (parseInt(from2[1]) - 1), from2[2]);
-
+		if(onetine!=null) {
+			from2=	vStorageFecStart;
+		}
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
 		var to = dateend;
@@ -4811,7 +4823,7 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 					max: dateend
 				},
 				defaultValues: {
-					min: vStorageFecStart,
+					min: from2,
 					max: vStorageFecEnd
 				},
 			}
@@ -4820,7 +4832,7 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-				min: vStorageFecStart,
+				min: from2,
 				max: vStorageFecEnd,
 			},
 			updateperiodo: true
@@ -4830,7 +4842,7 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 		var datesinit2 = {
 			label: dateSliderBounds,
 			values: {
-				min: vStorageFecStart,
+				min: from2,
 				max: vStorageFecEnd,
 			},
 			updateperiodo: true
@@ -4996,7 +5008,7 @@ function createSliderRotaMinMensualPib(divchartzoomslider, compmensual1, compmen
 		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-				min: vStorageFecStart,
+				min: from2,
 				max: vStorageFecEnd,
 			},
 			updateperiodo: true

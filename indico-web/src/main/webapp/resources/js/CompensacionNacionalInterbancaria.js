@@ -3,15 +3,18 @@
  */
 
 function completarFechaStart(fecha,sticks) {
-	if (fecha == null) return null;
-	var anio = fecha.split('-')[0];
-	if (anio == null) return null;
-	var mes = fecha.split('-')[1];
-	var dia = fecha.split('-')[2];
-	
-	if (mes === undefined) { mes = "01"; }
-	if (dia === undefined) { dia = "01"; }
+	if (fecha == null && (sticks==null || sticks.length==0)) return null;
 
+	var anio,mes,dia;
+	if (fecha!=null){
+		anio = fecha.split('-')[0];
+		mes = fecha.split('-')[1];
+		dia = fecha.split('-')[2];
+
+		if (mes === undefined) { mes = "01"; }
+		if (dia === undefined) { dia = "01"; }
+	}
+	
 	fecha = new Date(anio, mes - 1, dia);
 	if (isNaN(fecha) == true) {
   		fecha=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
@@ -32,16 +35,18 @@ function completarFechaStart(fecha,sticks) {
 }
 
 function completarFechaEnd(fecha,sticks) {
-	if (fecha == null) return null;
-	var anio = fecha.split('-')[0];
-	if (anio == null) return null;
-	var mes = fecha.split('-')[1];
-	var dia = fecha.split('-')[2];
+	if (fecha == null && (sticks ==null || sticks.length==0)) return null;
+	
+	var anio,mes,dia;
+	if (fecha!=null){
+		anio = fecha.split('-')[0];
+		mes = fecha.split('-')[1];
+		dia = fecha.split('-')[2];
 
-	if (mes === undefined) { mes = "01"; }
-	if (dia === undefined) { dia = "01"; }
+		if (mes === undefined) { mes = "01"; }
+		if (dia === undefined) { dia = "01"; }
+	}
 	dia = new Date(anio, (parseInt(mes)), 0).getDate(); 
-
 	var fecha = new Date(anio, mes-1, dia);
 	if (isNaN(fecha) == true) {
 		fecha = sticks[sticks.length-1];
@@ -65,6 +70,7 @@ function completarFechaEnd(fecha,sticks) {
 	}	
 	return fecha;
 }
+
 
 
 
@@ -260,7 +266,7 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-
+		var onetime=vStorageFecStart;
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
 
@@ -320,6 +326,10 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 
 		var from 		= data["startX"].split("-");
 		from			= new Date(from[0],parseInt(from[1])-1,from[2]);
+		if (onetime!=null) {
+			from=vStorageFecStart;
+		}
+		
 		var to			= dateend;
 
 		//Rangos del slider de control
@@ -361,7 +371,7 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 	        	  			max: dateend
 	        	  		},
 	        	  		defaultValues: {
-	        	  			min: vStorageFecStart,
+	        	  			min: from,
 	        	  			max: vStorageFecEnd
 	        	  		},
 	        	 	}
@@ -373,7 +383,7 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 		var datesinit = {
 			label: dateSlider,
 			values : {
-				min: vStorageFecStart,
+				min: from,
 				max: vStorageFecEnd,
 			},
 			first: first,
@@ -383,11 +393,10 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 		try{
 		$("#"+idDivSlider).unbind();
 		$("#"+idDivSlider).bind("valuesChanged", function(evt,dateSlider){
-
 			valuesPlotChangedTimes(dateSlider,controllerPlot,targetPlot,compPeriodo1,compPeriodo2,data,period);
-			if (dateSlider.first==null || dateSlider.first==false) {
+			//if (dateSlider.first==null || dateSlider.first==false) {
 				updatevaluescomponentstimesfromslider(dateSlider,compPeriodo1,compPeriodo2,data,period);
-			}
+			//}
 		});
 
 		$("#"+idDivSlider).trigger("valuesChanged",datesinit);

@@ -62,7 +62,7 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 		
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-
+		var oneTime=vStorageFecStart;
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
 
@@ -159,7 +159,10 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 		from		= new Date(from[0],parseInt(from[1])-1,from[2]);
 		//Variable de fecha Hasta
 		var to				= dateend;
-	
+		
+		if (oneTime!=null) {
+			from = vStorageFecStart;
+		}	
 		//Rangos del slider de control
 		
 		var minDays, maxDays;
@@ -187,33 +190,33 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 		};
 		
 		
-				var dateSlider = $("#"+idDivSlider).dateRangeSlider( {
-				                    			range:{ 
-						                    	    min: {months: minDays}
-				                    	  		},
-				                    	  		bounds: {
-				                    	  			min: datestart, 
-				                    	  			max: dateend
-				                    	  		},
-				                    	  		defaultValues: {
-				                    	  			min: vStorageFecStart, 
-				                    	  			max: vStorageFecEnd
-				                    	  		},
-				                    	  		step:{
-				                    	  			months: byStep
-				                    	  		},
-				                 });
+		var dateSlider = $("#"+idDivSlider).dateRangeSlider( {
+			range:{ 
+        	    min: {months: minDays}
+	  		},
+	  		bounds: {
+	  			min: datestart, 
+	  			max: dateend
+	  		},
+	  		defaultValues: {
+	  			min: from, 
+	  			max: vStorageFecEnd
+	  		},
+	  		step:{
+	  			months: byStep
+	  		},
+         });
 				
-				//Funcion que inicializa en la primera carga de página el slider
-				var datesinit = {
-						label: dateSlider,
-						values : {
-							min: vStorageFecStart,
-							max: vStorageFecEnd,
-						},
-						first: true
-				}
-				
+			//Funcion que inicializa en la primera carga de página el slider
+			var datesinit = {
+					label: dateSlider,
+					values : {
+						min: from,
+						max: vStorageFecEnd,
+					},
+					first: true
+			}
+			
 				//Remueve los eventos para el Slider
 				$("#"+idDivSlider).unbind();
 				//Actualiza el Slider agregandole un evento
