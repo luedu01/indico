@@ -681,6 +681,10 @@ function updatedatapieplottimesranges(leftplot,rigthplot,componente,divvalores,d
 			dateselected=getDateStartFromAnual(componente);
 			break;
 	}//
+	
+	console.log("INGRESA A updatedatapieplottimesranges");
+	console.log(componente);
+	
 	var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
 	var datoscantidad = getDataCountFiltered(data["SerieCantidad"],dateselected);
 	
@@ -736,6 +740,10 @@ function updatedCanjealCobro(leftplot,rigthplot,componente,divvalores,divcantida
 			dateselected=getDateStartFromAnual(componente);
 			break;
 	}//
+	
+	console.log("INGRESA:updatedCanjealCobro");	
+	console.log(componente);	
+	
 	var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
 	var datoscantidad = getDataCountFiltered(data["SerieCantidad"],dateselected);
 
@@ -1213,7 +1221,8 @@ function getDataFiltered(datos,dateselected) {
 	}
 
 	var datosseleccionados = [[]];
-	datosseleccionados[0] = datasel.sort(ordenar);
+	//datosseleccionados[0] = datasel.sort(ordenar);
+	datosseleccionados[0] = datasel;
 	datosseleccionados[1] = totales;
 	var totalvalorsumado = totalS;
 
@@ -1242,8 +1251,8 @@ function getDataCountFiltered(datos,dateselected) {
 
 	var datosseleccionados = [[]];
 	//ordenar datase1 
-	
-	datosseleccionados[0] = datasel.sort(ordenar);
+	//datosseleccionados[0] = datasel.sort(ordenar);
+	datosseleccionados[0] = datasel;
 	datosseleccionados[1] = totales;
 	var totalvalorsumado = totalS;
 	return datosseleccionados;
@@ -1254,6 +1263,28 @@ function ordenar(a,b) {
 	    return 1;
 	  }
 	  if (a[1] > b[1]) {
+	    return -1;
+	  }
+	  // a must be equal to b
+	  return 0;
+}
+
+function ordenarValores(a,b) {
+	  if (a.valorPorcentaje < b.valorPorcentaje) {
+	    return 1;
+	  }
+	  if (a.valorPorcentaje > b.valorPorcentaje) {
+	    return -1;
+	  }
+	  // a must be equal to b
+	  return 0;
+}
+
+function ordenarCantidades(a,b) {
+	  if (a[4] < b[4]) {
+	    return 1;
+	  }
+	  if (a[4] > b[4]) {
 	    return -1;
 	  }
 	  // a must be equal to b
@@ -1295,6 +1326,10 @@ function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDiaria({'tipodeplaza':tipodeplaza});
+		if ("MUL"==tipodeplaza){
+			data["SerieValores"].sort(ordenarValores);
+			data["SerieCantidad"].sort(ordenarCantidades);
+		}
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
 		$("#"+chartcantidad).empty();
@@ -1371,6 +1406,10 @@ function createChartMinMensual(chartvalores,chartcantidad,compmensual1,tipodepla
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionMensual({'tipodeplaza':tipodeplaza});
+		if ("MUL"==tipodeplaza){
+			data["SerieValores"].sort(ordenarValores);
+			data["SerieCantidad"].sort(ordenarCantidades);
+		}
 
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
@@ -1440,6 +1479,11 @@ function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tip
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionTrimestral({'tipodeplaza':tipodeplaza});
+		if ("MUL"==tipodeplaza){
+			data["SerieValores"].sort(ordenarValores);
+			data["SerieCantidad"].sort(ordenarCantidades);
+		}
+
 
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
@@ -1509,6 +1553,11 @@ function createChartMinSemestral(chartvalores,chartcantidad,compsemestral1,tipod
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionSemestral({'tipodeplaza':tipodeplaza});
+		if ("MUL"==tipodeplaza){
+			data["SerieValores"].sort(ordenarValores);
+			data["SerieCantidad"].sort(ordenarCantidades);
+		}
+		
 
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
@@ -1597,7 +1646,8 @@ function getDataFiltereCompensacion(datos,dateselected) {
 	}
 
 	var datosseleccionados = [[]];
-	datosseleccionados[0] = datasel.sort(ordenar);
+	//datosseleccionados[0] = datasel.sort(ordenar);
+	datosseleccionados[0] = datasel;
 	datosseleccionados[1] = totales;
 	var totalvalorsumado = totalS;
 	return datosseleccionados;
@@ -1606,7 +1656,12 @@ function getDataFiltereCompensacion(datos,dateselected) {
 function createChartMinAnual(chartvalores,chartcantidad,companual1,tipodeplaza,label,errormessage){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
+	
 		data =  RestCompensacionServices.getCompensacionAnual({'tipodeplaza':tipodeplaza});
+		if ("MUL"==tipodeplaza){
+			data["SerieValores"].sort(ordenarValores);
+			data["SerieCantidad"].sort(ordenarCantidades);
+		}
 
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
@@ -1932,6 +1987,11 @@ function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipode
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolDiaria({'tipodeplaza':tipodeplaza});
+		if ("MUL"==tipodeplaza){
+			data["SerieValores"].sort(ordenarValores);
+			data["SerieCantidad"].sort(ordenarCantidades);
+		}
+		
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
 		$("#"+chartcantidad).empty();
@@ -2006,6 +2066,11 @@ function createChartMinMensualDevol(chartvalores,chartcantidad,compmensual1,tipo
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolMensual({'tipodeplaza':tipodeplaza});
+		if ("MUL"==tipodeplaza){
+			data["SerieValores"].sort(ordenarValores);
+			data["SerieCantidad"].sort(ordenarCantidades);
+		}
+		
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
 		$("#"+chartcantidad).empty();
@@ -2074,6 +2139,11 @@ function createChartMinTrimestralDevol(chartvalores,chartcantidad,comptrimestral
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolTrimestral({'tipodeplaza':tipodeplaza});
+		if ("MUL"==tipodeplaza){
+			data["SerieValores"].sort(ordenarValores);
+			data["SerieCantidad"].sort(ordenarCantidades);
+		}
+		
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
 		$("#"+chartcantidad).empty();
@@ -2142,6 +2212,11 @@ function createChartMinSemestralDevol(chartvalores,chartcantidad,compsemestral1,
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolSemestral({'tipodeplaza':tipodeplaza});
+		if ("MUL"==tipodeplaza){
+			data["SerieValores"].sort(ordenarValores);
+			data["SerieCantidad"].sort(ordenarCantidades);
+		}
+		
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
 		$("#"+chartcantidad).empty();
@@ -2210,6 +2285,11 @@ function createChartMinAnualDevol(chartvalores,chartcantidad,companual1,tipodepl
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolAnual({'tipodeplaza':tipodeplaza});
+		if ("MUL"==tipodeplaza){
+			data["SerieValores"].sort(ordenarValores);
+			data["SerieCantidad"].sort(ordenarCantidades);
+		}
+		
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
 		$("#"+chartcantidad).empty();
