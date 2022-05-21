@@ -79,7 +79,7 @@
 												<p:selectOneMenu id="vdevol_tipoplaza" value="#{compChequesDevolucionMaBean.tipodeplaza}" widgetVar="vdevol_tipoplazaVar" styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande NoPadding">
 													<f:selectItem itemValue="todas" itemLabel="Todas"/>
 													<f:selectItems value="#{compChequesDevolucionMaBean.tiposdeplaza}" var="tp" itemValue="#{tp.idMedioServCompensacion}" itemLabel="#{tp.descMedioServCompensacion}"/>
-													<p:ajax onsuccess="changeperiodiciorperiododevol(); return false;" update="@([id$=vdevol_valorgraficavalor],[id$=vdevol_messageinformationglobal])"/>
+													<p:ajax onsuccess="changeperiodiciorperiododevol(); return false;" update="@([id$=vdevol_valorgraficavalor],[id$=vdevol_messageinformationglobal])" onstart="vdevol_savedperidoselected()"/>
 												</p:selectOneMenu>
 												</p:outputPanel>
 											  </h:form>	 

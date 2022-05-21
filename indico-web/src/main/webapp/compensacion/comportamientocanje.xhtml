@@ -97,7 +97,7 @@
 														widgetVar="vcompcanje_tipoplazaVar" styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande NoPadding">
 														<f:selectItem itemValue="todas" itemLabel="Todas"/>
 														<f:selectItems value="#{compComportamientoCanjeMaBean.tiposdeplaza}" var="tp" itemValue="#{tp.idMedioServCompensacion}" itemLabel="#{tp.descMedioServCompensacion}"/>
-														<p:ajax onsuccess="vcompcanjechangeperiodo(); return false;" update="@([id$=vcompcanje_valorgraficavalor],[id$=vcompcanje_messageinformationglobal],[id$=vcompcanje_panelSelects])"/>
+														<p:ajax onsuccess="vcompcanjechangeperiodo(); return false;" update="@([id$=vcompcanje_valorgraficavalor],[id$=vcompcanje_messageinformationglobal],[id$=vcompcanje_panelSelects])" onstart="vcompcanje_savedperidoselected(this.value);" />
 													</p:selectOneMenu>
 												</p:outputPanel>
 											  </h:form>	 
@@ -110,7 +110,7 @@
 															widgetVar="vcompcanje_ciudadVar" styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande NoPadding">
 														<f:selectItem itemValue="todas" itemLabel="Total Ciudades"/>
 														<f:selectItems value="#{compComportamientoCanjeMaBean.ciudades}" var="tp" itemValue="#{tp.value}" itemLabel="#{tp.label}"/>
-														<p:ajax listener="#{compComportamientoCanjeMaBean.changeCiudadAction}" onsuccess="vcompcanjechangeperiodo(); return false;" update="@([id$=vcompcanje_valorgraficavalor],[id$=vcompcanje_messageinformationglobal])"/>
+														<p:ajax listener="#{compComportamientoCanjeMaBean.changeCiudadAction}" onsuccess="vcompcanjechangeperiodo(); return false;" update="@([id$=vcompcanje_valorgraficavalor],[id$=vcompcanje_messageinformationglobal])" onstart="vcompcanje_savedperidoselected(this.value);" />
 													</p:selectOneMenu>
 												</p:outputPanel>
 											  </h:form>	 

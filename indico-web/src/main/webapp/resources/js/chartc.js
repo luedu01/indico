@@ -33,8 +33,11 @@ function completarFechaSelected(fecha,sticks) {
 	var dia = fecha.split('-')[2];
 
 	if (mes === undefined) { mes = "01"; }
-	if (dia === undefined) { dia = "01"; }
-	dia = new Date(anio, (parseInt(mes)), 0).getDate(); 
+	if (dia === undefined) { 
+		dia = "01";
+		//dia = new Date(anio, (parseInt(mes)), 0).getDate(); 
+	}
+	 
 
 	var fecha = new Date(anio, mes-1, dia);
 	if (isNaN(fecha) == true) {
@@ -682,13 +685,8 @@ function updatedatapieplottimesranges(leftplot,rigthplot,componente,divvalores,d
 			break;
 	}//
 	
-	console.log("INGRESA A updatedatapieplottimesranges");
-	console.log(componente);
-	
 	var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
 	var datoscantidad = getDataCountFiltered(data["SerieCantidad"],dateselected);
-	
-	
 
 	if (datosvalores[0].length && datoscantidad[0].length) {
 		$("#"+chartvaloresid).show();
@@ -740,9 +738,6 @@ function updatedCanjealCobro(leftplot,rigthplot,componente,divvalores,divcantida
 			dateselected=getDateStartFromAnual(componente);
 			break;
 	}//
-	
-	console.log("INGRESA:updatedCanjealCobro");	
-	console.log(componente);	
 	
 	var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
 	var datoscantidad = getDataCountFiltered(data["SerieCantidad"],dateselected);

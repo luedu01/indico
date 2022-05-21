@@ -82,7 +82,7 @@
 												<p:selectOneMenu id="vcanje_tipoplaza" value="#{compChequesCanjeMaBean.tipodeplaza}" widgetVar="vcanje_tipoplazaVar" styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande NoPadding">
 													<f:selectItem itemValue="todas" itemLabel="Todas"/>
 													<f:selectItems value="#{compChequesCanjeMaBean.tiposdeplaza}" var="tp" itemValue="#{tp.idMedioServCompensacion}" itemLabel="#{tp.descMedioServCompensacion}"/>
-													<p:ajax onsuccess="changeperiodiciocanje(); return false;" update="@([id$=vcanje_valorgraficavalor],[id$=vcanje_messageinformationglobal])"/>
+													<p:ajax onsuccess="changeperiodiciocanje(); return false;" update="@([id$=vcanje_valorgraficavalor],[id$=vcanje_messageinformationglobal])" onstart="vcheqcanje_savedperidoselected();"/>
 												</p:selectOneMenu>
 												</p:outputPanel>
 											  </h:form>

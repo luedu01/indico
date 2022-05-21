@@ -50,7 +50,6 @@ function completarFechaStart(fecha,sticks) {
 
 function completarFechaEnd(fecha,sticks) {
 	if (fecha == null && (sticks ==null || sticks.length==0)) return null;
-	
 	var anio,mes,dia;
 	if (fecha!=null){
 		anio = fecha.split('-')[0];
@@ -58,9 +57,10 @@ function completarFechaEnd(fecha,sticks) {
 		dia = fecha.split('-')[2];
 
 		if (mes === undefined) { mes = "01"; }
-		if (dia === undefined) { dia = "01"; }
+		if (dia === undefined) { 
+			dia = new Date(anio, (parseInt(mes)), 0).getDate(); 
+		}
 	}
-	dia = new Date(anio, (parseInt(mes)), 0).getDate(); 
 	var fecha = new Date(anio, mes-1, dia);
 	if (isNaN(fecha) == true) {
 		fecha = sticks[sticks.length-1];
@@ -2527,11 +2527,13 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
+		
 		var onetime =vStorageFecEnd; 
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compdiario1, compdiario2, data);
-
+		
 		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
 		divchartmax.style = "chartcustom";

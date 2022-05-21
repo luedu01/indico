@@ -12,10 +12,12 @@ function completarFechaStart(fecha,sticks) {
 		dia = fecha.split('-')[2];
 
 		if (mes === undefined) { mes = "01"; }
-		if (dia === undefined) { dia = "01"; }
+		if (dia === undefined) { 
+				dia = "01"; 
+		}
 	}
-	
 	fecha = new Date(anio, mes - 1, dia);
+	
 	if (isNaN(fecha) == true) {
   		fecha=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
 	} else {
@@ -44,9 +46,8 @@ function completarFechaEnd(fecha,sticks) {
 		dia = fecha.split('-')[2];
 
 		if (mes === undefined) { mes = "01"; }
-		if (dia === undefined) { dia = "01"; }
+		if (dia === undefined) { dia = new Date(anio, (parseInt(mes)), 0).getDate(); }
 	}
-	dia = new Date(anio, (parseInt(mes)), 0).getDate(); 
 	var fecha = new Date(anio, mes-1, dia);
 	if (isNaN(fecha) == true) {
 		fecha = sticks[sticks.length-1];

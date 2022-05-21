@@ -95,7 +95,7 @@
 														widgetVar="vcompdevol_tipoplazaVar" styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande NoPadding">
 														<f:selectItem itemValue="todas" itemLabel="Todas"/>
 														<f:selectItems value="#{compComportamientoDevolucionMaBean.tiposdeplaza}" var="tp" itemValue="#{tp.idMedioServCompensacion}" itemLabel="#{tp.descMedioServCompensacion}"/>
-														<p:ajax onsuccess="vcompdevolchangeperiodo(); return false;" update="@([id$=vcompdevol_valorgraficavalor],[id$=vcompdevol_messageinformationglobal],[id$=vcompdevol_panelSelects])"/>
+														<p:ajax onsuccess="vcompdevolchangeperiodo(); return false;" update="@([id$=vcompdevol_valorgraficavalor],[id$=vcompdevol_messageinformationglobal],[id$=vcompdevol_panelSelects])" onstart="vcompdevol_savedperidoselected(this.value);"/>
 													</p:selectOneMenu>
 												</p:outputPanel>
 											  </h:form>	 
@@ -107,7 +107,7 @@
 													<p:selectOneMenu id="vcompdevol_ciudad" value="#{compComportamientoDevolucionMaBean.ciudadSelected}" widgetVar="vcompdevol_ciudadVar" styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande NoPadding">
 														<f:selectItem itemValue="todas" itemLabel="Total Ciudades"/>
 														<f:selectItems value="#{compComportamientoDevolucionMaBean.ciudades}" var="tp" itemValue="#{tp.value}" itemLabel="#{tp.label}"/>
-														<p:ajax onsuccess="vcompdevolchangeperiodo(); return false;" update="@([id$=vcompdevol_valorgraficavalor],[id$=vcompdevol_messageinformationglobal])"/>
+														<p:ajax onsuccess="vcompdevolchangeperiodo(); return false;" update="@([id$=vcompdevol_valorgraficavalor],[id$=vcompdevol_messageinformationglobal])" onstart="vcompdevol_savedperidoselected(this.value);"/>
 													</p:selectOneMenu>
 												</p:outputPanel>
 											  </h:form>	 

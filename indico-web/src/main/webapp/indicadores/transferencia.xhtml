@@ -142,7 +142,7 @@
 											  <p:outputPanel styleClass="ui-g-8 NoPaddingTopBotton">
 												<p:selectOneMenu id="selconcepto" value="#{transferenciaBean.concepto}" widgetVar="conceptoVar" styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande NoPadding">
 													<f:selectItems value="#{transferenciaBean.conceptos}" var="concepto" itemLabel="#{concepto.label}" itemValue="#{concepto.value}" />
-													<p:ajax onsuccess="changeperiodiciorperiodo(); return false;"/>
+													<p:ajax onsuccess="changeperiodiciorperiodo(); return false;" onstart="tran_savedperidoselected();"/>
 												</p:selectOneMenu>
 												</p:outputPanel>
 											  </h:form>	 

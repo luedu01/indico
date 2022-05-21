@@ -134,7 +134,7 @@
 													<p:selectOneMenu id="vdevcanje_medioservicio" value="#{compDevolucionCanjeMaBean.medioservicio}" widgetVar="vdevcanje_medioservicioVar" styleClass="BoxSizeBorder minWidth-0 Fs14 selectonemenugrande NoPadding">
 														<f:selectItem itemValue="todas" itemLabel="Todas"/>
 														<f:selectItems value="#{compDevolucionCanjeMaBean.mediosdeservicio}" var="tp" itemValue="#{tp.idMedioServCompensacion}" itemLabel="#{tp.descMedioServCompensacion}"/>
-														<p:ajax onsuccess="vdevcanjechangeperiodo(); return false;" update="@([id$=vdevcanje_valorgraficavalor],[id$=vdevcanje_messageinformationglobal],[id$=vdevcanje_panelSelects])"/>
+														<p:ajax onsuccess="vdevcanjechangeperiodo(); return false;" update="@([id$=vdevcanje_valorgraficavalor],[id$=vdevcanje_messageinformationglobal],[id$=vdevcanje_panelSelects])" onstart="vdev_savedperidoselected(this.value);" />
 													</p:selectOneMenu>
 												</p:outputPanel>
 											  </h:form>	 

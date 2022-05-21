@@ -82,11 +82,9 @@
 								</p:outputPanel>
 						    </div>
 						     
-						     
 					  		<div class='mobileBar' style="#{homeMaBean.selected==0?'background-color: #7bb9e0;':''}">
 					  			<h:form>
-									<h:commandLink  id="cud2" actionListener="#{homeMaBean.iconAction2}" update="@([id$=panelGeneral])"
-											process="@this">
+									<h:commandLink  id="cud2" actionListener="#{homeMaBean.iconAction2}" update="@([id$=panelGeneral])" process="@this">
 					  					<p:outputPanel styleClass="cardCustonT2">
 											<div class="EmptyBox">
 												<p:outputPanel styleClass="textbelow">
@@ -107,6 +105,7 @@
 									</h:commandLink>
 								</h:form>
 					  		</div>
+					  		
 					  	</div>
 					</b:column>
 					
