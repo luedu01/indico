@@ -149,9 +149,6 @@ public class AnalisisChequesCompensaServiceImpl extends GeneralServiceImpl imple
 				vg.setSerieCantidadPorcentaje(getaPartWithOutPercent(vg.getSerieCantidad(), totalesCantidad.get(vg.getEjeX())));
 				vg.setSerieValorPorcentaje(getaPartWithOutPercent(vg.getSerieValor().divide(DIVISORMM), totalesValores.get(vg.getEjeX()).divide(DIVISORMM)));
 			}
-			if (medio!=null && medio.equalsIgnoreCase("MUL")) {
-				logger.info("IMPLEMENTAR DELEGADAS DIARIA");
-			}
 				
 		}
 		return valores;
@@ -201,10 +198,6 @@ public class AnalisisChequesCompensaServiceImpl extends GeneralServiceImpl imple
 				vg.setSerieCantidadPorcentaje(getaPartWithOutPercent(vg.getSerieCantidad(), totalesCantidad.get(vg.getEjeX())));
 				vg.setSerieValorPorcentaje(getaPartWithOutPercent(vg.getSerieValor().divide(DIVISORMM), totalesValores.get(vg.getEjeX()).divide(DIVISORMM)));
 			}
-			if (medio!=null && medio.equalsIgnoreCase("MUL")) {
-				logger.info("IMPLEMENTAR DELEGADAS MENSUAL");
-			}
-			
 		}
 		return valores;
 	}
@@ -253,9 +246,6 @@ public class AnalisisChequesCompensaServiceImpl extends GeneralServiceImpl imple
 			for (ValorGraficable vg: valores) {
 				vg.setSerieCantidadPorcentaje(getaPartWithOutPercent(vg.getSerieCantidad(), totalesCantidad.get(vg.getEjeX())));
 				vg.setSerieValorPorcentaje(getaPartWithOutPercent(vg.getSerieValor().divide(DIVISORMM), totalesValores.get(vg.getEjeX()).divide(DIVISORMM)));
-			}
-			if (medio!=null && medio.equalsIgnoreCase("MUL")) {
-				logger.info("IMPLEMENTAR DELEGADAS TRIMESTRAL");
 			}
 			
 		}
@@ -306,10 +296,6 @@ public class AnalisisChequesCompensaServiceImpl extends GeneralServiceImpl imple
 				vg.setSerieCantidadPorcentaje(getaPartWithOutPercent(vg.getSerieCantidad(), totalesCantidad.get(vg.getEjeX())));
 				vg.setSerieValorPorcentaje(getaPartWithOutPercent(vg.getSerieValor().divide(DIVISORMM), totalesValores.get(vg.getEjeX()).divide(DIVISORMM)));
 			}
-			if (medio!=null && medio.equalsIgnoreCase("MUL")) {
-				logger.info("IMPLEMENTAR DELEGADAS SEMESTRAL");
-			}
-			
 		}
 		return valores;
 	}
@@ -360,7 +346,6 @@ public class AnalisisChequesCompensaServiceImpl extends GeneralServiceImpl imple
 			}
 			
 			if (medio!=null && medio.equalsIgnoreCase("MUL")) {
-				logger.info("IMPLEMENTAR DELEGADAS ANUAL");
 				Collections.sort(valores, new Comparator<ValorGraficable>() {
 				    @Override
 				    public int compare(ValorGraficable vg1, ValorGraficable vg2) {

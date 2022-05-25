@@ -1657,7 +1657,6 @@ function createChartMinAnual(chartvalores,chartcantidad,companual1,tipodeplaza,l
 			data["SerieValores"].sort(ordenarValores);
 			data["SerieCantidad"].sort(ordenarCantidades);
 		}
-
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
 		$("#"+chartcantidad).empty();

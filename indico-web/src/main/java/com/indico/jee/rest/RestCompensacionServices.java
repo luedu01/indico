@@ -20,9 +20,15 @@ import static com.indico.jee.util.Constants.TODAS_LITERAL;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -112,6 +118,7 @@ public class RestCompensacionServices implements Serializable {
 		        	minimoCantidad = BigDecimal.ZERO;
 		        }
 		        //minimos y maximos en x
+		        ticks = getTicksSorted(ticks);
 		        String to = (String)ticks[ticks.length-1];
 		        dias = ticks.length-dias;
 		        String from = (String)ticks[dias<0?0:dias];
@@ -200,6 +207,7 @@ public class RestCompensacionServices implements Serializable {
 	        	minimoCantidad = BigDecimal.ZERO;
 	        }
 	        //minimos y maximos en x
+	        ticks = getTicksSorted(ticks);
 	        String to = (String)ticks[ticks.length-1];
 	        dias = ticks.length-dias;
 	        String from = (String)ticks[dias<0?0:dias];
@@ -286,6 +294,7 @@ public class RestCompensacionServices implements Serializable {
 	        	minimoCantidad = BigDecimal.ZERO;
 	        }
 	        //minimos y maximos en x
+	        ticks = getTicksSorted(ticks);
 	        String to = (String)ticks[ticks.length-1];
 	        dias = ticks.length-dias;
 	        String from = (String)ticks[dias<0?0:dias];
@@ -372,6 +381,7 @@ public class RestCompensacionServices implements Serializable {
 	        	minimoCantidad = BigDecimal.ZERO;
 	        }
 	        //minimos y maximos en x
+	        ticks = getTicksSorted(ticks);
 	        String to = (String)ticks[ticks.length-1];
 	        dias = ticks.length-dias;
 	        String from = (String)ticks[dias<0?0:dias];
@@ -459,7 +469,8 @@ public class RestCompensacionServices implements Serializable {
 	        	minimoCantidad = BigDecimal.ZERO;
 	        }
 	        //minimos y maximos en x
-	        String to = (String)ticks[ticks.length-1];
+	        ticks = getTicksSorted(ticks);
+	        String to = (String) ticks[ticks.length-1];
 	        dias = ticks.length-dias;
 	        String from = (String)ticks[dias<0?0:dias];
 	        String maxX = (String)ticks[ticks.length-1];
@@ -546,6 +557,7 @@ public class RestCompensacionServices implements Serializable {
 	        	minimoCantidad = BigDecimal.ZERO;
 	        }
 	        //minimos y maximos en x
+	        ticks = getTicksSorted(ticks);
 	        String to = (String)ticks[ticks.length-1];
 	        dias = ticks.length-dias;
 	        String from = (String)ticks[dias<0?0:dias];
@@ -627,6 +639,7 @@ public class RestCompensacionServices implements Serializable {
 	        	minimoCantidad = BigDecimal.ZERO;
 	        }
 	        //minimos y maximos en x
+	        ticks = getTicksSorted(ticks);
 	        String to = (String)ticks[ticks.length-1];
 	        dias = ticks.length-dias;
 	        String from = (String)ticks[dias<0?0:dias];
@@ -708,6 +721,7 @@ public class RestCompensacionServices implements Serializable {
 	        	minimoCantidad = BigDecimal.ZERO;
 	        }
 	        //minimos y maximos en x
+	        ticks = getTicksSorted(ticks);
 	        String to = (String)ticks[ticks.length-1];
 	        dias = ticks.length-dias;
 	        String from = (String)ticks[dias<0?0:dias];
@@ -789,6 +803,7 @@ public class RestCompensacionServices implements Serializable {
 	        	minimoCantidad = BigDecimal.ZERO;
 	        }
 	        //minimos y maximos en x
+	        ticks = getTicksSorted(ticks);
 	        String to = (String)ticks[ticks.length-1];
 	        dias = ticks.length-dias;
 	        String from = (String)ticks[dias<0?0:dias];
@@ -870,6 +885,7 @@ public class RestCompensacionServices implements Serializable {
 	        	minimoCantidad = BigDecimal.ZERO;
 	        }
 	        //minimos y maximos en x
+	        ticks = getTicksSorted(ticks);
 	        String to = (String)ticks[ticks.length-1];
 	        dias = ticks.length-dias;
 	        String from = (String)ticks[dias<0?0:dias];
@@ -893,4 +909,23 @@ public class RestCompensacionServices implements Serializable {
 		} 
 		return resultado;
 	}
+	
+	private Object[] getTicksSorted(Object[] ticks) {
+	    if (ticks!=null && ticks.length>0) {
+	    	Set<Object> ticUnic = new HashSet<Object>() ;
+	    	ticUnic.addAll(Arrays.asList(ticks));
+	    	ticUnic.size();
+	    	List<Object> sorList= ticUnic.stream().sorted(new Comparator<Object>() {
+	    	    @Override
+	    	    public int compare(Object o1, Object o2) {
+	    	    	int value1 =  Integer.valueOf(o1.toString().replace("-", ""));
+	    	    	int value2 =  Integer.valueOf(o2.toString().replace("-", ""));
+	    	        return value1-value2;
+	    	    }
+	    	}).collect(Collectors.toList());
+	    	ticks = (String[])sorList.toArray(new String[sorList.size()]);
+	    }
+	    return ticks;
+	}
+
 }
