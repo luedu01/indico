@@ -224,7 +224,6 @@
 		 						</div>  		
 							<h:outputScript>
 									var almacen="CanjeComportamientoDevoluciones";
-									localStorage.setItem("CanjeComportamientoDevolucionesOneTime","1")
 									function assignValuesDevol() {
 										var v_start;
 										var v_end;
@@ -280,6 +279,7 @@
 									}									
 																
 									function vcompdevolchangeperiodo() {
+										onetime = localStorage.getItem("CanjeComportamientoDevolucionesOneTime");
 										let idsel = localStorage.getItem("comportamientoDevolucionesOld");
 										var periodo = PF('vcompdevol_selFiltroPorValorW').jq.find('option:selected').val();
 										localStorage.setItem("comportamientoDevolucionesOld",periodo);
@@ -331,12 +331,15 @@
 												vcomcanjePeriodo2 = "vcompdevol_valanual2";
 												break;										
 										};//switch
+										
 										$(document).ready(function(){
-											createSliderComportamientoDevolucion('vcompdevol_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,tipodeplaza,ciudad,label,'vcompdevol_messageinformationglobal',almacen);
+											createSliderComportamientoDevolucion('vcompdevol_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,tipodeplaza,ciudad,label,'vcompdevol_messageinformationglobal',almacen,onetime);
 										});	
+										
 									}//function
 									
 									function recargarcanje(){
+										localStorage.setItem("CanjeComportamientoDevolucionesOneTime","1");
 									}
 									
 								    $(document).ready(function(){

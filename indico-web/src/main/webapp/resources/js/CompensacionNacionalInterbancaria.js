@@ -4,18 +4,20 @@
 
 function completarFechaStart(fecha,sticks) {
 	if (fecha == null && (sticks==null || sticks.length==0)) return null;
-
-	var anio,mes,dia;
-	if (fecha!=null){
-		anio = fecha.split('-')[0];
-		mes = fecha.split('-')[1];
-		dia = fecha.split('-')[2];
-
-		if (mes === undefined) { mes = "01"; }
-		if (dia === undefined) { dia = "01"; }
-	}
+	if (fecha instanceof Date) {
+	} else {
+		var anio,mes,dia;
+		if (fecha!=null){
+			anio = fecha.split('-')[0];
+			mes = fecha.split('-')[1];
+			dia = fecha.split('-')[2];
 	
-	fecha = new Date(anio, mes - 1, dia);
+			if (mes === undefined) { mes = "01"; }
+			if (dia === undefined) { dia = "01"; }
+		}
+		fecha = new Date(anio, mes - 1, dia);
+	} 
+
 	if (isNaN(fecha) == true) {
   		fecha=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
 	} else {
@@ -36,7 +38,6 @@ function completarFechaStart(fecha,sticks) {
 
 function completarFechaEnd(fecha,sticks) {
 	if (fecha == null && (sticks ==null || sticks.length==0)) return null;
-	
 	var anio,mes,dia;
 	if (fecha!=null){
 		anio = fecha.split('-')[0];
@@ -44,9 +45,10 @@ function completarFechaEnd(fecha,sticks) {
 		dia = fecha.split('-')[2];
 
 		if (mes === undefined) { mes = "01"; }
-		if (dia === undefined) { dia = dia = new Date(anio, (parseInt(mes)), 0).getDate(); }
+		if (dia === undefined) { 
+			dia = new Date(anio, (parseInt(mes)), 0).getDate(); 
+		}
 	}
-	 
 	var fecha = new Date(anio, mes-1, dia);
 	if (isNaN(fecha) == true) {
 		fecha = sticks[sticks.length-1];
@@ -74,28 +76,29 @@ function completarFechaEnd(fecha,sticks) {
 
 
 
+
 function vbajo_savedOldDatesStoStorage(almacen, componente1, componente2, anterior) {
 	var vfecStart;
 	var vfecEnd;
-
+	anterior=parseInt(anterior);
 	switch (anterior) {
-		case "1":
+		case 1:
 			vfecStart = getDateStartFromDiario(componente1);
 			vfecEnd = getDateEndFromDiario(componente2);
 			break;
-		case "2":
+		case 2:
 			vfecStart = getDateStartFromMensual(componente1);
 			vfecEnd = getDateEndFromMensual(componente2);
 			break;
-		case "3":
+		case 3:
 			vfecStart = getDateStartFromTrimestral(componente1);
 			vfecEnd = getDateEndFromTrimestral(componente2);
 			break;
-		case "4":
+		case 4:
 			vfecStart = getDateStartFromSemestral(componente1);
 			vfecEnd = getDateEndFromSemestral(componente2);
 			break;
-		case "5":
+		case 5:
 			vfecStart = getDateStartFromAnual(componente1);
 			vfecEnd = getDateStartFromAnual(componente2);
 			break;
@@ -245,11 +248,45 @@ function startvaluescomponentstimesPeriod(valchanged1,valchanged2,compdiario1,co
 }
 
 
-function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,compPeriodo2,errormessage,almacen){
+function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,compPeriodo2,errormessage,almacen,onetime){
 
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	var period = parseInt(periodo,10);
 
+
+		//Rangos del slider de control
+		var minDays;
+		var first;
+		var updateperiodo;
+		var minDays;
+		var first;
+		var updateperiodo;
+		var addday=0;
+		switch (period) {
+			case 1:		minDays = 1;
+						addday = 1;
+						first = true;
+				break;
+			case 2: 	minDays = 60;
+						minMonth = 1;
+						first = false;
+						updateperiodo = true;
+				break;
+			case 3: 	minDays = 90;
+						minMonth = 3;
+						first = true;
+				break;  
+			case 4: 	minMonth = 6;
+						first = true;
+						minDays = 180;
+			break;
+			case 5: 	minMonth = 12;
+						first = false;
+						updateperiodo = true;
+						minDays = 360;
+				break;
+		};
+		
 	try {
 		data =  RestTransaccionCNI.getTransaccionCNI({'periodo':period});
 		//var fCounter = data['SerieCantidadPorcentaje'].length;
@@ -259,20 +296,36 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 		var fCounter = serieCantidad.length;
 
 
+
 		$("#"+divchartzoomslider).empty();
 		$("#"+divchartzoomslider)[0].setAttribute("class","superzoom");
 
 		data["Title"] = data["Title"];
+		ticks = data["Ticks"];
 
-		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
-		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		var onetime=vStorageFecStart;
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
+		vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
+		
+		vStorageFecStart = completarFechaStart(vStorageFecStart,ticks);
+		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,ticks);
+		
+		datestart 	= data["MinX"].split("-");
+		datestart	= new Date(datestart[0],(parseInt(datestart[1])-1),datestart[2]);
+		
+		dateend 	= data["MaxX"].split("-");
+		dateend 	= getDateCounter(fCounter, dateend, period);
 
-		//startvaluescomponentstimes(null,null,compPeriodo1,compPeriodo2,data);
+		if (onetime!=null && onetime=="1") {
+			from 		= data["startX"].split("-");
+			from		= new Date(from[0],parseInt(from[1])-1,from[2]);
+			dia = 24*60*60*1000;
+			fromtmp = dateend.getTime() - (dia * (minDays+addday));
+			fromtmp = new Date(fromtmp);
+			vStorageFecStart = completarFechaStart(fromtmp,ticks);
+			vStorageFecEnd=dateend;
+			from = vStorageFecStart;
+		} 
 		startvaluescomponentstimesPeriod(vStorageFecStart,vStorageFecEnd,compPeriodo1,compPeriodo2,data, period, fCounter);
-
 		var divchartmax = document.createElement('div');
 
 		divchartmax.id=divchartzoomslider+"_chartMax";
@@ -282,6 +335,7 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 
 		var xmin = targetPlot.axes.xaxis.min;
 		var xmax = targetPlot.axes.xaxis.max;
+		
 		var s_left 		= targetPlot._defaultGridPadding.left;
 		var s_right 	= targetPlot._defaultGridPadding.right;
 		var left 		= targetPlot._gridPadding.left;
@@ -294,7 +348,7 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 
 		innerDivMini.id =idMini;
 
-		var style =         "width:".concat((width-left)).concat("px !important; ")
+		var style =  "width:".concat((width-left)).concat("px !important; ")
 					.concat("left:").concat(0).concat("px !important;")
 					.concat("right:").concat(right-s_right).concat("px !important;")
 					.concat("height:").concat(55).concat("px !important;");
@@ -318,67 +372,37 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 		innerDivSlider.setAttribute("style",styleSlider);
 		document.getElementById(divchartzoomslider).appendChild(innerDivSlider);
 
-		var datestart 	= data["MinX"].split("-");
-		datestart		= new Date(datestart[0],(parseInt(datestart[1])-1),datestart[2]);
-		var dateend 	= data["MaxX"].split("-");
-
-		dateend 		= getDateCounter(fCounter, dateend, period);
-
-		var from 		= data["startX"].split("-");
-		from			= new Date(from[0],parseInt(from[1])-1,from[2]);
-		if (onetime!=null) {
-			from=vStorageFecStart;
+		if (period==1) {
+			dateSlider = $("#"+idDivSlider).dateRangeSlider({
+				range:{
+	        	    min: {days: minDays},
+		  		},
+		  		bounds: {
+		  			min: datestart,
+		  			max: dateend
+		  		},
+		  		defaultValues: {
+		  			min: vStorageFecStart,
+		  			max: vStorageFecEnd
+		  		},
+		 	});
+		} else {
+			dateSlider = $("#"+idDivSlider).dateRangeSlider({
+				range:{
+	        	    min: {months: minMonth},
+		  		},
+		  		bounds: {
+		  			min: datestart,
+		  			max: dateend
+		  		},
+		  		defaultValues: {
+		  			min: vStorageFecStart,
+		  			max: vStorageFecEnd
+		  		},
+		 	});
 		}
 		
-		var to			= dateend;
-
-		//Rangos del slider de control
-		var minDays;
-		var first;
-		var updateperiodo;
-		var minDays;
-		var first;
-		var updateperiodo;
-		switch (period) {
-			case 1:
-						minDays = 10;
-						first = true;
-				break;
-			case 2: 	minDays = 60;
-						first = false;
-						updateperiodo = true;
-				break;
-			case 3: 	minDays = 93;
-						first = true;
-				break;
-			case 4: 	minDays = 185;
-					first = true;
-			break;
-			case 5: 	minDays = 360;
-						first = false;
-						updateperiodo = true;
-				break;
-		};
-
-		try{
-			var dateSlider = $("#"+idDivSlider).dateRangeSlider(
-	        		{
-	        			range:{
-	                	    min: {days: minDays},
-	        	  		},
-	        	  		bounds: {
-	        	  			min: datestart,
-	        	  			max: dateend
-	        	  		},
-	        	  		defaultValues: {
-	        	  			min: from,
-	        	  			max: vStorageFecEnd
-	        	  		},
-	        	 	}
-			);
-		} catch (err) {
-			console.log(err);
-		}
+		
 		//trigger first load
 		var datesinit = {
 			label: dateSlider,
@@ -390,31 +414,18 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 			updateperiodo: updateperiodo
 		}
 
-		try{
 		$("#"+idDivSlider).unbind();
 		$("#"+idDivSlider).bind("valuesChanged", function(evt,dateSlider){
 			valuesPlotChangedTimes(dateSlider,controllerPlot,targetPlot,compPeriodo1,compPeriodo2,data,period);
 			//if (dateSlider.first==null || dateSlider.first==false) {
 				updatevaluescomponentstimesfromslider(dateSlider,compPeriodo1,compPeriodo2,data,period);
+				vbajo_savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period); 
 			//}
 		});
-
-		$("#"+idDivSlider).trigger("valuesChanged",datesinit);
-
-		} catch (err) {
-			console.log(err);
-		}
-
-		scroll();
-		/**
-		 *
-		 */
-
 
 		//Retira eventos y actualiza datos en años
 		$("#"+compPeriodo1+"_sel_anio").unbind();
 		$("#"+compPeriodo1+"_sel_anio").change(function(evt) {
-
 			switch (period) {
 				case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					break;
@@ -427,13 +438,12 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 				case 5: 	changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					break;
 			};
-
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
+			vbajo_savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period); 
 		});
 
 		$("#"+compPeriodo2+"_sel_anio").unbind();
 		$("#"+compPeriodo2+"_sel_anio").change(function(evt) {
-
 			switch (period) {
 				case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					break;
@@ -446,13 +456,12 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 				case 5: 	changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					break;
 			};
-
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
+			vbajo_savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
 		});
 
 		//Retira eventos y actualiza datos en mes
 		$("#"+compPeriodo1+"_sel_mes").unbind();
-
 		$("#"+compPeriodo1+"_sel_mes").change(function(evt) {
 			switch (period) {
 				case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
@@ -461,12 +470,11 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 					break;
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
+			vbajo_savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period); 
 		});
 
 		$("#"+compPeriodo2+"_sel_mes").unbind();
-
 		$("#"+compPeriodo2+"_sel_mes").change(function(evt) {
-
 			switch (period) {
 				case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					break;
@@ -474,17 +482,18 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 					break;
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
+			vbajo_savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period); 
 		});
 
 		//Retira eventos y actualiza datos en dia
 		$("#"+compPeriodo1+"_sel_dia").unbind();
 		$("#"+compPeriodo1+"_sel_dia").change(function(evt) {
-
 			switch (period) {
 				case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					break;
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
+			vbajo_savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period); 
 		});
 
 		$("#"+compPeriodo2+"_sel_dia").unbind();
@@ -494,6 +503,7 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 					break;
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
+			vbajo_savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period); 
 		});
 
 		//Retira eventos y actualiza datos en Semestre
@@ -503,15 +513,16 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 				changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
+			vbajo_savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period); 
 		});
 
 		$("#"+compPeriodo2+"_sel_semestre").unbind();
 		$("#"+compPeriodo2+"_sel_semestre").change(function(evt) {
-
 			if(period == 4){
 				changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
+			vbajo_savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period); 
 		});
 
 		//Retira eventos y actualiza datos en trimestre
@@ -521,6 +532,7 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 				changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
+			vbajo_savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period); 
 		});
 
 		$("#"+compPeriodo2+"_sel_trimestre").unbind();
@@ -529,7 +541,11 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 				changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 			}
 			updatedataplottimesranges(targetPlot,controllerPlot,compPeriodo1,compPeriodo2,data,idDivSlider,period);
+			vbajo_savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period); 
 		});
+
+		$("#"+idDivSlider).trigger("valuesChanged",datesinit);
+		scroll();
 
 	} catch (err) {
 		console.log(err);

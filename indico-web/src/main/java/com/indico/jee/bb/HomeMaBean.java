@@ -5,7 +5,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.event.ActionEvent;
-
 import org.primefaces.component.accordionpanel.AccordionPanel;
 import org.primefaces.event.TabChangeEvent;
 
@@ -97,6 +96,7 @@ public class HomeMaBean implements Serializable {
 		}
 	}
 	
+	
 	public void buttonAction() {
         addMessage();
     }
@@ -104,5 +104,5 @@ public class HomeMaBean implements Serializable {
     public void addMessage() {
         //FacesContext.getCurrentInstance().addMessage(null, message);
     }
-	
+
 }

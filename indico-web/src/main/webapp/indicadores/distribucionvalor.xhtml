@@ -199,8 +199,6 @@
 							<div id="chartzoomsliderdistribucion" class="superzoominternal"/>
 							<h:outputScript>
 									var almacen="distribucionvalor";
-									localStorage.setItem("distribucionvalorOneTime","1")
-									
 									function assignValuesVal() {
 										var periodo = PF('vval_selFiltroPorValorW').jq.find('option:selected').val();
 										var v_start;
@@ -257,6 +255,7 @@
 							
 									function vval_changeperiodiciorperiodo() {
 										var periodo = PF('vval_selFiltroPorValorW').jq.find('option:selected').val();
+										var onetime = localStorage.getItem("distribucionvalorOneTime");
 										$("[id*='vval_pValorDiario']").hide();
 										$("[id*='vval_pValorMensual']").hide();
 										$("[id*='vval_pValorTrimestral']").hide();
@@ -264,27 +263,27 @@
 										$("[id*='vval_pValorAnual']").hide();
 										switch (periodo) {
 											case "1":
-												createSliderDistriValorMinDiario('chartzoomsliderdistribucion','vval_valperiodo1','vval_valperiodo2','vval_messageinformationglobal',almacen);
+												createSliderDistriValorMinDiario('chartzoomsliderdistribucion','vval_valperiodo1','vval_valperiodo2','vval_messageinformationglobal',almacen,onetime);
 												$("[id*='vval_pValorDiario']").show();
 												localStorage.setItem("distribucionValorOld","1");
 												break;										
 											case "2":
-												createSliderDistriValorMinMensual('chartzoomsliderdistribucion','vval_valmensual1','vval_valmensual2','vval_messageinformationglobal',almacen);
+												createSliderDistriValorMinMensual('chartzoomsliderdistribucion','vval_valmensual1','vval_valmensual2','vval_messageinformationglobal',almacen,onetime);
 												$("[id*='vval_pValorMensual']").show();
 												localStorage.setItem("distribucionValorOld","2");
 												break;										
 											case "3":
-												createSliderDistriValorMinTrimestral('chartzoomsliderdistribucion','vval_valtrimestral1','vval_valtrimestral2','vval_messageinformationglobal',almacen);
+												createSliderDistriValorMinTrimestral('chartzoomsliderdistribucion','vval_valtrimestral1','vval_valtrimestral2','vval_messageinformationglobal',almacen,onetime);
 												$("[id*='vval_pValorTrimestral']").show();
 												localStorage.setItem("distribucionValorOld","3");
 												break;
 											case "4": 
-												createSliderDistriValorMinSemestral('chartzoomsliderdistribucion','vval_valsemestral1','vval_valsemestral2','vval_messageinformationglobal',almacen);
+												createSliderDistriValorMinSemestral('chartzoomsliderdistribucion','vval_valsemestral1','vval_valsemestral2','vval_messageinformationglobal',almacen,onetime);
 												$("[id*='vval_pValorSemestral']").show();
 												localStorage.setItem("distribucionValorOld","4");
 												break;										
 											case "5": 
-												createSliderDistriValorMinAnual('chartzoomsliderdistribucion','vval_valanual1','vval_valanual2','vval_messageinformationglobal',almacen);
+												createSliderDistriValorMinAnual('chartzoomsliderdistribucion','vval_valanual1','vval_valanual2','vval_messageinformationglobal',almacen,onetime);
 												$("[id*='vval_pValorAnual']").show();
 												localStorage.setItem("distribucionValorOld","5");
 												break;										
@@ -293,7 +292,10 @@
 									}//function
 								     
 						  			function vval_recargar() {
+						  				var concepto="todos";
+						  				localStorage.setItem("distribucionvalorOneTime","1");
 									}
+									
 									
 									$(document).ready(function(){
 								    	gra = document.getElementById('accoCuentas_active').value;
