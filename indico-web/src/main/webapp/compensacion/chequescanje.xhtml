@@ -200,7 +200,9 @@
 		 						</div>
 							<h:outputScript>
 									var almacen='canjealcobro';
+									localStorage.setItem("canjealcobroOneTime","1")
 									function assignValues() {
+
 										var v_start;
 										var v_end;
 										var periodo = PF('vcanje_selFiltroPorValorW').jq.find('option:selected').val();
@@ -255,7 +257,6 @@
 
 
 									function changeperiodiciocanje() {
-										var onetime = localStorage.getItem("canjealcobroOneTime");
 										var periodo = PF('vcanje_selFiltroPorValorW').jq.find('option:selected').val();
 										localStorage.setItem("ChequeCanjeOld",periodo);
 										var tipodeplaza = PF('vcanje_tipoplazaVar').jq.find('option:selected').val();
@@ -269,30 +270,28 @@
 										switch (periodo) {
 											case "1":
 												$("[id*='vcanje_pValorDiario']").show();
-												createChartMinDiario('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valperiodo1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen,onetime);
+												createChartMinDiario('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valperiodo1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen);
 												break;
 											case "2":
 												$("[id*='vcanje_pValorMensual']").show();
-												createChartMinMensual('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valmensual1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen,onetime);
+												createChartMinMensual('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valmensual1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen);
 												break;
 											case "3":
 												$("[id*='vcanje_pValorTrimestral']").show();
-												createChartMinTrimestral('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valtrimestral1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen,onetime);
+												createChartMinTrimestral('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valtrimestral1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen);
 												break;
 											case "4":
 												$("[id*='vcanje_pValorSemestral']").show();
-												createChartMinSemestral('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valsemestral1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen,onetime);
+												createChartMinSemestral('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valsemestral1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen);
 												break;
 											case "5":
 												$("[id*='vcanje_pValorAnual']").show();
-												createChartMinAnual('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valanual1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen.onetime);
+												createChartMinAnual('vcanje_chartvalores','vcanje_chartcantidad','vcanje_valanual1',tipodeplaza,label,'vcanje_messageinformationglobal',almacen);
 												break;
 										};//switch
 									}//function
 
 									function recargarcanje(){
-										localStorage.setItem("canjealcobroOneTime","1");
-										
 									}
 
 								    $(document).ready(function(){

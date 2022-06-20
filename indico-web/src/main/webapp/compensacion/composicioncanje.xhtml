@@ -253,6 +253,7 @@
 		 						</div>  		
 							<h:outputScript>
 									var almacen="CanjeComposicion";
+									localStorage.setItem("CanjeComposicionOneTime","1")
 									function assignValuesCompoCanje() {
 										var v_start;
 										var v_end;
@@ -321,7 +322,6 @@
 									}									
 															
 									function vcomcanjechangeperiodo() {
-										onetime = localStorage.getItem("CanjeComposicionOneTime");
 										let idsel = localStorage.getItem("composicioncanjeoldOld");
 										
 										var rangocanjesel = [];
@@ -375,7 +375,7 @@
 											.concat("left: 100%; ");
 											
 										$(document).ready(function(){
-											createSliderComposicionCanje('vcomcanje_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,rangocanjesel,label,'vcomcanje_messageinformationglobal',almacen,onetime);
+											createSliderComposicionCanje('vcomcanje_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,rangocanjesel,label,'vcomcanje_messageinformationglobal',almacen);
 																				
 											$(".jqplot-table-legend")[0].id="tableComLeg";
 											document.getElementById("tableComLeg").setAttribute("style",styleLegend);
@@ -387,7 +387,6 @@
 									}//function
 									
 									function recargarcanje(){
-										localStorage.setItem("CanjeComposicionOneTime","1");
 									}
 									
 								    $(document).ready(function(){

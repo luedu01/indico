@@ -233,6 +233,7 @@ Las cifras se presentan en miles de millones de pesos</p>
 		 						</div>  		
 								<h:outputScript>
 								var almacen="TransferenciaBajoValor"; 
+								localStorage.setItem("TransferenciaBajoValorOneTime","1")
 								function assignValuesceni() {
 										
 										var v_start;
@@ -289,9 +290,10 @@ Las cifras se presentan en miles de millones de pesos</p>
 									}																
 																
 									function vbajovalchangeperiodo() {
-										onetime = localStorage.getItem("TransferenciaBajoValorOneTime");
+									
 										var periodo = PF('vbajoval_selFiltroPorValorW').jq.find('option:selected').val();
 										localStorage.setItem("TransferenciaBajoValor",periodo);
+										
 										$("[id*='vbajoval_pValorDiario']").hide();
 										$("[id*='vbajoval_pValorMensual']").hide();
 										$("[id*='vbajoval_pValorTrimestral']").hide();
@@ -325,17 +327,17 @@ Las cifras se presentan en miles de millones de pesos</p>
 												break;										
 										};//switch
 										$(document).ready(function(){
-											createSliderTransBajoValor('vbajoval_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,'vbajoval_messageinformationglobal',almacen,onetime);
+											createSliderTransBajoValor('vbajoval_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,'vbajoval_messageinformationglobal',almacen);
 										});
 										
 									}//function
 									
 									function recargarcanje(){
-										localStorage.setItem("TransferenciaBajoValorOneTime","1");
 									}
 									
 								    $(document).ready(function(){
 								    	vbajovalchangeperiodo();
+								    	
 								    	var onetime = localStorage.getItem("TransferenciaBajoValorOneTime");
 								    	if (onetime=="1") {
 									    	setTimeout(() => {
@@ -345,6 +347,7 @@ Las cifras se presentan en miles de millones de pesos</p>
 								    	}
 								    	
 								    	var isIPhone = {
+										   
 										    iOS: function() {
 										        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
 										    },

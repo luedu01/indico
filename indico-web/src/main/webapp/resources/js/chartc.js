@@ -1317,7 +1317,7 @@ function scroll (){
 	    }
 }
 
-function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza,label,errormessage,almacen){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDiaria({'tipodeplaza':tipodeplaza});
@@ -1331,27 +1331,8 @@ function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza
 		if (label==null || label =="undefined") label = "Todas";
 		data["Title"] = data["Title"] + " - " + label;
 		
-		vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
+		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
 		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			console.log(ticks);
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecStart = from2;
-			vStorageFecEnd = dateend;
-			vStorageFecSelected=dateend;
-			
-		} 				
 		startvaluescomponentstimes (vStorageFecSelected,compdiario1,data,_DIARIO);
 		
 		$("#"+chartvalores)[0].setAttribute("class","");
@@ -1363,6 +1344,7 @@ function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza
 		var datasel = [[]];
 		var dateselected = data["endX"];
 		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
+		
 		var leftPlot 		= createplotpieleft ( chartvaloresid		,	datosvalores[0] , _DIARIO);
 		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
 		var divlegendvalores = document.createElement('div');
@@ -1389,27 +1371,24 @@ function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza
 		divlegendcantidad.innerHTML=legendacantidad;
 		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
 
+		scroll();
+
 		$("#"+compdiario1+"_sel_anio").unbind();
 		$("#"+compdiario1+"_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compdiario1,data);
 			updatedCanjealCobro(leftPlot,rigthPlot,compdiario1,divlegendvaloresid,divlegendcantidadid,data,_DIARIO,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compdiario1, "1")
 		});
 		$("#"+compdiario1+"_sel_mes").unbind();
 		$("#"+compdiario1+"_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compdiario1,data);
 			updatedCanjealCobro(leftPlot,rigthPlot,compdiario1,divlegendvaloresid,divlegendcantidadid,data,_DIARIO,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compdiario1, "1")
 		});
 
 		$("#"+compdiario1+"_sel_dia").unbind();
 		$("#"+compdiario1+"_sel_dia").change(function(evt) {
 			changedatesselectedstimes(compdiario1,data);
 			updatedCanjealCobro(leftPlot,rigthPlot,compdiario1,divlegendvaloresid,divlegendcantidadid,data,_DIARIO,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compdiario1, "1")
 		});
-		scroll();
-
 	} catch (err) {
 		if (logerrors) console.log(err);
 		$("[id*='"+errormessage+"'").show();
@@ -1418,7 +1397,7 @@ function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza
 	}
 };
 
-function createChartMinMensual(chartvalores,chartcantidad,compmensual1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinMensual(chartvalores,chartcantidad,compmensual1,tipodeplaza,label,errormessage,almacen){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionMensual({'tipodeplaza':tipodeplaza});
@@ -1434,21 +1413,6 @@ function createChartMinMensual(chartvalores,chartcantidad,compmensual1,tipodepla
 		data["Title"] = data["Title"] + " - " + label;
 		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
 		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			vStorageFecSelected = new Date(fromtmp);
-			vStorageFecSelected = completarFechaStart(fromtmp,ticks);
-		} 				
 		startvaluescomponentstimes (vStorageFecSelected,compmensual1,data,_MENSUAL);
 		$("#"+chartvalores)[0].setAttribute("class","");
 		var chartvaloresid=chartvalores+"_chart";
@@ -1485,21 +1449,19 @@ function createChartMinMensual(chartvalores,chartcantidad,compmensual1,tipodepla
 		divlegendcantidad.innerHTML=legendacantidad;
 		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
 
+		scroll();
+
 		$("#"+compmensual1+"_sel_anio").unbind();
 		$("#"+compmensual1+"_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compmensual1,data);
 			updatedCanjealCobro(leftPlot,rigthPlot,compmensual1,divlegendvaloresid,divlegendcantidadid,data,_MENSUAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compmensual1, "2");
 		});
 
 		$("#"+compmensual1+"_sel_mes").unbind();
 		$("#"+compmensual1+"_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compmensual1,data);
 			updatedCanjealCobro(leftPlot,rigthPlot,compmensual1,divlegendvaloresid,divlegendcantidadid,data,_MENSUAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compmensual1, "2");
 		});
-		scroll();
-		
 	} catch (err) {
 		if (logerrors) console.log(err);
 		$("[id*='"+errormessage+"'").show();
@@ -1508,7 +1470,7 @@ function createChartMinMensual(chartvalores,chartcantidad,compmensual1,tipodepla
 	}
 };
 
-function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tipodeplaza,label,errormessage,almacen){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionTrimestral({'tipodeplaza':tipodeplaza});
@@ -1517,6 +1479,7 @@ function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tip
 			data["SerieCantidad"].sort(ordenarCantidades);
 		}
 
+
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
 		$("#"+chartcantidad).empty();
@@ -1524,21 +1487,6 @@ function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tip
 		data["Title"] = data["Title"] + " - " + label;
 		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
 		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			vStorageFecSelected = new Date(fromtmp);
-			vStorageFecSelected = completarFechaStart(fromtmp,ticks);
-		} 				
 		startvaluescomponentstimes (vStorageFecSelected,comptrimestral1,data,_TRIMESTRAL);
 		$("#"+chartvalores)[0].setAttribute("class","");
 		var chartvaloresid=chartvalores+"_chart";
@@ -1581,14 +1529,12 @@ function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tip
 		$("#"+comptrimestral1+"_sel_anio").change(function(evt) {
 			changedatesselectedstimes(comptrimestral1,data);
 			updatedCanjealCobro(leftPlot,rigthPlot,comptrimestral1,divlegendvaloresid,divlegendcantidadid,data,_TRIMESTRAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, comptrimestral1, "3");
 		});
 
 		$("#"+comptrimestral1+"_sel_trimestre").unbind();
 		$("#"+comptrimestral1+"_sel_trimestre").change(function(evt) {
 			changedatesselectedstimes(comptrimestral1,data);
 			updatedCanjealCobro(leftPlot,rigthPlot,comptrimestral1,divlegendvaloresid,divlegendcantidadid,data,_TRIMESTRAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, comptrimestral1, "3");
 		});
 	} catch (err) {
 		if (logerrors) console.log(err);
@@ -1598,7 +1544,7 @@ function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tip
 	}
 }
 
-function createChartMinSemestral(chartvalores,chartcantidad,compsemestral1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinSemestral(chartvalores,chartcantidad,compsemestral1,tipodeplaza,label,errormessage,almacen){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionSemestral({'tipodeplaza':tipodeplaza});
@@ -1613,23 +1559,8 @@ function createChartMinSemestral(chartvalores,chartcantidad,compsemestral1,tipod
 		$("#"+chartcantidad).empty();
 		if (label==null || label =="undefined") label = "Todas";
 		data["Title"] = data["Title"] + " - " + label;
-		vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
+		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
 		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			vStorageFecSelected = new Date(fromtmp);
-			vStorageFecSelected = completarFechaStart(fromtmp,ticks);
-		} 				
 		startvaluescomponentstimes (vStorageFecSelected,compsemestral1,data,_SEMESTRAL);
 		$("#"+chartvalores)[0].setAttribute("class","");
 		var chartvaloresid=chartvalores+"_chart";
@@ -1672,14 +1603,12 @@ function createChartMinSemestral(chartvalores,chartcantidad,compsemestral1,tipod
 		$("#"+compsemestral1+"_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compsemestral1,data);
 			updatedCanjealCobro(leftPlot,rigthPlot,compsemestral1,divlegendvaloresid,divlegendcantidadid,data,_SEMESTRAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compsemestral1, "4");
 		});
 
 		$("#"+compsemestral1+"_sel_semestre").unbind();
 		$("#"+compsemestral1+"_sel_semestre").change(function(evt) {
 			changedatesselectedstimes(compsemestral1,data);
 			updatedCanjealCobro(leftPlot,rigthPlot,compsemestral1,divlegendvaloresid,divlegendcantidadid,data,_SEMESTRAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compsemestral1, "4");
 		});
 
 	} catch (err) {
@@ -1688,7 +1617,6 @@ function createChartMinSemestral(chartvalores,chartcantidad,compsemestral1,tipod
 		$("[id*='"+errormessage+"']").empty();
 		$("[id*='"+errormessage+"'").append(brmensaje(mensageError, "error"));
 	}
-	
 }
 
 function getDataFiltereCompensacion(datos,dateselected) {
@@ -1718,10 +1646,9 @@ function getDataFiltereCompensacion(datos,dateselected) {
 	datosseleccionados[1] = totales;
 	var totalvalorsumado = totalS;
 	return datosseleccionados;
-
 }
 
-function createChartMinAnual(chartvalores,chartcantidad,companual1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinAnual(chartvalores,chartcantidad,companual1,tipodeplaza,label,errormessage){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 	
@@ -1730,6 +1657,7 @@ function createChartMinAnual(chartvalores,chartcantidad,companual1,tipodeplaza,l
 			data["SerieValores"].sort(ordenarValores);
 			data["SerieCantidad"].sort(ordenarCantidades);
 		}
+
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
 		$("#"+chartcantidad).empty();
@@ -1737,21 +1665,6 @@ function createChartMinAnual(chartvalores,chartcantidad,companual1,tipodeplaza,l
 		data["Title"] = data["Title"] + " - " + label;
 		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
 		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			vStorageFecSelected = new Date(fromtmp);
-			vStorageFecSelected = completarFechaStart(fromtmp,ticks);
-		} 				
 		startvaluescomponentstimes (vStorageFecSelected,companual1,data,_ANUAL);
 		$("#"+chartvalores)[0].setAttribute("class","");
 		var chartvaloresid=chartvalores+"_chart";
@@ -1790,15 +1703,13 @@ function createChartMinAnual(chartvalores,chartcantidad,companual1,tipodeplaza,l
 		divlegendcantidad.innerHTML=legendacantidad;
 		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
 
+		scroll();
+
 		$("#"+companual1+"_sel_anio").unbind();
 		$("#"+companual1+"_sel_anio").change(function(evt) {
 			changedatesselectedstimes(companual1,data);
 			updatedCanjealCobro(leftPlot,rigthPlot,companual1,divlegendvaloresid,divlegendcantidadid,data,_ANUAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, companual1, "5");
 		});
-
-		scroll();
-
 	} catch (err) {
 		if (logerrors) console.log(err);
 		$("[id*='"+errormessage+"'").show();
@@ -1919,7 +1830,6 @@ function createplotpieleft (name,data,tipo) {
 	});
 	return plot2;
 }
-
 
 function createplotpieright (name,data,tipo) {
  	$.jqplot.sprintf.thousandsSeparator = '.';
@@ -2067,10 +1977,9 @@ function scroll2 (){
 	 }
 }
 
-function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipodeplaza,label,errormessage){
 
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
-	
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolDiaria({'tipodeplaza':tipodeplaza});
 		if ("MUL"==tipodeplaza){
@@ -2083,25 +1992,8 @@ function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipode
 		$("#"+chartcantidad).empty();
 		if (label==null || label =="undefined") label = "Todas";
 		data["Title"] = data["Title"] + " - " + label;
-		vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
+		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
 		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		console.log(onetime);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			console.log(ticks);
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			vStorageFecSelected = new Date(fromtmp);
-			vStorageFecSelected = dateend;
-		} 				
 		startvaluescomponentstimes (vStorageFecSelected,compdiario1,data,_DIARIO);
 		$("#"+chartvalores)[0].setAttribute("class","");
 		var chartvaloresid=chartvalores+"_chart";
@@ -2138,28 +2030,25 @@ function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipode
 		divlegendcantidad.innerHTML=legendacantidad;
 		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
 
+		scroll2 ();
+
 		$("#"+compdiario1+"_sel_anio").unbind();
 		$("#"+compdiario1+"_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compdiario1,data);
 			updatedatapieplottimesranges(leftPlot,rigthPlot,compdiario1,divlegendvaloresid,divlegendcantidadid,data,_DIARIO,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compdiario1, "1");
 		});
 
 		$("#"+compdiario1+"_sel_mes").unbind();
 		$("#"+compdiario1+"_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compdiario1,data);
 			updatedatapieplottimesranges(leftPlot,rigthPlot,compdiario1,divlegendvaloresid,divlegendcantidadid,data,_DIARIO,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compdiario1, "1");
 		});
 
 		$("#"+compdiario1+"_sel_dia").unbind();
 		$("#"+compdiario1+"_sel_dia").change(function(evt) {
 			changedatesselectedstimes(compdiario1,data);
 			updatedatapieplottimesranges(leftPlot,rigthPlot,compdiario1,divlegendvaloresid,divlegendcantidadid,data,_DIARIO,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compdiario1, "1");
 		});
-		scroll2 ();
-
 	} catch (err) {
 		if (logerrors) console.log(err);
 		$("[id*='"+errormessage+"'").show();
@@ -2168,7 +2057,7 @@ function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipode
 	}
 };
 
-function createChartMinMensualDevol(chartvalores,chartcantidad,compmensual1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinMensualDevol(chartvalores,chartcantidad,compmensual1,tipodeplaza,label,errormessage){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolMensual({'tipodeplaza':tipodeplaza});
@@ -2184,23 +2073,6 @@ function createChartMinMensualDevol(chartvalores,chartcantidad,compmensual1,tipo
 		data["Title"] = data["Title"] + " - " + label;
 		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
 		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
-		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			vStorageFecSelected = new Date(fromtmp);
-			vStorageFecSelected = completarFechaStart(fromtmp,ticks);
-		} 		
 		startvaluescomponentstimes (vStorageFecSelected,compmensual1,data,_MENSUAL);
 		$("#"+chartvalores)[0].setAttribute("class","");
 		var chartvaloresid=chartvalores+"_chart";
@@ -2237,20 +2109,19 @@ function createChartMinMensualDevol(chartvalores,chartcantidad,compmensual1,tipo
 		divlegendcantidad.innerHTML=legendacantidad;
 		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
 
+		scroll2 ();
+
 		$("#"+compmensual1+"_sel_anio").unbind();
 		$("#"+compmensual1+"_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compmensual1,data);
 			updatedatapieplottimesranges(leftPlot,rigthPlot,compmensual1,divlegendvaloresid,divlegendcantidadid,data,_MENSUAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compmensual1, "2");
 		});
 
 		$("#"+compmensual1+"_sel_mes").unbind();
 		$("#"+compmensual1+"_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compmensual1,data);
 			updatedatapieplottimesranges(leftPlot,rigthPlot,compmensual1,divlegendvaloresid,divlegendcantidadid,data,_MENSUAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compmensual1, "2");
 		});
-		scroll2 ();
 	} catch (err) {
 		if (logerrors) console.log(err);
 		$("[id*='"+errormessage+"'").show();
@@ -2259,7 +2130,7 @@ function createChartMinMensualDevol(chartvalores,chartcantidad,compmensual1,tipo
 	}
 };
 
-function createChartMinTrimestralDevol(chartvalores,chartcantidad,comptrimestral1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinTrimestralDevol(chartvalores,chartcantidad,comptrimestral1,tipodeplaza,label,errormessage){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolTrimestral({'tipodeplaza':tipodeplaza});
@@ -2275,23 +2146,6 @@ function createChartMinTrimestralDevol(chartvalores,chartcantidad,comptrimestral
 		data["Title"] = data["Title"] + " - " + label;
 		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
 		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
-		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			vStorageFecSelected = new Date(fromtmp);
-			vStorageFecSelected = completarFechaStart(fromtmp,ticks);
-		} 		
 		startvaluescomponentstimes (vStorageFecSelected,comptrimestral1,data,_TRIMESTRAL);
 		$("#"+chartvalores)[0].setAttribute("class","");
 		var chartvaloresid=chartvalores+"_chart";
@@ -2328,20 +2182,19 @@ function createChartMinTrimestralDevol(chartvalores,chartcantidad,comptrimestral
 		divlegendcantidad.innerHTML=legendacantidad;
 		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
 
+		scroll2 ();
+
 		$("#"+comptrimestral1+"_sel_anio").unbind();
 		$("#"+comptrimestral1+"_sel_anio").change(function(evt) {
 			changedatesselectedstimes(comptrimestral1,data);
 			updatedatapieplottimesranges(leftPlot,rigthPlot,comptrimestral1,divlegendvaloresid,divlegendcantidadid,data,_TRIMESTRAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, comptrimestral1, "3");
 		});
 
 		$("#"+comptrimestral1+"_sel_trimestre").unbind();
 		$("#"+comptrimestral1+"_sel_trimestre").change(function(evt) {
 			changedatesselectedstimes(comptrimestral1,data);
 			updatedatapieplottimesranges(leftPlot,rigthPlot,comptrimestral1,divlegendvaloresid,divlegendcantidadid,data,_TRIMESTRAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, comptrimestral1, "3");
 		});
-		scroll2 ();
 	} catch (err) {
 		if (logerrors) console.log(err);
 		$("[id*='"+errormessage+"'").show();
@@ -2350,7 +2203,7 @@ function createChartMinTrimestralDevol(chartvalores,chartcantidad,comptrimestral
 	}
 }
 
-function createChartMinSemestralDevol(chartvalores,chartcantidad,compsemestral1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinSemestralDevol(chartvalores,chartcantidad,compsemestral1,tipodeplaza,label,errormessage){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolSemestral({'tipodeplaza':tipodeplaza});
@@ -2366,23 +2219,6 @@ function createChartMinSemestralDevol(chartvalores,chartcantidad,compsemestral1,
 		data["Title"] = data["Title"] + " - " + label;
 		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
 		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
-		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			vStorageFecSelected = new Date(fromtmp);
-			vStorageFecSelected = completarFechaStart(fromtmp,ticks);
-		} 		
 		startvaluescomponentstimes (vStorageFecSelected,compsemestral1,data,_SEMESTRAL);
 		$("#"+chartvalores)[0].setAttribute("class","");
 		var chartvaloresid=chartvalores+"_chart";
@@ -2419,21 +2255,19 @@ function createChartMinSemestralDevol(chartvalores,chartcantidad,compsemestral1,
 		divlegendcantidad.innerHTML=legendacantidad;
 		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
 
+		scroll2 ();
+
 		$("#"+compsemestral1+"_sel_anio").unbind();
 		$("#"+compsemestral1+"_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compsemestral1,data);
 			updatedatapieplottimesranges(leftPlot,rigthPlot,compsemestral1,divlegendvaloresid,divlegendcantidadid,data,_SEMESTRAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compsemestral1, "4");
 		});
 
 		$("#"+compsemestral1+"_sel_semestre").unbind();
 		$("#"+compsemestral1+"_sel_semestre").change(function(evt) {
 			changedatesselectedstimes(compsemestral1,data);
 			updatedatapieplottimesranges(leftPlot,rigthPlot,compsemestral1,divlegendvaloresid,divlegendcantidadid,data,_SEMESTRAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, compsemestral1, "4");
 		});
-
-		scroll2 ();
 	} catch (err) {
 		if (logerrors) console.log(err);
 		$("[id*='"+errormessage+"'").show();
@@ -2442,7 +2276,7 @@ function createChartMinSemestralDevol(chartvalores,chartcantidad,compsemestral1,
 	}
 }
 
-function createChartMinAnualDevol(chartvalores,chartcantidad,companual1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinAnualDevol(chartvalores,chartcantidad,companual1,tipodeplaza,label,errormessage){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolAnual({'tipodeplaza':tipodeplaza});
@@ -2458,23 +2292,6 @@ function createChartMinAnualDevol(chartvalores,chartcantidad,companual1,tipodepl
 		data["Title"] = data["Title"] + " - " + label;
 		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
 		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
-		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			vStorageFecSelected = new Date(fromtmp);
-			vStorageFecSelected = completarFechaStart(fromtmp,ticks);
-		} 		
 		startvaluescomponentstimes (vStorageFecSelected,companual1,data,_ANUAL);
 		$("#"+chartvalores)[0].setAttribute("class","");
 		var chartvaloresid=chartvalores+"_chart";
@@ -2512,13 +2329,13 @@ function createChartMinAnualDevol(chartvalores,chartcantidad,companual1,tipodepl
 		divlegendcantidad.innerHTML=legendacantidad;
 		document.getElementById(chartcantidad).appendChild(divlegendcantidad);
 
+		scroll2 ();
+
 		$("#"+companual1+"_sel_anio").unbind();
 		$("#"+companual1+"_sel_anio").change(function(evt) {
 			changedatesselectedstimes(companual1,data);
 			updatedatapieplottimesranges(leftPlot,rigthPlot,companual1,divlegendvaloresid,divlegendcantidadid,data,_ANUAL,errormessage,chartvalores,chartcantidad);
-			savedOldDatesStoStorage(almacen, companual1, "5");
 		});
-		scroll2 ();
 	} catch (err) {
 		if (logerrors) console.log(err);
 		$("[id*='"+errormessage+"'").show();

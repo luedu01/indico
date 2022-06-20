@@ -40,7 +40,7 @@
 	</h:head>
 
 	<h:body>
-		<p:panelGrid id="headerBody" class="p-grid p-dir-col">
+		<p:panelGrid class="p-grid p-dir-col">
 			<b:container fluid="true" id="columnCon">
 				<div class='nav'>
 					<b:column col-sm="3" col-md="3" id="column2" class="barIcoHeight">
@@ -55,7 +55,10 @@
 						    <!--  <div class="full" id="fullCud" style="#{homeMaBean.selected==0?'display: block;':''}"> -->
 						    	<p:outputPanel styleClass="cardCustonT2">
 									<h:form>
-										<p:commandLink id="cud1" actionListener="#{homeMaBean.iconAction}" update="@([id$=panelGeneral],[id$=columnCon])" process="@this" ajax="true">
+										<h:commandLink id="cud1" actionListener="#{homeMaBean.iconAction}"
+											update="@([id$=panelGeneral])"
+											process="@this"
+											>
 											<p:outputPanel>
 												<center>
 													<p:graphicImage styleClass="imagecarousel2" id="imgcrs"
@@ -65,21 +68,23 @@
 												<div class="EmptyBox1">
 													<center>
 														<p:outputPanel styleClass="textbelow">
-															<h1 class="textbelow-tittle">Sistema de cuentas de</h1>
+															<h1 class="textbelow-tittle">Sistema de cuentas de
+															</h1>
+															<div class="EmptyBox1"></div>
 															<h1 class="importantxt">Depósito - CUD</h1>
 														</p:outputPanel>
 													</center>
 												</div>
 											</p:outputPanel>
 											<f:attribute name="sel" value="0" />
-										</p:commandLink>
+										</h:commandLink>
 									</h:form>
 								</p:outputPanel>
 						    </div>
 						     
 					  		<div class='mobileBar' style="#{homeMaBean.selected==0?'background-color: #7bb9e0;':''}">
 					  			<h:form>
-									<p:commandLink  id="cud2" actionListener="#{homeMaBean.iconAction2}" update="@([id$=panelGeneral],[id$=columnCon])" process="@this" ajax="true">
+									<h:commandLink  id="cud2" actionListener="#{homeMaBean.iconAction2}" update="@([id$=panelGeneral])" process="@this">
 					  					<p:outputPanel styleClass="cardCustonT2">
 											<div class="EmptyBox">
 												<p:outputPanel styleClass="textbelow">
@@ -89,6 +94,7 @@
 													    </div>
 		    											<div class="ui-g-6 ui-md-6 ui-lg-6">
 		    												<span class="textbelow-tittle">Sistema de cuentas de</span>
+															<div class="EmptyBox1"></div>
 															<span class="importantxt">Depósito - CUD</span>
 		    											</div>
 													</div>
@@ -96,7 +102,7 @@
 											</div>	
 										</p:outputPanel>
 										<f:attribute name="sel" value="0" />
-									</p:commandLink>
+									</h:commandLink>
 								</h:form>
 					  		</div>
 					  		
@@ -113,9 +119,9 @@
 				    		<div class='full' id="fullCheques" style="display: block;">
 				      			<p:outputPanel styleClass="cardCustonT2">
 									<h:form>
-										<p:commandLink id="cheques1" actionListener="#{homeMaBean.iconAction}"
-											update="@([id$=panelGeneral],[id$=columnCon])"
-											process="@this" ajax="true"
+										<h:commandLink id="cheques1" actionListener="#{homeMaBean.iconAction}"
+											update="@([id$=panelGeneral])"
+											process="@this"
 											>
 											<p:outputPanel>
 												<center>
@@ -126,7 +132,7 @@
 												<div class="EmptyBox1">
 													<center>
 														<p:outputPanel styleClass="textbelow">
-															<h1 class="textbelow-tittle">Compensación de</h1>
+															<h1 class="textbelow-tittle">Compensación de </h1>
 															<div class="EmptyBox1"></div>
 															<h2 class="importantxt">cheques</h2>
 														</p:outputPanel>
@@ -134,16 +140,16 @@
 												</div>
 											</p:outputPanel>
 											<f:attribute name="sel" value="1" />
-										</p:commandLink >
+										</h:commandLink>
 									</h:form>
 								</p:outputPanel>
 				    		</div>
 				    		<div class='mobileBar' style="#{homeMaBean.selected==1?'background-color: #7bb9e0;':''}">
 					  			<p:outputPanel styleClass="cardCustonT2">
 									<h:form>
-										<p:commandLink id="cheques2" actionListener="#{homeMaBean.iconAction2}"
-											update="@([id$=panelGeneral],[id$=columnCon])"
-											process="@this" ajax="true">
+										<h:commandLink id="cheques2" actionListener="#{homeMaBean.iconAction2}"
+											update="@([id$=panelGeneral])"
+											process="@this">
 											<div class="EmptyBox">
 												<p:outputPanel styleClass="textbelow">
 													<div class="ui-g">
@@ -159,7 +165,7 @@
 												</p:outputPanel>
 											</div>	
 											<f:attribute name="sel" value="1" />
-										</p:commandLink >
+										</h:commandLink>
 									</h:form>
 								</p:outputPanel>
 					  		</div>
@@ -176,9 +182,9 @@
 				    		<div class='full' id="fullBajo" style="display: block;">
 				      			<p:outputPanel styleClass="cardCustonT2">
 									<h:form>
-										<p:commandLink id="bajoval1" actionListener="#{homeMaBean.iconAction}"
-											update="@([id$=panelGeneral],[id$=columnCon])"
-											process="@this" ajax="true"
+										<h:commandLink id="bajoval1" actionListener="#{homeMaBean.iconAction}"
+											update="@([id$=panelGeneral])"
+											process="@this"
 											
 										>
 											<p:outputPanel>
@@ -198,17 +204,17 @@
 												</div>
 											</p:outputPanel>
 											<f:attribute name="sel" value="2" />
-										</p:commandLink >
+										</h:commandLink>
 									</h:form>
 								</p:outputPanel>
 				    		</div>
 				  			<div class='mobileBar' style="#{homeMaBean.selected==2?'background-color: #7bb9e0;':''}">
 					  			<p:outputPanel styleClass="cardCustonT2">
 									<h:form>
-										<p:commandLink id="bajoval2" actionListener="#{homeMaBean.iconAction2}"
-											update="@([id$=panelGeneral],[id$=columnCon])"
+										<h:commandLink id="bajoval2" actionListener="#{homeMaBean.iconAction2}"
+											update="@([id$=panelGeneral])"
 											process="@this"
-											ajax="true"
+											
 										>
 											<div class="EmptyBox">
 												<p:outputPanel styleClass="textbelow">
@@ -225,7 +231,7 @@
 												</p:outputPanel>
 											</div>
 											<f:attribute name="sel" value="2" />
-										</p:commandLink >
+										</h:commandLink>
 									</h:form>
 								</p:outputPanel>
 					  		</div>
@@ -234,7 +240,8 @@
 				
 					<b:column col-sm="3" col-md="3" id="column5" class="barIcoHeight">
 						<h:form  id="fguia"  >
-							<p:commandLink id="guia2" actionListener="#{homeMaBean.iconAction}" update="@([id$=panelGeneral],[id$=columnCon])" process="@this" ajax="true">
+							<h:commandLink id="guia2" actionListener="#{homeMaBean.iconAction}"  
+								update="@([id$=panelGeneral])" process="@this">
 								<div class='link2 btn' id="guia" style="#{homeMaBean.selected==3?'background-color: #7bb9e0;':''}">
 									<div class='small'><img src="./resources/images/question-mark.svg" class="imgGuia" style="width:22% !important"></img>
 										<h1 id="titulo4">guía de uso</h1>
@@ -242,12 +249,13 @@
 									</div>
 									<f:attribute name="sel" value="3" />					  
 								</div>
-							</p:commandLink >
+							</h:commandLink>
 						</h:form>
 				  	</b:column> 	
 				</div>
 			</b:container>
 		</p:panelGrid>
+		
 		<b:container id="panelGeneral" style="width: 100%">
 			<ui:insert>
 				<ui:include src="#{homeMaBean.src}">
@@ -256,49 +264,29 @@
 		</b:container>
 
 		<h:outputScript target="body">
-		
+			$(document).ready(function() {  
+				iefix();
+				var t;
+    window.onload = resetTimer;
+    window.onmousemove = resetTimer;
+    window.onmousedown = resetTimer;  //catches touchscreen presses as well      
+    window.ontouchstart = resetTimer; //catches touchscreen swipes as well 
+    window.onclick = resetTimer;      //catches touchpad clicks as well
+    window.onkeypress = resetTimer;   
+    window.addEventListener('scroll', resetTimer, true); //improved; see comments
+
+    function yourFunction() {
+       	window.location.href = 'index.xhtml';
+    }
+
+    function resetTimer() {
+        clearTimeout(t);
+        t = setTimeout(yourFunction, 300000);  //time is in milliseconds
+    }
+    	});
 			jQuery(window).resize(function() {
 				iefix(); 
 			});	
-
-			$(window).on("load",function(){
-				localStorage.setItem("TransferenciaOneTime","1");
-				localStorage.setItem("TransferenciaBajoValorOneTime","1");
-				localStorage.setItem("canjealcobroOneTime","1");
-				localStorage.setItem("canjedevolucionchequesOneTime","1");
-				localStorage.setItem("ComportamientoCanjeOneTime","1");
-				localStorage.setItem("CanjeComportamientoDevolucionesOneTime","1");
-				localStorage.setItem("CanjeComposicionOneTime","1");
-				localStorage.setItem("CanjeDevolucionesOneTime","1");
-				localStorage.setItem("distribucioncantidadOneTime","1");
-				localStorage.setItem("distribucionvalorOneTime","1");
-				localStorage.setItem("PagosPIBOneTime","1");
-				localStorage.setItem("PagosRotacionOneTime","1");
-				
-				
-				$(document).ready(function() {  
-					iefix();
-					var t;
-				    window.onload = resetTimer;
-				    window.onmousemove = resetTimer;
-				    window.onmousedown = resetTimer;  //catches touchscreen presses as well      
-				    window.ontouchstart = resetTimer; //catches touchscreen swipes as well 
-				    window.onclick = resetTimer;      //catches touchpad clicks as well
-				    window.onkeypress = resetTimer;   
-				    window.addEventListener('scroll', resetTimer, true); //improved; see comments
-				
-				    function yourFunction() {
-				       	window.location.href = 'index.xhtml';
-				    }
-				
-				    function resetTimer() {
-				        clearTimeout(t);
-				        t = setTimeout(yourFunction, 300000);  //time is in milliseconds
-				    }
-				    
-		    	});				
-			});
-			
 			
 		</h:outputScript>
 	</h:body>	

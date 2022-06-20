@@ -152,7 +152,8 @@
 													<p:outputPanel class="ui-g Wid90">
 														<p:commandButton icon="" styleClass="WhiteBack Black Wid60 NoMargin NoBorder-radius-Right Fs14 border-gray-1 " process="@this"
 															value="Restaurar" update="@([id$=valorgraficavalor],[id$=panelesValoresDinamic],[id$=panelFiltros],[id$=selconcepto])" 
-															actionListener="#{transferenciaBean.restaurarAction}"  onclick="recargar();"/>
+															actionListener="#{transferenciaBean.restaurarAction}"  onclick="recargar();"
+															/>
 														<p:commandButton icon="icon-restaurar" styleClass="BlueBack Wid30 NoMargin NoBorder-radius-Left"  process="@this"
 															update="@([id$=valorgraficavalor],[ID$=panelesValoresDinamic],[ID$=panelFiltros])" 
 															actionListener="#{transferenciaBean.restaurarAction}"  onclick="recargar();">
@@ -259,6 +260,7 @@
 						 
 								<h:outputScript>
 								    var almacen="Transferencia";  
+								    localStorage.setItem("TransferenciaOneTime","1")
 									function assignValues() {
 										periodo = PF('selFiltroPorValorW').jq.find('option:selected').val();
 										concepto = PF('conceptoVar').jq.find('option:selected').val();
@@ -295,7 +297,6 @@
 									
 									function recargar() {
 										var concepto="todos";
-										localStorage.setItem("TransferenciaOneTime","1");
 									}
 									
 									function tran_savedperidoselected() {
@@ -324,7 +325,6 @@
 									
 									function changeperiodiciorperiodo() {
 										let idsel = localStorage.getItem("transferenciaOld");
-										let onetime = localStorage.getItem("TransferenciaOneTime");
 										$(document).ready(function(){
 											try {
 												periodo = PF('selFiltroPorValorW').jq.find('option:selected').val();
@@ -338,30 +338,30 @@
 												
 												switch (periodo) {
 													case "1":
-														createSliderMinDiario('chartzoomslidertransf','valperiodo1','valperiodo2',concepto,label,'messageinformationglobal',almacen,onetime);
+														createSliderMinDiario('chartzoomslidertransf','valperiodo1','valperiodo2',concepto,label,'messageinformationglobal',almacen);
 														$("[id*='pValorDiario']").show();
 														localStorage.setItem("transferenciaOld","1");
 														break;										
 													case "2":
-														createSliderMinMensual('chartzoomslidertransf','valmensual1','valmensual2',concepto,label,'messageinformationglobal',almacen,onetime);
+														createSliderMinMensual('chartzoomslidertransf','valmensual1','valmensual2',concepto,label,'messageinformationglobal',almacen);
 														$("[id*='pValorMensual']").show();
 														localStorage.setItem("transferenciaOld","2");
 														break;										
 													case "3":
 														$("[id*='pValorTrimestral']").show();
-														createSliderMinTrimestral('chartzoomslidertransf','valtrimestral1','valtrimestral2',concepto,label,'messageinformationglobal',almacen,onetime);
+														createSliderMinTrimestral('chartzoomslidertransf','valtrimestral1','valtrimestral2',concepto,label,'messageinformationglobal',almacen);
 														$("[id*='pValorTrimestral']").show();
 														localStorage.setItem("transferenciaOld","3");
 														break;
 													case "4": 
 														$("[id*='pValorSemestral']").show();
-														createSliderMinSemestral('chartzoomslidertransf','valsemestral1','valsemestral2',concepto,label,'messageinformationglobal',almacen,onetime);
+														createSliderMinSemestral('chartzoomslidertransf','valsemestral1','valsemestral2',concepto,label,'messageinformationglobal',almacen);
 														$("[id*='pValorSemestral']").show();
 														localStorage.setItem("transferenciaOld","4");
 														break;										
 													case "5": 
 														$("[id*='pValorAnual']").show();
-														createSliderMinAnual('chartzoomslidertransf','valanual1','valanual2',concepto,label,'messageinformationglobal',almacen,onetime);
+														createSliderMinAnual('chartzoomslidertransf','valanual1','valanual2',concepto,label,'messageinformationglobal',almacen);
 														$("[id*='pValorAnual']").show();
 														localStorage.setItem("transferenciaOld","5");
 														break;										
@@ -372,6 +372,22 @@
 										});
 									}//function
 									
+									$(document).ready(function(){
+									    	gra = document.getElementById('accoCuentas_active').value;
+									    	if(gra == "0"){
+									    	   	changeperiodiciorperiodo();
+									    	}
+									    	
+									    	var onetime = localStorage.getItem("TransferenciaOneTime");
+									    	if (onetime=="1") {
+										    	setTimeout(() => {
+										    		tran_savedperidoselected();
+										    	},2000);	
+										    	localStorage.setItem("TransferenciaOneTime","0");
+									    	}									    	
+									    	
+								    });
+								    							     
 								    jQuery(window).resize(function() {
 								      $(document).ready(function(){
 	         							gra = document.getElementById('accoCuentas_active').value;
@@ -381,22 +397,6 @@
 								      });	
 	      							});
 								   
-								   
-									$(document).ready(function(){
-									    	gra = document.getElementById('accoCuentas_active').value;
-									    	if(gra == "0"){
-									    	   	changeperiodiciorperiodo();
-									    	}
-									    	var onetime = localStorage.getItem("TransferenciaOneTime");
-									    	if (onetime=="1") {
-										    	setTimeout(() => {
-										    		tran_savedperidoselected();
-										    	},2000);	
-										    	localStorage.setItem("TransferenciaOneTime","0");
-									    	}									    	
-									    	
-								    });									    
-
 								</h:outputScript>
 						  	
 						</h:form>

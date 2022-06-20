@@ -146,12 +146,12 @@
 														styleClass="BlueBack Wid30 NoMargin NoBorder-radius-Right"
 														process="@this"
 														update="@([id$=ppib_valorgraficavalor002],[ID$=ppib_panelesValoresDinamic],[id$=ppib_panelFiltros])"
-														actionListener="#{pagosPIBMaBean.restaurarAction}" onclick="recargarpib();"/>
+														actionListener="#{pagosPIBMaBean.restaurarAction}" />
 													<p:commandButton icon=""
 														styleClass="WhiteBack Black Wid60 NoMargin  NoBorder-radius-Left  Fs13 border-gray-1 "
 														value="Restaurar" process="@this"
 														update="@([id$=ppib_valorgraficavalor002],[ID$=ppib_panelesValoresDinamic],[id$=ppib_panelFiltros])"
-														actionListener="#{pagosPIBMaBean.restaurarAction}" onclick="recargarpib();"/>
+														actionListener="#{pagosPIBMaBean.restaurarAction}" />
 												</p:outputPanel>
 											</h:form>
 										</p:outputPanel>
@@ -162,12 +162,12 @@
 														styleClass="WhiteBack Black Wid70 NoMargin NoBorder-radius-Right Padding5 Fs13 border-gray-1 TexAlLeft"
 														value="Restaurar" process="@this"
 														update="@([id$=ppib_valorgraficavalor002],[id$=ppib_panelesValoresDinamic],[id$=ppib_panelFiltros])"
-														actionListener="#{pagosPIBMaBean.restaurarAction}" onclick="recargarpib();" />
+														actionListener="#{pagosPIBMaBean.restaurarAction}" />
 													<p:commandButton icon="icon-restaurar"
 														styleClass="BlueBack Wid30 NoMargin Padding5 NoBorder-radius-Left"
 														process="@this"
 														update="@([id$=ppib_valorgraficavalor002],[id$=ppib_panelesValoresDinamic],[id$=ppib_panelFiltros])"
-														actionListener="#{pagosPIBMaBean.restaurarAction}" onclick="recargarpib();"/>
+														actionListener="#{pagosPIBMaBean.restaurarAction}" />
 												</p:outputPanel>
 											</h:form>
 
@@ -258,6 +258,8 @@
 								<div id="chartzoomsliderrotacionpib" class="superzoominternal" />
 								<h:outputScript>
 									var almacen="PagosPIB";
+									localStorage.setItem("PagosPIBOneTime","1")
+									
 									function ppib_assignValues() {
 										var periodo = PF('ppib_selFiltroPorValorW').jq.find('option:selected').val();
 										
@@ -316,7 +318,6 @@
 									function ppib_changeperiodiciorperiodo() {
 										let idsel = localStorage.getItem("pagospibOld");
 										var periodo = PF('ppib_selFiltroPorValorW').jq.find('option:selected').val();
-										var onetime = localStorage.getItem("PagosPIBOneTime");
 										$("[id*='ppib_pValorDiario']").hide();
 										$("[id*='ppib_pValorMensual']").hide();
 										$("[id*='ppib_pValorTrimestral']").hide();
@@ -324,27 +325,27 @@
 										$("[id*='ppib_pValorAnual']").hide();
 										switch (periodo) {
 											case "1":
-												createSliderRotaMinDiarioPib('chartzoomsliderrotacionpib','ppib_valperiodo1','ppib_valperiodo2','ppib_messageinformationglobal',almacen,onetime);
+												createSliderRotaMinDiarioPib('chartzoomsliderrotacionpib','ppib_valperiodo1','ppib_valperiodo2','ppib_messageinformationglobal',almacen);
 												$("[id*='ppib_pValorDiario']").show();
 												localStorage.setItem("pagospibOld","1");
 												break;										
 											case "2":
-												createSliderRotaMinMensualPib('chartzoomsliderrotacionpib','ppib_valmensual1','ppib_valmensual2','ppib_messageinformationglobal',almacen,onetime);
+												createSliderRotaMinMensualPib('chartzoomsliderrotacionpib','ppib_valmensual1','ppib_valmensual2','ppib_messageinformationglobal',almacen);
 												$("[id*='ppib_pValorMensual']").show();
 												localStorage.setItem("pagospibOld","2");
 												break;										
 											case "3":
-												createSliderRotaMinTrimestralPib('chartzoomsliderrotacionpib','ppib_valtrimestral1','ppib_valtrimestral2','ppib_messageinformationglobal',almacen,onetime);
+												createSliderRotaMinTrimestralPib('chartzoomsliderrotacionpib','ppib_valtrimestral1','ppib_valtrimestral2','ppib_messageinformationglobal',almacen);
 												$("[id*='ppib_pValorTrimestral']").show();
 												localStorage.setItem("pagospibOld","3");
 												break;
 											case "4": 
-												createSliderRotaMinSemestralPib ('chartzoomsliderrotacionpib','ppib_valsemestral1','ppib_valsemestral2','ppib_messageinformationglobal',almacen,onetime);
+												createSliderRotaMinSemestralPib ('chartzoomsliderrotacionpib','ppib_valsemestral1','ppib_valsemestral2','ppib_messageinformationglobal',almacen);
 												$("[id*='ppib_pValorSemestral']").show();
 												localStorage.setItem("pagospibOld","4");
 												break;										
 											case "5": 
-												createSliderRotaMinAnualPib('chartzoomsliderrotacionpib','ppib_valanual1','ppib_valanual2','ppib_messageinformationglobal',almacen,onetime);
+												createSliderRotaMinAnualPib('chartzoomsliderrotacionpib','ppib_valanual1','ppib_valanual2','ppib_messageinformationglobal',almacen);
 												$("[id*='ppib_pValorAnual']").show();
 												localStorage.setItem("pagospibOld","5");
 												break;										
@@ -353,7 +354,6 @@
 									}//function
 								     
 						  			function recargarpib() {
-						  				localStorage.setItem("PagosPIBOneTime","1");
 									}
 									
 									 $(document).ready(function(){

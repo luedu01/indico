@@ -18,21 +18,18 @@ function formatdate(val) {
 
 function completarFechaStart(fecha,sticks) {
 	if (fecha == null && (sticks==null || sticks.length==0)) return null;
-	if (fecha instanceof Date) {
-		
-	} else {
-		var anio,mes,dia;
-		if (fecha!=null){
-			anio = fecha.split('-')[0];
-			mes = fecha.split('-')[1];
-			dia = fecha.split('-')[2];
-	
-			if (mes === undefined) { mes = "01"; }
-			if (dia === undefined) { dia = "01"; }
-		}
-		fecha = new Date(anio, mes - 1, dia);
-	} 
 
+	var anio,mes,dia;
+	if (fecha!=null){
+		anio = fecha.split('-')[0];
+		mes = fecha.split('-')[1];
+		dia = fecha.split('-')[2];
+
+		if (mes === undefined) { mes = "01"; }
+		if (dia === undefined) { dia = "01"; }
+	}
+	
+	fecha = new Date(anio, mes - 1, dia);
 	if (isNaN(fecha) == true) {
   		fecha=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
 	} else {
@@ -94,26 +91,26 @@ function savedOldDatesStoStorage(almacen, componente1, componente2, anterior) {
 
 	var vfecStart;
 	var vfecEnd;
-	anterior=parseInt(anterior);
+
 
 	switch (anterior) {
-		case 1:
+		case "1":
 			vfecStart = getDateStartFromDiario(componente1);
 			vfecEnd = getDateEndFromDiario(componente2);
 			break;
-		case 2:
+		case "2":
 			vfecStart = getDateStartFromMensual(componente1);
 			vfecEnd = getDateEndFromMensual(componente2);
 			break;
-		case 3:
+		case "3":
 			vfecStart = getDateStartFromTrimestral(componente1);
 			vfecEnd = getDateEndFromTrimestral(componente2);
 			break;
-		case 4:
+		case "4":
 			vfecStart = getDateStartFromSemestral(componente1);
 			vfecEnd = getDateEndFromSemestral(componente2);
 			break;
-		case 5:
+		case "5":
 			vfecStart = getDateStartFromAnual(componente1);
 			vfecEnd = getDateStartFromAnual(componente2);
 			break;
@@ -749,7 +746,7 @@ function changedatesselectedstimes(compdiario1, compdiario2, data, slider) {
 	}
 	var inicio = new Date(anio1, mes1 - 1, dia1);
 	var fin = new Date(anio2, mes2 - 1, dia2);
-	
+
 	//
 	addaniotimes(data, "#" + compdiario1 + "_sel_anio", inicio);
 	addmesestimes(data, "#" + compdiario1 + "_sel_mes", inicio);
@@ -2517,7 +2514,7 @@ function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, concepto, label, errormessage, almacen,onetime) {
+function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, concepto, label, errormessage, almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -2528,30 +2525,31 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 		if (label == null || label == "undefined") label = "Todos";
 		data["Title"] = data["Title"] + " - " + label;
 
-		let vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
-		let vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
+		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
+		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		
+		var onetime =vStorageFecEnd; 
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
 		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compdiario1, compdiario2, data);
 		
-		let divchartmax = document.createElement('div');
+		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
 		divchartmax.style = "chartcustom";
 		document.getElementById(divchartzoomslider).appendChild(divchartmax);
 		targetPlot = createplotmaxgeneral(divchartmax.id, data, 1);
-		let xmin = targetPlot.axes.xaxis.min;
-		let xmax = targetPlot.axes.xaxis.max;
-		let s_left = targetPlot._defaultGridPadding.left;
-		let s_right = targetPlot._defaultGridPadding.right;
-		let left = targetPlot._gridPadding.left;
-		let right = targetPlot._gridPadding.right;
-		let width = targetPlot._plotDimensions.width;
+		var xmin = targetPlot.axes.xaxis.min;
+		var xmax = targetPlot.axes.xaxis.max;
+		var s_left = targetPlot._defaultGridPadding.left;
+		var s_right = targetPlot._defaultGridPadding.right;
+		var left = targetPlot._gridPadding.left;
+		var right = targetPlot._gridPadding.right;
+		var width = targetPlot._plotDimensions.width;
 		idMini = divchartzoomslider + "_divmini";
-		let innerDivMini = document.createElement('div');
+		var innerDivMini = document.createElement('div');
 		innerDivMini.id = idMini;
-		let style = "width:".concat((width - left)).concat("px !important; ")
+		var style = "width:".concat((width - left)).concat("px !important; ")
 			.concat("left:").concat(0).concat("px !important;")
 			.concat("right:").concat(right - s_right).concat("px !important;")
 			.concat("height:").concat(55).concat("px !important;");
@@ -2561,9 +2559,9 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider + "_slider";
-		let innerDivSlider = document.createElement('div');
+		var innerDivSlider = document.createElement('div');
 		innerDivSlider.id = idDivSlider;
-		let styleSlider = "width:".concat((width - left - right + s_left + s_right + 24)).concat("px !important; ")
+		var styleSlider = "width:".concat((width - left - right + s_left + s_right + 24)).concat("px !important; ")
 			.concat("margin-top:").concat(-8).concat("px !important;")
 			.concat("left:").concat(left - s_left - 12).concat("px !important;")
 			.concat("right:").concat(right).concat("px !important;")
@@ -2572,25 +2570,40 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 		innerDivSlider.setAttribute("style", styleSlider);
 		document.getElementById(divchartzoomslider).appendChild(innerDivSlider);
 		
-		let ticks = data["Ticks"];
-		let datestart = ticks[0];
+		var ticks = data["Ticks"];
+		var datestart = ticks[0];
 		datestart = datestart.split("-");
 		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
 		//
-		let dateend = ticks[ticks.length - 1].split("-");
+		var dateend = ticks[ticks.length - 1].split("-");
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
-		let from = data["startX"].split("-");
-		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
+	
+		
+		var from2;
 
-		let dateSlider;
+		if (isMobile.any()) {
+			if (ticks.length > 180) {
+				from2 = ticks[ticks.length - 180].split("-");
+			} else {
+				from2 = ticks[ticks.length - 60].split("-");
+			}
+		} else {
+			if (ticks.length > 60) {
+				from2 = ticks[ticks.length - 60].split("-");
+			} else {
+				from2 = ticks[ticks.length - 1].split("-");
+			}
+
+		}
+
+		from2 = new Date(from2[0], (parseInt(from2[1]) - 1), from2[2]);
+		if (onetime!=null) {
+			from2=vStorageFecStart;
+		}
+		var from = data["startX"].split("-");
+		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
+		//from=datestart;
+		var dateSlider;
 		setTimeout(() => {
 		 dateSlider= $("#" + idDivSlider).dateRangeSlider(
 			{
@@ -2634,55 +2647,50 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 			//if (dateSlider.first == null || dateSlider.first == false) {
 				changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 				updatevaluescomponentstimesfromslider(dateSlider, compdiario1, compdiario2, data, 1);
-				savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 			//}
 		});
 		
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit2);
+		
+		scroll();
+
+
 		$("#" + compdiario1 + "_sel_anio").unbind("change");
 		$("#" + compdiario1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario1 + "_sel_mes").unbind("change");
 		$("#" + compdiario1 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario1 + "_sel_dia").unbind("change");
 		$("#" + compdiario1 + "_sel_dia").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario2 + "_sel_anio").unbind("change");
 		$("#" + compdiario2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario2 + "_sel_mes").unbind("change");
 		$("#" + compdiario2 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario2 + "_sel_dia").unbind("change");
 		$("#" + compdiario2 + "_sel_dia").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
-
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit2);
-		scroll();
 
 	} catch (err) {
 		if (showError) { console.log(err); }
@@ -2693,8 +2701,8 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 
 
 var datatransfermensual;
-function createSliderMinMensual(divchartzoomslider, compmensual1, compmensual2, concepto, label, errormessage, almacen,onetime) {
-	let targetPlot, controllerPlot, idMini, idDivSlider, data;
+function createSliderMinMensual(divchartzoomslider, compmensual1, compmensual2, concepto, label, errormessage, almacen) {
+	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestServices.getTransferenciasMensuales({ 'concepto': concepto });
@@ -2703,28 +2711,28 @@ function createSliderMinMensual(divchartzoomslider, compmensual1, compmensual2, 
 		if (label == null || label == "undefined") label = "Todos";
 		data["Title"] = data["Title"] + " - " + label;
 
-		let vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
-		let vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
+		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
+		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
 
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compmensual1, compmensual2, data);
 
-		let divchartmax = document.createElement('div');
+		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
 		divchartmax.style = "chartcustom"
 		document.getElementById(divchartzoomslider).appendChild(divchartmax);
 		targetPlot = createplotmaxgeneral(divchartmax.id, data, 2);
-		let s_left = targetPlot._defaultGridPadding.left;
-		let s_right = targetPlot._defaultGridPadding.right;
-		let left = targetPlot._gridPadding.left;
-		let right = targetPlot._gridPadding.right;
-		let width = targetPlot._plotDimensions.width;
+		var s_left = targetPlot._defaultGridPadding.left;
+		var s_right = targetPlot._defaultGridPadding.right;
+		var left = targetPlot._gridPadding.left;
+		var right = targetPlot._gridPadding.right;
+		var width = targetPlot._plotDimensions.width;
 		idMini = divchartzoomslider + "_divmini";
-		let innerDivMini = document.createElement('div');
+		var innerDivMini = document.createElement('div');
 		innerDivMini.id = idMini;
-		let style = "width:".concat((width - left)).concat("px !important; ")
+		var style = "width:".concat((width - left)).concat("px !important; ")
 			.concat("left:").concat(0).concat("px !important;")
 			.concat("right:").concat(right - s_right).concat("px !important;")
 			.concat("height:").concat(55).concat("px !important;");
@@ -2734,9 +2742,9 @@ function createSliderMinMensual(divchartzoomslider, compmensual1, compmensual2, 
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider + "_slider";
-		let innerDivSlider = document.createElement('div');
+		var innerDivSlider = document.createElement('div');
 		innerDivSlider.id = idDivSlider;
-		let styleSlider = "width:".concat((width - left - right + s_left + s_right + 24)).concat("px !important; ")
+		var styleSlider = "width:".concat((width - left - right + s_left + s_right + 24)).concat("px !important; ")
 			.concat("margin-top:").concat(-8).concat("px !important;")
 			.concat("left:").concat(left - s_left - 12).concat("px !important;")
 			.concat("right:").concat(right).concat("px !important;")
@@ -2745,35 +2753,49 @@ function createSliderMinMensual(divchartzoomslider, compmensual1, compmensual2, 
 		innerDivSlider.setAttribute("style", styleSlider);
 		document.getElementById(divchartzoomslider).appendChild(innerDivSlider);
 
-		let datestart = data["MinX"].split("-");
+		var datestart = data["MinX"].split("-");
 		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
 		
-		let dateend = data["MaxX"].split("-");;
+		var dateend = data["MaxX"].split("-");;
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 
-		let from = data["startX"].split("-");
+		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
 		
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 30);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
+		var to = dateend;
 
-		let dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
+		var from2;
+		var ticks = data["Ticks"];
+
+		if (isMobile.any()) {
+			if (ticks.length > 180) {
+				from2 = ticks[ticks.length - 180].split("-");
+			} else {
+				from2 = ticks[ticks.length - 60].split("-");
+			}
+		} else {
+			if (ticks.length > 60) {
+				from2 = ticks[ticks.length - 60].split("-");
+			} else {
+				from2 = ticks[ticks.length - 1].split("-");
+			}
+
+		}
+
+		from2 = new Date(from2[0], (parseInt(from2[1]) - 1), from2[2]);
+		//from2 = datestart;
+		
+		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
 				range: {
-					min: { months: 1 },
+					min: { days: 30 },
 				},
 				bounds: {
 					min: datestart,
 					max: dateend
 				},
 				defaultValues: {
-					min: from2,
+					min: vStorageFecStart,
 					max: vStorageFecEnd
 				},
 			}
@@ -2782,8 +2804,8 @@ function createSliderMinMensual(divchartzoomslider, compmensual1, compmensual2, 
 		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-					min: from2,
-					max: vStorageFecEnd
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			updateperiodo: true
 		}
@@ -2803,43 +2825,37 @@ function createSliderMinMensual(divchartzoomslider, compmensual1, compmensual2, 
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, compmensual1, compmensual2, data, 2);
 			if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, compmensual1, compmensual2, data, 2);
-				savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 			}
 		});
+
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit2);
+
+		scroll();
 
 		$("#" + compmensual1 + "_sel_anio").unbind();
 		$("#" + compmensual1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual1 + "_sel_mes").unbind();
 		$("#" + compmensual1 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual2 + "_sel_anio").unbind();
 		$("#" + compmensual2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual2 + "_sel_mes").unbind();
 		$("#" + compmensual2 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
-		
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit2);
-		scroll();
-
-		
 	} catch (err) {
 		if (showError) { console.log(err); }
 		$("[id*='" + errormessage + "'").empty();
@@ -2848,8 +2864,8 @@ function createSliderMinMensual(divchartzoomslider, compmensual1, compmensual2, 
 };
 
 var datatransfertrimestral;
-function createSliderMinTrimestral(divchartzoomslider, comptrimestral1, comptrimestral2, concepto, label, errormessage,almacen,onetime) {
-	let targetPlot, controllerPlot, idMini, idDivSlider, data;
+function createSliderMinTrimestral(divchartzoomslider, comptrimestral1, comptrimestral2, concepto, label, errormessage,almacen) {
+	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestServices.getTransferenciasTrimestrales({ 'concepto': concepto });
@@ -2857,27 +2873,27 @@ function createSliderMinTrimestral(divchartzoomslider, comptrimestral1, comptrim
 		$("#" + divchartzoomslider)[0].setAttribute("class", "superzoom");
 		if (label == null || label == "undefined") label = "Todos";
 		data["Title"] = data["Title"] + " - " + label;
-		let vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
-		let vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
+		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
+		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
 
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, comptrimestral1, comptrimestral2, data);
-		let divchartmax = document.createElement('div');
+		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
 		divchartmax.style = "chartcustom"
 		document.getElementById(divchartzoomslider).appendChild(divchartmax);
 		targetPlot = createplotmaxgeneral(divchartmax.id, data, 3);
-		let s_left = targetPlot._defaultGridPadding.left;
-		let s_right = targetPlot._defaultGridPadding.right;
-		let left = targetPlot._gridPadding.left;
-		let right = targetPlot._gridPadding.right;
-		let width = targetPlot._plotDimensions.width;
+		var s_left = targetPlot._defaultGridPadding.left;
+		var s_right = targetPlot._defaultGridPadding.right;
+		var left = targetPlot._gridPadding.left;
+		var right = targetPlot._gridPadding.right;
+		var width = targetPlot._plotDimensions.width;
 		idMini = divchartzoomslider + "_divmini";
-		let innerDivMini = document.createElement('div');
+		var innerDivMini = document.createElement('div');
 		innerDivMini.id = idMini;
-		let style = "width:".concat((width - left)).concat("px !important; ")
+		var style = "width:".concat((width - left)).concat("px !important; ")
 			.concat("left:").concat(0).concat("px !important;")
 			.concat("right:").concat(right - s_right).concat("px !important;")
 			.concat("height:").concat(55).concat("px !important;");
@@ -2887,9 +2903,9 @@ function createSliderMinTrimestral(divchartzoomslider, comptrimestral1, comptrim
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider + "_slider";
-		let innerDivSlider = document.createElement('div');
+		var innerDivSlider = document.createElement('div');
 		innerDivSlider.id = idDivSlider;
-		let styleSlider = "width:".concat((width - left - right + s_left + s_right + 24)).concat("px !important; ")
+		var styleSlider = "width:".concat((width - left - right + s_left + s_right + 24)).concat("px !important; ")
 			.concat("margin-top:").concat(-8).concat("px !important;")
 			.concat("left:").concat(left - s_left - 12).concat("px !important;")
 			.concat("right:").concat(right).concat("px !important;")
@@ -2903,17 +2919,7 @@ function createSliderMinTrimestral(divchartzoomslider, comptrimestral1, comptrim
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 		var from = data["startX"].split("-");
 		var from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
-		
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
-
-		
+		var to = dateend;
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
 				range: {
@@ -2924,17 +2930,17 @@ function createSliderMinTrimestral(divchartzoomslider, comptrimestral1, comptrim
 					max: dateend
 				},
 				defaultValues: {
-					min: from2,
+					min: vStorageFecStart,
 					max: vStorageFecEnd
 				},
 			}
 		);
 		//trigger first loaf
-		let datesinit = {
+		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-					min: from2,
-					max: vStorageFecEnd
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			first: true
 		}
@@ -2947,36 +2953,33 @@ function createSliderMinTrimestral(divchartzoomslider, comptrimestral1, comptrim
 			}
 		});
 
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+
+		scroll();
+
 		$("#" + comptrimestral1 + "_sel_anio").unbind("change");
 		$("#" + comptrimestral1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral1 + "_sel_trimestre").unbind("change");
 		$("#" + comptrimestral1 + "_sel_trimestre").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral2 + "_sel_anio").unbind("change");
 		$("#" + comptrimestral2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral2 + "_sel_trimestre").unbind("change");
 		$("#" + comptrimestral2 + "_sel_trimestre").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
-
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		scroll();
 
 	} catch (err) {
 		if (showError) { console.log(err); }
@@ -2986,7 +2989,7 @@ function createSliderMinTrimestral(divchartzoomslider, comptrimestral1, comptrim
 }
 
 var datatransfersemestral;
-function createSliderMinSemestral(divchartzoomslider, compsemestral1, compsemestral2, concepto, label, errormessage,almacen,onetime) {
+function createSliderMinSemestral(divchartzoomslider, compsemestral1, compsemestral2, concepto, label, errormessage,almacen) {
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
@@ -3039,16 +3042,7 @@ function createSliderMinSemestral(divchartzoomslider, compsemestral1, compsemest
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
-		
-		
+		var to = dateend;
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
 				range: {
@@ -3059,7 +3053,7 @@ function createSliderMinSemestral(divchartzoomslider, compsemestral1, compsemest
 					max: dateend
 				},
 				defaultValues: {
-					min: from2,
+					min: vStorageFecStart,
 					max: vStorageFecEnd
 				},
 			}
@@ -3068,8 +3062,8 @@ function createSliderMinSemestral(divchartzoomslider, compsemestral1, compsemest
 		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-					min: from2,
-					max: vStorageFecEnd
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			first: true
 		}
@@ -3079,40 +3073,36 @@ function createSliderMinSemestral(divchartzoomslider, compsemestral1, compsemest
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, compsemestral1, compsemestral2, data, 4);
 			if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, compsemestral1, compsemestral2, data, 4);
-				savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 			}
 		});
+
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+
+		scroll();
 
 		$("#" + compsemestral1 + "_sel_anio").unbind();
 		$("#" + compsemestral1 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral1 + "_sel_semestre").unbind();
 		$("#" + compsemestral1 + "_sel_semestre").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral2 + "_sel_anio").unbind();
 		$("#" + compsemestral2 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral2 + "_sel_semestre").unbind();
 		$("#" + compsemestral2 + "_sel_semestre").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
-
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		scroll();
 
 	} catch (err) {
 		if (showError) { console.log(err); }
@@ -3122,7 +3112,7 @@ function createSliderMinSemestral(divchartzoomslider, compsemestral1, compsemest
 }
 
 var datatransferanual;
-function createSliderMinAnual(divchartzoomslider, companual1, companual2, concepto, label, errormessage,almacen,onetime) {
+function createSliderMinAnual(divchartzoomslider, companual1, companual2, concepto, label, errormessage,almacen) {
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
@@ -3178,15 +3168,7 @@ function createSliderMinAnual(divchartzoomslider, companual1, companual2, concep
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
-
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
+		var to = dateend;
 
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
@@ -3198,7 +3180,7 @@ function createSliderMinAnual(divchartzoomslider, companual1, companual2, concep
 					max: dateend
 				},
 				defaultValues: {
-					min: from2,
+					min: vStorageFecStart,
 					max: vStorageFecEnd
 				},
 			}
@@ -3207,8 +3189,8 @@ function createSliderMinAnual(divchartzoomslider, companual1, companual2, concep
 		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-					min: from2,
-					max: vStorageFecEnd
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			updateperiodo: true
 		}
@@ -3218,27 +3200,24 @@ function createSliderMinAnual(divchartzoomslider, companual1, companual2, concep
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, companual1, companual2, data, 5);
 			if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, companual1, companual2, data, 5);
-				savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 			}
 		});
+
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+
+		scroll();
 
 		$("#" + companual1 + "_sel_anio").unbind("change");
 		$("#" + companual1 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(companual1, companual2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, companual1, companual2, data, idDivSlider, 5);
-			savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 		});
 
 		$("#" + companual2 + "_sel_anio").unbind("change");
 		$("#" + companual2 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(companual1, companual2, data, idDivSlider);
 			updatedataplottimesrangestran(targetPlot, controllerPlot, companual1, companual2, data, idDivSlider, 5);
-			savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 		});
-
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		scroll();
-
 
 	} catch (err) {
 		if (showError) { console.log(err); }
@@ -3382,8 +3361,7 @@ function createplotmaxgeneral(name, data, tipo) {
 				max: maxX,
 				label: 'Fecha',
 				showLabel: false,
-				pad: 1.0,
-				padMin: 1.0,
+				pad: 1,
 				tickInterval: getTickInterval(tipo),
 				renderer: $.jqplot.DateAxisRenderer,
 				rendererOptions: {
@@ -3424,8 +3402,7 @@ function createplotmaxgeneral(name, data, tipo) {
 					size: 4,
 					markSize: 6,
 					show: true,
-					pad: 1.0,
-					Minpad: 1.0,
+					pad: 1,
 					fontFamily: '"Roboto", sans-serif',
 					textColor: "#850024",
 					formatString: "%'.2f",
@@ -3451,8 +3428,7 @@ function createplotmaxgeneral(name, data, tipo) {
 					show: true,
 					size: 4,
 					markSize: 6,
-					pad: 5.2,
-					minPad: 1.5,
+					pad: 1.2,
 					textColor: "#006fb9",
 					fontFamily: '"Roboto", sans-serif',
 					formatString: "%'.0f",
@@ -3664,7 +3640,7 @@ function scrollrotacion() {
 	}
 }
 var datarotadiaria;
-function createSliderRotaMinDiario(divchartzoomslider, compdiario1, compdiario2, errormessage,almacen,onetime) {
+function createSliderRotaMinDiario(divchartzoomslider, compdiario1, compdiario2, errormessage,almacen) {
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
 
@@ -3722,18 +3698,31 @@ function createSliderRotaMinDiario(divchartzoomslider, compdiario1, compdiario2,
 		var dateend = data["MaxX"].split("-");;
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 
+		var ticks = data["Ticks"];
+		var from2;
+		if (isMobile.any()) {
+			if (ticks.length > 180) {
+				from2 = ticks[ticks.length - 180].split("-");
+			} else {
+				from2 = ticks[ticks.length - 60].split("-");
+			}
+		} else {
+			if (ticks.length > 60) {
+				from2 = ticks[ticks.length - 60].split("-");
+			} else {
+				from2 = ticks[ticks.length - 1].split("-");
+			}
+
+		}
+
+		//var from2	 	= ticks[ticks.length-60].split("-");
+		from2 = new Date(from2[0], (parseInt(from2[1]) - 1), from2[2]);
+		if(onetine!=null){
+			from2=vStorageFecStart;
+		}
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
-
-		var ticks = data["Ticks"];
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
+		var to = dateend;
 
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
@@ -3775,58 +3764,49 @@ function createSliderRotaMinDiario(divchartzoomslider, compdiario1, compdiario2,
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, compdiario1, compdiario2, data, 1);
 			//if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, compdiario1, compdiario2, data, 1);
-				savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 			//}
 		});
 
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit2);
+
+		scrollrotacion();
 
 		$("#" + compdiario1 + "_sel_anio").unbind();
 		$("#" + compdiario1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario1 + "_sel_mes").unbind();
 		$("#" + compdiario1 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario1 + "_sel_dia").unbind();
 		$("#" + compdiario1 + "_sel_dia").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario2 + "_sel_anio").unbind();
 		$("#" + compdiario2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario2 + "_sel_mes").unbind();
 		$("#" + compdiario2 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario2 + "_sel_dia").unbind();
 		$("#" + compdiario2 + "_sel_dia").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
-
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit2);
-		scrollrotacion();
-		
-		
 	} catch (err) {
 		if (showError) { console.log(err); }
 		$("[id*='" + errormessage + "'").empty();
@@ -3835,7 +3815,7 @@ function createSliderRotaMinDiario(divchartzoomslider, compdiario1, compdiario2,
 };
 
 var datarotamensual;
-function createSliderRotaMinMensual(divchartzoomslider, compmensual1, compmensual2, errormessage,almacen,onetime) {
+function createSliderRotaMinMensual(divchartzoomslider, compmensual1, compmensual2, errormessage,almacen) {
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
@@ -3895,18 +3875,31 @@ function createSliderRotaMinMensual(divchartzoomslider, compmensual1, compmensua
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 
 
+		var ticks = data["Ticks"];
+
+		var from2;
+		if (isMobile.any()) {
+			if (ticks.length > 180) {
+				from2 = ticks[ticks.length - 180].split("-");
+			} else {
+				from2 = ticks[ticks.length - 60].split("-");
+			}
+		} else {
+			if (ticks.length > 60) {
+				from2 = ticks[ticks.length - 60].split("-");
+			} else {
+				from2 = ticks[ticks.length - 1].split("-");
+			}
+
+		}
+		//var from2	 	= ticks[ticks.length-60].split("-");
+
+		from2 = new Date(from2[0], (parseInt(from2[1]) - 1), from2[2]);
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
-		var ticks = data["Ticks"];
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
-		
+		var to = dateend;
+
+
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
 				range: {
@@ -3918,7 +3911,7 @@ function createSliderRotaMinMensual(divchartzoomslider, compmensual1, compmensua
 					max: dateend
 				},
 				defaultValues: {
-					min: from2,
+					min: vStorageFecStart,
 					max: vStorageFecEnd
 				},
 			}
@@ -3927,8 +3920,8 @@ function createSliderRotaMinMensual(divchartzoomslider, compmensual1, compmensua
 		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-					min: from2,
-					max: vStorageFecEnd
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			updateperiodo: true
 		}
@@ -3937,8 +3930,8 @@ function createSliderRotaMinMensual(divchartzoomslider, compmensual1, compmensua
 		var datesinit2 = {
 			label: dateSliderBounds,
 			values: {
-					min: from2,
-					max: vStorageFecEnd
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			//first: true
 			updateperiodo: true
@@ -3952,38 +3945,33 @@ function createSliderRotaMinMensual(divchartzoomslider, compmensual1, compmensua
 			}
 		});
 
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit2);
+
+		scrollrotacion();
+
 		$("#" + compmensual1 + "_sel_anio").unbind();
 		$("#" + compmensual1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual1 + "_sel_mes").unbind();
 		$("#" + compmensual1 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual2 + "_sel_anio").unbind();
 		$("#" + compmensual2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 		$("#" + compmensual2 + "_sel_mes").unbind();
 		$("#" + compmensual2 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
-
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit2);
-
-		scrollrotacion();
-
 	} catch (err) {
 		if (showError) { console.log(err); }
 		$("[id*='" + errormessage + "'").empty();
@@ -3992,7 +3980,7 @@ function createSliderRotaMinMensual(divchartzoomslider, compmensual1, compmensua
 };
 
 var datarotatrimestral;
-function createSliderRotaMinTrimestral(divchartzoomslider, comptrimestral1, comptrimestral2, errormessage,almacen,onetime) {
+function createSliderRotaMinTrimestral(divchartzoomslider, comptrimestral1, comptrimestral2, errormessage,almacen) {
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
@@ -4050,15 +4038,7 @@ function createSliderRotaMinTrimestral(divchartzoomslider, comptrimestral1, comp
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
-		
+		var to = dateend;
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
 				range: {
@@ -4069,7 +4049,7 @@ function createSliderRotaMinTrimestral(divchartzoomslider, comptrimestral1, comp
 					max: dateend
 				},
 				defaultValues: {
-					min: from2,
+					min: vStorageFecStart,
 					max: vStorageFecEnd
 				},
 			}
@@ -4078,8 +4058,8 @@ function createSliderRotaMinTrimestral(divchartzoomslider, comptrimestral1, comp
 		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-					min: from2,
-					max: vStorageFecEnd
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			updateperiodo: true
 		}
@@ -4088,42 +4068,36 @@ function createSliderRotaMinTrimestral(divchartzoomslider, comptrimestral1, comp
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, comptrimestral1, comptrimestral2, data, 3);
 			if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, comptrimestral1, comptrimestral2, data, 3);
-				savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 			}
 		});
 
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+
+		scrollrotacion();
 
 		$("#" + comptrimestral1 + "_sel_anio").unbind();
 		$("#" + comptrimestral1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral1 + "_sel_trimestre").unbind();
 		$("#" + comptrimestral1 + "_sel_trimestre").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral2 + "_sel_anio").unbind();
 		$("#" + comptrimestral2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral2 + "_sel_trimestre").unbind();
 		$("#" + comptrimestral2 + "_sel_trimestre").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
-
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		scrollrotacion();
-
 	} catch (err) {
 		if (showError) { console.log(err); }
 		$("[id*='" + errormessage + "'").empty();
@@ -4132,7 +4106,7 @@ function createSliderRotaMinTrimestral(divchartzoomslider, comptrimestral1, comp
 };
 
 var datarotasemestral;
-function createSliderRotaMinSemestral(divchartzoomslider, compsemestral1, compsemestral2, errormessage,almacen,onetime) {
+function createSliderRotaMinSemestral(divchartzoomslider, compsemestral1, compsemestral2, errormessage,almacen) {
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
@@ -4190,15 +4164,7 @@ function createSliderRotaMinSemestral(divchartzoomslider, compsemestral1, compse
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
-		
+		var to = dateend;
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
 				range: {
@@ -4209,7 +4175,7 @@ function createSliderRotaMinSemestral(divchartzoomslider, compsemestral1, compse
 					max: dateend
 				},
 				defaultValues: {
-					min: from2,
+					min: vStorageFecStart,
 					max: vStorageFecEnd
 				},
 			}
@@ -4218,8 +4184,8 @@ function createSliderRotaMinSemestral(divchartzoomslider, compsemestral1, compse
 		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-					min: from2,
-					max: vStorageFecEnd
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			updateperiodo: true
 		}
@@ -4229,45 +4195,40 @@ function createSliderRotaMinSemestral(divchartzoomslider, compsemestral1, compse
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, compsemestral1, compsemestral2, data, 4);
 			if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, compsemestral1, compsemestral2, data, 4);
-				savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 			}
 		});
+
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+
+		scrollrotacion();
 
 		$("#" + compsemestral1 + "_sel_anio").unbind();
 		$("#" + compsemestral1 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral1 + "_sel_semestre").unbind();
 		$("#" + compsemestral1 + "_sel_semestre").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral2 + "_sel_anio").unbind();
 		$("#" + compsemestral2 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral2 + "_sel_semestre").unbind();
 		$("#" + compsemestral2 + "_sel_semestre").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
-		
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		scrollrotacion();
-		
+
 		jQuery(window).resize(function() {
 			resizePlot(targetPlot, controllerPlot, idMini, idDivSlider);
 		});
-		
 	} catch (err) {
 		if (showError) { console.log(err); }
 		$("[id*='" + errormessage + "'").empty();
@@ -4276,7 +4237,7 @@ function createSliderRotaMinSemestral(divchartzoomslider, compsemestral1, compse
 };
 
 var datarotaanual;
-function createSliderRotaMinAnual(divchartzoomslider, companual1, companual2, errormessage,almacen,onetime) {
+function createSliderRotaMinAnual(divchartzoomslider, companual1, companual2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -4336,14 +4297,7 @@ function createSliderRotaMinAnual(divchartzoomslider, companual1, companual2, er
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
+		var to = dateend;
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
 				range: {
@@ -4354,7 +4308,7 @@ function createSliderRotaMinAnual(divchartzoomslider, companual1, companual2, er
 					max: dateend
 				},
 				defaultValues: {
-					min: from2,
+					min: vStorageFecStart,
 					max: vStorageFecEnd
 				},
 			}
@@ -4363,8 +4317,8 @@ function createSliderRotaMinAnual(divchartzoomslider, companual1, companual2, er
 		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-					min: from2,
-					max: vStorageFecEnd
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			updateperiodo: true
 		}
@@ -4374,26 +4328,24 @@ function createSliderRotaMinAnual(divchartzoomslider, companual1, companual2, er
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, companual1, companual2, data, 5);
 			if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, companual1, companual2, data, 5);
-				savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 			}
 		});
+
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+
+		scrollrotacion();
 
 		$("#" + companual1 + "_sel_anio").unbind();
 		$("#" + companual1 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(companual1, companual2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, companual1, companual2, data, idDivSlider, 5);
-			savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 		});
 
 		$("#" + companual2 + "_sel_anio").unbind();
 		$("#" + companual2 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(companual1, companual2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, companual1, companual2, data, idDivSlider, 5);
-			savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 		});
-
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		scrollrotacion();
 
 	} catch (err) {
 		if (showError) { console.log(err); }
@@ -4784,7 +4736,7 @@ function scrollpib() {
 
 }
 var datapibdiario;
-function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiario2, errormessage,almacen,onetime) {
+function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiario2, errormessage,almacen) {
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
@@ -4837,22 +4789,36 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 
 		var ticks = data["Ticks"];
+
+		var from2;
+		if (isMobile.any()) {
+			if (ticks.length > 180) {
+				from2 = ticks[ticks.length - 180].split("-");
+			} else {
+				from2 = ticks[ticks.length - 60].split("-");
+			}
+		} else {
+			if (ticks.length > 60) {
+				from2 = ticks[ticks.length - 60].split("-");
+			} else {
+				from2 = ticks[ticks.length - 1].split("-");
+			}
+
+		}
+
+		//var from2	 	= ticks[ticks.length-60].split("-");
+		from2 = new Date(from2[0], (parseInt(from2[1]) - 1), from2[2]);
+		if(onetine!=null) {
+			from2=	vStorageFecStart;
+		}
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
-		from2=vStorageFecStart;
-		console.log("OneTime:"+ onetime);
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
+		var to = dateend;
 
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
 				range: {
-					min: { days: 2 },
+					min: { days: 10 },
 				},
 				bounds: {
 					min: datestart,
@@ -4886,25 +4852,28 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 
 		$("#" + idDivSlider).unbind();
 		$("#" + idDivSlider).bind("valuesChanged", function(evt, dateSlider) {
+
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, compdiario1, compdiario2, data, 1);
 			//if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, compdiario1, compdiario2, data, 1);
-				savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 			//}
 		});
+
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit2);
+
+		scrollpib();
 
 		$("#" + compdiario1 + "_sel_anio").unbind();
 		$("#" + compdiario1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario1 + "_sel_mes").unbind();
 		$("#" + compdiario1 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario1 + "_sel_dia").unbind();
@@ -4917,7 +4886,6 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 		$("#" + compdiario2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario2 + "_sel_mes").unbind();
@@ -4930,15 +4898,7 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 		$("#" + compdiario2 + "_sel_dia").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedatapflottimesranges(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
-		
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit2);
-
-		scrollpib();
-		
-		
 	} catch (err) {
 		if (showError) { console.log(err); }
 		$("[id*='" + errormessage + "'").empty();
@@ -4947,7 +4907,7 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 };
 
 var datapibmensual;
-function createSliderRotaMinMensualPib(divchartzoomslider, compmensual1, compmensual2, errormessage,almacen,onetime) {
+function createSliderRotaMinMensualPib(divchartzoomslider, compmensual1, compmensual2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -5007,17 +4967,29 @@ function createSliderRotaMinMensualPib(divchartzoomslider, compmensual1, compmen
 		var dateend = data["MaxX"].split("-");;
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 
+
 		var ticks = data["Ticks"];
+		var from2;
+		if (isMobile.any()) {
+			if (ticks.length > 180) {
+				from2 = ticks[ticks.length - 180].split("-");
+			} else {
+				from2 = ticks[ticks.length - 60].split("-");
+			}
+		} else {
+			if (ticks.length > 60) {
+				from2 = ticks[ticks.length - 60].split("-");
+			} else {
+				from2 = ticks[ticks.length - 1].split("-");
+			}
+
+		}
+		//var from2	 	= ticks[ticks.length-60].split("-");
+		from2 = new Date(from2[0], (parseInt(from2[1]) - 1), from2[2]);
+
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
+		var to = dateend;
 
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
@@ -5029,7 +5001,7 @@ function createSliderRotaMinMensualPib(divchartzoomslider, compmensual1, compmen
 					max: dateend
 				},
 				defaultValues: {
-					min: from2,
+					min: vStorageFecStart,
 					max: vStorageFecEnd
 				},
 			}
@@ -5038,8 +5010,8 @@ function createSliderRotaMinMensualPib(divchartzoomslider, compmensual1, compmen
 		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-					min: from2,
-					max: vStorageFecEnd
+				min: from2,
+				max: vStorageFecEnd,
 			},
 			updateperiodo: true
 		}
@@ -5048,8 +5020,8 @@ function createSliderRotaMinMensualPib(divchartzoomslider, compmensual1, compmen
 		var datesinit2 = {
 			label: dateSliderBounds,
 			values: {
-					min: from2,
-					max: vStorageFecEnd
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			updateperiodo: true
 		}
@@ -5059,43 +5031,38 @@ function createSliderRotaMinMensualPib(divchartzoomslider, compmensual1, compmen
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, compmensual1, compmensual2, data, 2);
 			if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, compmensual1, compmensual2, data, 2);
-				savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 			}
 		});
+
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit2);
+
+		scrollpib();
+
 
 		$("#" + compmensual1 + "_sel_anio").unbind();
 		$("#" + compmensual1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual1 + "_sel_mes").unbind();
 		$("#" + compmensual1 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual2 + "_sel_anio").unbind();
 		$("#" + compmensual2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual2 + "_sel_mes").unbind();
 		$("#" + compmensual2 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
-		
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit2);
-
-		scrollpib();
-		
 	} catch (err) {
 		if (showError) { console.log(err); }
 		$("[id*='" + errormessage + "'").empty();
@@ -5104,7 +5071,7 @@ function createSliderRotaMinMensualPib(divchartzoomslider, compmensual1, compmen
 };
 
 var datapibtrimestral;
-function createSliderRotaMinTrimestralPib(divchartzoomslider, comptrimestral1, comptrimestral2, errormessage,almacen,onetime) {
+function createSliderRotaMinTrimestralPib(divchartzoomslider, comptrimestral1, comptrimestral2, errormessage,almacen) {
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
@@ -5165,14 +5132,7 @@ function createSliderRotaMinTrimestralPib(divchartzoomslider, comptrimestral1, c
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
+		var to = dateend;
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
 				range: {
@@ -5183,7 +5143,7 @@ function createSliderRotaMinTrimestralPib(divchartzoomslider, comptrimestral1, c
 					max: dateend
 				},
 				defaultValues: {
-					min: from2,
+					min: vStorageFecStart,
 					max: vStorageFecEnd
 				},
 			}
@@ -5192,8 +5152,8 @@ function createSliderRotaMinTrimestralPib(divchartzoomslider, comptrimestral1, c
 		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-					min: from2,
-					max: vStorageFecEnd
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			updateperiodo: true
 		}
@@ -5203,42 +5163,36 @@ function createSliderRotaMinTrimestralPib(divchartzoomslider, comptrimestral1, c
 			valuesPlotChangedTimes(dateSlider,controllerPlot,targetPlot,comptrimestral1,comptrimestral2,data,3);
 			if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, comptrimestral1, comptrimestral2, data, 3);
-				savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 			}
 		});
+
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+
+		scrollpib();
 
 		$("#" + comptrimestral1 + "_sel_anio").unbind();
 		$("#" + comptrimestral1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral1 + "_sel_trimestre").unbind();
 		$("#" + comptrimestral1 + "_sel_trimestre").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral2 + "_sel_anio").unbind();
 		$("#" + comptrimestral2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral2 + "_sel_trimestre").unbind();
 		$("#" + comptrimestral2 + "_sel_trimestre").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
-		
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		scrollpib();
-		
-		
 	} catch (err) {
 		if (showError) { console.log(err); }
 		$("[id*='" + errormessage + "'").empty();
@@ -5247,7 +5201,7 @@ function createSliderRotaMinTrimestralPib(divchartzoomslider, comptrimestral1, c
 };
 
 var datapibsemestral;
-function createSliderRotaMinSemestralPib(divchartzoomslider, compsemestral1, compsemestral2, errormessage,almacen,onetime) {
+function createSliderRotaMinSemestralPib(divchartzoomslider, compsemestral1, compsemestral2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -5308,15 +5262,7 @@ function createSliderRotaMinSemestralPib(divchartzoomslider, compsemestral1, com
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
-
+		var to = dateend;
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
 				range: {
@@ -5327,7 +5273,7 @@ function createSliderRotaMinSemestralPib(divchartzoomslider, compsemestral1, com
 					max: dateend
 				},
 				defaultValues: {
-					min: from2,
+					min: vStorageFecStart,
 					max: vStorageFecEnd
 				},
 			}
@@ -5347,41 +5293,36 @@ function createSliderRotaMinSemestralPib(divchartzoomslider, compsemestral1, com
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, compsemestral1, compsemestral2, data, 4);
 			if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, compsemestral1, compsemestral2, data, 4);
-				savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 			}
 		});
+
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+
+		scrollpib();
 
 		$("#" + compsemestral1 + "_sel_anio").unbind();
 		$("#" + compsemestral1 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral1 + "_sel_semestre").unbind();
 		$("#" + compsemestral1 + "_sel_semestre").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral2 + "_sel_anio").unbind();
 		$("#" + compsemestral2 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral2 + "_sel_semestre").unbind();
 		$("#" + compsemestral2 + "_sel_semestre").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
-		
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		scrollpib();
-		
 	} catch (err) {
 		if (showError) { console.log(err); }
 		$("[id*='" + errormessage + "'").empty();
@@ -5390,7 +5331,7 @@ function createSliderRotaMinSemestralPib(divchartzoomslider, compsemestral1, com
 };
 
 var datapibanual;
-function createSliderRotaMinAnualPib(divchartzoomslider, companual1, companual2, errormessage,almacen,onetime) {
+function createSliderRotaMinAnualPib(divchartzoomslider, companual1, companual2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -5450,14 +5391,7 @@ function createSliderRotaMinAnualPib(divchartzoomslider, companual1, companual2,
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
 		var from = data["startX"].split("-");
 		from = new Date(from[0], parseInt(from[1]) - 1, from[2]);
-		from2=vStorageFecStart;
-		if (onetime!=null && onetime=="1") {
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-		} 
+		var to = dateend;
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider(
 			{
 				range: {
@@ -5468,7 +5402,7 @@ function createSliderRotaMinAnualPib(divchartzoomslider, companual1, companual2,
 					max: dateend
 				},
 				defaultValues: {
-					min: from2,
+					min: vStorageFecStart,
 					max: vStorageFecEnd
 				},
 			}
@@ -5477,8 +5411,8 @@ function createSliderRotaMinAnualPib(divchartzoomslider, companual1, companual2,
 		var datesinit = {
 			label: dateSliderBounds,
 			values: {
-					min: from2,
-					max: vStorageFecEnd
+				min: vStorageFecStart,
+				max: vStorageFecEnd,
 			},
 			updateperiodo: true
 		}
@@ -5488,26 +5422,24 @@ function createSliderRotaMinAnualPib(divchartzoomslider, companual1, companual2,
 			valuesPlotChangedTimes(dateSlider, controllerPlot, targetPlot, companual1, companual2, data, 5);
 			if (dateSlider.first == null || dateSlider.first == false) {
 				updatevaluescomponentstimesfromslider(dateSlider, companual1, companual2, data, 5);
-				savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 			}
+
 		});
+
+		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+
+		scrollpib();
 
 		$("#" + companual1 + "_sel_anio").unbind();
 		$("#" + companual1 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(companual1, companual2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, companual1, companual2, data, idDivSlider, 5);
-			savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 		});
 		$("#" + companual2 + "_sel_anio").unbind();
 		$("#" + companual2 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(companual1, companual2, data, idDivSlider);
 			updatedataplottimesranges(targetPlot, controllerPlot, companual1, companual2, data, idDivSlider, 5);
-			savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 		});
-
-		$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-		scrollpib();
-		
 	} catch (err) {
 		if (showError) { console.log(err); }
 		$("[id*='" + errormessage + "'").empty();
@@ -5858,7 +5790,7 @@ function scrollvalor() {
 }
 
 
-function createSliderDistriValorMinDiario(divchartzoomslider, compdiario1, compdiario2, errormessage,almacen,onetime) {
+function createSliderDistriValorMinDiario(divchartzoomslider, compdiario1, compdiario2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -5871,26 +5803,7 @@ function createSliderDistriValorMinDiario(divchartzoomslider, compdiario1, compd
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-		
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecStart = from2;
-			vStorageFecEnd = dateend;
-			
-		} 
-
+				
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compdiario1, compdiario2, data);
 		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
@@ -5930,56 +5843,47 @@ function createSliderDistriValorMinDiario(divchartzoomslider, compdiario1, compd
 		innerDivSlider.setAttribute("style", styleSlider);
 		document.getElementById(divchartzoomslider).appendChild(innerDivSlider);
 
-
+		scrollvalor();
 		$("#" + idDivSlider).unbind();
 		$("#" + idDivSlider).bind("valuesChanged", function(evt, dataSlider) {
 			valuesPlotChangedTimesHour(dataSlider, controllerPlot, targetPlot, compdiario1, compdiario2, data, 1)
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario1 + "_sel_anio").unbind();
 		$("#" + compdiario1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario1 + "_sel_mes").unbind();
 		$("#" + compdiario1 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario1 + "_sel_dia").unbind();
 		$("#" + compdiario1 + "_sel_dia").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario2 + "_sel_anio").unbind();
 		$("#" + compdiario2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario2 + "_sel_mes").unbind();
 		$("#" + compdiario2 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario2 + "_sel_dia").unbind();
 		$("#" + compdiario2 + "_sel_dia").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
-
-		scrollvalor();
 
 	} catch (err) {
 		if (showError) { console.log(err); }
@@ -5988,7 +5892,7 @@ function createSliderDistriValorMinDiario(divchartzoomslider, compdiario1, compd
 	}
 }
 
-function createSliderDistriValorMinMensual(divchartzoomslider, compmensual1, compmensual2, errormessage,almacen,onetime) {
+function createSliderDistriValorMinMensual(divchartzoomslider, compmensual1, compmensual2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -6000,24 +5904,6 @@ function createSliderDistriValorMinMensual(divchartzoomslider, compmensual1, com
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecStart = from2;
-			vStorageFecEnd = dateend;
-			
-		} 		
 		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compmensual1, compmensual2, data);
 		var divchartmax = document.createElement('div');
@@ -6067,28 +5953,24 @@ function createSliderDistriValorMinMensual(divchartzoomslider, compmensual1, com
 		$("#" + compmensual1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual1 + "_sel_mes").unbind();
 		$("#" + compmensual1 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual2 + "_sel_anio").unbind();
 		$("#" + compmensual2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual2 + "_sel_mes").unbind();
 		$("#" + compmensual2 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 	} catch (err) {
@@ -6098,7 +5980,7 @@ function createSliderDistriValorMinMensual(divchartzoomslider, compmensual1, com
 	}
 }
 
-function createSliderDistriValorMinTrimestral(divchartzoomslider, comptrimestral1, comptrimestral2, errormessage,almacen,onetime) {
+function createSliderDistriValorMinTrimestral(divchartzoomslider, comptrimestral1, comptrimestral2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -6110,24 +5992,7 @@ function createSliderDistriValorMinTrimestral(divchartzoomslider, comptrimestral
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecStart = from2;
-			vStorageFecEnd = dateend;
-			
-		} 				
+				
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, comptrimestral1, comptrimestral2, data);
 		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
@@ -6169,36 +6034,31 @@ function createSliderDistriValorMinTrimestral(divchartzoomslider, comptrimestral
 
 		$("#" + idDivSlider).unbind("valuesChanged");
 		$("#" + idDivSlider).bind("valuesChanged", function(evt, dataSlider) {
-			valuesPlotChangedTimesHour(dataSlider, controllerPlot, targetPlot, comptrimestral1, comptrimestral2, data, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
+			valuesPlotChangedTimesHour(dataSlider, controllerPlot, targetPlot, comptrimestral1, comptrimestral2, data, 3)
 		});
 
 		$("#" + comptrimestral1 + "_sel_anio").unbind("change");
 		$("#" + comptrimestral1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral1 + "_sel_trimestre").unbind("change");
 		$("#" + comptrimestral1 + "_sel_trimestre").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral2 + "_sel_anio").unbind("change");
 		$("#" + comptrimestral2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral2 + "_sel_trimestre").unbind("change");
 		$("#" + comptrimestral2 + "_sel_trimestre").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 	} catch (err) {
@@ -6208,7 +6068,7 @@ function createSliderDistriValorMinTrimestral(divchartzoomslider, comptrimestral
 	}
 }
 
-function createSliderDistriValorMinSemestral(divchartzoomslider, compsemestral1, compsemestral2, errormessage,almacen,onetime) {
+function createSliderDistriValorMinSemestral(divchartzoomslider, compsemestral1, compsemestral2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -6220,24 +6080,7 @@ function createSliderDistriValorMinSemestral(divchartzoomslider, compsemestral1,
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecStart = from2;
-			vStorageFecEnd = dateend;
-			
-		} 				
+				
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compsemestral1, compsemestral2, data);
 		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
@@ -6281,35 +6124,30 @@ function createSliderDistriValorMinSemestral(divchartzoomslider, compsemestral1,
 		$("#" + idDivSlider).unbind();
 		$("#" + idDivSlider).bind("valuesChanged", function(evt, dataSlider) {
 			valuesPlotChangedTimesHour(dataSlider, controllerPlot, targetPlot, compsemestral1, compsemestral2, data, 4)
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral1 + "_sel_anio").unbind();
 		$("#" + compsemestral1 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral1 + "_sel_semestre").unbind();
 		$("#" + compsemestral1 + "_sel_semestre").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral2 + "_sel_anio").unbind();
 		$("#" + compsemestral2 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral2 + "_sel_semestre").unbind();
 		$("#" + compsemestral2 + "_sel_semestre").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 	} catch (err) {
 		if (showError) { console.log(err); }
@@ -6318,7 +6156,7 @@ function createSliderDistriValorMinSemestral(divchartzoomslider, compsemestral1,
 	}
 }
 
-function createSliderDistriValorMinAnual(divchartzoomslider, companual1, companual2, errormessage,almacen,onetime) {
+function createSliderDistriValorMinAnual(divchartzoomslider, companual1, companual2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -6330,24 +6168,7 @@ function createSliderDistriValorMinAnual(divchartzoomslider, companual1, companu
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecStart = from2;
-			vStorageFecEnd = dateend;
-			
-		} 				
+				
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, companual1, companual2, data);
 		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
@@ -6390,21 +6211,18 @@ function createSliderDistriValorMinAnual(divchartzoomslider, companual1, companu
 		$("#" + idDivSlider).unbind();
 		$("#" + idDivSlider).bind("valuesChanged", function(evt, dataSlider) {
 			valuesPlotChangedTimesHour(dataSlider, controllerPlot, targetPlot, companual1, companual2, data, 5)
-			savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 		});
 
 		$("#" + companual1 + "_sel_anio").unbind();
 		$("#" + companual1 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(companual1, companual2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, companual1, companual2, data, idDivSlider, 5);
-			savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 		});
 
 		$("#" + companual2 + "_sel_anio").unbind();
 		$("#" + companual2 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(companual1, companual2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, companual1, companual2, data, idDivSlider, 5);
-			savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 		});
 	} catch (err) {
 		if (showError) { console.log(err); }
@@ -6434,6 +6252,8 @@ function createplotmaxdistribucionvalor(name, data, tipo, periodo1, periodo2) {
 	var fec_p2 = "" + periodo2.getFullYear() + "-" + ("0".concat(periodo2.getMonth() + 1)).slice(-2) + "-" + ("0".concat(periodo2.getDate())).slice(-2);
 
 	var horas = hours();//[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
+
+
 
 	for (var i = 0; i < serieValores.length; i++) {
 		var fec001 = serieValores[i][0];
@@ -6851,7 +6671,7 @@ function scrollcantidad() {
 
 	}
 }
-function createSliderDistriCantMinDiario(divchartzoomslider, compdiario1, compdiario2, errormessage,almacen,onetime) {
+function createSliderDistriCantMinDiario(divchartzoomslider, compdiario1, compdiario2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -6863,24 +6683,7 @@ function createSliderDistriCantMinDiario(divchartzoomslider, compdiario1, compdi
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecStart = from2;
-			vStorageFecEnd = dateend;
-			
-		} 				
+				
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compdiario1, compdiario2, data);
 		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
@@ -6890,7 +6693,6 @@ function createSliderDistriCantMinDiario(divchartzoomslider, compdiario1, compdi
 		var periodo1 = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["endX"].split("-");
 		var periodo2 = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
-
 		targetPlot = createplotmaxdistribucioncantidad(divchartmax.id, data, 1, periodo1, periodo2);
 		var s_left = targetPlot._defaultGridPadding.left;
 		var s_right = targetPlot._defaultGridPadding.right;
@@ -6925,49 +6727,42 @@ function createSliderDistriCantMinDiario(divchartzoomslider, compdiario1, compdi
 		$("#" + idDivSlider).unbind();
 		$("#" + idDivSlider).bind("valuesChanged", function(evt, dataSlider) {
 			valuesPlotChangedTimesHour(dataSlider, controllerPlot, targetPlot, compdiario1, compdiario2, data, 1)
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario1 + "_sel_anio").unbind();
 		$("#" + compdiario1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario1 + "_sel_mes").unbind();
 		$("#" + compdiario1 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario1 + "_sel_dia").unbind();
 		$("#" + compdiario1 + "_sel_dia").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario2 + "_sel_anio").unbind();
 		$("#" + compdiario2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario2 + "_sel_mes").unbind();
 		$("#" + compdiario2 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 		$("#" + compdiario2 + "_sel_dia").unbind();
 		$("#" + compdiario2 + "_sel_dia").change(function(evt) {
 			changedatesselectedstimes(compdiario1, compdiario2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compdiario1, compdiario2, data, idDivSlider, 1);
-			savedOldDatesStoStorage(almacen, compdiario1, compdiario2, "1");
 		});
 
 	} catch (err) {
@@ -6977,7 +6772,7 @@ function createSliderDistriCantMinDiario(divchartzoomslider, compdiario1, compdi
 	}
 }
 
-function createSliderDistriCantMinMensual(divchartzoomslider, compmensual1, compmensual2, errormessage,almacen,onetime) {
+function createSliderDistriCantMinMensual(divchartzoomslider, compmensual1, compmensual2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -6991,24 +6786,7 @@ function createSliderDistriCantMinMensual(divchartzoomslider, compmensual1, comp
 		
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecStart = from2;
-			vStorageFecEnd = dateend;
-			
-		} 				
+				
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compmensual1, compmensual2, data);
 		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
@@ -7044,16 +6822,13 @@ function createSliderDistriCantMinMensual(divchartzoomslider, compmensual1, comp
 			.concat("left:").concat(left - s_left - 12).concat("px !important;")
 			.concat("right:").concat(right).concat("px !important;")
 			.concat("position: relative;")
-		;
-		
+			;
 		innerDivSlider.setAttribute("style", styleSlider);
 		document.getElementById(divchartzoomslider).appendChild(innerDivSlider);
 		scrollcantidad();
-		
 		$("#" + idDivSlider).unbind();
 		$("#" + idDivSlider).bind("valuesChanged", function(evt, dataSlider) {
 			valuesPlotChangedTimesHour(dataSlider, controllerPlot, targetPlot, compmensual1, compmensual2, data, 2)
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 
@@ -7061,28 +6836,24 @@ function createSliderDistriCantMinMensual(divchartzoomslider, compmensual1, comp
 		$("#" + compmensual1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual1 + "_sel_mes").unbind();
 		$("#" + compmensual1 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual2 + "_sel_anio").unbind();
 		$("#" + compmensual2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 		$("#" + compmensual2 + "_sel_mes").unbind();
 		$("#" + compmensual2 + "_sel_mes").change(function(evt) {
 			changedatesselectedstimes(compmensual1, compmensual2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compmensual1, compmensual2, data, idDivSlider, 2);
-			savedOldDatesStoStorage(almacen, compmensual1, compmensual2, "2");
 		});
 
 	} catch (err) {
@@ -7092,7 +6863,7 @@ function createSliderDistriCantMinMensual(divchartzoomslider, compmensual1, comp
 	}
 }
 
-function createSliderDistriCantMinTrimestral(divchartzoomslider, comptrimestral1, comptrimestral2, errormessage,almacen,onetime) {
+function createSliderDistriCantMinTrimestral(divchartzoomslider, comptrimestral1, comptrimestral2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -7104,24 +6875,7 @@ function createSliderDistriCantMinTrimestral(divchartzoomslider, comptrimestral1
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecStart = from2;
-			vStorageFecEnd = dateend;
-			
-		} 				
+				
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, comptrimestral1, comptrimestral2, data);
 		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
@@ -7160,41 +6914,36 @@ function createSliderDistriCantMinTrimestral(divchartzoomslider, comptrimestral1
 			;
 		innerDivSlider.setAttribute("style", styleSlider);
 		document.getElementById(divchartzoomslider).appendChild(innerDivSlider);
-		
+		scrollcantidad();
 		$("#" + idDivSlider).unbind();
 		$("#" + idDivSlider).bind("valuesChanged", function(evt, dataSlider) {
 			valuesPlotChangedTimesHour(dataSlider, controllerPlot, targetPlot, comptrimestral1, comptrimestral2, data, 3)
 		});
 
+
 		$("#" + comptrimestral1 + "_sel_anio").unbind();
 		$("#" + comptrimestral1 + "_sel_anio").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral1 + "_sel_trimestre").unbind();
 		$("#" + comptrimestral1 + "_sel_trimestre").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral2 + "_sel_anio").unbind();
 		$("#" + comptrimestral2 + "_sel_anio").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
 
 		$("#" + comptrimestral2 + "_sel_trimestre").unbind();
 		$("#" + comptrimestral2 + "_sel_trimestre").change(function(evt) {
 			changedatesselectedstrimestralestimes(comptrimestral1, comptrimestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, comptrimestral1, comptrimestral2, data, idDivSlider, 3);
-			savedOldDatesStoStorage(almacen, comptrimestral1, comptrimestral2, "3");
 		});
-
-		scrollcantidad();
 
 	} catch (err) {
 		if (showError) { console.log(err); }
@@ -7203,7 +6952,7 @@ function createSliderDistriCantMinTrimestral(divchartzoomslider, comptrimestral1
 	}
 }
 
-function createSliderDistriCantMinSemestral(divchartzoomslider, compsemestral1, compsemestral2, errormessage,almacen,onetime) {
+function createSliderDistriCantMinSemestral(divchartzoomslider, compsemestral1, compsemestral2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -7215,24 +6964,7 @@ function createSliderDistriCantMinSemestral(divchartzoomslider, compsemestral1, 
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecStart = from2;
-			vStorageFecEnd = dateend;
-			
-		} 				
+				
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compsemestral1, compsemestral2, data);
 		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
@@ -7271,43 +7003,35 @@ function createSliderDistriCantMinSemestral(divchartzoomslider, compsemestral1, 
 			;
 		innerDivSlider.setAttribute("style", styleSlider);
 		document.getElementById(divchartzoomslider).appendChild(innerDivSlider);
-		
+		scrollcantidad();
 		$("#" + idDivSlider).unbind();
 		$("#" + idDivSlider).bind("valuesChanged", function(evt, dataSlider) {
 			valuesPlotChangedTimesHour(dataSlider, controllerPlot, targetPlot, compsemestral1, compsemestral2, data, 4)
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral1 + "_sel_anio").unbind();
 		$("#" + compsemestral1 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral1 + "_sel_semestre").unbind();
 		$("#" + compsemestral1 + "_sel_semestre").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral2 + "_sel_anio").unbind();
 		$("#" + compsemestral2 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
 
 		$("#" + compsemestral2 + "_sel_semestre").unbind();
 		$("#" + compsemestral2 + "_sel_semestre").change(function(evt) {
 			changedatesselectedssemestralestimes(compsemestral1, compsemestral2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, compsemestral1, compsemestral2, data, idDivSlider, 4);
-			savedOldDatesStoStorage(almacen, compsemestral1, compsemestral2, "4");
 		});
-		
-		scrollcantidad();
-		
 	} catch (err) {
 		if (showError) { console.log(err); }
 		$("[id*='" + errormessage + "'").empty();
@@ -7315,7 +7039,7 @@ function createSliderDistriCantMinSemestral(divchartzoomslider, compsemestral1, 
 	}
 }
 
-function createSliderDistriCantMinAnual(divchartzoomslider, companual1, companual2, errormessage,almacen,onetime) {
+function createSliderDistriCantMinAnual(divchartzoomslider, companual1, companual2, errormessage,almacen) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
@@ -7327,24 +7051,7 @@ function createSliderDistriCantMinAnual(divchartzoomslider, companual1, companua
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecStart = from2;
-			vStorageFecEnd = dateend;
-			
-		} 				
+				
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, companual1, companual2, data);
 		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
@@ -7383,29 +7090,23 @@ function createSliderDistriCantMinAnual(divchartzoomslider, companual1, companua
 			;
 		innerDivSlider.setAttribute("style", styleSlider);
 		document.getElementById(divchartzoomslider).appendChild(innerDivSlider);
-		
+		scrollcantidad();
 		$("#" + idDivSlider).unbind();
 		$("#" + idDivSlider).bind("valuesChanged", function(evt, dataSlider) {
 			valuesPlotChangedTimesHour(dataSlider, controllerPlot, targetPlot, companual1, companual2, data, 5)
-			savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 		});
 
 		$("#" + companual1 + "_sel_anio").unbind();
 		$("#" + companual1 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(companual1, companual2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, companual1, companual2, data, idDivSlider, 5);
-			savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 		});
 
 		$("#" + companual2 + "_sel_anio").unbind();
 		$("#" + companual2 + "_sel_anio").change(function(evt) {
 			changedatesselectedssemestralestimes(companual1, companual2, data, idDivSlider);
 			updatedataplottimes(targetPlot, controllerPlot, companual1, companual2, data, idDivSlider, 5);
-			savedOldDatesStoStorage(almacen, companual1, companual2, "5");
 		});
-		
-		scrollcantidad();
-		
 	} catch (err) {
 		if (showError) { console.log(err); }
 		$("[id*='" + errormessage + "'").empty();

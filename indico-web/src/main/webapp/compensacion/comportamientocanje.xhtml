@@ -227,6 +227,8 @@
 		 						</div>  		
 							<h:outputScript>
 									var almacen="ComportamientoCanje";
+									localStorage.setItem("ComportamientoCanjeOneTime","1")
+									
 									function assignValuesCanje() {
 										var v_start;
 										var v_end;
@@ -282,8 +284,6 @@
 									}										
 																
 									function vcompcanjechangeperiodo() {
-									
-										var onetime = localStorage.getItem("ComportamientoCanjeOneTime");
 										var periodo = PF('vcompcanje_selFiltroPorValorW').jq.find('option:selected').val();
 										localStorage.setItem("comportamientoCanjeOld",periodo);
 										var tipodeplaza = PF('vcompcanje_tipoplazaVar').jq.find('option:selected').val();
@@ -311,23 +311,23 @@
 										$(document).ready(function(){
 											switch (periodo) {
 												case "1":
-													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valperiodo1','vcompcanje_valperiodo2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen,onetime);												
+													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valperiodo1','vcompcanje_valperiodo2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen);												
 													$("[id*='vcompcanje_pValorDiario']").show();
 													break;										
 												case "2":
-													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valmensual1','vcompcanje_valmensual2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen,onetime);												
+													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valmensual1','vcompcanje_valmensual2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen);												
 													$("[id*='vcompcanje_pValorMensual']").show();
 													break;										
 												case "3":
-													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valtrimestral1','vcompcanje_valtrimestral2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen,onetime);												
+													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valtrimestral1','vcompcanje_valtrimestral2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen);												
 													$("[id*='vcompcanje_pValorTrimestral']").show();
 													break;
 												case "4": 
-													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valsemestral1','vcompcanje_valsemestral2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen,onetime);												
+													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valsemestral1','vcompcanje_valsemestral2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen);												
 													$("[id*='vcompcanje_pValorSemestral']").show();
 													break;										
 												case "5": 
-													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valanual1','vcompcanje_valanual2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen,onetime);												
+													createSliderComportamientoCanje('vcompcanje_chart',periodo,'vcompcanje_valanual1','vcompcanje_valanual2',tipodeplaza,ciudad,label,'vcompcanje_messageinformationglobal',almacen);												
 													$("[id*='vcompcanje_pValorAnual']").show();
 													break;										
 											};//switch
@@ -335,7 +335,6 @@
 									}//function
 									
 									function recargarcanje(){
-										localStorage.setItem("ComportamientoCanjeOneTime","1");
 									}
 									
 								    $(document).ready(function(){

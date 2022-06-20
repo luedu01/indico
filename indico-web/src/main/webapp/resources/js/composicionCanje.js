@@ -1,40 +1,3 @@
-
-function savedOldDatesStoStorage(almacen, componente1, componente2, anterior) {
-
-	var vfecStart;
-	var vfecEnd;
-
-	anterior=parseInt(anterior);
-
-	switch (anterior) {
-		case 1:
-			vfecStart = getDateStartFromDiario(componente1);
-			vfecEnd = getDateEndFromDiario(componente2);
-			break;
-		case 2:
-			vfecStart = getDateStartFromMensual(componente1);
-			vfecEnd = getDateEndFromMensual(componente2);
-			break;
-		case 3:
-			vfecStart = getDateStartFromTrimestral(componente1);
-			vfecEnd = getDateEndFromTrimestral(componente2);
-			break;
-		case 4:
-			vfecStart = getDateStartFromSemestral(componente1);
-			vfecEnd = getDateEndFromSemestral(componente2);
-			break;
-		case 5:
-			vfecStart = getDateStartFromAnual(componente1);
-			vfecEnd = getDateStartFromAnual(componente2);
-			break;
-	}
-
-	localStorage.setItem(almacen + "_fecStart", vfecStart);
-	localStorage.setItem(almacen + "_fecEnd", vfecEnd);
-
-}
-
-
 /**
  * Crea las gráficas para la Composición del Canje
  */
@@ -81,47 +44,10 @@ function scroll (){
 	    }
 }
 
-function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,compPeriodo2,rangocanjesel,label,errormessage,almacen,onetime){
+function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,compPeriodo2,rangocanjesel,label,errormessage,almacen){
 
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	var period = parseInt(periodo,10);
-  
-  
-  	//Rangos del slider de control
-	var first;
-	var minDays;
-	var updateperiodo;
-	var addday=0;
-	switch (period) {
-		case 1:		minDays = 1;
-					addday = 360;
-					first = true;
-					updateperiodo = true;
-			break;
-		case 2: 	minDays = 60;
-					minMonth = 1;
-					first = false;
-					updateperiodo = true;
-			break;
-		case 3: 	minDays = 90;
-					minMonth = 3;
-					first = true;
-					updateperiodo = true;
-			break;  
-		case 4: 	minMonth = 6;
-					first = true;
-					minDays = 180;
-					updateperiodo = true;
-		break;
-		case 5: 	minMonth = 12;
-					first = false;
-					updateperiodo = true;
-					minDays = 360;
-			break;
-	};
-	
-
-  
   
 	try {
 		data =  RestComposicionCanjeServices.getComposicionCanje({'periodo':period,'rangocanje':rangocanjesel});
@@ -140,32 +66,6 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
 
-
-
-		var ticks = data ["Ticks"];		
-		vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
-		vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-
-		ticks = data["Ticks"];
-		datestart = ticks[0];
-		datestart = datestart.split("-");
-		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-		dateend = ticks[ticks.length - 1];
-		dateend = dateend.split("-");
-		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-		
-		if (onetime!=null && onetime=="1") {
-			dia = 24*60*60*1000;
-			fromtmp = dateend.getTime() - (dia * ( minDays +addday));
-			fromtmp = new Date(fromtmp);
-			vStorageFecStart = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
-			from = vStorageFecStart;
-		} 
-		from2=vStorageFecStart;
 		//Inicializa los componentes de tiempo
 		startvaluescomponentstimes (vStorageFecStart, vStorageFecEnd, compPeriodo1, compPeriodo2, data);
 		
@@ -244,6 +144,25 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 		document.getElementById(divchartzoomslider).appendChild(innerDivSlider);
 		
 		
+		var ticks = data ["Ticks"];		
+		//Variable de Fecha de inicio
+		var datestart 	= data["MinX"].split("-");
+		//Convierte la fecha a formato de JS
+		datestart		= new Date(datestart[0],(parseInt(datestart[1])-1),datestart[2]);
+		//Variable de Fecha de Din
+		var dateend 	= data["MaxX"].split("-");
+		//Convierte la fecha a formato de JS
+		dateend			= new Date(dateend[0],(parseInt(dateend[1])-1),dateend[2]);
+		//Variable de fecha Desde
+		var from 	= data["startX"].split("-");
+		//Convierte la fecha a formato de JS
+		from		= new Date(from[0],parseInt(from[1])-1,from[2]);
+		//Variable de fecha Hasta
+		var to				= dateend;
+		
+		if (oneTime!=null) {
+			from = vStorageFecStart;
+		}	
 		//Rangos del slider de control
 		
 		var minDays, maxDays;
@@ -304,9 +223,12 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 				$("#"+idDivSlider).bind("valuesChanged", function(evt,dateSlider){
 					//if (dateSlider.first==null || dateSlider.first==false) {
 						updFilterBySliderReplot(dateSlider,compPeriodo1,compPeriodo2,data,period,targetPlot,targetPlot2,"slider");
-						savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
 					//}
 				});
+				
+				//Lanza la reubicación del Slider
+				$("#"+idDivSlider).trigger("valuesChanged",datesinit);
+				scroll();
 				
 				/**
 				 * 
@@ -322,8 +244,8 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 						case 4, 5: 	changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 							break;
 					};		
+					
 					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,period,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
 				});
 				
 				$("#"+compPeriodo2+"_sel_anio").unbind();
@@ -338,7 +260,6 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 					};
 					
 					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,period,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
 				});
 				//Retira eventos y actualiza datos en Semestre
 				$("#"+compPeriodo1+"_sel_semestre").unbind();
@@ -347,7 +268,6 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 						changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					}
 					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,4,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
 				});
 				
 				$("#"+compPeriodo2+"_sel_semestre").unbind();
@@ -356,7 +276,6 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 						changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					}
 					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,4,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
 				});
 				
 				//Retira eventos y actualiza datos en trimestre
@@ -366,7 +285,6 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 						changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					}			
 					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,3,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
 				});
 				
 				$("#"+compPeriodo2+"_sel_trimestre").unbind();
@@ -375,7 +293,6 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 						changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
 					}
 					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,3,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
 				});
 				
 				//Retira eventos y actualiza datos en mes
@@ -388,7 +305,6 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 							break;
 					}
 					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,period,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
 				});
 				
 				$("#"+compPeriodo2+"_sel_mes").unbind();
@@ -400,13 +316,7 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 							break;
 					}
 					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,period,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
-				});
-				
-				//Lanza la reubicación del Slider
-				$("#"+idDivSlider).trigger("valuesChanged",datesinit);
-				scroll();
-
+				});	
 	} catch (err) {
 		console.log(err);
 		$("[id*='"+errormessage+"'").empty();
