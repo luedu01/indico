@@ -2542,14 +2542,15 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 		//
 		dateend = ticks[ticks.length - 1].split("-");
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-		
+		from=datestart;
 		if (onetime!=null && onetime=="1") {
 			dia = 24*60*60*1000;
 			from = dateend.getTime() - (dia * 180);
-			from = new Date(fromtmp);
-			fromtmp = dateend.getTime() - (dia * 10);
-			fromtmp = new Date(fromtmp);
-			vStorageFecStart = completarFechaStart(fromtmp,ticks);
+			from = new Date(from);
+			
+			from2= dateend.getTime() - (dia * 10);
+			from2 = new Date(from2);
+			vStorageFecStart = completarFechaStart(from2,ticks);
 			vStorageFecEnd=dateend;
 		}
 		from2=vStorageFecStart;
