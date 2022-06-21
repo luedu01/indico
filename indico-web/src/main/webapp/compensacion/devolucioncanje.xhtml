@@ -252,7 +252,6 @@
 		 						</div>  		
 							<h:outputScript>
 									var almacen="CanjeDevoluciones";
-									localStorage.setItem("CanjeDevolucionesOneTime","1")
 									function assignValuesDevolCanje() {
 										var v_start;
 										var v_end;
@@ -308,6 +307,7 @@
 									}									
 																
 									function vdevcanjechangeperiodo() {
+										onetime = localStorage.getItem("CanjeDevolucionesOneTime");
 										let idsel = localStorage.getItem("devolucionescanjeOld");
 										var periodo = PF('vdevcanje_selFiltroPorValorW').jq.find('option:selected').val();
 										var medioservicio = PF('vdevcanje_medioservicioVar').jq.find('option:selected').val();
@@ -351,11 +351,12 @@
 												break;										
 										};//switch
 										$(document).ready(function(){
-											createSliderDevolucionCanje('vdevcanje_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,medioservicio,label,'vdevcanje_messageinformationglobal',almacen)
+											createSliderDevolucionCanje('vdevcanje_chart',periodo,vcomcanjePeriodo1,vcomcanjePeriodo2,medioservicio,label,'vdevcanje_messageinformationglobal',almacen,onetime)
 										});	
 									}//function
 									
 									function recargarcanje(){
+										localStorage.setItem("CanjeDevolucionesOneTime","1");
 									}
 									
 								    $(document).ready(function(){

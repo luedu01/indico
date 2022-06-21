@@ -99,12 +99,12 @@
 														styleClass="WhiteBack Black Wid70 NoMargin NoBorder-radius-Right Padding5 Fs14 border-gray-1 TexAlLeft"
 														value="Restaurar" process="@this"
 														update="@([id$=prota_valorgraficavalor002],[ID$=prota_panelesValoresDinamic],[ID$=prota_panelFiltros])"
-														actionListener="#{pagosRotacionMaBean.restaurarAction}" />
+														actionListener="#{pagosRotacionMaBean.restaurarAction}" onclick="prota_recargar();"/>
 													<p:commandButton icon="icon-restaurar"
 														styleClass="BlueBack Wid30 NoMargin Padding5 NoBorder-radius-Left"
 														process="@this"
 														update="@([id$=prota_valorgraficavalor002],[ID$=prota_panelesValoresDinamic],[ID$=prota_panelFiltros])"
-														actionListener="#{pagosRotacionMaBean.restaurarAction}" />
+														actionListener="#{pagosRotacionMaBean.restaurarAction}" onclick="prota_recargar();"/>
 												</p:outputPanel>
 											</h:form>
 
@@ -184,8 +184,6 @@
 						  		<div id="chartzoomsliderrotacion" class="superzoominternal" />
 						  		<h:outputScript>
 						  			var almacen="PagosRotacion";
-						  			localStorage.setItem("PagosRotacionOneTime","1")
-						  			
 									function prota_assignValues() {
 										var periodo = PF('prota_selFiltroPorValorW').jq.find('option:selected').val();
 										
@@ -243,6 +241,7 @@
 						  		
 									function prota_changeperiodiciorperiodo() {
 										let idsel = localStorage.getItem("pagosrotacionOld");
+										var onetime = localStorage.getItem("PagosRotacionOneTime");
 										var periodo = PF('prota_selFiltroPorValorW').jq.find('option:selected').val();
 										$("[id*='prota_pValorDiario']").hide();
 										$("[id*='prota_pValorMensual']").hide();
@@ -252,27 +251,27 @@
 										switch (periodo) {
 											case "1":
 												$("[id*='prota_pValorDiario']").show();
-												createSliderRotaMinDiario('chartzoomsliderrotacion','prota_valperiodo1','prota_valperiodo2','prota_messageinformationglobal',almacen);
+												createSliderRotaMinDiario('chartzoomsliderrotacion','prota_valperiodo1','prota_valperiodo2','prota_messageinformationglobal',almacen,onetime);
 												localStorage.setItem("pagosrotacionOld","1");
 												break;										
 											case "2":
 												$("[id*='prota_pValorMensual']").show();
-												createSliderRotaMinMensual('chartzoomsliderrotacion','prota_valmensual1','prota_valmensual2','prota_messageinformationglobal',almacen);
+												createSliderRotaMinMensual('chartzoomsliderrotacion','prota_valmensual1','prota_valmensual2','prota_messageinformationglobal',almacen,onetime);
 												localStorage.setItem("pagosrotacionOld","2");
 												break;										
 											case "3":
 												$("[id*='prota_pValorTrimestral']").show();
-												createSliderRotaMinTrimestral('chartzoomsliderrotacion','prota_valtrimestral1','prota_valtrimestral2','prota_messageinformationglobal',almacen);
+												createSliderRotaMinTrimestral('chartzoomsliderrotacion','prota_valtrimestral1','prota_valtrimestral2','prota_messageinformationglobal',almacen,onetime);
 												localStorage.setItem("pagosrotacionOld","3");
 												break;
 											case "4": 
 												$("[id*='prota_pValorSemestral']").show();
-												createSliderRotaMinSemestral('chartzoomsliderrotacion','prota_valsemestral1','prota_valsemestral2','prota_messageinformationglobal',almacen);
+												createSliderRotaMinSemestral('chartzoomsliderrotacion','prota_valsemestral1','prota_valsemestral2','prota_messageinformationglobal',almacen,onetime);
 												localStorage.setItem("pagosrotacionOld","4");
 												break;										
 											case "5": 
 												$("[id*='prota_pValorAnual']").show();
-												createSliderRotaMinAnual('chartzoomsliderrotacion','prota_valanual1','prota_valanual2','prota_messageinformationglobal',almacen);
+												createSliderRotaMinAnual('chartzoomsliderrotacion','prota_valanual1','prota_valanual2','prota_messageinformationglobal',almacen,onetime);
 												localStorage.setItem("pagosrotacionOld","5");
 												break;										
 										};//switch										
@@ -280,6 +279,7 @@
 									}//function
 								     
 						  			function prota_recargar() {
+						  				localStorage.setItem("PagosRotacionOneTime","1");
 									}
 									
 									$(document).ready(function(){

@@ -196,7 +196,6 @@
 		 						</div>  		
 							<h:outputScript>
 									var almacen='canjedevolucioncheques';
-									localStorage.setItem("canjedevolucionchequesOneTime","1")
 									function assignValuesCheqDev() {
 										var v_start;
 										var v_end;
@@ -251,6 +250,7 @@
 									}								
 							
 									function changeperiodiciorperiododevol() {
+										onetime = localStorage.getItem("canjedevolucionchequesOneTime");
 										var periodo = PF('vdevol_selFiltroPorValorW').jq.find('option:selected').val();
 										localStorage.setItem("ChequeDevolOld",periodo);
 										var tipodeplaza = PF('vdevol_tipoplazaVar').jq.find('option:selected').val();
@@ -264,29 +264,30 @@
 											switch (periodo) {
 											case "1":
 													$("[id*='vdevol_pValorDiario']").show();
-													createChartMinDiarioDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valperiodo1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen);
+													createChartMinDiarioDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valperiodo1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen,onetime);
 													break;										
 												case "2":
 													$("[id*='vdevol_pValorMensual']").show();
-													createChartMinMensualDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valmensual1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen);
+													createChartMinMensualDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valmensual1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen,onetime);
 													break;										
 												case "3":
 													$("[id*='vdevol_pValorTrimestral']").show();
-													createChartMinTrimestralDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valtrimestral1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen);
+													createChartMinTrimestralDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valtrimestral1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen,onetime);
 													break;
 												case "4": 
 													$("[id*='vdevol_pValorSemestral']").show();
-													createChartMinSemestralDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valsemestral1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen);
+													createChartMinSemestralDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valsemestral1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen,onetime);
 													break;										
 												case "5": 
 													$("[id*='vdevol_pValorAnual']").show();
-													createChartMinAnualDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valanual1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen);
+													createChartMinAnualDevol('vdevol_chartvalores','vdevol_chartcantidad','vdevol_valanual1',tipodeplaza,label,'vdevol_messageinformationglobal',almacen,onetime);
 													break;										
 											};//switch
 										});	
 									}//function
 									
 									function recargar(){
+										localStorage.setItem("canjedevolucionchequesOneTime","1");
 									}
 									
 								    $(document).ready(function(){
