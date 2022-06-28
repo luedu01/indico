@@ -25,40 +25,51 @@ function formatdate (val){
         return days + "/" + month + "/" + year;
 }
 
-function completarFechaSelected(fecha,sticks) {
+function completarFechaSelected(fecha,sticks,periodoactual,periodoanterior) {
+
 	if (fecha == null) return null;
-	var anio = fecha.split('-')[0];
+	
+	anio = fecha.split('-')[0];
 	if (anio == null) return null;
-	var mes = fecha.split('-')[1];
-	var dia = fecha.split('-')[2];
+	mes = fecha.split('-')[1];
+	dia = fecha.split('-')[2];
 
 	if (mes === undefined) { mes = "01"; }
-	if (dia === undefined) { 
-		dia = "01";
-		//dia = new Date(anio, (parseInt(mes)), 0).getDate(); 
-	}
+	if (dia === undefined) { dia = "01"; }
 	 
 
-	var fecha = new Date(anio, mes-1, dia);
+	fecha = new Date(anio, mes-1, dia);
 	if (isNaN(fecha) == true) {
 		fecha = sticks[sticks.length-1];
   		fecha=new Date(fecha.split('-')[0],fecha.split('-')[1]-1,fecha.split('-')[2]);
 	} else {
-		let anterior = sticks[0];
+		anterior = sticks[sticks.length-1];
 		anterior=new Date(anterior.split('-')[0],(anterior.split('-')[1]-1),anterior.split('-')[2]);
-		for (let i=0 ; i<sticks.length ; i++ ) {
-			let currentValue = sticks[i]; 
-			let actualdate = new Date(currentValue.split('-')[0],(currentValue.split('-')[1]-1),currentValue.split('-')[2]);
-			if (fecha>=actualdate) {
-				anterior=actualdate;
-			}else{
-				fecha=anterior;
+		j=0;
+		for (i=sticks.length-1 ; i>=0 ; i-- ) {
+			currentValue = sticks[i]; 
+			actualdate = new Date(currentValue.split('-')[0],(currentValue.split('-')[1]-1),currentValue.split('-')[2]);
+			if (actualdate<=fecha) {
 				break;
 			}
+			anterior=actualdate;
 		}
-		if (fecha>anterior) {
-			fecha=anterior;
-		}
+		periodoactual=parseInt(periodoactual);
+		periodoanterior=parseInt(periodoanterior);
+		if(periodoactual>periodoanterior) {
+			if (fecha>actualdate) {
+				fecha = anterior;
+			} else {
+				fecha = actualdate;
+			}
+		}	else {
+			if (fecha<actualdate) {
+				fecha = anterior;
+			} else {
+				fecha = actualdate;
+			}
+		}	
+
 	}	
 	return fecha;
 }
@@ -67,20 +78,21 @@ function completarFechaSelected(fecha,sticks) {
 
 function savedOldDatesStoStorage(almacen, componente1, anterior) {
 	var vfecSelected;
+	anterior = parseInt(anterior);
 	switch (anterior) {
-		case "1":
+		case 1:
 			vfecSelected = getDateStartFromDiario(componente1);
 			break;
-		case "2":
+		case 2:
 			vfecSelected = getDateStartFromMensual(componente1);
 			break;
-		case "3":
+		case 3:
 			vfecSelected = getDateStartFromTrimestral(componente1);
 			break;
-		case "4":
+		case 4:
 			vfecSelected = getDateStartFromSemestral(componente1);
 			break;
-		case "5":
+		case 5:
 			vfecSelected = getDateStartFromAnual(componente1);
 			break;
 	}
@@ -665,7 +677,6 @@ function updatedatapieplottimesranges(leftplot,rigthplot,componente,divvalores,d
 	var counta = 0;
 	var countb = 0;
 	var anio1,mes1,dia1,trimestre1,semestre1,anio1;
-	/*****   *****/
 	var dateselected;
 	switch (tipo) {
 		case 1:
@@ -719,8 +730,8 @@ function updatedCanjealCobro(leftplot,rigthplot,componente,divvalores,divcantida
 	var counta = 0;
 	var countb = 0;
 	var anio1,mes1,dia1,trimestre1,semestre1,anio1;
-	/*****   *****/
 	var dateselected;
+	tipo = parseInt(tipo);
 	switch (tipo) {
 		case 1:
 			dateselected=getDateStartFromDiario(componente);
@@ -738,10 +749,10 @@ function updatedCanjealCobro(leftplot,rigthplot,componente,divvalores,divcantida
 			dateselected=getDateStartFromAnual(componente);
 			break;
 	}//
-	
+	     
 	var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
 	var datoscantidad = getDataCountFiltered(data["SerieCantidad"],dateselected);
-
+	
 	if (datosvalores[0].length && datoscantidad[0].length) {
 		$("#"+chartvaloresid).show();
 		$("#"+chartcantidadid).show();
@@ -1197,6 +1208,9 @@ function createlegend(titulo,valor,plot,tipodatototal) {
 }
 
 function getDataFiltered(datos,dateselected) {
+	if (dateselected instanceof Date) {
+		dateselected = ""+dateselected.getFullYear()+"-" + "" + (("0"+(dateselected.getMonth() + 1)).slice(-2) +"-" + ("0"+(dateselected.getDate())).slice(-2));
+	} 
 	
 	var datasel=[];
 	var datossumados=[];
@@ -1219,13 +1233,15 @@ function getDataFiltered(datos,dateselected) {
 	//datosseleccionados[0] = datasel.sort(ordenar);
 	datosseleccionados[0] = datasel;
 	datosseleccionados[1] = totales;
-	var totalvalorsumado = totalS;
-
 	return datosseleccionados;
 }
 
 //Cantidades
 function getDataCountFiltered(datos,dateselected) {
+	if (dateselected instanceof Date) {
+		dateselected = ""+dateselected.getFullYear()+"-" + "" + (("0"+(dateselected.getMonth() + 1)).slice(-2) +"-" + ("0"+(dateselected.getDate())).slice(-2));
+	} 
+	
     //linea 1077
 	var datasel=[];
 	var datossumados=[];
@@ -1317,11 +1333,12 @@ function scroll (){
 	    }
 }
 
-function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza,label,errormessage,almacen,onetime,periodoAnterior){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
-	
 	try {
+
 		data =  RestCompensacionServices.getCompensacionDiaria({'tipodeplaza':tipodeplaza});
+		
 		if ("MUL"==tipodeplaza){
 			data["SerieValores"].sort(ordenarValores);
 			data["SerieCantidad"].sort(ordenarCantidades);
@@ -1333,25 +1350,18 @@ function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza
 		data["Title"] = data["Title"] + " - " + label;
 		
 		vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
-		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
-		if (onetime!=null && onetime=="1") {
-			ticks = data["Ticks"];
-			datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
+		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"],1,periodoAnterior);
 
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			dia = 24*60*60*1000;
-			fromtmp = dateend.getTime() - (dia * 10);
-			fromtmp = new Date(fromtmp);
-			from2 = completarFechaStart(fromtmp,ticks);
-			vStorageFecStart = from2;
-			vStorageFecEnd = dateend;
+		ticks = data["Ticks"];
+		datestart = ticks[0];
+		datestart = datestart.split("-");
+		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
+		//
+		dateend = ticks[ticks.length - 1].split("-");
+		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
+		//
+		if (onetime!=null && onetime=="1") {
 			vStorageFecSelected=dateend;
-			
 		} 				
 		startvaluescomponentstimes (vStorageFecSelected,compdiario1,data,_DIARIO);
 		
@@ -1363,8 +1373,8 @@ function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza
 		document.getElementById(chartvalores).appendChild(divchart);
 		datasel = [[]];
 		dateselected = data["endX"];
-		datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
-		leftPlot 		= createplotpieleft ( chartvaloresid		,	datosvalores[0] , _DIARIO);
+		datosvalores 	= getDataFiltereCompensacion(data["SerieValores"],vStorageFecSelected);
+		leftPlot 		= createplotpieleft ( chartvaloresid, datosvalores[0] , _DIARIO);
 		legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
 		divlegendvalores = document.createElement('div');
 		divlegendvaloresid=chartvalores+"_legend"
@@ -1381,7 +1391,7 @@ function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza
 		//divchartcant.style="chartcustom"
 		divchartcant.id=chartcantidadid;
 		document.getElementById(chartcantidad).appendChild(divchartcant);
-		datoscantidades = getDataCountFiltered(data["SerieCantidad"],dateselected);
+		datoscantidades = getDataCountFiltered(data["SerieCantidad"],vStorageFecSelected);
 		rigthPlot 		= createplotpieright ( chartcantidadid		,	datoscantidades[0] , _DIARIO);
 		legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
 		divlegendcantidad = document.createElement('div');
@@ -1421,7 +1431,7 @@ function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza
 	}
 };
 
-function createChartMinMensual(chartvalores,chartcantidad,compmensual1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinMensual(chartvalores,chartcantidad,compmensual1,tipodeplaza,label,errormessage,almacen,onetime,periodoAnterior){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionMensual({'tipodeplaza':tipodeplaza});
@@ -1435,20 +1445,19 @@ function createChartMinMensual(chartvalores,chartcantidad,compmensual1,tipodepla
 		$("#"+chartcantidad).empty();
 		if (label==null || label =="undefined") label = "Todas";
 		data["Title"] = data["Title"] + " - " + label;
-		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
-		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
+		vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
+		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"],2,periodoAnterior);
+		ticks = data["Ticks"];
+		datestart = ticks[0];
+		datestart = datestart.split("-");
+		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
+		//
+		dateend = ticks[ticks.length - 1].split("-");
+		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
+
 		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
+			dia = 24*60*60*1000;
+			fromtmp = dateend.getTime() - (dia * 2);
 			vStorageFecSelected = new Date(fromtmp);
 			vStorageFecSelected = completarFechaStart(fromtmp,ticks);
 		} 				
@@ -1461,7 +1470,7 @@ function createChartMinMensual(chartvalores,chartcantidad,compmensual1,tipodepla
 		document.getElementById(chartvalores).appendChild(divchart);
 		var datasel = [[]];
 		var dateselected = data["endX"];
-		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
+		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],vStorageFecSelected);
 		var leftPlot 		= createplotpieleft ( chartvaloresid		,	datosvalores[0] , _MENSUAL);
 		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
 		var divlegendvalores = document.createElement('div');
@@ -1479,7 +1488,7 @@ function createChartMinMensual(chartvalores,chartcantidad,compmensual1,tipodepla
 		//divchartcant.style="chartcustom"
 		divchartcant.id=chartcantidadid;
 		document.getElementById(chartcantidad).appendChild(divchartcant);
-		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],dateselected);
+		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],vStorageFecSelected);
 		var rigthPlot 		= createplotpieright ( chartcantidadid		,	datoscantidades[0] , _MENSUAL);
 		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
 		var divlegendcantidad = document.createElement('div');
@@ -1511,7 +1520,7 @@ function createChartMinMensual(chartvalores,chartcantidad,compmensual1,tipodepla
 	}
 };
 
-function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tipodeplaza,label,errormessage,almacen,onetime,periodoAnterior){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionTrimestral({'tipodeplaza':tipodeplaza});
@@ -1525,8 +1534,8 @@ function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tip
 		$("#"+chartcantidad).empty();
 		if (label==null || label =="undefined") label = "Todas";
 		data["Title"] = data["Title"] + " - " + label;
-		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
-		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
+		vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
+		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"],3,periodoAnterior);
 		if (onetime!=null && onetime=="1") {
 			let ticks = data["Ticks"];
 			let datestart = ticks[0];
@@ -1551,7 +1560,7 @@ function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tip
 		document.getElementById(chartvalores).appendChild(divchart);
 		var datasel = [[]];
 		var dateselected = data["endX"];
-		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
+		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],vStorageFecSelected);
 		var leftPlot 		= createplotpieleft ( chartvaloresid		,	datosvalores[0] , _TRIMESTRAL);
 		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
 		var divlegendvalores = document.createElement('div');
@@ -1569,7 +1578,7 @@ function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tip
 		//divchartcant.style="chartcustom"
 		divchartcant.id=chartcantidadid;
 		document.getElementById(chartcantidad).appendChild(divchartcant);
-		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],dateselected);
+		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],vStorageFecSelected);
 		var rigthPlot 		= createplotpieright ( chartcantidadid		,	datoscantidades[0] , _TRIMESTRAL);
 		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
 		var divlegendcantidad = document.createElement('div');
@@ -1601,35 +1610,35 @@ function createChartMinTrimestral(chartvalores,chartcantidad,comptrimestral1,tip
 	}
 }
 
-function createChartMinSemestral(chartvalores,chartcantidad,compsemestral1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinSemestral(chartvalores,chartcantidad,compsemestral1,tipodeplaza,label,errormessage,almacen,onetime,periodoAnterior){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionSemestral({'tipodeplaza':tipodeplaza});
+
 		if ("MUL"==tipodeplaza){
 			data["SerieValores"].sort(ordenarValores);
 			data["SerieCantidad"].sort(ordenarCantidades);
 		}
 		
-
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
 		$("#"+chartcantidad).empty();
 		if (label==null || label =="undefined") label = "Todas";
 		data["Title"] = data["Title"] + " - " + label;
-		vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
+		vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected",4,periodoAnterior);
 		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
+
+		ticks = data["Ticks"];
+		datestart = ticks[0];
+		datestart = datestart.split("-");
+		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
+		//
+		dateend = ticks[ticks.length - 1].split("-");
+		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
+		
 		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
+			dia = 24*60*60*1000;
+			fromtmp = dateend.getTime() - (dia * 2);
 			vStorageFecSelected = new Date(fromtmp);
 			vStorageFecSelected = completarFechaStart(fromtmp,ticks);
 		} 				
@@ -1642,7 +1651,7 @@ function createChartMinSemestral(chartvalores,chartcantidad,compsemestral1,tipod
 		document.getElementById(chartvalores).appendChild(divchart);
 		var datasel = [[]];
 		var dateselected = data["endX"];
-		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
+		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],vStorageFecSelected);
 		var leftPlot 		= createplotpieleft ( chartvaloresid		,	datosvalores[0] , _SEMESTRAL);
 		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
 		var divlegendvalores = document.createElement('div');
@@ -1660,7 +1669,7 @@ function createChartMinSemestral(chartvalores,chartcantidad,compsemestral1,tipod
 		//divchartcant.style="chartcustom"
 		divchartcant.id=chartcantidadid;
 		document.getElementById(chartcantidad).appendChild(divchartcant);
-		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],dateselected);
+		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],vStorageFecSelected);
 		var rigthPlot 		= createplotpieright ( chartcantidadid		,	datoscantidades[0] , _SEMESTRAL);
 		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
 		var divlegendcantidad = document.createElement('div');
@@ -1695,22 +1704,20 @@ function createChartMinSemestral(chartvalores,chartcantidad,compsemestral1,tipod
 }
 
 function getDataFiltereCompensacion(datos,dateselected) {
-
+	if (dateselected instanceof Date) {
+		dateselected = ""+dateselected.getFullYear()+"-" + "" + (("0"+(dateselected.getMonth() + 1)).slice(-2) +"-" + ("0"+(dateselected.getDate())).slice(-2));
+	} 
 	var datasel=[];
 	var datossumados=[];
 	var totalesParse=[];
 	var j=0;
-	var totalS=0;
 	var totales=0;
-
 	for (var i=0; i<datos.length; i++) {
 		if (datos[i].ejex==dateselected) {
-
 			datasel[j]=new Array(datos[i].ciudad,datos[i].valorPorcentaje)
 		    totales = parseFloat(totales + datos[i].serieValor);
 
 		    datossumados[j]=new Array(datos[i].ciudad,datos[i].serieValor,datos[i].valorPorcentaje)
-		    totalS= totalS + 1;
 			j++;
 		}
 	}
@@ -1719,13 +1726,13 @@ function getDataFiltereCompensacion(datos,dateselected) {
 	//datosseleccionados[0] = datasel.sort(ordenar);
 	datosseleccionados[0] = datasel;
 	datosseleccionados[1] = totales;
-	var totalvalorsumado = totalS;
 	return datosseleccionados;
 
 }
 
-function createChartMinAnual(chartvalores,chartcantidad,companual1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinAnual(chartvalores,chartcantidad,companual1,tipodeplaza,label,errormessage,almacen,onetime,periodoAnterior){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
+	
 	try {
 	
 		data =  RestCompensacionServices.getCompensacionAnual({'tipodeplaza':tipodeplaza});
@@ -1733,43 +1740,51 @@ function createChartMinAnual(chartvalores,chartcantidad,companual1,tipodeplaza,l
 			data["SerieValores"].sort(ordenarValores);
 			data["SerieCantidad"].sort(ordenarCantidades);
 		}
+
 		/* PIE VALORES */
 		$("#"+chartvalores).empty();
 		$("#"+chartcantidad).empty();
 		if (label==null || label =="undefined") label = "Todas";
 		data["Title"] = data["Title"] + " - " + label;
-		var vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
-		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
+
+		vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
+		if (vStorageFecSelected!=null && typeof vStorageFecSelected === "string") {
+			vStorageFecSelected=vStorageFecSelected.substring(0,4)+"-01-01";
+		}
+		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"],5,periodoAnterior);
+
+		datestart = ticks[0];
+		datestart = datestart.split("-");
+		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
+		//
+		
+		dateend = ticks[ticks.length - 1].split("-");
+		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
+
+		ticks = data["Ticks"];
 		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
+			dia = 24*60*60*1000;
+			fromtmp = dateend.getTime() - (dia * 2);
 			vStorageFecSelected = new Date(fromtmp);
 			vStorageFecSelected = completarFechaStart(fromtmp,ticks);
-		} 				
+		}
+		
 		startvaluescomponentstimes (vStorageFecSelected,companual1,data,_ANUAL);
+		
 		$("#"+chartvalores)[0].setAttribute("class","");
 		var chartvaloresid=chartvalores+"_chart";
 		var divchart = document.createElement('div');
 		divchart.style="chartcustom"
 		divchart.id=chartvaloresid;
 		document.getElementById(chartvalores).appendChild(divchart);
-		var datasel = [[]];
-		var dateselected = data["endX"];
-		var datosvalores = getDataFiltereCompensacion(data["SerieValores"],dateselected);
-
-		var leftPlot 		= createplotpieleft ( chartvaloresid		,	datosvalores[0] , _ANUAL);
-		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
-		var divlegendvalores = document.createElement('div');
-		var divlegendvaloresid=chartvalores+"_legend"
+		datasel = [[]];
+		dateselected = data["endX"];;
+		datosvalores = getDataFiltereCompensacion(data["SerieValores"],vStorageFecSelected);
+		
+		leftPlot 		= createplotpieleft ( chartvaloresid		,	datosvalores[0] , _ANUAL);
+		legendavalores = createlegend("Valor de Cheques"			, datosvalores[1],leftPlot,_NUMERICO);
+		divlegendvalores = document.createElement('div');
+		divlegendvaloresid=chartvalores+"_legend"
 		divlegendvalores.id=divlegendvaloresid;
 		divlegendvalores.innerHTML=legendavalores;
 		document.getElementById(chartvalores).appendChild(divlegendvalores);
@@ -1784,7 +1799,7 @@ function createChartMinAnual(chartvalores,chartcantidad,companual1,tipodeplaza,l
 		divchartcant.id=chartcantidadid;
 		document.getElementById(chartcantidad).appendChild(divchartcant);
 
-		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],dateselected);
+		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],vStorageFecSelected);
 		var rigthPlot 		= createplotpieright ( chartcantidadid		,	datoscantidades[0] , _ANUAL);
 		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
 		var divlegendcantidad = document.createElement('div');
@@ -2070,7 +2085,7 @@ function scroll2 (){
 	 }
 }
 
-function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipodeplaza,label,errormessage,almacen,onetime,periodoAnterior){
 
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	
@@ -2088,21 +2103,23 @@ function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipode
 		data["Title"] = data["Title"] + " - " + label;
 		vStorageFecSelected = localStorage.getItem(almacen + "_fecSelected");
 		vStorageFecSelected = completarFechaSelected(vStorageFecSelected,data["Ticks"]);
+		ticks = data["Ticks"];
+
+		datestart = ticks[0];
+		datestart = datestart.split("-");
+		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
+		//
+		
+		dateend = ticks[ticks.length - 1].split("-");
+		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
+
 		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 10);
+			dia = 24*60*60*1000;
+			fromtmp = dateend.getTime() - (dia * 10);
 			vStorageFecSelected = new Date(fromtmp);
 			vStorageFecSelected = dateend;
-		} 				
+		}
+		 				
 		startvaluescomponentstimes (vStorageFecSelected,compdiario1,data,_DIARIO);
 		$("#"+chartvalores)[0].setAttribute("class","");
 		var chartvaloresid=chartvalores+"_chart";
@@ -2112,7 +2129,7 @@ function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipode
 		document.getElementById(chartvalores).appendChild(divchart);
 		var datasel = [[]];
 		var dateselected = data["endX"];
-		var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
+		var datosvalores = getDataFiltered(data["SerieValores"],vStorageFecSelected);
 		var leftPlot 		= createplotpieleftdevol ( chartvaloresid		,	datosvalores[0] , _DIARIO);
 		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
 		var divlegendvalores = document.createElement('div');
@@ -2130,7 +2147,7 @@ function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipode
 		//divchartcant.style="chartcustom"
 		divchartcant.id=chartcantidadid;
 		document.getElementById(chartcantidad).appendChild(divchartcant);
-		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],dateselected);
+		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],vStorageFecSelected);
 		var rigthPlot 		= createplotpierightdevol ( chartcantidadid		,	datoscantidades[0] , _DIARIO);
 		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
 		var divlegendcantidad = document.createElement('div');
@@ -2171,7 +2188,7 @@ function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipode
 	}
 };
 
-function createChartMinMensualDevol(chartvalores,chartcantidad,compmensual1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinMensualDevol(chartvalores,chartcantidad,compmensual1,tipodeplaza,label,errormessage,almacen,onetime,periodoAnterior){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolMensual({'tipodeplaza':tipodeplaza});
@@ -2213,7 +2230,7 @@ function createChartMinMensualDevol(chartvalores,chartcantidad,compmensual1,tipo
 		document.getElementById(chartvalores).appendChild(divchart);
 		var datasel = [[]];
 		var dateselected = data["endX"];
-		var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
+		var datosvalores = getDataFiltered(data["SerieValores"],vStorageFecSelected);
 		var leftPlot 		= createplotpieleftdevol ( chartvaloresid		,	datosvalores[0] , _MENSUAL);
 		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
 		var divlegendvalores = document.createElement('div');
@@ -2231,7 +2248,7 @@ function createChartMinMensualDevol(chartvalores,chartcantidad,compmensual1,tipo
 		//divchartcant.style="chartcustom"
 		divchartcant.id=chartcantidadid;
 		document.getElementById(chartcantidad).appendChild(divchartcant);
-		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],dateselected);
+		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],vStorageFecSelected);
 		var rigthPlot 		= createplotpierightdevol ( chartcantidadid		,	datoscantidades[0] , _MENSUAL);
 		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
 		var divlegendcantidad = document.createElement('div');
@@ -2262,7 +2279,7 @@ function createChartMinMensualDevol(chartvalores,chartcantidad,compmensual1,tipo
 	}
 };
 
-function createChartMinTrimestralDevol(chartvalores,chartcantidad,comptrimestral1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinTrimestralDevol(chartvalores,chartcantidad,comptrimestral1,tipodeplaza,label,errormessage,almacen,onetime,periodoAnterior){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolTrimestral({'tipodeplaza':tipodeplaza});
@@ -2304,7 +2321,7 @@ function createChartMinTrimestralDevol(chartvalores,chartcantidad,comptrimestral
 		document.getElementById(chartvalores).appendChild(divchart);
 		var datasel = [[]];
 		var dateselected = data["endX"];
-		var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
+		var datosvalores = getDataFiltered(data["SerieValores"],vStorageFecSelected);
 		var leftPlot 		= createplotpieleftdevol ( chartvaloresid		,	datosvalores[0] , _TRIMESTRAL);
 		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
 		var divlegendvalores = document.createElement('div');
@@ -2322,7 +2339,7 @@ function createChartMinTrimestralDevol(chartvalores,chartcantidad,comptrimestral
 		//divchartcant.style="chartcustom"
 		divchartcant.id=chartcantidadid;
 		document.getElementById(chartcantidad).appendChild(divchartcant);
-		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],dateselected);
+		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],vStorageFecSelected);
 		var rigthPlot 		= createplotpierightdevol ( chartcantidadid		,	datoscantidades[0] , _TRIMESTRAL);
 		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
 		var divlegendcantidad = document.createElement('div');
@@ -2353,7 +2370,7 @@ function createChartMinTrimestralDevol(chartvalores,chartcantidad,comptrimestral
 	}
 }
 
-function createChartMinSemestralDevol(chartvalores,chartcantidad,compsemestral1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinSemestralDevol(chartvalores,chartcantidad,compsemestral1,tipodeplaza,label,errormessage,almacen,onetime,periodoAnterior){
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolSemestral({'tipodeplaza':tipodeplaza});
@@ -2395,7 +2412,7 @@ function createChartMinSemestralDevol(chartvalores,chartcantidad,compsemestral1,
 		document.getElementById(chartvalores).appendChild(divchart);
 		var datasel = [[]];
 		var dateselected = data["endX"];
-		var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
+		var datosvalores = getDataFiltered(data["SerieValores"],vStorageFecSelected);
 		var leftPlot 		= createplotpieleftdevol ( chartvaloresid		,	datosvalores[0] , _SEMESTRAL);
 		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
 		var divlegendvalores = document.createElement('div');
@@ -2413,7 +2430,7 @@ function createChartMinSemestralDevol(chartvalores,chartcantidad,compsemestral1,
 		//divchartcant.style="chartcustom"
 		divchartcant.id=chartcantidadid;
 		document.getElementById(chartcantidad).appendChild(divchartcant);
-		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],dateselected);
+		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],vStorageFecSelected);
 		var rigthPlot 		= createplotpierightdevol ( chartcantidadid		,	datoscantidades[0] , _SEMESTRAL);
 		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
 		var divlegendcantidad = document.createElement('div');
@@ -2445,7 +2462,8 @@ function createChartMinSemestralDevol(chartvalores,chartcantidad,compsemestral1,
 	}
 }
 
-function createChartMinAnualDevol(chartvalores,chartcantidad,companual1,tipodeplaza,label,errormessage,almacen,onetime){
+function createChartMinAnualDevol(chartvalores,chartcantidad,companual1,tipodeplaza,label,errormessage,almacen,onetime,periodoAnterior){
+	
 	var targetPlot,controllerPlot,idMini,idDivSlider,data;
 	try {
 		data =  RestCompensacionServices.getCompensacionDevolAnual({'tipodeplaza':tipodeplaza});
@@ -2487,7 +2505,7 @@ function createChartMinAnualDevol(chartvalores,chartcantidad,companual1,tipodepl
 		document.getElementById(chartvalores).appendChild(divchart);
 		var datasel = [[]];
 		var dateselected = data["endX"];
-		var datosvalores = getDataFiltered(data["SerieValores"],dateselected);
+		var datosvalores = getDataFiltered(data["SerieValores"],vStorageFecSelected);
 		
 		var leftPlot 		= createplotpieleftdevol ( chartvaloresid		,	datosvalores[0] , _ANUAL);
 		var legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
@@ -2506,7 +2524,7 @@ function createChartMinAnualDevol(chartvalores,chartcantidad,companual1,tipodepl
 		//divchartcant.style="chartcustom"
 		divchartcant.id=chartcantidadid;
 		document.getElementById(chartcantidad).appendChild(divchartcant);
-		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],dateselected);
+		var datoscantidades = getDataCountFiltered(data["SerieCantidad"],vStorageFecSelected);
 		var rigthPlot 		= createplotpierightdevol ( chartcantidadid		,	datoscantidades[0] , _ANUAL);
 		var legendacantidad = createlegend("Cantidad de cheques" , datoscantidades[1],rigthPlot,_ENTERO);
 		var divlegendcantidad = document.createElement('div');

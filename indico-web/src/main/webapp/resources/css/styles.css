@@ -3145,11 +3145,11 @@ coloresseries{	​
 	padding-left: 0px !important;
 	margin: 0px 0px 0px 0px !important;
 	float: none !important;
-}
+	}
 
 	.nav {
-		margin-top: 2%;
-  		margin-bottom: 2% !important;
+	  margin-top: 2%;
+  	  margin-bottom: 2% !important;
 	  width: 92%;
 	  height: auto;
 	  background: #eee;

@@ -1618,6 +1618,7 @@ function createSliderComportamientoCanje(divchartzoomslider,periodo, compPeriodo
 	var minDays;
 	var updateperiodo;
 	var addday=0;
+	
 	switch (period) {
 		case 1:		minDays = 1;
 					addday = 10;
@@ -1662,12 +1663,15 @@ function createSliderComportamientoCanje(divchartzoomslider,periodo, compPeriodo
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
 		
 		ticks = data["Ticks"];
+				
 		datestart = ticks[0];
 		datestart = datestart.split("-");
 		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
+		
 		dateend = ticks[ticks.length - 1];
 		dateend = dateend.split("-");
 		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
+		
 		if (onetime!=null && onetime=="1") {
 			dia = 24*60*60*1000;
 			//obligatorio para obliagr a refrescar el valor minimo

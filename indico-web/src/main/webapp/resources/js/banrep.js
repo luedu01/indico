@@ -2584,12 +2584,14 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 		idDivSlider = divchartzoomslider + "_slider";
 		innerDivSlider = document.createElement('div');
 		innerDivSlider.id = idDivSlider;
+		
 		styleSlider = "width:".concat((width - left - right + s_left + s_right + 24)).concat("px !important; ")
 			.concat("margin-top:").concat(-8).concat("px !important;")
 			.concat("left:").concat(left - s_left - 12).concat("px !important;")
 			.concat("right:").concat(right).concat("px !important;")
 			.concat("position: relative;")
 			;
+			
 		innerDivSlider.setAttribute("style", styleSlider);
 		document.getElementById(divchartzoomslider).appendChild(innerDivSlider);
 		
@@ -3250,15 +3252,15 @@ function createplotmaxgeneral(name, data, tipo) {
 	serieCantidad = datos(data["SerieCantidad"]);
 	minValor = data["MinValor"];
 	minCantidad = data["MinCantidad"];
-	var maxValor = data["MaxValor"];
-	var maxCantidad = data["MaxCantidad"];
-	var minX = data["MinX"];
-	var maxX = data["MaxX"];
+	maxValor = data["MaxValor"];
+	maxCantidad = data["MaxCantidad"];
+	minX = data["MinX"];
+	maxX = data["MaxX"];
 	$.jqplot.sprintf.thousandsSeparator = '.';
 	$.jqplot.sprintf.decimalMark = ',';
-	var fecha1 = minX.split("-");
+	fecha1 = minX.split("-");
 	minX = new Date(fecha1[0], (parseInt(fecha1[1]) - 1), fecha1[2])
-	var fecha2 = maxX.split("-");
+	fecha2 = maxX.split("-");
 	maxX = new Date(fecha2[0], (parseInt(fecha2[1]) - 1), fecha2[2]);
 
 	var plot2 = $.jqplot(name, [serieValores, serieCantidad], {
@@ -3464,13 +3466,13 @@ function createplotmingeneral(name, data, tipo) {
 	serieCantidad = datos(data["SerieCantidad"]);
 	minValor = data["MinValor"];
 	minCantidad = data["MinCantidad"];
-	var maxValor = data["MaxValor"];
-	var maxCantidad = data["MaxCantidad"];
-	var minX = data["MinX"];
-	var maxX = data["MaxX"];
-	var fecha1 = minX.split("-");
+	maxValor = data["MaxValor"];
+	maxCantidad = data["MaxCantidad"];
+	minX = data["MinX"];
+	maxX = data["MaxX"];
+	fecha1 = minX.split("-");
 	minX = new Date(fecha1[0], (parseInt(fecha1[1]) - 1), fecha1[2])
-	var fecha2 = maxX.split("-");
+	fecha2 = maxX.split("-");
 	maxX = new Date(fecha2[0], (parseInt(fecha2[1]) - 1), fecha2[2]);
 
 	$.jqplot.sprintf.thousandsSeparator = '.';
@@ -3579,6 +3581,7 @@ function createplotmingeneral(name, data, tipo) {
 				showLabel: false,
 				label: 'Cantidad',
 				show: false,
+				textColor: "#850024",
 				rendererOptions: {
 					tickRenderer: $.jqplot.CanvasAxisTickRenderer,
 					forceTickAt0: true,
@@ -3604,6 +3607,7 @@ function createplotmingeneral(name, data, tipo) {
 				showLabel: false,
 				label: 'Número Transacciones',
 				textColor: "#006fb9",
+				show: false,
 				rendererOptions: {
 					tickRenderer: $.jqplot.CanvasAxisTickRenderer,
 					forceTickAt0: true,
@@ -3614,6 +3618,7 @@ function createplotmingeneral(name, data, tipo) {
 					showLabel: false,
 					showMark: false,
 					showGridline: false,
+					fontSize: "8pt",
 					size: 0,
 					markSize: 0,
 					show: false,
@@ -5895,7 +5900,7 @@ function createSliderDistriValorMinDiario(divchartzoomslider, compdiario1, compd
 		var periodo1 = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["endX"].split("-");
 		var periodo2 = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
-		targetPlot = createplotmaxdistribucionvalor(divchartmax.id, data, 1, periodo1, periodo2);
+		targetPlot = createplotmaxdistribucionvalor(divchartmax.id, data, 1, vStorageFecStart, vStorageFecEnd);
 		var s_left = targetPlot._defaultGridPadding.left;
 		var s_right = targetPlot._defaultGridPadding.right;
 		var left = targetPlot._gridPadding.left;
@@ -5910,7 +5915,7 @@ function createSliderDistriValorMinDiario(divchartzoomslider, compdiario1, compd
 			.concat("height:").concat(55).concat("px !important;").concat(" display: none;");
 		innerDivMini.setAttribute("style", style);
 		document.getElementById(divchartzoomslider).appendChild(innerDivMini);
-		controllerPlot = createplotmindistribucionvalor(idMini, data, 1, periodo1, periodo2);
+		controllerPlot = createplotmindistribucionvalor(idMini, data, 1, vStorageFecStart, vStorageFecEnd);
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider + "_slider";
@@ -6013,23 +6018,21 @@ function createSliderDistriValorMinMensual(divchartzoomslider, compmensual1, com
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		ticks = data["Ticks"];
+		datestart = ticks[0];
+		datestart = datestart.split("-");
+		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
+		//
+		dateend = ticks[ticks.length - 1].split("-");
+		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
+
 		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
+			dia = 24*60*60*1000;
+			fromtmp = dateend.getTime() - (dia * 2);
 			fromtmp = new Date(fromtmp);
 			from2 = completarFechaStart(fromtmp,ticks);
 			vStorageFecStart = from2;
 			vStorageFecEnd = dateend;
-			
 		} 		
 		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compmensual1, compmensual2, data);
@@ -6041,7 +6044,7 @@ function createSliderDistriValorMinMensual(divchartzoomslider, compmensual1, com
 		var periodo1 = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["endX"].split("-");
 		var periodo2 = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
-		targetPlot = createplotmaxdistribucionvalor(divchartmax.id, data, 2, periodo1, periodo2);
+		targetPlot = createplotmaxdistribucionvalor(divchartmax.id, data, 2, vStorageFecStart, vStorageFecEnd);
 		var s_left = targetPlot._defaultGridPadding.left;
 		var s_right = targetPlot._defaultGridPadding.right;
 		var left = targetPlot._gridPadding.left;
@@ -6056,7 +6059,7 @@ function createSliderDistriValorMinMensual(divchartzoomslider, compmensual1, com
 			.concat("height:").concat(55).concat("px !important;").concat(" display: none;");
 		innerDivMini.setAttribute("style", style);
 		document.getElementById(divchartzoomslider).appendChild(innerDivMini);
-		controllerPlot = createplotmindistribucionvalor(idMini, data, 2, periodo1, periodo2);
+		controllerPlot = createplotmindistribucionvalor(idMini, data, 2, vStorageFecStart, vStorageFecEnd);
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider + "_slider";
@@ -6124,23 +6127,21 @@ function createSliderDistriValorMinTrimestral(divchartzoomslider, comptrimestral
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		ticks = data["Ticks"];
+		datestart = ticks[0];
+		datestart = datestart.split("-");
+		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
+		//
+		dateend = ticks[ticks.length - 1].split("-");
+		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
+
 		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
+			dia = 24*60*60*1000;
+			fromtmp = dateend.getTime() - (dia * 2);
 			fromtmp = new Date(fromtmp);
 			from2 = completarFechaStart(fromtmp,ticks);
 			vStorageFecStart = from2;
 			vStorageFecEnd = dateend;
-			
 		} 				
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, comptrimestral1, comptrimestral2, data);
 		var divchartmax = document.createElement('div');
@@ -6151,7 +6152,7 @@ function createSliderDistriValorMinTrimestral(divchartzoomslider, comptrimestral
 		var periodo1 = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["endX"].split("-");
 		var periodo2 = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
-		targetPlot = createplotmaxdistribucionvalor(divchartmax.id, data, 3, periodo1, periodo2);
+		targetPlot = createplotmaxdistribucionvalor(divchartmax.id, data, 3, vStorageFecStart, vStorageFecEnd);
 		var s_left = targetPlot._defaultGridPadding.left;
 		var s_right = targetPlot._defaultGridPadding.right;
 		var left = targetPlot._gridPadding.left;
@@ -6166,7 +6167,7 @@ function createSliderDistriValorMinTrimestral(divchartzoomslider, comptrimestral
 			.concat("height:").concat(55).concat("px !important;").concat(" display: none;");
 		innerDivMini.setAttribute("style", style);
 		document.getElementById(divchartzoomslider).appendChild(innerDivMini);
-		controllerPlot = createplotmindistribucionvalor(idMini, data, 3, periodo1, periodo2);
+		controllerPlot = createplotmindistribucionvalor(idMini, data, 3, vStorageFecStart, vStorageFecEnd);
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider + "_slider";
@@ -6234,23 +6235,22 @@ function createSliderDistriValorMinSemestral(divchartzoomslider, compsemestral1,
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+
+		ticks = data["Ticks"];
+		datestart = ticks[0];
+		datestart = datestart.split("-");
+		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
+		//
+		dateend = ticks[ticks.length - 1].split("-");
+		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
+
 		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
+			dia = 24*60*60*1000;
+			fromtmp = dateend.getTime() - (dia * 2);
 			fromtmp = new Date(fromtmp);
 			from2 = completarFechaStart(fromtmp,ticks);
 			vStorageFecStart = from2;
 			vStorageFecEnd = dateend;
-			
 		} 				
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compsemestral1, compsemestral2, data);
 		var divchartmax = document.createElement('div');
@@ -6261,7 +6261,7 @@ function createSliderDistriValorMinSemestral(divchartzoomslider, compsemestral1,
 		var periodo1 = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["endX"].split("-");
 		var periodo2 = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
-		targetPlot = createplotmaxdistribucionvalor(divchartmax.id, data, 4, periodo1, periodo2);
+		targetPlot = createplotmaxdistribucionvalor(divchartmax.id, data, 4, vStorageFecStart, vStorageFecEnd);
 		var s_left = targetPlot._defaultGridPadding.left;
 		var s_right = targetPlot._defaultGridPadding.right;
 		var left = targetPlot._gridPadding.left;
@@ -6276,7 +6276,7 @@ function createSliderDistriValorMinSemestral(divchartzoomslider, compsemestral1,
 			.concat("height:").concat(55).concat("px !important;").concat(" display: none;");
 		innerDivMini.setAttribute("style", style);
 		document.getElementById(divchartzoomslider).appendChild(innerDivMini);
-		controllerPlot = createplotmindistribucionvalor(idMini, data, 4, periodo1, periodo2);
+		controllerPlot = createplotmindistribucionvalor(idMini, data, 4, vStorageFecStart, vStorageFecEnd);
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider + "_slider";
@@ -6344,23 +6344,23 @@ function createSliderDistriValorMinAnual(divchartzoomslider, companual1, companu
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+
+		ticks = data["Ticks"];
+		datestart = ticks[0];
+		datestart = datestart.split("-");
+		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
+		//
+		
+		dateend = ticks[ticks.length - 1].split("-");
+		dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
+
 		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
-			let datestart = ticks[0];
-			datestart = datestart.split("-");
-			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
-			//
-			
-			let dateend = ticks[ticks.length - 1].split("-");
-			dateend = new Date(dateend[0], (parseInt(dateend[1]) - 1), dateend[2]);
-			
-			let dia = 24*60*60*1000;
-			let fromtmp = dateend.getTime() - (dia * 2);
+			dia = 24*60*60*1000;
+			fromtmp = dateend.getTime() - (dia * 2);
 			fromtmp = new Date(fromtmp);
 			from2 = completarFechaStart(fromtmp,ticks);
 			vStorageFecStart = from2;
 			vStorageFecEnd = dateend;
-			
 		} 				
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, companual1, companual2, data);
 		var divchartmax = document.createElement('div');
@@ -6371,7 +6371,7 @@ function createSliderDistriValorMinAnual(divchartzoomslider, companual1, companu
 		var periodo1 = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["endX"].split("-");
 		var periodo2 = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
-		targetPlot = createplotmaxdistribucionvalor(divchartmax.id, data, 5, periodo1, periodo2);
+		targetPlot = createplotmaxdistribucionvalor(divchartmax.id, data, 5, vStorageFecStart, vStorageFecEnd);
 		var s_left = targetPlot._defaultGridPadding.left;
 		var s_right = targetPlot._defaultGridPadding.right;
 		var left = targetPlot._gridPadding.left;
@@ -6386,7 +6386,7 @@ function createSliderDistriValorMinAnual(divchartzoomslider, companual1, companu
 			.concat("height:").concat(55).concat("px !important;").concat(" display: none;");
 		innerDivMini.setAttribute("style", style);
 		document.getElementById(divchartzoomslider).appendChild(innerDivMini);
-		controllerPlot = createplotmindistribucionvalor(idMini, data, 5, periodo1, periodo2);
+		controllerPlot = createplotmindistribucionvalor(idMini, data, 5, vStorageFecStart, vStorageFecEnd);
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider + "_slider";
@@ -6909,7 +6909,7 @@ function createSliderDistriCantMinDiario(divchartzoomslider, compdiario1, compdi
 		var fechaB = data["endX"].split("-");
 		var periodo2 = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
 
-		targetPlot = createplotmaxdistribucioncantidad(divchartmax.id, data, 1, periodo1, periodo2);
+		targetPlot = createplotmaxdistribucioncantidad(divchartmax.id, data, 1, vStorageFecStart, vStorageFecEnd);
 		var s_left = targetPlot._defaultGridPadding.left;
 		var s_right = targetPlot._defaultGridPadding.right;
 		var left = targetPlot._gridPadding.left;
@@ -6924,7 +6924,7 @@ function createSliderDistriCantMinDiario(divchartzoomslider, compdiario1, compdi
 			.concat("height:").concat(55).concat("px !important;").concat(" display: none;");
 		innerDivMini.setAttribute("style", style);
 		document.getElementById(divchartzoomslider).appendChild(innerDivMini);
-		controllerPlot = createplotmindistribucioncantidad(idMini, data, 1, periodo1, periodo2);
+		controllerPlot = createplotmindistribucioncantidad(idMini, data, 1, vStorageFecStart, vStorageFecEnd);
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider + "_slider";
@@ -7036,7 +7036,7 @@ function createSliderDistriCantMinMensual(divchartzoomslider, compmensual1, comp
 		var periodo1 = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["endX"].split("-");
 		var periodo2 = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
-		targetPlot = createplotmaxdistribucioncantidad(divchartmax.id, data, 2, periodo1, periodo2);
+		targetPlot = createplotmaxdistribucioncantidad(divchartmax.id, data, 2, vStorageFecStart, vStorageFecEnd);
 		var s_left = targetPlot._defaultGridPadding.left;
 		var s_right = targetPlot._defaultGridPadding.right;
 		var left = targetPlot._gridPadding.left;
@@ -7051,7 +7051,7 @@ function createSliderDistriCantMinMensual(divchartzoomslider, compmensual1, comp
 			.concat("height:").concat(55).concat("px !important;").concat(" display: none;");
 		innerDivMini.setAttribute("style", style);
 		document.getElementById(divchartzoomslider).appendChild(innerDivMini);
-		controllerPlot = createplotmindistribucioncantidad(idMini, data, 2, periodo1, periodo2);
+		controllerPlot = createplotmindistribucioncantidad(idMini, data, 2, vStorageFecStart, vStorageFecEnd);
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider + "_slider";
@@ -7149,7 +7149,7 @@ function createSliderDistriCantMinTrimestral(divchartzoomslider, comptrimestral1
 		var periodo1 = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["endX"].split("-");
 		var periodo2 = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
-		targetPlot = createplotmaxdistribucioncantidad(divchartmax.id, data, 3, periodo1, periodo2);
+		targetPlot = createplotmaxdistribucioncantidad(divchartmax.id, data, 3, vStorageFecStart, vStorageFecEnd);
 		var s_left = targetPlot._defaultGridPadding.left;
 		var s_right = targetPlot._defaultGridPadding.right;
 		var left = targetPlot._gridPadding.left;
@@ -7164,7 +7164,7 @@ function createSliderDistriCantMinTrimestral(divchartzoomslider, comptrimestral1
 			.concat("height:").concat(55).concat("px !important;").concat(" display: none;");
 		innerDivMini.setAttribute("style", style);
 		document.getElementById(divchartzoomslider).appendChild(innerDivMini);
-		controllerPlot = createplotmindistribucioncantidad(idMini, data, 3, periodo1, periodo2);
+		controllerPlot = createplotmindistribucioncantidad(idMini, data, 3, vStorageFecStart, vStorageFecEnd);
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider + "_slider";
@@ -7260,7 +7260,7 @@ function createSliderDistriCantMinSemestral(divchartzoomslider, compsemestral1, 
 		var periodo1 = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["endX"].split("-");
 		var periodo2 = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
-		targetPlot = createplotmaxdistribucioncantidad(divchartmax.id, data, 4, periodo1, periodo2);
+		targetPlot = createplotmaxdistribucioncantidad(divchartmax.id, data, 4, vStorageFecStart, vStorageFecEnd);
 		var s_left = targetPlot._defaultGridPadding.left;
 		var s_right = targetPlot._defaultGridPadding.right;
 		var left = targetPlot._gridPadding.left;
@@ -7275,7 +7275,7 @@ function createSliderDistriCantMinSemestral(divchartzoomslider, compsemestral1, 
 			.concat("height:").concat(55).concat("px !important;").concat(" display: none;");
 		innerDivMini.setAttribute("style", style);
 		document.getElementById(divchartzoomslider).appendChild(innerDivMini);
-		controllerPlot = createplotmindistribucioncantidad(idMini, data, 4, periodo1, periodo2);
+		controllerPlot = createplotmindistribucioncantidad(idMini, data, 4, vStorageFecStart, vStorageFecEnd);
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider + "_slider";
@@ -7372,7 +7372,7 @@ function createSliderDistriCantMinAnual(divchartzoomslider, companual1, companua
 		var periodo1 = new Date(fechaA[0], parseInt(fechaA[1]) - 1, fechaA[2]);
 		var fechaB = data["endX"].split("-");
 		var periodo2 = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
-		targetPlot = createplotmaxdistribucioncantidad(divchartmax.id, data, 5, periodo1, periodo2);
+		targetPlot = createplotmaxdistribucioncantidad(divchartmax.id, data, 5, vStorageFecStart, vStorageFecEnd);
 		var s_left = targetPlot._defaultGridPadding.left;
 		var s_right = targetPlot._defaultGridPadding.right;
 		var left = targetPlot._gridPadding.left;
@@ -7387,7 +7387,7 @@ function createSliderDistriCantMinAnual(divchartzoomslider, companual1, companua
 			.concat("height:").concat(55).concat("px !important;").concat(" display: none;");
 		innerDivMini.setAttribute("style", style);
 		document.getElementById(divchartzoomslider).appendChild(innerDivMini);
-		controllerPlot = createplotmindistribucioncantidad(idMini, data, 5, periodo1, periodo2);
+		controllerPlot = createplotmindistribucioncantidad(idMini, data, 5, vStorageFecStart, vStorageFecEnd);
 		$.jqplot.Cursor.zoomProxy(targetPlot, controllerPlot);
 		$.jqplot._noToImageButton = true;
 		idDivSlider = divchartzoomslider + "_slider";

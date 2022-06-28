@@ -15,7 +15,7 @@
 		<title>Home</title>
 		<f:facet name="first">
 			<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+			<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 			<meta name="apple-mobile-web-app-capable" content="yes" />
 		</f:facet>
@@ -66,7 +66,8 @@
 													<center>
 														<p:outputPanel styleClass="textbelow">
 															<h1 class="textbelow-tittle">Sistema de cuentas de</h1>
-															<h1 class="importantxt">Depósito - CUD</h1>
+															<div class="EmptyBox1"></div>
+															<h2 class="importantxt">Depósito - CUD</h2>
 														</p:outputPanel>
 													</center>
 												</div>
@@ -89,9 +90,10 @@
 													    </div>
 		    											<div class="ui-g-6 ui-md-6 ui-lg-6">
 		    												<span class="textbelow-tittle">Sistema de cuentas de</span>
+															<div class="EmptyBox1"></div>
 															<span class="importantxt">Depósito - CUD</span>
-		    											</div>
-													</div>
+														</div>
+													</div>	
 												</p:outputPanel>
 											</div>	
 										</p:outputPanel>
@@ -178,9 +180,7 @@
 									<h:form>
 										<p:commandLink id="bajoval1" actionListener="#{homeMaBean.iconAction}"
 											update="@([id$=panelGeneral],[id$=columnCon])"
-											process="@this" ajax="true"
-											
-										>
+											process="@this" ajax="true">
 											<p:outputPanel>
 												<center>
 													<p:graphicImage styleClass="imagecarousel2" style="width:21% !important" id="imgcrs"
@@ -216,11 +216,19 @@
 													    <div class="ui-g-2 ui-md-2 ui-lg-4">
 													    	<p:graphicImage styleClass="imagecarousel2" id="imgcrs4" value="./resources/images/Compensacion Electronica Interbancaria.svg" />
 													    </div>
-		    											<div class="ui-g-6 ui-md-6 ui-lg-6">
+		    											<!-- div class="ui-g-6 ui-md-6 ui-lg-6">
 		    												<span class="textbelow-tittle2">compensación Electrónica </span>
 															<div class="EmptyBox1"></div>
 															<span class="importantxtBV">Nacional Interbancaria</span>
-		    											</div>
+		    											</div-->
+		    											
+		    											<div class="ui-g-6 ui-md-6 ui-lg-6">
+		    												<span class="textbelow-tittle">Compensación Electrónica</span>
+															<div class="EmptyBox1"></div>
+															<span class="importantxt">Nacional Interbancaria</span>
+														</div>
+		    											
+		    											
 													</div>
 												</p:outputPanel>
 											</div>
@@ -263,6 +271,8 @@
 
 			$(window).on("load",function(){
 			
+				localStorage.clear();
+				
 				localStorage.setItem("TransferenciaOneTime","1");
 				localStorage.setItem("TransferenciaBajoValorOneTime","1");
 				localStorage.setItem("canjealcobroOneTime","1");
