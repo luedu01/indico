@@ -2548,7 +2548,7 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 			from = dateend.getTime() - (dia * 180);
 			from = new Date(from);
 			
-			from2= dateend.getTime() - (dia * 10);
+			from2= dateend.getTime() - (dia * 9);
 			from2 = new Date(from2);
 			vStorageFecStart = completarFechaStart(from2,ticks);
 			vStorageFecEnd=dateend;
@@ -3688,7 +3688,7 @@ function createSliderRotaMinDiario(divchartzoomslider, compdiario1, compdiario2,
 			from = dateend.getTime() - (dia * 180);
 			from = new Date(from);
 
-			from2 = dateend.getTime() - (dia * 10);
+			from2 = dateend.getTime() - (dia * 9);
 			from2 = new Date(from2);
 			
 			vStorageFecStart = completarFechaStart(from2,ticks);
@@ -4809,7 +4809,7 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 			from = dateend.getTime() - (dia * 180);
 			from = new Date(from);
 			
-			from2 = dateend.getTime() - (dia * 10);
+			from2 = dateend.getTime() - (dia * 9);
 			from2 = new Date(from2);
 			vStorageFecStart 	= 	completarFechaStart(from2,ticks);
 			vStorageFecEnd		=	dateend;
@@ -4852,7 +4852,7 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 
 		var dateSliderBounds = $("#" + idDivSlider).dateRangeSlider({
 				range: {
-					min: { days: 10 },
+					min: { days: 1 },
 				},
 				bounds: {
 					min: datestart,
@@ -5882,7 +5882,7 @@ function createSliderDistriValorMinDiario(divchartzoomslider, compdiario1, compd
 			from = dateend.getTime() - (dia * 180);
 			from = new Date(from);
 
-			from2 = dateend.getTime() - (dia * 2);
+			from2 = dateend.getTime() - (dia * 1);
 			from2 = new Date(from2);
 			from2 = completarFechaStart(from2,ticks);
 			
@@ -6892,7 +6892,7 @@ function createSliderDistriCantMinDiario(divchartzoomslider, compdiario1, compdi
 			from = dateend.getTime() - (dia * 180);
 			from = new Date(from);
 
-			from2 = dateend.getTime() - (dia * 2);
+			from2 = dateend.getTime() - (dia * 1);
 			from2 = new Date(from2);
 			from2 = completarFechaStart(from2,ticks);
 			vStorageFecStart = from2;

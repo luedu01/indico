@@ -2115,7 +2115,7 @@ function createChartMinDiarioDevol(chartvalores,chartcantidad,compdiario1,tipode
 
 		if (onetime!=null && onetime=="1") {
 			dia = 24*60*60*1000;
-			fromtmp = dateend.getTime() - (dia * 10);
+			fromtmp = dateend.getTime() - (dia * 9);
 			vStorageFecSelected = new Date(fromtmp);
 			vStorageFecSelected = dateend;
 		}

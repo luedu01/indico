@@ -94,7 +94,7 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 	var addday=0;
 	switch (period) {
 		case 1:		minDays = 1;
-					addday = 9;
+					addday = 8;
 					first = true;
 					updateperiodo = true;
 			break;

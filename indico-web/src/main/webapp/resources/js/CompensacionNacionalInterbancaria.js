@@ -264,7 +264,7 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 		var addday=0;
 		switch (period) {
 			case 1:		minDays = 1;
-						addday = 9;
+						addday = 8;
 						first = true;
 				break;
 			case 2: 	minDays = 60;

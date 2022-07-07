@@ -1621,7 +1621,7 @@ function createSliderComportamientoCanje(divchartzoomslider,periodo, compPeriodo
 	
 	switch (period) {
 		case 1:		minDays = 1;
-					addday = 10;
+					addday = 8;
 					first = true;
 					updateperiodo = true;
 			break;
@@ -1956,7 +1956,7 @@ function createSliderComportamientoDevolucion(divchartzoomslider,periodo,compPer
 	var addday=0;
 	switch (period) {
 		case 1:		minDays = 1;
-					addday = 10;
+					addday = 8;
 					first = true;
 					updateperiodo = true;
 			break;
@@ -2708,7 +2708,7 @@ function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,com
 	var addday=0;
 	switch (period) {
 		case 1:		minDays = 1;
-					addday = 9;
+					addday = 8;
 					first = true;
 					updateperiodo = true;
 			break;
