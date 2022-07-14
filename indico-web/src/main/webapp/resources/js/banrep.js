@@ -4841,7 +4841,6 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 
 		from = datestart;
 		var ticks = data["Ticks"];
-		console.log(ticks);
 		if (onetime!=null && onetime=="1") {
 			dia = 24*60*60*1000;
 			
