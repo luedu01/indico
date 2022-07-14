@@ -16,7 +16,7 @@ function formatdate(val) {
 	return days + "/" + month + "/" + year;
 }
 
-function completarFechaStart(fecha,sticks) {
+function completarFechaStart(fecha,sticks,fechaFinal) {
 	if (fecha == null && (sticks==null || sticks.length==0)) return null;
 	if (fecha instanceof Date) {
 		
@@ -37,15 +37,31 @@ function completarFechaStart(fecha,sticks) {
   		fecha=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
 	} else {
 		let anterior=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
+		let pos = 0;
+		let nextdate = null;
 		for (let i=0 ; i<sticks.length ; i++ ) {
 			let currentValue = sticks[i]; 
 			let actualdate = new Date(currentValue.split('-')[0],currentValue.split('-')[1]-1,currentValue.split('-')[2]);
 			if (fecha>=actualdate) {
 				anterior=actualdate;
-			}else{
+				pos++;
+			} else {
 				//fecha=anterior;
+				nextdate = actualdate;
 				break;
 			}
+		}
+		
+		if (sticks.length==pos) {
+			currentValue = sticks[pos-2];
+			fecha = new Date(currentValue.split('-')[0],currentValue.split('-')[1]-1,currentValue.split('-')[2]);
+		} else {
+			fecha = anterior;
+			if (fechaFinal!=null) {
+				if (nextdate < fechaFinal){
+					fecha = nextdate;		
+				} 
+			} 
 		}
 	}
 	return fecha;
@@ -2531,8 +2547,9 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 		vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		ticks = data["Ticks"];
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
 		
 		ticks = data["Ticks"];
 		//		
@@ -2700,8 +2717,9 @@ function createSliderMinMensual(divchartzoomslider, compmensual1, compmensual2, 
 		let vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		let vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		ticks = data["Ticks"];
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
 
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compmensual1, compmensual2, data);
 
@@ -2854,8 +2872,10 @@ function createSliderMinTrimestral(divchartzoomslider, comptrimestral1, comptrim
 		let vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		let vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+
+		ticks = data["Ticks"];
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
 
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, comptrimestral1, comptrimestral2, data);
 		let divchartmax = document.createElement('div');
@@ -2991,8 +3011,11 @@ function createSliderMinSemestral(divchartzoomslider, compsemestral1, compsemest
 		data["Title"] = data["Title"] + " - " + label;
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		
+		ticks = data["Ticks"];
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compsemestral1, compsemestral2, data);
 		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
@@ -3121,16 +3144,21 @@ function createSliderMinAnual(divchartzoomslider, companual1, companual2, concep
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestServices.getTransferenciasAnuales({ 'concepto': concepto });
+		ticks = data["Ticks"];
+		
 		$("#" + divchartzoomslider).empty();
 		$("#" + divchartzoomslider)[0].setAttribute("class", "superzoom");
 		if (label == null || label == "undefined") label = "Todos";
 		data["Title"] = data["Title"] + " - " + label;
 
+
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-
+		
+		ticks = data["Ticks"];
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, companual1, companual2, data);
 		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
@@ -3666,13 +3694,14 @@ function createSliderRotaMinDiario(divchartzoomslider, compdiario1, compdiario2,
 	try {
 
 		if (!($("#" + divchartzoomslider).length)) return;
-		data = RestServices.getRotacionDiaria();
+		data  = RestServices.getRotacionDiaria();
+		ticks = data["Ticks"]; 
 
 		vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
 		
 		datestart = data["MinX"].split("-");
 		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
@@ -3840,13 +3869,15 @@ function createSliderRotaMinMensual(divchartzoomslider, compmensual1, compmensua
 		if (!($("#" + divchartzoomslider).length)) return;
 
 		data = RestServices.getRotacionMensual();
+		ticks = data["Ticks"];
 
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
 		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compmensual1, compmensual2, data);
 		/*load*/
@@ -3996,13 +4027,15 @@ function createSliderRotaMinTrimestral(divchartzoomslider, comptrimestral1, comp
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestServices.getRotacionTrimestral();
-
+		ticks=data["Ticks"];
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);		
+
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, comptrimestral1, comptrimestral2, data);
 		/*load*/
 		var divchartmax = document.createElement('div');
@@ -4136,13 +4169,16 @@ function createSliderRotaMinSemestral(divchartzoomslider, compsemestral1, compse
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestServices.getRotacionSemestral();
+		ticks = data["Ticks"];
 
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);		
+		
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compsemestral1, compsemestral2, data);
 		/*load*/
 		var divchartmax = document.createElement('div');
@@ -4280,15 +4316,16 @@ function createSliderRotaMinAnual(divchartzoomslider, companual1, companual2, er
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
-		data = RestServices.getRotacionAnual();
-
+		data  = RestServices.getRotacionAnual();
+		ticks = data["Ticks"] ;
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
 
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, companual1, companual2, data);
 		/*load*/
 		var divchartmax = document.createElement('div');
@@ -4788,13 +4825,14 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestServices.getRotacionPIBDiaria();
+		ticks= data["Ticks"];
 
 		$("#" + divchartzoomslider).empty();
 		vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
 		
 		datestart = data["MinX"].split("-");
 		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
@@ -4803,6 +4841,7 @@ function createSliderRotaMinDiarioPib(divchartzoomslider, compdiario1, compdiari
 
 		from = datestart;
 		var ticks = data["Ticks"];
+		console.log(ticks);
 		if (onetime!=null && onetime=="1") {
 			dia = 24*60*60*1000;
 			
@@ -4949,15 +4988,16 @@ function createSliderRotaMinMensualPib(divchartzoomslider, compmensual1, compmen
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestServices.getRoracionPIBMensual();
+		ticks = data["Ticks"];
 
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		$("#" + divchartzoomslider).empty();
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-				
+		
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compmensual1, compmensual2, data);
 		/*load*/
 		var divchartmax = document.createElement('div');
@@ -5105,15 +5145,17 @@ function createSliderRotaMinTrimestralPib(divchartzoomslider, comptrimestral1, c
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestServices.getRotacionPIBTrimestral();
-
+		ticks = data["Ticks"];
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		$("#" + divchartzoomslider).empty();
+		
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-				
+		
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, comptrimestral1, comptrimestral2, data);
 		/*load*/
 		var divchartmax = document.createElement('div');
@@ -5249,15 +5291,17 @@ function createSliderRotaMinSemestralPib(divchartzoomslider, compsemestral1, com
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestServices.getRotacionPIBSemestral();
+		ticks = data["Ticks"];
 
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		$("#" + divchartzoomslider).empty();
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-				
+		
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compsemestral1, compsemestral2, data);
 		/*load*/
 		var divchartmax = document.createElement('div');
@@ -5391,14 +5435,16 @@ function createSliderRotaMinAnualPib(divchartzoomslider, companual1, companual2,
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
-		data = RestServices.getRotacionPibAnual();
-
+		data 	= RestServices.getRotacionPibAnual();
+		ticks 	= data["Ticks"];
+	
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
 		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, companual1, companual2, data);
 		/*load*/
@@ -5861,15 +5907,16 @@ function createSliderDistriValorMinDiario(divchartzoomslider, compdiario1, compd
 		if (!($("#" + divchartzoomslider).length)) return;
 
 		data = RestDistribucionValor.getDistribucionValorDiario();
+		ticks = data["Ticks"];
 
 		$("#" + divchartzoomslider).empty();
 		
 		vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
 		
-		ticks = data["Ticks"];
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+		
 		datestart = ticks[0];
 		datestart = datestart.split("-");
 		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
@@ -6012,13 +6059,17 @@ function createSliderDistriValorMinMensual(divchartzoomslider, compmensual1, com
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestDistribucionValor.getDistribucionValorMensual();
+		ticks = data["Ticks"];
+
 		$("#" + divchartzoomslider).empty();
+
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-		ticks = data["Ticks"];
+
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+
 		datestart = ticks[0];
 		datestart = datestart.split("-");
 		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
@@ -6033,7 +6084,7 @@ function createSliderDistriValorMinMensual(divchartzoomslider, compmensual1, com
 			from2 = completarFechaStart(fromtmp,ticks);
 			vStorageFecStart = from2;
 			vStorageFecEnd = dateend;
-		} 		
+		} 	
 		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compmensual1, compmensual2, data);
 		var divchartmax = document.createElement('div');
@@ -6121,13 +6172,15 @@ function createSliderDistriValorMinTrimestral(divchartzoomslider, comptrimestral
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestDistribucionValor.getDistribucionValorTrimestral();
+		ticks = data["Ticks"];
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-		ticks = data["Ticks"];
+		
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+		
 		datestart = ticks[0];
 		datestart = datestart.split("-");
 		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
@@ -6229,14 +6282,16 @@ function createSliderDistriValorMinSemestral(divchartzoomslider, compsemestral1,
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestDistribucionValor.getDistribucionValorSemestral();
+		ticks = data["Ticks"];
+
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
 
-		ticks = data["Ticks"];
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+
 		datestart = ticks[0];
 		datestart = datestart.split("-");
 		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
@@ -6338,14 +6393,16 @@ function createSliderDistriValorMinAnual(divchartzoomslider, companual1, companu
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestDistribucionValor.getDistribucionValorAnual();
+		ticks = data["Ticks"];
+
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
 
-		ticks = data["Ticks"];
 		datestart = ticks[0];
 		datestart = datestart.split("-");
 		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
@@ -6865,20 +6922,23 @@ function scrollcantidad() {
 
 	}
 }
+
 function createSliderDistriCantMinDiario(divchartzoomslider, compdiario1, compdiario2, errormessage,almacen,onetime) {
 
 	var targetPlot, controllerPlot, idMini, idDivSlider, data;
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestServices.getDistribucionCantidadDiario();
+		ticks = data["Ticks"];
+
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
 
-		ticks = data["Ticks"];
 		datestart = ticks[0];
 		datestart = datestart.split("-");
 		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
@@ -7002,15 +7062,19 @@ function createSliderDistriCantMinMensual(divchartzoomslider, compmensual1, comp
 		if (!($("#" + divchartzoomslider).length)) return;
 
 		data = RestServices.getDistribucionCantidadMensual();
+		let ticks = data["Ticks"];
+		
 		$("#" + divchartzoomslider).empty();
+		
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+		
 		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
+			
 			let datestart = ticks[0];
 			datestart = datestart.split("-");
 			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
@@ -7027,6 +7091,7 @@ function createSliderDistriCantMinMensual(divchartzoomslider, compmensual1, comp
 			vStorageFecEnd = dateend;
 			
 		} 				
+		
 		startvaluescomponentstimes(vStorageFecStart, vStorageFecEnd, compmensual1, compmensual2, data);
 		var divchartmax = document.createElement('div');
 		divchartmax.id = divchartzoomslider + "_chartMax";
@@ -7116,14 +7181,17 @@ function createSliderDistriCantMinTrimestral(divchartzoomslider, comptrimestral1
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestServices.getDistribucionCantidadTrimestal();
+		let ticks = data["Ticks"];
+		
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+		
 		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
 			let datestart = ticks[0];
 			datestart = datestart.split("-");
 			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
@@ -7227,14 +7295,17 @@ function createSliderDistriCantMinSemestral(divchartzoomslider, compsemestral1, 
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestServices.getDistribucionCantidadSemestral();
+		let ticks = data["Ticks"];
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+		
+		
 		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
 			let datestart = ticks[0];
 			datestart = datestart.split("-");
 			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
@@ -7339,14 +7410,17 @@ function createSliderDistriCantMinAnual(divchartzoomslider, companual1, companua
 	try {
 		if (!($("#" + divchartzoomslider).length)) return;
 		data = RestServices.getDistribucionCantidadAnual();
+		let ticks = data["Ticks"];
+
 		$("#" + divchartzoomslider).empty();
 		/* start selects components */
 		var vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		var vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
-		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		
+		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+		
 		if (onetime!=null && onetime=="1") {
-			let ticks = data["Ticks"];
 			let datestart = ticks[0];
 			datestart = datestart.split("-");
 			datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
