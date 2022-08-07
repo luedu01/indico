@@ -1,6 +1,7 @@
 /**
  *  GENERAL FUNCTIONS
  **/
+var _v = "1.1.1";
 var showError = true;
 
 function restartExportar(selectname) {
@@ -16,7 +17,7 @@ function formatdate(val) {
 	return days + "/" + month + "/" + year;
 }
 
-function completarFechaStart(fecha,sticks,fechaFinal) {
+function completarFechaStart(fecha,sticks,fechaFinal,startSticks) {
 	if (fecha == null && (sticks==null || sticks.length==0)) return null;
 	if (fecha instanceof Date) {
 		
@@ -62,6 +63,15 @@ function completarFechaStart(fecha,sticks,fechaFinal) {
 					fecha = nextdate;		
 				} 
 			} 
+		}
+		
+		if (startSticks!=null && startSticks > 0) {
+			if(sticks.length>=startSticks) {
+				fs = sticks[sticks.length-startSticks];
+			} else {
+				fs = sticks[0];
+			}
+			fecha = new Date(fs.split('-')[0],fs.split('-')[1]-1,fs.split('-')[2]);
 		}
 	}
 	return fecha;
@@ -2549,7 +2559,7 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 		
 		ticks = data["Ticks"];
 		vStorageFecEnd 		= completarFechaEnd(vStorageFecEnd,ticks);
-		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd);
+		vStorageFecStart 	= completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd,10);
 		
 		ticks = data["Ticks"];
 		//		
@@ -2567,7 +2577,7 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 			
 			from2= dateend.getTime() - (dia * 9);
 			from2 = new Date(from2);
-			vStorageFecStart = completarFechaStart(from2,ticks);
+			vStorageFecStart = completarFechaStart(from2,ticks,vStorageFecEnd,10);
 			vStorageFecEnd=dateend;
 		}
 		from2=vStorageFecStart;
