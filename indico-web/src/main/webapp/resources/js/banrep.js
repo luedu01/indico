@@ -2066,7 +2066,7 @@ function formatterLabel(tipo, valor) {
 function getTickInterval(tipo) {
 	var mintickinterval;
 	switch (tipo) {
-		case 1: mintickinterval = "1 days";
+		case 1: mintickinterval = "1 day";
 			break;
 		case 2: mintickinterval = "1 month";
 			break;
