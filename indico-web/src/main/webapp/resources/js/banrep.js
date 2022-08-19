@@ -1422,28 +1422,32 @@ function valuesPlotChangedTimes(dataSlider, controllerPlot, targetPlot, compdiar
 		var v = targetPlot;
 		var x = controllerPlot.plugins.cursor;
 		var w = v.axes;
-		x._zoom.zooming = true;
+		x._zoom.zooming	= true;
 		x._zoom.started = true;
-		x._zoom.start = [xStart2, 1];
+		x._zoom.start 	= [xStart2	, 1];
+		x._zoom.end   	= [xEnd2	, 1];
+		
 		var gridEnd = {
 			x: xEnd2,
 			y: 1,
 		};
-		x._zoom.end = [xEnd2, 1];
 		x._zoom.gridpos = gridEnd;
 		
 		var dataEnd = {
 			xaxis: maximo,
 			yaxis: 1,
 		}
+		
 		x._zoom.axes.start = {
 			xaxis: minimo,
 			yaxis: 1,
 		}
+		
 		x._zoom.axes.end = {
 			xaxis: maximo,
 			yaxis: 1,
 		}
+		
 		if (minimo instanceof Date) {
 			w.xaxis.tickInterval = getTickInterval(tipo);
 			w.xaxis.numberTicks = getTicks(minimo, maximo, tipo);
@@ -1911,6 +1915,7 @@ function valuesPlotChanged(dataSlider, controllerPlot, targetPlot, compdiario1, 
 
 	var xStart = (controllerPlot.axes.xaxis.u2p(dataSlider.values.min)).toFixed(2);
 	var xEnd = (controllerPlot.axes.xaxis.u2p(dataSlider.values.max)).toFixed(2);
+	
 	var v = targetPlot;
 	var x = controllerPlot.plugins.cursor;
 
@@ -2577,7 +2582,8 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 			
 			from2= dateend.getTime() - (dia * 9);
 			from2 = new Date(from2);
-			vStorageFecStart = completarFechaStart(from2,ticks,vStorageFecEnd,10);
+			vStorageFecStart2 = completarFechaStart(from2,ticks,vStorageFecEnd,10); 
+			vStorageFecStart = completarFechaStart(from2,ticks,vStorageFecEnd,180);
 			vStorageFecEnd=dateend;
 		}
 		from2=vStorageFecStart;
@@ -2634,11 +2640,12 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 				},
 				defaultValues: {
 					min: from2,
-					max: vStorageFecEnd
+					max: dateend
 				},
 		});
 		
 		//trigger first load
+		
 		var datesinit = {
 			label: dateSlider,
 			values: {
@@ -2646,6 +2653,15 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 				max: vStorageFecEnd,
 			},
 			first: true
+		}
+
+		var datesinit2 = {
+			label: dateSlider,
+			values: {
+				min: vStorageFecStart2,
+				max: vStorageFecEnd,
+			},
+			first: false
 		}
 
 		$("#" + idDivSlider).unbind();
@@ -2701,8 +2717,14 @@ function createSliderMinDiario(divchartzoomslider, compdiario1, compdiario2, con
 		});
 
 		$(document).ready(function(){
-			$("#" + idDivSlider).trigger("valuesChanged", datesinit);
-			scroll();
+		    	setTimeout(() => {
+					$("#" + idDivSlider).trigger("valuesChanged", datesinit);
+					scroll();
+
+						$("#" + idDivSlider).trigger("valuesChanged", datesinit2);
+						scroll();
+
+		    	},100);	
   		});
  
   	} catch (err) {
@@ -3356,10 +3378,7 @@ function createplotmaxgeneral(name, data, tipo) {
 				lineWidth: 0.5,
 				shadow: true,
 				label: 'Número Transacciones',
-				markerOptions: {
-					size: 4,
-					style: 'filledCircle'
-				},
+				markerOptions: { size: 4, style: 'filledCircle'},
 				rendererOptions: {
 					smooth: false,
 					css: {
@@ -3415,7 +3434,7 @@ function createplotmaxgeneral(name, data, tipo) {
 				label: 'Fecha',
 				showLabel: false,
 				pad: 1.0,
-				padMin: 1.0,
+				padMin: 1.2,
 				tickInterval: getTickInterval(tipo),
 				renderer: $.jqplot.DateAxisRenderer,
 				rendererOptions: {
@@ -3433,6 +3452,7 @@ function createplotmaxgeneral(name, data, tipo) {
 					size: 4,
 					markSize: 4,
 					formatString: formatter(tipo),
+					/*formatString: '%d-%m-%Y',*/
 				}
 			},
 			yaxis: {
@@ -4460,10 +4480,7 @@ function parsedata(serieValores) {
 }
 
 function datos(serieValores) {
-
-
 	var serieValoresF = [];
-
 	for (var i = 0; i < serieValores.length; i++) {
 		var valor2 = serieValores[i].serieValor;
 		var fecha = (serieValores[i].valorFecha);
@@ -4473,9 +4490,7 @@ function datos(serieValores) {
 }
 
 function datosValor(serieValores) {
-
 	var serieValorD = [];
-
 	for (var i = 0; i < serieValores.length; i++) {
 		var valor2 = serieValores[i].serieValor;
 		var fecha = (serieValores[i].valorFecha);
