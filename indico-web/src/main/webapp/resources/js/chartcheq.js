@@ -2,9 +2,10 @@
  *  GENERAL FUNCTIONS
  **/
 
-function completarFechaStart(fecha,sticks) {
+function completarFechaStart(fecha,sticks,fechaFinal,startSticks) {
 	if (fecha == null && (sticks==null || sticks.length==0)) return null;
 	if (fecha instanceof Date) {
+		
 	} else {
 		var anio,mes,dia;
 		if (fecha!=null){
@@ -22,15 +23,39 @@ function completarFechaStart(fecha,sticks) {
   		fecha=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
 	} else {
 		let anterior=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
+		let pos = 0;
+		let nextdate = null;
 		for (let i=0 ; i<sticks.length ; i++ ) {
 			let currentValue = sticks[i]; 
 			let actualdate = new Date(currentValue.split('-')[0],currentValue.split('-')[1]-1,currentValue.split('-')[2]);
 			if (fecha>=actualdate) {
 				anterior=actualdate;
-			}else{
+				pos++;
+			} else {
 				//fecha=anterior;
+				nextdate = actualdate;
 				break;
 			}
+		}
+		
+		if (sticks.length==pos) {
+			currentValue = sticks[pos-2];
+			fecha = new Date(currentValue.split('-')[0],currentValue.split('-')[1]-1,currentValue.split('-')[2]);
+		} else {
+			fecha = anterior;
+			if (fechaFinal!=null) {
+				if (nextdate < fechaFinal){
+					fecha = nextdate;		
+				} 
+			} 
+		}
+		if (startSticks!=null && startSticks > 0) {
+			if(sticks.length>=startSticks) {
+				fs = sticks[sticks.length-startSticks];
+			} else {
+				fs = sticks[0];
+			}
+			fecha = new Date(fs.split('-')[0],fs.split('-')[1]-1,fs.split('-')[2]);
 		}
 	}
 	return fecha;
@@ -1655,14 +1680,13 @@ function createSliderComportamientoCanje(divchartzoomslider,periodo, compPeriodo
 		
 		if (label==null || label =="undefined") label = "Todos";
 		data["Title"] = data["Title"] + " - " + label;
+		ticks = data["Ticks"];
 		
 		vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-		
-		ticks = data["Ticks"];
+		vStorageFecStart = completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd,10);
 				
 		datestart = ticks[0];
 		datestart = datestart.split("-");
@@ -1679,8 +1703,8 @@ function createSliderComportamientoCanje(divchartzoomslider,periodo, compPeriodo
 			from = new Date(from);
 			fromtmp = dateend.getTime() - (dia * ( minDays +addday));
 			fromtmp = new Date(fromtmp);
-			vStorageFecStart = completarFechaStart(fromtmp,ticks);
 			vStorageFecEnd=dateend;
+			vStorageFecStart = completarFechaStart(fromtmp,ticks,vStorageFecEnd,10);
 		} 
 		from2=vStorageFecStart;
 		startvaluescomponentstimes (vStorageFecStart,vStorageFecEnd,compPeriodo1,compPeriodo2,data);
@@ -1988,14 +2012,14 @@ function createSliderComportamientoDevolucion(divchartzoomslider,periodo,compPer
 		$("#"+divchartzoomslider)[0].setAttribute("class","superzoom");
 		if (label==null || label =="undefined") label = "Todos";
 		data["Title"] = data["Title"] + " - " + label;
+		ticks = data["Ticks"];
 		
 		vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		vStorageFecStart = completarFechaStart(fromtmp,ticks,vStorageFecEnd,10);
 
-		ticks = data["Ticks"];
 		datestart = ticks[0];
 		datestart = datestart.split("-");
 		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
@@ -2006,12 +2030,12 @@ function createSliderComportamientoDevolucion(divchartzoomslider,periodo,compPer
 		if (onetime!=null && onetime=="1") {
 			dia = 24*60*60*1000;
 			//obligatorio para obliagr a refrescar el valor minimo
+			vStorageFecEnd=dateend;
 			from = dateend.getTime() - (dia * 180);
 			from = new Date(from);
 			fromtmp = dateend.getTime() - (dia * ( minDays +addday));
 			fromtmp = new Date(fromtmp);
-			vStorageFecStart = completarFechaStart(fromtmp,ticks);
-			vStorageFecEnd=dateend;
+			vStorageFecStart = completarFechaStart(fromtmp,ticks,vStorageFecEnd,10);
 		} 
 		from2=vStorageFecStart;
 		startvaluescomponentstimes (vStorageFecStart,vStorageFecEnd,compPeriodo1,compPeriodo2,data);
@@ -2742,14 +2766,14 @@ function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,com
 		
 		if (label==null || label =="undefined") label = "Todas";
 		data["Title"] = data["Title"] + " - " + label;
+		ticks = data["Ticks"];
 		
 		vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 
-		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
+		vStorageFecStart = completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd,10);
 
-		ticks = data["Ticks"];
 		datestart = ticks[0];
 		datestart = datestart.split("-");
 		datestart = new Date(datestart[0], (parseInt(datestart[1]) - 1), datestart[2]);
@@ -2765,9 +2789,10 @@ function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,com
 			fromtmp = dateend.getTime() - (dia * ( minDays +addday));
 			fromtmp = new Date(fromtmp);
 			
-			vStorageFecStart = completarFechaStart(fromtmp,ticks);
 			vStorageFecEnd=dateend;
+			vStorageFecStart = completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd,10);
 		} 
+		
 		from2=vStorageFecStart;
 		startvaluescomponentstimes (vStorageFecStart,vStorageFecEnd,compPeriodo1,compPeriodo2,data);
 		
@@ -2836,7 +2861,7 @@ function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,com
 				min: from,
 				max: vStorageFecEnd,
 			},
-			first: first,
+			first: true,
 			updateperiodo: updateperiodo
 		}
 		
@@ -2847,17 +2872,17 @@ function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,com
 				min: from2,
 				max: vStorageFecEnd,
 			},
-			first: first,
+			first: false,
 			updateperiodo: updateperiodo
 		}
 
 		$("#"+idDivSlider).unbind();
 		$("#"+idDivSlider).bind("valuesChanged", function(evt,dateSlider){
 			valuesPlotChangedTimes(dateSlider,controllerPlot,targetPlot,compPeriodo1,compPeriodo2,data,period);
-			//if (dateSlider.first==null || dateSlider.first==false) {
+			if (dateSlider.first==null || dateSlider.first==false) {
 				updatevaluescomponentstimesfromslider(dateSlider,compPeriodo1,compPeriodo2,data,period);
 				savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
-			//}
+			}
 		});
 		
 		/**
@@ -2985,11 +3010,15 @@ function createSliderDevolucionCanje(divchartzoomslider,periodo,compPeriodo1,com
 			savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
 		});
 		
-		$("#"+idDivSlider).trigger("valuesChanged",datesinit);
-		$("#"+idDivSlider).trigger("valuesChanged",datesinit2);
-		window.scrollTo(0, 380);
-
 		
+		$(document).ready(function(){
+		    	setTimeout(() => {
+					$("#"+idDivSlider).trigger("valuesChanged",datesinit);
+					scroll();
+						$("#"+idDivSlider).trigger("valuesChanged",datesinit2);
+						window.scrollTo(0, 380);
+		    	},100);	
+  		});
 	} catch (err) {
 		console.log(err);
 		$("[id*='"+errormessage+"'").empty();

@@ -2,9 +2,10 @@
  * Crea las gráficas para Transacción CNI
  */
 
-function completarFechaStart(fecha,sticks) {
+function completarFechaStart(fecha,sticks,fechaFinal,startSticks) {
 	if (fecha == null && (sticks==null || sticks.length==0)) return null;
 	if (fecha instanceof Date) {
+		
 	} else {
 		var anio,mes,dia;
 		if (fecha!=null){
@@ -22,15 +23,39 @@ function completarFechaStart(fecha,sticks) {
   		fecha=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
 	} else {
 		let anterior=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
+		let pos = 0;
+		let nextdate = null;
 		for (let i=0 ; i<sticks.length ; i++ ) {
 			let currentValue = sticks[i]; 
 			let actualdate = new Date(currentValue.split('-')[0],currentValue.split('-')[1]-1,currentValue.split('-')[2]);
 			if (fecha>=actualdate) {
 				anterior=actualdate;
-			}else{
+				pos++;
+			} else {
 				//fecha=anterior;
+				nextdate = actualdate;
 				break;
 			}
+		}
+		
+		if (sticks.length==pos) {
+			currentValue = sticks[pos-2];
+			fecha = new Date(currentValue.split('-')[0],currentValue.split('-')[1]-1,currentValue.split('-')[2]);
+		} else {
+			fecha = anterior;
+			if (fechaFinal!=null) {
+				if (nextdate < fechaFinal){
+					fecha = nextdate;		
+				} 
+			} 
+		}
+		if (startSticks!=null && startSticks > 0) {
+			if(sticks.length>=startSticks) {
+				fs = sticks[sticks.length-startSticks];
+			} else {
+				fs = sticks[0];
+			}
+			fecha = new Date(fs.split('-')[0],fs.split('-')[1]-1,fs.split('-')[2]);
 		}
 	}
 	return fecha;
@@ -295,8 +320,6 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 		serieCantidad = datosValor(serieCantidad);
 		var fCounter = serieCantidad.length;
 
-
-
 		$("#"+divchartzoomslider).empty();
 		$("#"+divchartzoomslider)[0].setAttribute("class","superzoom");
 
@@ -306,8 +329,8 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 		vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
 		vStorageFecEnd = localStorage.getItem(almacen + "_fecEnd");
 		
-		vStorageFecStart = completarFechaStart(vStorageFecStart,ticks);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,ticks);
+		vStorageFecStart = completarFechaStart(vStorageFecStart,ticks,vStorageFecEnd,10);
 		
 		datestart 	= data["MinX"].split("-");
 		datestart	= new Date(datestart[0],(parseInt(datestart[1])-1),datestart[2]);
@@ -322,8 +345,9 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 
 			fromtmp = dateend.getTime() - (dia * (minDays+addday));
 			fromtmp = new Date(fromtmp);
-			vStorageFecStart = completarFechaStart(fromtmp,ticks);
+
 			vStorageFecEnd=dateend;
+			vStorageFecStart = completarFechaStart(fromtmp,ticks,vStorageFecEnd,10);
 		}
 		from2 = vStorageFecStart;
  
@@ -412,7 +436,7 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 				min: from,
 				max: vStorageFecEnd,
 			},
-			first: first,
+			first: true,
 			updateperiodo: updateperiodo
 		}
 
@@ -422,17 +446,17 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 				min: from2,
 				max: vStorageFecEnd,
 			},
-			first: first,
+			first: false,
 			updateperiodo: updateperiodo
 		}
 
 		$("#"+idDivSlider).unbind();
 		$("#"+idDivSlider).bind("valuesChanged", function(evt,dateSlider){
 			valuesPlotChangedTimes(dateSlider,controllerPlot,targetPlot,compPeriodo1,compPeriodo2,data,period);
-			//if (dateSlider.first==null || dateSlider.first==false) {
+			if (dateSlider.first==null || dateSlider.first==false) {
 				updatevaluescomponentstimesfromslider(dateSlider,compPeriodo1,compPeriodo2,data,period);
 				vbajo_savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period); 
-			//}
+			}
 		});
 
 		//Retira eventos y actualiza datos en años
@@ -556,9 +580,13 @@ function createSliderTransBajoValor(divchartzoomslider,periodo,compPeriodo1,comp
 			vbajo_savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period); 
 		});
 
-		$("#"+idDivSlider).trigger("valuesChanged",datesinit);
-		$("#"+idDivSlider).trigger("valuesChanged",datesinit2);
-		scroll();
+		$(document).ready(function(){
+		    	setTimeout(() => {
+					$("#"+idDivSlider).trigger("valuesChanged",datesinit);
+					$("#"+idDivSlider).trigger("valuesChanged",datesinit2);
+					scroll();
+		    	},100);	
+  		});
 
 	} catch (err) {
 		console.log(err);
