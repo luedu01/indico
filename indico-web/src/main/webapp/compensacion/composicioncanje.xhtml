@@ -185,8 +185,7 @@
 																<f:selectItem itemLabel="CSV" itemValue="csv" />
 																<f:selectItem itemLabel="XLS" itemValue="xls" />
 																<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
-																<p:ajax event="change" onsuccess='$(&apos;[id*="vcomcanje_downloadFile001"]&apos;).click();' process="@this" 
-																update="@([id$=vcomcanje_panelexportar001])"/>
+																<p:ajax event="change" onsuccess='$(&apos;[id*="vcomcanje_downloadFile001"]&apos;).click();' process="@this"/>																
 															</p:selectOneMenu>
 															<p:commandButton icon="fa fa-fw fa-cloud-download" id="vcomcanje_downloadFile001" value="Download"
 																widgetVar="vcomcanje_downloadFileW0001" process="@form"  ajax="false"  style="display: none;"
