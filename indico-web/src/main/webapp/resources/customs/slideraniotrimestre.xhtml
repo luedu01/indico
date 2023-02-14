@@ -33,7 +33,8 @@
 			<h:outputLabel value="#{cc.attrs.tittle}" styleClass="labelPanels"/>
 		</c:if>
 		<p:outputPanel>
-			<div id="#{cc.attrs.idg}_container_anio" class="containerselectslider" style="min-width: 65px;">
+			<div id="#{cc.attrs.idg}_container_anio" class="containerselectslider tooltipc" style="min-width: 65px;">
+				<span class="tooltiptextc ui-widget">Desplegar Lista</span>
 				<select id="#{cc.attrs.idg}_sel_anio" class="minWidth-0 selectonslider" onchange="updateLabelValue('#{cc.attrs.idg}_sel_anio_label',this.value,'#{cc.attrs.idg}_sel_anio_label')">
 				</select>
 				<label id="#{cc.attrs.idg}_sel_anio_label" for="#{cc.attrs.idg}_sel_anio" class="selectFechasLabel"></label>

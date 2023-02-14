@@ -46,6 +46,7 @@
 														<f:selectItem itemLabel="Anual" itemValue="5" />
 														<p:ajax process="@this" update="@([id$=vcan_panelesValoresDinamic],[id$=vcan_valorgraficavalor002])" listener="#{distribucionCantidadMaBean.changePanelAction}"  onstart="vcan_savedperidoselected(this.value);" oncomplete="vcan_changeperiodiciorperiodo(); return false;"/>
 													</p:selectOneMenu>
+													<p:tooltip for="vcan_selFiltroPorValor" value="Desplegar Lista" position="top"></p:tooltip>
 													</p:outputLabel>
 													</p:outputPanel>
 													<div class="EmptyBox10"></div>
@@ -130,18 +131,20 @@
 												<p:panelGrid
 													styleClass="panelgridExportar  Wid100 BoxSizeBorder"
 													columns="1">
-													<p:selectOneMenu widgetVar="vcan_exportGra" onchange="exportChart(this.value,'chartzoomslidercantidad','Participación Transacciones - Cantidad'); restartExportar('vcan_exportGra');" styleClass="selectDownload selectonemenugrande">
+													<p:selectOneMenu id="vcan_exportGra" widgetVar="vcan_exportGra" onchange="exportChart(this.value,'chartzoomslidercantidad','Participación Transacciones - Cantidad'); restartExportar('vcan_exportGra');" styleClass="selectDownload selectonemenugrande">
 														<f:selectItem itemLabel="Gráfica" itemValue="" />
 														<f:selectItem itemLabel="JPG" itemValue="jpg" />
 														<f:selectItem itemLabel="PDF" itemValue="pdf" />
 													</p:selectOneMenu>
-													<p:selectOneMenu value="#{distribucionCantidadMaBean.tipoaexportar}" styleClass="selectonemenugrande">
+													<p:tooltip for="vcan_exportGra" value="Desplegar Lista" position="top"></p:tooltip>
+													<p:selectOneMenu id="vcan_exportarG002W" value="#{distribucionCantidadMaBean.tipoaexportar}" styleClass="selectonemenugrande">
 														<f:selectItem itemLabel="Datos" itemValue="" />
 														<f:selectItem itemLabel="CSV" itemValue="csv" />
 														<f:selectItem itemLabel="XLS" itemValue="xls" />
 														<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 														<p:ajax event="change" onsuccess='$(&apos;[id*="downloadFile001"]&apos;).click();' />
 													</p:selectOneMenu>
+													<p:tooltip for="vcan_exportarG002W" value="Desplegar Lista" position="top"></p:tooltip>
 												</p:panelGrid>
 												<p:commandButton id="downloadFile001"
 													widgetVar="downloadFile001W" value="Download" ajax="false"
@@ -170,19 +173,21 @@
 									styleClass="border-left-c">
 									<p:panelGrid styleClass="panelgridExportar MarginLeft20"
 										columns="1">
-										<p:selectOneMenu widgetVar="vcan_exportGra001" onchange="exportChart(this.value,'chartzoomslidercantidad','Participación Transacciones - Cantidad'); restartExportar('vcan_exportGra001');"
+										<p:selectOneMenu id="vcan_exportGra001" widgetVar="vcan_exportGra001" onchange="exportChart(this.value,'chartzoomslidercantidad','Participación Transacciones - Cantidad'); restartExportar('vcan_exportGra001');"
 											styleClass="selectDownload selectonemenugrande">
 											<f:selectItem itemLabel="Gráfica"  itemValue="" />
 											<f:selectItem itemLabel="JPG" itemValue="jpg" />
 											<f:selectItem itemLabel="PDF" itemValue="pdf" />
 										</p:selectOneMenu>
-										<p:selectOneMenu value="#{distribucionCantidadMaBean.tipoaexportar}" styleClass="selectonemenugrande">
+										<p:tooltip for="vcan_exportGra001" value="Desplegar Lista" position="top"></p:tooltip>
+										<p:selectOneMenu id="vcan_selectdescargar" value="#{distribucionCantidadMaBean.tipoaexportar}" styleClass="selectonemenugrande">
 											<f:selectItem itemLabel="Datos" itemValue="" />
 											<f:selectItem itemLabel="CSV" itemValue="csv" />
 											<f:selectItem itemLabel="XLS" itemValue="xls" />
 											<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 											<p:ajax event="change" onsuccess='$(&apos;[id*="vcan_downloadFile002"]&apos;).click();' />
 										</p:selectOneMenu>
+										<p:tooltip for="vcan_selectdescargar" value="Desplegar Lista" position="top"></p:tooltip>
 									</p:panelGrid>
 									<p:commandButton id="vcan_downloadFile002" onclick="vcan_updatedescargar002();"
 										widgetVar="vcan_downloadFileW002" value="Download"

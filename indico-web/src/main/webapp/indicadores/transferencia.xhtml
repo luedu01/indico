@@ -97,6 +97,7 @@
 													<f:selectItem itemLabel="Anual" itemValue="5" />
 													<p:ajax process="@this" update="@([id$='panelesValoresDinamic'],[id$='valorgraficavalor'])" listener="#{transferenciaBean.changePanelAction}" onstart="tran_savedperidoselected(this.value);" onsuccess="changeperiodiciorperiodo(); return false;"/>
 												</p:selectOneMenu>
+												<p:tooltip for="selFiltroPorValor" value="Desplegar Lista" position="top"></p:tooltip>
 												</p:outputPanel>
 											</p:outputPanel>
 											<p:panelGrid id="panelesValoresDinamic" columns="1"
@@ -144,6 +145,7 @@
 													<f:selectItems value="#{transferenciaBean.conceptos}" var="concepto" itemLabel="#{concepto.label}" itemValue="#{concepto.value}" />
 													<p:ajax onsuccess="changeperiodiciorperiodo(); return false;" onstart="tran_savedperidoselected();"/>
 												</p:selectOneMenu>
+												<p:tooltip for="selconcepto" value="Desplegar Lista" position="top"></p:tooltip>
 												</p:outputPanel>
 											  </h:form>	 
 											</p:outputPanel>
@@ -186,18 +188,20 @@
 													</div>
 													<p:outputPanel id="panelexportar001"  styleClass="border-left-c ui-g-6  NoPaddingRight">
 														<p:panelGrid columns="1" styleClass="panelgridExportar MarAuto ui-g-12 ui-md-6">
-															<p:selectOneMenu widgetVar="selectdescargar001" onchange="exportChart(this.value,'chartzoomslidertransf','Transacciones Liquidadas CUD');restartExportar('selectdescargar001');" styleClass="selectonemenugrande selectDownload">
+															<p:selectOneMenu id="selectdescargar001" widgetVar="selectdescargar001" onchange="exportChart(this.value,'chartzoomslidertransf','Transacciones Liquidadas CUD');restartExportar('selectdescargar001');" styleClass="selectonemenugrande selectDownload">
 																<f:selectItem itemLabel="Gráfica" itemValue="" />
 																<f:selectItem itemLabel="JPG" itemValue="jpg" />
 																<f:selectItem itemLabel="PDF" itemValue="pdf" />
 															</p:selectOneMenu>
-															<p:selectOneMenu id="selectdescargar001" widgetVar="selectdescargarW001" value="#{transferenciaBean.tipoaexportar}" styleClass="selectonemenugrande">
+															<p:tooltip for="selectdescargar001" value="Desplegar Lista" position="top"></p:tooltip>
+															<p:selectOneMenu id="selectdescargarW001" widgetVar="selectdescargarW001" value="#{transferenciaBean.tipoaexportar}" styleClass="selectonemenugrande">
 																<f:selectItem itemLabel="Datos" itemValue="" />
 																<f:selectItem itemLabel="CSV" itemValue="csv" />
 																<f:selectItem itemLabel="XLS" itemValue="xls" />
 																<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 																<p:ajax event="change" onsuccess='$(&apos;[id*="downloadFile001"]&apos;).click();' process="@this" update="@([id$=panelexportar001])"/>
 															</p:selectOneMenu>
+															<p:tooltip for="selectdescargarW001" value="Desplegar Lista" position="top"></p:tooltip>
 															<p:commandButton id="downloadFile001" widgetVar="downloadFile001W" value="Download" ajax="false" icon="fa fa-fw fa-cloud-download"
 																actionListener="#{transferenciaBean.exportAction}" style="display: none;" onclick="updatedescargar001()">
 																<f:attribute name="start" 		value="#{transferenciaBean.start}"/>
@@ -224,18 +228,20 @@
 									</div>
 									
 									<p:panelGrid columns="1" styleClass="panelgridExportar MarginLeft15">
-										<p:selectOneMenu widgetVar="selectdescargar" onchange="exportChart(this.value,'chartzoomslidertransf','Transacciones Liquidadas CUD');restartExportar('selectdescargar'); "  styleClass="selectonemenugrande selectDownload">
+										<p:selectOneMenu id="selectdescargar" widgetVar="selectdescargar" onchange="exportChart(this.value,'chartzoomslidertransf','Transacciones Liquidadas CUD');restartExportar('selectdescargar'); "  styleClass="selectonemenugrande selectDownload">
 											<f:selectItem itemLabel="Gráfica" itemValue="" />
 											<f:selectItem itemLabel="JPG" itemValue="jpg" />
 											<f:selectItem itemLabel="PDF" itemValue="pdf" />
 										</p:selectOneMenu>
-										<p:selectOneMenu id="selectdescargar" widgetVar="selectdescargarW" value="#{transferenciaBean.tipoaexportar}" styleClass="selectonemenugrande">
+										<p:tooltip for="selectdescargar" value="Desplegar Lista" position="top"></p:tooltip>
+										<p:selectOneMenu id="selectdescargarW" widgetVar="selectdescargarW" value="#{transferenciaBean.tipoaexportar}" styleClass="selectonemenugrande">
 											<f:selectItem itemLabel="Datos" itemValue="" />
 											<f:selectItem itemLabel="CSV" itemValue="csv" />
 											<f:selectItem itemLabel="XLS" itemValue="xls" />
 											<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 											<p:ajax event="change" onsuccess='$(&apos;[id*="downloadFile0002"]&apos;).click();' update="@this"/>
 										</p:selectOneMenu>
+										<p:tooltip for="selectdescargarW" value="Desplegar Lista" position="top"></p:tooltip>
 										<p:commandButton id="downloadFile0002" widgetVar="downloadFileW0002" value="Download" ajax="false"
 											icon="fa fa-fw fa-cloud-download" onclick="updatedescargar002();" 
 											actionListener="#{transferenciaBean.exportAction}"

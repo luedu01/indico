@@ -87,6 +87,7 @@ Las cifras se presentan en miles de millones de pesos</p>
 														<f:selectItem itemLabel="Anual" itemValue="5" />
 														<p:ajax process="@this" update="@([id$='vbajoval_panelesValoresDinamic'],[id$='vbajoval_valorgraficavalor'])" listener="#{transfeBajoValorMaBean.changePanelAction}" onstart="vbajo_savedperidoselected(this.value);" onsuccess="vbajovalchangeperiodo(); return false;"/>
 													</p:selectOneMenu>
+													<p:tooltip for="vbajoval_selFiltroPorValor" value="Desplegar Lista" position="top"></p:tooltip>
 												</p:outputPanel>
 											</p:outputPanel>
 											
@@ -163,11 +164,13 @@ Las cifras se presentan en miles de millones de pesos</p>
 												</div>
 												<p:outputPanel id="vbajoval_panelexportar001"  styleClass="border-left-c ui-g-6  NoPaddingRight">
 													<p:panelGrid columns="1" styleClass="panelgridExportar MarAuto ui-g-12 ui-md-6">
-														<p:selectOneMenu widgetVar="vchque_exportarG001W" onchange="exportChart(this.value,'vbajoval_chart', 'Transferencias electrónicas interbancarias de bajo valor'); restartExportar('vchque_exportarG001W');" styleClass="selectonemenugrande selectDownload">
+														<p:selectOneMenu id="vchque_exportarG001W" widgetVar="vchque_exportarG001W" 
+															onchange="exportChart(this.value,'vbajoval_chart', 'Transferencias electrónicas interbancarias de bajo valor'); restartExportar('vchque_exportarG001W');" styleClass="selectonemenugrande selectDownload">
 															<f:selectItem itemLabel="Gráfica" itemValue="" />
 															<f:selectItem itemLabel="JPG" itemValue="jpg" />
 															<f:selectItem itemLabel="PDF" itemValue="pdf" />
 														</p:selectOneMenu>
+														<p:tooltip for="vchque_exportarG001W" value="Desplegar Lista" position="top"></p:tooltip>
 														<p:selectOneMenu id="vbajoval_selectdescargar001" widgetVar="vbajoval_selectdescargarW001" value="#{transfeBajoValorMaBean.tipoaexportar}" styleClass="selectonemenugrande">
 															<f:selectItem itemLabel="Datos" itemValue="" />
 															<f:selectItem itemLabel="CSV" itemValue="csv" />
@@ -175,6 +178,7 @@ Las cifras se presentan en miles de millones de pesos</p>
 															<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 															<p:ajax event="change" onsuccess='$(&apos;[id*="vbajoval_downloadFile001"]&apos;).click();' process="@this" update="@([id$=vbajoval_panelexportar001])"/>
 														</p:selectOneMenu>
+														<p:tooltip for="vbajoval_selectdescargar001" value="Desplegar Lista" position="top"></p:tooltip>
 														<p:commandButton id="vbajoval_downloadFile001" widgetVar="vbajoval_downloadFile001W" value="Download" ajax="false" icon="fa fa-fw fa-cloud-download"
 															actionListener="#{transfeBajoValorMaBean.exportAction}" style="display: none;" onclick="vbajoval_updatedescargar001()">
 															<f:attribute name="start" 		value="#{transfeBajoValorMaBean.start}"/>
@@ -200,11 +204,12 @@ Las cifras se presentan en miles de millones de pesos</p>
 									</div>
 									
 									<p:panelGrid columns="1" styleClass="panelgridExportar MarginLeft15">
-										<p:selectOneMenu widgetVar="vchque_exportarG002W" onchange="exportChart(this.value,'vbajoval_chart','Transferencias electrónicas interbancarias de bajo valor'); restartExportar('vchque_exportarG002W');"  styleClass="selectonemenugrande selectDownload">
+										<p:selectOneMenu id="vchque_exportarG002W" widgetVar="vchque_exportarG002W" onchange="exportChart(this.value,'vbajoval_chart','Transferencias electrónicas interbancarias de bajo valor'); restartExportar('vchque_exportarG002W');"  styleClass="selectonemenugrande selectDownload">
 											<f:selectItem itemLabel="Gráfica" itemValue="" />
 											<f:selectItem itemLabel="JPG" itemValue="jpg" />
 											<f:selectItem itemLabel="PDF" itemValue="pdf" />
 										</p:selectOneMenu>
+										<p:tooltip for="vchque_exportarG002W" value="Desplegar Lista" position="top"></p:tooltip>
 										<p:selectOneMenu id="vbajoval_selectdescargar" widgetVar="vbajoval_selectdescargarW" value="#{transfeBajoValorMaBean.tipoaexportar}" styleClass="selectonemenugrande">
 											<f:selectItem itemLabel="Datos" itemValue="" />
 											<f:selectItem itemLabel="CSV" itemValue="csv" />
@@ -212,6 +217,7 @@ Las cifras se presentan en miles de millones de pesos</p>
 											<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 											<p:ajax event="change" onsuccess='$(&apos;[id*="vbajoval_downloadFile0002"]&apos;).click();' update="@this"/>
 										</p:selectOneMenu>
+										<p:tooltip for="vbajoval_selectdescargar" value="Desplegar Lista" position="top"></p:tooltip>
 										<p:commandButton id="vbajoval_downloadFile0002" widgetVar="vbajoval_downloadFileW0002" value="Download" ajax="false"
 											icon="fa fa-fw fa-cloud-download" onclick="vbajoval_updatedescargar002();" 
 											actionListener="#{transfeBajoValorMaBean.exportAction}"

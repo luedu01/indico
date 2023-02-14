@@ -94,10 +94,11 @@ public class RestComposicionCanjeServices implements Serializable  {
 		        //recorre las fechas de los datos
 		        int fc = 0;
 	        	for(String t : ticks) {
+
 	        		CanjeInterbancario[] cantidades = new CanjeInterbancario[serieTotal];
-	        		//Object[][] cantidades = new Object[serieTotal][3];
+	        		
 	        		CanjeInterbancario [] valores = new CanjeInterbancario[serieTotal];
-    				//Object[][] valores = new Object[serieTotal][3];
+    				
     				String fecha="";
 	        		for (ValorGraficable vg : vgl) {
 		        		//compara las fechas de las listas
@@ -159,17 +160,31 @@ public class RestComposicionCanjeServices implements Serializable  {
 		        }	        
 		        
 		        //Obtener Labels
-		        for(RangoCanjeCompensacion rc : rangoscanje) {
-					if(rc.getValorFinal() == null) {
-						rangoscanjetmp.add("Mayor a "+rc.getValorInicial());
-					}else {
-						rangoscanjetmp.add(rc.getValorInicial()+"-"+rc.getValorFinal());
+				if (idRangoCanje==null || idRangoCanje.equals("Todos")) {
+					for(RangoCanjeCompensacion rc : rangoscanje) {
+						if(rc.getValorFinal() == null) {
+							rangoscanjetmp.add("Mayor a "+rc.getValorInicial());
+						}else {
+							rangoscanjetmp.add(rc.getValorInicial()+"-"+rc.getValorFinal());
+						}
 					}
-	        	}
+				} else {
+					for(RangoCanjeCompensacion rc : rangoscanje) {
+						for (String rs: rangosSelected) {
+							if ( rc.getIdRangoCanje().equals(rs)) {
+								if(rc.getValorFinal() == null) {
+									rangoscanjetmp.add("Mayor a "+rc.getValorInicial());
+								}else {
+									rangoscanjetmp.add(rc.getValorInicial()+"-"+rc.getValorFinal());
+								}
+							}
+						}
+					}
+				}
 		        
 		        List<String> rangoLabesDis = rangoscanjetmp.stream().distinct().collect(Collectors.toList());
 		        
-				Object[][] RangosLabel = new Object[serieTotal][1];
+				Object[][] RangosLabel = new Object[rangoscanjetmp.size()][1];
 				
 				int fila=0;
 				for (String rl : rangoLabesDis) {

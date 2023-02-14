@@ -1,10 +1,10 @@
 /**
- *  GENERAL FUNCTIONS
+ *  GENERAL FUNCTIONS Distribución por tipo de plaza
  **/
 
 var _ENTERO		=1;
 var _PORCENTAJE	=2;
-var _NUMERICO	=3;
+var _NUMERICO	=2;
 var logerrors 	=true;
 var _DIARIO		=1;
 var _MENSUAL	=2;
@@ -74,8 +74,6 @@ function completarFechaSelected(fecha,sticks,periodoactual,periodoanterior) {
 	return fecha;
 }
 
-
-
 function savedOldDatesStoStorage(almacen, componente1, anterior) {
 	var vfecSelected;
 	anterior = parseInt(anterior);
@@ -98,10 +96,6 @@ function savedOldDatesStoStorage(almacen, componente1, anterior) {
 	}
 	localStorage.setItem(almacen + "_fecSelected", vfecSelected);
 }
-
-
-
-
 
 function getDateStartFromDiario(compDiario) {
 	var anio = $("#"+compDiario+"_sel_anio").val();
@@ -274,7 +268,7 @@ function addaniotimes(data,selanio,selected) {
 		var maxXdistValor = new Date(fechaB[0], parseInt(fechaB[1]) - 1, fechaB[2]);
 		var aniostart = minXdistValor.getFullYear();
 		var anioend = maxXdistValor.getFullYear();
-		var option = $('<option/>').val("").text("Año").attr('disabled', 'disabled');
+		var option = $('<option/>').val("").text("Seleccione Año").attr('disabled', 'disabled');
 		option.appendTo(selectanio);
 		var index = 0;
 		for (var anio = aniostart; anio <= anioend; anio++) {
@@ -1150,7 +1144,7 @@ var formatNumber = {
 					var splitStr = num.split('.');
 					var splitLeft = splitStr[0];
 					var splitRight = splitStr.length > 1 ? this.sepDecimal + splitStr[1] : '';
-					var regx = /(\d+)(\d{3})/;
+					var regx = /(\d+)(\d{2})/;
 					while (regx.test(splitLeft)) {
 						splitLeft = splitLeft.replace(regx, '$1' + this.separador + '$2');
 					}
@@ -1168,9 +1162,9 @@ function createlegend(titulo,valor,plot,tipodatototal) {
 	if (tipodatototal==_ENTERO) {//entero
 		numero = formatNumber.new(valor,0);
 	} if (tipodatototal==2) {//porcentaje
-		numero = Number(valor*100).toFixed(3);
+		numero = Number(valor*100).toFixed(2);
 	} else if  (tipodatototal==_NUMERICO) {
-		numero = formatNumber.new(valor,3);
+		numero = formatNumber.new(valor,2);
 	}
 	var line="<center><table class=\"custompielegendparent\">	"+
 	 	 " 	<tr> 									"+
@@ -1188,7 +1182,7 @@ function createlegend(titulo,valor,plot,tipodatototal) {
 			var porcentaje;
 			//if(parseFloat(plot.data[0][i][1]) < parseFloat(0.001)){
 				//var porcentaje = Number((parseFloat(plot.data[0][i][1])*100)).toFixed(3)
-			var porcentaje = Number((parseFloat(plot.data[0][i][1])*100)).toFixed(3).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+			var porcentaje = Number((parseFloat(plot.data[0][i][1])*100)).toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{2})+(?!\d))/g, '$1.');//eo
 			/*}else{
 				var porcentaje = Number(plot.data[0][i][1]*100).toFixed(3);
 			}*/
@@ -1222,7 +1216,7 @@ function getDataFiltered(datos,dateselected) {
 		if (datos[i]["ejex"]==dateselected) {
 			datasel[j]=new Array(datos[i]["ciudad"],datos[i]["valorPorcentaje"])
 		   //totales = parseFloat(totales + datos[i]["valorPorcentaje"]);
-		   totales = parseFloat(totales + datos[i]["serieValor"]);
+		   totales = parseFloat(totales + datos[i]["serieValor"]).toFixed(2);//eo
 		   datossumados[j]=new Array(datos[i]["ciudad"],datos[i]["serieValor"],datos[i]["valorPorcentaje"])
 		   totalS= totalS + 1;
 			j++;
@@ -1252,7 +1246,7 @@ function getDataCountFiltered(datos,dateselected) {
 	for (var i=0; i<datos.length; i++) {
 		if (datos[i][1]==dateselected) {
 			datasel[j]=new Array(datos[i][2],datos[i][3])
-		   totales = parseFloat(totales + datos[i][4]);
+		   totales = parseFloat(totales + datos[i][4]).toFixed(2);//eo
 
 		   datossumados[j]=new Array(datos[i][2],datos[i][4],datos[i][3])
 		   totalS= totalS + 1;
@@ -1715,7 +1709,7 @@ function getDataFiltereCompensacion(datos,dateselected) {
 	for (var i=0; i<datos.length; i++) {
 		if (datos[i].ejex==dateselected) {
 			datasel[j]=new Array(datos[i].ciudad,datos[i].valorPorcentaje)
-		    totales = parseFloat(totales + datos[i].serieValor);
+		    totales = parseFloat(totales + datos[i].serieValor).toFixed(2);//eo
 
 		    datossumados[j]=new Array(datos[i].ciudad,datos[i].serieValor,datos[i].valorPorcentaje)
 			j++;
@@ -1914,7 +1908,7 @@ function createplotpieleft (name,data,tipo) {
 				barMargin: 1,
 				shadowDepth: 3,
 				showDataLabels: true,
-				dataLabelFormatString: '%.3f%'
+				dataLabelFormatString: '%.2f%'
 			},
             animation: {
                 show: false
@@ -1932,7 +1926,7 @@ function createplotpieleft (name,data,tipo) {
 
         },
         legend: {
-        	dataLabelFormatString: '%.3f%'
+        	dataLabelFormatString: '%.2f%'
         },
 	});
 	return plot2;
@@ -2027,7 +2021,7 @@ function createplotpieright (name,data,tipo) {
 				barMargin: 1,
 				shadowDepth: 3,
 				showDataLabels: true,
-				dataLabelFormatString: '%.3f%',
+				dataLabelFormatString: '%.2f%',
 			},
 
             animation: {
@@ -2634,7 +2628,7 @@ function createplotpieleftdevol (name,data,tipo) {
 				barMargin: 1,
 				shadowDepth: 5,
 				showDataLabels: true,
-				dataLabelFormatString: '%.3f%'
+				dataLabelFormatString: '%.2f%'
 			},
             animation: {
                 show: false
@@ -2651,7 +2645,7 @@ function createplotpieleftdevol (name,data,tipo) {
     		left: "0",
         },
         legend: {
-        	dataLabelFormatString: '%.3f%'
+        	dataLabelFormatString: '%.2f%'
         },
 	});
 	return plot2;
@@ -2742,7 +2736,7 @@ function createplotpierightdevol (name,data,tipo) {
 				barMargin: 1,
 				shadowDepth: 5,
 				showDataLabels: true,
-				dataLabelFormatString: '%.3f%'
+				dataLabelFormatString: '%.2f%'
 			},
             animation: {
                 show: false

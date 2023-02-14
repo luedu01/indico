@@ -16,3 +16,12 @@ indico-ear/.gitignore
 .settings/
 .classpath
 .metadata/
+indico-ear/target/*
+jboss-eap-7.3/*
+indico-ejb/target/*
+*.class
+jboss-eap-7.3/standalone/deployments/indico-ear.ear.deployed
+jboss-eap-7.3/standalone/log/server.log
+jboss-eap-7.3/standalone/configuration/standalone.xml
+jboss-eap-7.3/standalone/configuration/standalone_xml_history/standalone.last.xml
+jboss-eap-7.3/standalone/log/server.log

@@ -98,10 +98,6 @@ function completarFechaEnd(fecha,sticks) {
 	return fecha;
 }
 
-
-
-
-
 function vbajo_savedOldDatesStoStorage(almacen, componente1, componente2, anterior) {
 	var vfecStart;
 	var vfecEnd;

@@ -2771,6 +2771,43 @@ td {
 	padding-right: 0em;
 }
 
+.tooltipc {
+	
+	position: relative;
+}
+
+.tooltipc .tooltiptextc {
+	visibility: hidden;
+	width: 60%;
+	background-color: #4c4c4c;
+	color: #fff;
+	text-align: center;
+	border-radius: 3px;
+	padding: 4px 0;
+
+	position: absolute;
+	z-index: 1;
+	top: -30px;
+	left: 40%;
+	margin-left: -30%;
+}
+
+.tooltipc .tooltiptextc::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-top-color: #4c4c4c !important;
+	border-color: transparent;
+	border-style: solid;
+}
+
+.tooltipc:hover .tooltiptextc {
+	visibility: visible;
+}
+
 .selectonslider {
 	font-family: 'Roboto', sans-serif !important;
 	font-weight: normal;

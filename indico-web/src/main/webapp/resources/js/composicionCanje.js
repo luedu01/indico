@@ -119,9 +119,6 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 					minDays = 360;
 			break;
 	};
-	
-
-  
   
 	try {
 		data =  RestComposicionCanjeServices.getComposicionCanje({'periodo':period,'rangocanje':rangocanjesel});
@@ -139,8 +136,6 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 		var oneTime=vStorageFecStart;
 		vStorageFecStart = completarFechaStart(vStorageFecStart,data["Ticks"]);
 		vStorageFecEnd = completarFechaEnd(vStorageFecEnd,data["Ticks"]);
-
-
 
 		var ticks = data ["Ticks"];		
 		vStorageFecStart = localStorage.getItem(almacen + "_fecStart");
@@ -194,6 +189,7 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 		//Función que crea la gráfica de acuerdo al periodo
 		targetPlot = createplotmaxComposicionCanje (divchartmax.id, data , period, 1);
 		targetPlot2 = createplotmaxComposicionCanje (divchartmax2.id, data , period, 2);
+
 		//Crea los estilos para el plot destino
 		var s_left 		= targetPlot._defaultGridPadding.left;
 		var s_right 	= targetPlot._defaultGridPadding.right;
@@ -289,136 +285,136 @@ function createSliderComposicionCanje(divchartzoomslider, periodo,compPeriodo1,c
 	  		step:{
 	  			months: byStep
 	  		},
-         });
+        });
 				
-			//Funcion que inicializa en la primera carga de página el slider
-			var datesinit = {
-					label: dateSlider,
-					values : {
-						min: from,
-						max: vStorageFecEnd,
-					},
-					first: true
-			}
+		//Funcion que inicializa en la primera carga de página el slider
+		var datesinit = {
+				label: dateSlider,
+				values : {
+					min: from,
+					max: vStorageFecEnd,
+				},
+				first: true
+		}
 
-			var datesinit2 = {
-					label: dateSlider,
-					values : {
-						min: from2,
-						max: vStorageFecEnd,
-					},
-					first: true
-			}
+		var datesinit2 = {
+				label: dateSlider,
+				values : {
+					min: from2,
+					max: vStorageFecEnd,
+				},
+				first: true
+		}
 			
-				//Remueve los eventos para el Slider
-				$("#"+idDivSlider).unbind();
-				//Actualiza el Slider agregandole un evento
-				$("#"+idDivSlider).bind("valuesChanged", function(evt,dateSlider){
-					//if (dateSlider.first==null || dateSlider.first==false) {
-						updFilterBySliderReplot(dateSlider,compPeriodo1,compPeriodo2,data,period,targetPlot,targetPlot2,"slider");
-						savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
-					//}
-				});
-				
-				/**
-				 * 
-				 */
-				//Retira eventos y actualiza datos en años
-				$("#"+compPeriodo1+"_sel_anio").unbind();
-				$("#"+compPeriodo1+"_sel_anio").change(function(evt) {
-					switch (period) {
-						case 1, 2: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-							break;
-						case 3: 		changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-							break;
-						case 4, 5: 	changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-							break;
-					};		
-					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,period,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
-				});
-				
-				$("#"+compPeriodo2+"_sel_anio").unbind();
-				$("#"+compPeriodo2+"_sel_anio").change(function(evt) {
-					switch (period) {
-						case 1, 2: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-							break;
-						case 3: 		changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-							break;
-						case 4, 5: 	changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-							break;
-					};
-					
-					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,period,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
-				});
-				//Retira eventos y actualiza datos en Semestre
-				$("#"+compPeriodo1+"_sel_semestre").unbind();
-				$("#"+compPeriodo1+"_sel_semestre").change(function(evt) {
-					if(period == 4){
-						changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-					}
-					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,4,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
-				});
-				
-				$("#"+compPeriodo2+"_sel_semestre").unbind();
-				$("#"+compPeriodo2+"_sel_semestre").change(function(evt) {
-					if(period == 4){
-						changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-					}
-					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,4,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
-				});
-				
-				//Retira eventos y actualiza datos en trimestre
-				$("#"+compPeriodo1+"_sel_trimestre").unbind();
-				$("#"+compPeriodo1+"_sel_trimestre").change(function(evt) {
-					if(period == 3){
-						changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-					}			
-					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,3,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
-				});
-				
-				$("#"+compPeriodo2+"_sel_trimestre").unbind();
-				$("#"+compPeriodo2+"_sel_trimestre").change(function(evt) {
-					if(period == 3){
-						changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-					}
-					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,3,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
-				});
-				
-				//Retira eventos y actualiza datos en mes
-				$("#"+compPeriodo1+"_sel_mes").unbind();
-				$("#"+compPeriodo1+"_sel_mes").change(function(evt) {
-					switch (period) {
-						case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-							break;
-						case 2: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-							break;
-					}
-					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,period,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
-				});
-				
-				$("#"+compPeriodo2+"_sel_mes").unbind();
-				$("#"+compPeriodo2+"_sel_mes").change(function(evt) {
-					switch (period) {
-						case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-							break;
-						case 2: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
-							break;
-					}
-					updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,period,"");
-					savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
-				});
-				
-				//Lanza la reubicación del Slider
-				$("#"+idDivSlider).trigger("valuesChanged",datesinit);
-				$("#"+idDivSlider).trigger("valuesChanged",datesinit2);
-				scroll();
+		//Remueve los eventos para el Slider
+		$("#"+idDivSlider).unbind();
+		//Actualiza el Slider agregandole un evento
+		$("#"+idDivSlider).bind("valuesChanged", function(evt,dateSlider){
+			//if (dateSlider.first==null || dateSlider.first==false) {
+				updFilterBySliderReplot(dateSlider,compPeriodo1,compPeriodo2,data,period,targetPlot,targetPlot2,"slider");
+				savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
+			//}
+		});
+		
+		/**
+		 * 
+		 */
+		//Retira eventos y actualiza datos en años
+		$("#"+compPeriodo1+"_sel_anio").unbind();
+		$("#"+compPeriodo1+"_sel_anio").change(function(evt) {
+			switch (period) {
+				case 1, 2: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+				case 3: 		changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+				case 4, 5: 	changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+			};		
+			updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,period,"");
+			savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
+		});
+		
+		$("#"+compPeriodo2+"_sel_anio").unbind();
+		$("#"+compPeriodo2+"_sel_anio").change(function(evt) {
+			switch (period) {
+				case 1, 2: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+				case 3: 		changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+				case 4, 5: 	changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+			};
+			
+			updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,period,"");
+			savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
+		});
+		//Retira eventos y actualiza datos en Semestre
+		$("#"+compPeriodo1+"_sel_semestre").unbind();
+		$("#"+compPeriodo1+"_sel_semestre").change(function(evt) {
+			if(period == 4){
+				changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+			}
+			updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,4,"");
+			savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
+		});
+		
+		$("#"+compPeriodo2+"_sel_semestre").unbind();
+		$("#"+compPeriodo2+"_sel_semestre").change(function(evt) {
+			if(period == 4){
+				changedatesselectedssemestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+			}
+			updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,4,"");
+			savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
+		});
+		
+		//Retira eventos y actualiza datos en trimestre
+		$("#"+compPeriodo1+"_sel_trimestre").unbind();
+		$("#"+compPeriodo1+"_sel_trimestre").change(function(evt) {
+			if(period == 3){
+				changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+			}			
+			updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,3,"");
+			savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
+		});
+		
+		$("#"+compPeriodo2+"_sel_trimestre").unbind();
+		$("#"+compPeriodo2+"_sel_trimestre").change(function(evt) {
+			if(period == 3){
+				changedatesselectedstrimestralestimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+			}
+			updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,3,"");
+			savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
+		});
+		
+		//Retira eventos y actualiza datos en mes
+		$("#"+compPeriodo1+"_sel_mes").unbind();
+		$("#"+compPeriodo1+"_sel_mes").change(function(evt) {
+			switch (period) {
+				case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+				case 2: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+			}
+			updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,period,"");
+			savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
+		});
+		
+		$("#"+compPeriodo2+"_sel_mes").unbind();
+		$("#"+compPeriodo2+"_sel_mes").change(function(evt) {
+			switch (period) {
+				case 1: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+				case 2: 	changedatesselectedstimes(compPeriodo1,compPeriodo2,data,idDivSlider);
+					break;
+			}
+			updatePlotFromFilters(targetPlot,targetPlot2,compPeriodo1,compPeriodo2,data,idDivSlider,period,"");
+			savedOldDatesStoStorage(almacen, compPeriodo1, compPeriodo2, period);
+		});
+		
+		//Lanza la reubicación del Slider
+		$("#"+idDivSlider).trigger("valuesChanged",datesinit);
+		$("#"+idDivSlider).trigger("valuesChanged",datesinit2);
+		scroll();
 
 	} catch (err) {
 		console.log(err);
@@ -603,7 +599,12 @@ function generaSeriesFecha(ArregloObjetosin, fec_p1, fec_p2, plot, tipo){
 				tickstmp.push(fechaSerie);
 			}
 		}
-		serieCantidad2.push(serietmp);
+
+		let total = serietmp.reduce((a, b) => a + b, 0);
+
+		if (total > 0)
+			serieCantidad2.push(serietmp);
+
 		n++;
 		flag--;
 	}while(flag > 0);
@@ -632,21 +633,17 @@ function GeneraSeries(ArregloObjetosin, plotTipe){
 		var serietmp = [];
 		var rq=0;
 		var i=0;
-		/*if(plotTipe==1){
-			if(size1>12){
-				rq = size1-12;
-			}else{
-				rq=0;
-			}
-		}else{
-			rq=0;
-		}*/
 		
 		for(i = rq; i<size1; i++){ 		 
 			var sortedArr = ArregloObjetosin[i][0].sort(comparar);
 			serietmp.push(parseFloat(sortedArr[n]["porcentaje"]));
 		}
-		serieCantidad2.push(serietmp);
+
+		let total = serietmp.reduce((a, b) => a + b, 0);
+
+		if (total > 0)
+			serieCantidad2.push(serietmp);
+			
 		n++;
 		flag--;
 	}while(flag > 0);
@@ -658,7 +655,7 @@ function GeneraSeries(ArregloObjetosin, plotTipe){
  * @returns
  */
 function colors(){
-	var colores = ["#0079C1","#009543","#910028","#FAE600","#0097AC","#EAB010","#559DC5","#8E9295","#653B71","#FF9A00","#B49583","#B6B97D","#7A003C","#FFB300","#559DC5","#BC9B6A","#006469"];
+	var colores = ["#231F20","#8E9295","#004677","#0079C1","#559DC5","#0097AC","#004027","#009543","#006469","#B6B97D","#BC9B6A","#EAB010","#FF9A00","#FFB300","#FAE600","#D21034","#CE1141","#B49583","#910028","#B22C1B","#7A003C","#95288F","#653B71"];
 	return colores;
 }
 
@@ -761,7 +758,6 @@ function formatterLabel(tipo,valor) {
 //GRÁFICAS
 function createplotmaxComposicionCanje(name,data,tipo, gCanValor) {
 	var title,ticks,serieValores,serieCantidad,minValor,minCantidad,maxValor,maxCantidad,minX,maxX,label;
-
 	//ticks 			= GeneraTicks(data["Ticks"],1, tipo);
 	ticks 			= data["Ticks"];
  	serieCantidad 	= data["Rangos"];
@@ -790,13 +786,13 @@ function createplotmaxComposicionCanje(name,data,tipo, gCanValor) {
 	maxX = new Date(fecha2[0],(parseInt(fecha2[1])-1),fecha2[2]);
 	
 	var colores = colors();
-	
 	var series = GeneraLabels(data["LabelsRangos"], colores);
+
 	var plot2 = $.jqplot(name, serieRecortada , {
 		title:title,
 		stackSeries: true,
 	    textColor:  "#003E6C",
-	    seriesColors: colores,
+	    seriesColors: colores.slice(0,data["LabelsRangos"].length),
 	    seriesDefaults:{
 	    	renderer:$.jqplot.BarRenderer,
 	    	showMarker: true,
@@ -831,7 +827,7 @@ function createplotmaxComposicionCanje(name,data,tipo, gCanValor) {
             rendererOptions: {
               seriesToggle: "true",
               seriesToggleReplot: {
-              	resetAxes: false
+              	resetAxes: true
               }
           }
         },
@@ -938,7 +934,14 @@ function createplotmaxComposicionCanje(name,data,tipo, gCanValor) {
 		      }
 	    }	    
 	  });
-	  
+	
+	/*var legends = $("td.jqplot-table-legend-label");
+	for (var i = 0; i < legends.length; i++) {
+		if($(legends[i]).text() == "Staff Appearance") {
+			$(legends[i]).trigger("click");
+		}
+	}*/
+
 	return plot2;
 }
 

@@ -48,6 +48,7 @@
 															onsuccess="ppib_changeperiodiciorperiodo(); return false;" 
 															 />
 													</p:selectOneMenu>
+													<p:tooltip for="ppib_selFiltroPorValor" value="Desplegar Lista" position="top"></p:tooltip>
 												</p:outputLabel>
 											</p:outputPanel>
 											<div class="EmptyBox10"></div>
@@ -180,21 +181,22 @@
 													styleClass="border-left-c PaddingLeft3 NoPaddingRight">
 													<p:panelGrid styleClass="panelgridExportar  Wid100 BoxSizeBorder"
 														columns="1">
-														<p:selectOneMenu widgetVar="ppib_selectdescargar001"
+														<p:selectOneMenu id="ppib_selectdescargar001" widgetVar="ppib_selectdescargar001"
 															onchange="exportChart(this.value,'chartzoomsliderrotacionpib','Indicadores de pagos - PIB'); restartExportar('ppib_selectdescargar001');"
 															styleClass="selectDownload selectonemenugrande">
 															<f:selectItem itemLabel="Gráfica"  itemValue="" />
 															<f:selectItem itemLabel="JPG" itemValue="jpg" />
 															<f:selectItem itemLabel="PDF" itemValue="pdf" />
 														</p:selectOneMenu>
-														<p:selectOneMenu value="#{pagosPIBMaBean.tipoaexportar}" styleClass="selectonemenugrande">
+														<p:tooltip for="ppib_selectdescargar001" value="Desplegar Lista" position="top"></p:tooltip>
+														<p:selectOneMenu id="ppib_selectdescargar" value="#{pagosPIBMaBean.tipoaexportar}" styleClass="selectonemenugrande">
 															<f:selectItem itemLabel="Datos" itemValue="" />
 															<f:selectItem itemLabel="CSV" itemValue="csv" />
 															<f:selectItem itemLabel="XLS" itemValue="xls" />
 															<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 															<p:ajax event="change" onsuccess='$(&apos;[id*="ppib_downloadFile001"]&apos;).click();'/>
 														</p:selectOneMenu>
-													
+														<p:tooltip for="ppib_selectdescargar" value="Desplegar Lista" position="top"></p:tooltip>
 														<p:commandButton id="ppib_downloadFile001"  widgetVar="ppib_downloadFile001W" value="Download" onclick="ppib_updatedescargar001();"
 															ajax="false" icon="fa fa-fw fa-cloud-download" process="@form"
 															actionListener="#{pagosPIBMaBean.exportAction}"
@@ -226,7 +228,8 @@
 											<f:selectItem itemLabel="JPG" itemValue="jpg" />
 											<f:selectItem itemLabel="PDF" itemValue="pdf" />
 										</p:selectOneMenu>
-										<p:selectOneMenu value="#{pagosPIBMaBean.tipoaexportar}"
+										<p:tooltip for="ppib_panelexportar002" value="Desplegar Lista" position="top"></p:tooltip>
+										<p:selectOneMenu id="ppib_selectdescargar" value="#{pagosPIBMaBean.tipoaexportar}"
 											styleClass="selectonemenugrande">
 											<f:selectItem itemLabel="Datos" itemValue="" />
 											<f:selectItem itemLabel="CSV" itemValue="csv" />
@@ -234,7 +237,7 @@
 											<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 											<p:ajax event="change" onsuccess='$(&apos;[id*="ppib_downloadFile002"]&apos;).click();' />
 										</p:selectOneMenu>
-									
+										<p:tooltip for="ppib_selectdescargar" value="Desplegar Lista" position="top"></p:tooltip>
 										<p:commandButton id="ppib_downloadFile002" widgetVar="ppib_downloadFileW002" value="Download"
 											ajax="false" icon="fa fa-fw fa-cloud-download" actionListener="#{pagosPIBMaBean.exportAction}"
 											onclick="ppib_updatedescargar002()" style="display: none;" 

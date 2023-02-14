@@ -45,6 +45,7 @@
 														<f:selectItem itemLabel="Anual" itemValue="5" />
 														<p:ajax process="@this" update="@([id$=vval_panelesValoresDinamic],[id$=vval_valorgraficavalor002])" listener="#{distribucionValorMaBean.changePanelAction}" onstart="vval_savedperidoselected(this.value);" oncomplete="vval_changeperiodiciorperiodo(); return false;"/>
 													</p:selectOneMenu>
+													<p:tooltip for="vval_selFiltroPorValor" value="Desplegar Lista" position="top"></p:tooltip>
 												</p:outputLabel>
 											</p:outputPanel>
 											<div class="EmptyBox10"></div>
@@ -119,14 +120,15 @@
 											</div>
 											<p:outputPanel id="vval_panelexportar2" styleClass="border-left-c PaddingLeft3 NoPaddingRight">
 												<p:panelGrid styleClass="panelgridExportar  Wid100 BoxSizeBorder" columns="1">
-													<p:selectOneMenu widgetVar="vval_selectexport001"
+													<p:selectOneMenu id="vval_selectexport001" widgetVar="vval_selectexport001"
 														onchange="exportChart(this.value,'chartzoomsliderdistribucion','Participación Transacciones - Valor');restartExportar('vval_selectexport001');"
 														styleClass="selectDownload selectonemenugrande">
 														<f:selectItem itemLabel="Gráfica"  itemValue="" />
 														<f:selectItem itemLabel="JPG" itemValue="jpg" />
 														<f:selectItem itemLabel="PDF" itemValue="pdf" />
 													</p:selectOneMenu>
-													<p:selectOneMenu
+													<p:tooltip for="vval_selectexport001" value="Desplegar Lista" position="top"></p:tooltip>
+													<p:selectOneMenu id="vval_selectdescargar"
 														value="#{distribucionValorMaBean.tipoaexportar}"
 														styleClass="selectonemenugrande">
 														<f:selectItem itemLabel="Datos" itemValue="" />
@@ -135,6 +137,7 @@
 														<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 														<p:ajax event="change" 	onsuccess='$(&apos;[id*="vval_downloadFile001"]&apos;).click();' />
 													</p:selectOneMenu>
+													<p:tooltip for="vval_selectdescargar" value="Desplegar Lista" position="top"></p:tooltip>
 												</p:panelGrid>
 												<p:commandButton id="vval_downloadFile001"
 													widgetVar="vval_downloadFile001W" value="Download" ajax="false" process="@form"
@@ -163,13 +166,14 @@
 								<p:outputPanel id="vval_panelexportar002"
 									styleClass="border-left-c">
 									<p:panelGrid styleClass="panelgridExportar MarginLeft20" columns="1">
-										<p:selectOneMenu widgetVar="vval_selectexport002" onchange="exportChart(this.value,'chartzoomsliderdistribucion','Participación Transacciones - Valor');restartExportar('vval_selectexport002');"
+										<p:selectOneMenu id="vval_selectexport002" widgetVar="vval_selectexport002" onchange="exportChart(this.value,'chartzoomsliderdistribucion','Participación Transacciones - Valor');restartExportar('vval_selectexport002');"
 											styleClass="selectDownload selectonemenugrande">
 											<f:selectItem itemLabel="Gráfica"  itemValue="" />
 											<f:selectItem itemLabel="JPG" itemValue="jpg" />
 											<f:selectItem itemLabel="PDF" itemValue="pdf" />
 										</p:selectOneMenu>
-										<p:selectOneMenu
+										<p:tooltip for="vval_selectexport002" value="Desplegar Lista" position="top"></p:tooltip>
+										<p:selectOneMenu id="vval_selectdescargar"
 											value="#{distribucionValorMaBean.tipoaexportar}"
 											styleClass="selectonemenugrande">
 											<f:selectItem itemLabel="Datos" itemValue="" />
@@ -178,6 +182,7 @@
 											<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 											<p:ajax event="change" onsuccess='$(&apos;[id*="vval_downloadFile002"]&apos;).click();' />
 										</p:selectOneMenu>
+										<p:tooltip for="vval_selectdescargar" value="Desplegar Lista" position="top"></p:tooltip>
 									</p:panelGrid>
 									<p:commandButton id="vval_downloadFile002"
 										widgetVar="vval_downloadFileW002" value="Download" process="@form"

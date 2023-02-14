@@ -5905,8 +5905,6 @@ function scrollvalor() {
 
 		try {
 			var bodyheight = document.getElementById('chartzoomsliderdistribucion').clientHeight;
-
-
 		}
 		catch (err) {
 			var bodyheight = 0;

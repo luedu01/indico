@@ -42,6 +42,7 @@
 														<f:selectItem itemLabel="Anual" itemValue="5" />
 														<p:ajax process="@this" update="@([id$=prota_panelesValoresDinamic],[id$=prota_valorgraficavalor002])" listener="#{pagosRotacionMaBean.changePanelAction}"  onstart="prota_savedperidoselected(this.value);" onsuccess="prota_changeperiodiciorperiodo(); return false;"/>
 													</p:selectOneMenu>
+													<p:tooltip for="prota_selFiltroPorValor" value="Desplegar Lista" position="top"></p:tooltip>
 													</p:outputLabel>
 											</p:outputPanel>
 											<div class="EmptyBox10"></div>
@@ -116,19 +117,21 @@
 												<p:outputPanel id="prota_panelexportar2" styleClass="border-left-c PaddingLeft3 NoPaddingRight">
 													<p:panelGrid styleClass="panelgridExportar  Wid100 BoxSizeBorder"
 														columns="1">
-														<p:selectOneMenu widgetVar="prota_selectexport001" onchange="exportChart(this.value,'chartzoomsliderrotacion','Indicadores de pagos - Rotación');restartExportar('prota_selectexport001');" 
+														<p:selectOneMenu id="prota_selectexport001" widgetVar="prota_selectexport001" onchange="exportChart(this.value,'chartzoomsliderrotacion','Indicadores de pagos - Rotación');restartExportar('prota_selectexport001');" 
 															styleClass="selectDownload selectonemenugrande">
 															<f:selectItem itemLabel="Gráfica" itemValue="" />
 															<f:selectItem itemLabel="JPG" itemValue="jpg" />
 															<f:selectItem itemLabel="PDF" itemValue="pdf" />
 														</p:selectOneMenu>
-														<p:selectOneMenu value="#{pagosRotacionMaBean.tipoaexportar}"  widgetVar="ppib_selFiltroPorVa" styleClass="selectonemenugrande">
+														<p:tooltip for="prota_selectexport001" value="Desplegar Lista" position="top"></p:tooltip>
+														<p:selectOneMenu id="prota_selectdescargar" value="#{pagosRotacionMaBean.tipoaexportar}"  widgetVar="ppib_selFiltroPorVa" styleClass="selectonemenugrande">
 															<f:selectItem itemLabel="Datos" itemValue="" />
 															<f:selectItem itemLabel="CSV" itemValue="csv" />
 															<f:selectItem itemLabel="XLS" itemValue="xls" />
 															<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 															<p:ajax event="change" onsuccess='$(&apos;[id*="prota_downloadFile001"]&apos;).click();' />
 														</p:selectOneMenu>
+														<p:tooltip for="prota_selectdescargar" value="Desplegar Lista" position="top"></p:tooltip>
 													</p:panelGrid>
 													<p:commandButton id="prota_downloadFile001" widgetVar="prota_downloadFile001W" value="Download"
 														ajax="false" icon="fa fa-fw fa-cloud-download" actionListener="#{pagosRotacionMaBean.exportAction}"
@@ -153,12 +156,13 @@
 								</div>
 								<p:outputPanel id="prota_panelexportar002" styleClass="border-left-c">
 									<p:panelGrid styleClass="panelgridExportar MarginLeft20" columns="1">
-										<p:selectOneMenu widgetVar="prota_selectexport002" onchange="exportChart(this.value,'chartzoomsliderrotacion','Indicadores de pagos - Rotación');restartExportar('prota_selectexport002');" styleClass="selectDownload selectonemenugrande">
+										<p:selectOneMenu id="prota_selectexport002" widgetVar="prota_selectexport002" onchange="exportChart(this.value,'chartzoomsliderrotacion','Indicadores de pagos - Rotación');restartExportar('prota_selectexport002');" styleClass="selectDownload selectonemenugrande">
 											<f:selectItem itemLabel="Gráfica" itemValue="" />
 											<f:selectItem itemLabel="JPG" itemValue="jpg" />
 											<f:selectItem itemLabel="PDF" itemValue="pdf" />
 										</p:selectOneMenu>
-										<p:selectOneMenu value="#{pagosRotacionMaBean.tipoaexportar}"
+										<p:tooltip for="prota_selectexport002" value="Desplegar Lista" position="top"></p:tooltip>
+										<p:selectOneMenu id="prota_selectdescargar002" value="#{pagosRotacionMaBean.tipoaexportar}"
 											styleClass="selectonemenugrande">
 											<f:selectItem itemLabel="Datos" itemValue="" />
 											<f:selectItem itemLabel="CSV" itemValue="csv" />
@@ -166,6 +170,7 @@
 											<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 											<p:ajax event="change" onsuccess='$(&apos;[id*="prota_downloadFile002"]&apos;).click();' />
 										</p:selectOneMenu>
+										<p:tooltip for="prota_selectdescargar002" value="Desplegar Lista" position="top"></p:tooltip>
 									</p:panelGrid>
 									<p:commandButton id="prota_downloadFile002" widgetVar="prota_downloadFileW002" value="Download" ajax="false"
 										icon="fa fa-fw fa-cloud-download" actionListener="#{pagosRotacionMaBean.exportAction}"

@@ -48,6 +48,7 @@
 													<f:selectItem itemLabel="Anual" itemValue="5" />
 													<p:ajax process="@this" update="@([id$='vdevol_panelesValoresDinamic'],[id$='vdevol_valorgraficavalor'])" listener="#{compChequesDevolucionMaBean.changePanelAction}" onsuccess="changeperiodiciorperiododevol(); return false;" onstart="vdevol_savedperidoselected()"/>
 												</p:selectOneMenu>
+												<p:tooltip for="vdevol_selFiltroPorValor" value="Desplegar Lista" position="top"></p:tooltip>
 												</p:outputPanel>
 											</p:outputPanel>
 											<p:panelGrid id="vdevol_panelesValoresDinamic" columns="1"
@@ -81,6 +82,7 @@
 													<f:selectItems value="#{compChequesDevolucionMaBean.tiposdeplaza}" var="tp" itemValue="#{tp.idMedioServCompensacion}" itemLabel="#{tp.descMedioServCompensacion}"/>
 													<p:ajax onsuccess="changeperiodiciorperiododevol(); return false;" update="@([id$=vdevol_valorgraficavalor],[id$=vdevol_messageinformationglobal])" onstart="vdevol_savedperidoselected()"/>
 												</p:selectOneMenu>
+												<p:tooltip for="vdevol_tipoplaza" value="Desplegar Lista" position="top"></p:tooltip>
 												</p:outputPanel>
 											  </h:form>	 
 											</p:outputPanel>
@@ -123,11 +125,12 @@
 													</div>
 													<p:outputPanel id="vdevol_panelexportar001"  styleClass="border-left-c ui-g-6  NoPaddingRight">
 														<p:panelGrid columns="1" styleClass="panelgridExportar MarAuto ui-g-12 ui-md-6">
-															<p:selectOneMenu widgetVar="vdevol_exportarG001W"  onchange="exportChartPipe(this.value,'vdevol_chartvalores', 'vdevol_chartcantidad', 'Devoluciones'); restartExportar('vdevol_exportarG001W');" styleClass="selectonemenugrande selectDownload">
+															<p:selectOneMenu id="vdevol_exportarG001W" widgetVar="vdevol_exportarG001W"  onchange="exportChartPipe(this.value,'vdevol_chartvalores', 'vdevol_chartcantidad', 'Devoluciones'); restartExportar('vdevol_exportarG001W');" styleClass="selectonemenugrande selectDownload">
 																<f:selectItem itemLabel="Gráfica" itemValue="" />
 																<f:selectItem itemLabel="JPG" itemValue="jpg" />
 																<f:selectItem itemLabel="PDF" itemValue="pdf" />
 															</p:selectOneMenu>
+															<p:tooltip for="vdevol_exportarG001W" value="Desplegar Lista" position="top"></p:tooltip>
 															<p:selectOneMenu id="vdevol_selectdescargar001" widgetVar="vdevol_selectdescargarW001" value="#{compChequesDevolucionMaBean.tipoaexportar}" styleClass="selectonemenugrande">
 																<f:selectItem itemLabel="Datos" itemValue="" />
 																<f:selectItem itemLabel="CSV" itemValue="csv" />
@@ -135,6 +138,7 @@
 																<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 																<p:ajax event="change" onsuccess='$(&apos;[id*="downloadFile001"]&apos;).click();' process="@this" update="@([id$=vdevol_panelexportar001])"/>
 															</p:selectOneMenu>
+															<p:tooltip for="vdevol_selectdescargar001" value="Desplegar Lista" position="top"></p:tooltip>
 															<p:commandButton id="vdevol_downloadFile001" widgetVar="vdevol_downloadFile001W" value="Download" ajax="false" icon="fa fa-fw fa-cloud-download"
 																actionListener="#{compChequesDevolucionMaBean.exportAction}" style="display: none;" onclick="vdevol_updatedescargar001()">
 																<f:attribute name="start" 		value="#{compChequesDevolucionMaBean.start}"/>
@@ -173,6 +177,7 @@
 											<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 											<p:ajax event="change" onsuccess='$(&apos;[id*="downloadFile0002"]&apos;).click();' update="@this"/>
 										</p:selectOneMenu>
+										<p:tooltip for="vdevol_selectdescargar" value="Desplegar Lista" position="top"></p:tooltip>
 										<p:commandButton id="vdevol_downloadFile0002" widgetVar="vdevol_downloadFileW0002" value="Download" ajax="false"
 											icon="fa fa-fw fa-cloud-download" onclick="vdevol_updatedescargar002();" 
 											actionListener="#{compChequesDevolucionMaBean.exportAction}"

@@ -85,13 +85,14 @@
 													styleClass="border-left-c ui-g-6  NoPaddingRight">
 													<p:panelGrid columns="1"
 														styleClass="panelgridExportar MarAuto ui-g-12 ui-md-6">
-														<p:selectOneMenu widgetVar="vchque_exportarG001W"
+														<p:selectOneMenu id="vchque_exportarG001W" widgetVar="vchque_exportarG001W"
 															onchange="exportChart(this.value,'vcheqpesosconts_chart','Comportamiento Anualizado del Canje de Cheques'); restartExportar('vchque_exportarG001W');"
 															styleClass="selectonemenugrande selectDownload">
 															<f:selectItem itemLabel="Gráfica" itemValue="" />
 															<f:selectItem itemLabel="JPG" itemValue="jpg" />
 															<f:selectItem itemLabel="PDF" itemValue="pdf" />
 														</p:selectOneMenu>
+														<p:tooltip for="vchque_exportarG001W" value="Desplegar Lista" position="top"></p:tooltip>
 														<p:selectOneMenu id="vpesoscons_selectdescargar001"
 															widgetVar="vpesoscons_selectdescargarW001"
 															value="#{compChequesPesoMaBean.tipoaexportar}"
@@ -105,6 +106,7 @@
 																process="@this"
 																update="@([id$=vpesoscons_panelexportar001])" />
 														</p:selectOneMenu>
+														<p:tooltip for="vpesoscons_selectdescargar001" value="Desplegar Lista" position="top"></p:tooltip>
 														<p:commandButton id="vpesoscons_downloadFile001"
 															widgetVar="vpesoscons_downloadFile001W" value="Download"
 															ajax="false" icon="fa fa-fw fa-cloud-download"
@@ -133,13 +135,14 @@
 								<p:outputPanel id="vpesoscons_panelexportar0002">
 									<p:panelGrid columns="1"
 										styleClass="panelgridExportar MarginLeft15">
-										<p:selectOneMenu widgetVar="vchque_exportarG002W"
+										<p:selectOneMenu id="vchque_exportarG002W" widgetVar="vchque_exportarG002W"
 											onchange="exportChart(this.value,'vcheqpesosconts_chart','Comportamiento Anualizado del Canje de Cheques'); restartExportar('vchque_exportarG002W');"
 											styleClass="selectonemenugrande selectDownload">
 											<f:selectItem itemLabel="Gráfica" itemValue="" />
 											<f:selectItem itemLabel="JPG" itemValue="jpg" />
 											<f:selectItem itemLabel="PDF" itemValue="pdf" />
 										</p:selectOneMenu>
+										<p:tooltip for="vchque_exportarG002W" value="Desplegar Lista" position="top"></p:tooltip>
 										<p:selectOneMenu id="vpesoscons_selectdescargar"
 											widgetVar="vpesoscons_selectdescargarW"
 											value="#{compChequesPesoMaBean.tipoaexportar}"
@@ -152,6 +155,7 @@
 												onsuccess='$(&apos;[id*="vpesoscons_downloadFile0002"]&apos;).click();'
 												update="@this" />
 										</p:selectOneMenu>
+										<p:tooltip for="vpesoscons_selectdescargar" value="Desplegar Lista" position="top"></p:tooltip>
 										<p:commandButton id="vpesoscons_downloadFile0002"
 											widgetVar="vpesoscons_downloadFileW0002" value="Download"
 											ajax="false" icon="fa fa-fw fa-cloud-download"

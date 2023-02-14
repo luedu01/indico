@@ -51,6 +51,7 @@
 													<f:selectItem itemLabel="Anual" itemValue="5" />
 													<p:ajax process="@this" update="@([id$='vcanje_panelesValoresDinamic'],[id$='vcanje_valorgraficavalor'])" listener="#{compChequesCanjeMaBean.changePanelAction}" onsuccess="changeperiodiciocanje(); return false;" onstart="vcheqcanje_savedperidoselected();"/>
 												</p:selectOneMenu>
+												<p:tooltip for="vcanje_selFiltroPorValor" value="Desplegar Lista" position="top"></p:tooltip>
 												</p:outputPanel>
 											</p:outputPanel>
 											<p:panelGrid id="vcanje_panelesValoresDinamic" columns="1"
@@ -84,6 +85,7 @@
 													<f:selectItems value="#{compChequesCanjeMaBean.tiposdeplaza}" var="tp" itemValue="#{tp.idMedioServCompensacion}" itemLabel="#{tp.descMedioServCompensacion}"/>
 													<p:ajax onsuccess="changeperiodiciocanje(); return false;" update="@([id$=vcanje_valorgraficavalor],[id$=vcanje_messageinformationglobal])" onstart="vcheqcanje_savedperidoselected();"/>
 												</p:selectOneMenu>
+												<p:tooltip for="vcanje_tipoplaza" value="Desplegar Lista" position="top"></p:tooltip>
 												</p:outputPanel>
 											  </h:form>
 											</p:outputPanel>
@@ -127,11 +129,12 @@
 													</div>
 													<p:outputPanel id="vcanje_panelexportar001"  styleClass="border-left-c ui-g-6  NoPaddingRight">
 														<p:panelGrid columns="1" styleClass="panelgridExportar MarAuto ui-g-12 ui-md-6">
-															<p:selectOneMenu widgetVar="vchque_exportarG001W" onchange="exportChartPipe(this.value,'vcanje_chartvalores', 'vcanje_chartcantidad', 'Canje Al Cobro'); restartExportar('vchque_exportarG001W');" styleClass="selectonemenugrande selectDownload">
+															<p:selectOneMenu id="vchque_exportarG001W" widgetVar="vchque_exportarG001W" onchange="exportChartPipe(this.value,'vcanje_chartvalores', 'vcanje_chartcantidad', 'Canje Al Cobro'); restartExportar('vchque_exportarG001W');" styleClass="selectonemenugrande selectDownload">
 																<f:selectItem itemLabel="Gráfica" itemValue="" />
 																<f:selectItem itemLabel="JPG" itemValue="jpg" />
 																<f:selectItem itemLabel="PDF" itemValue="pdf" />
 															</p:selectOneMenu>
+															<p:tooltip for="vchque_exportarG001W" value="Desplegar Lista" position="top"></p:tooltip>
 															<p:selectOneMenu id="vcanje_selectdescargar001" widgetVar="vcanje_selectdescargarW001" value="#{compChequesCanjeMaBean.tipoaexportar}" styleClass="selectonemenugrande">
 																<f:selectItem itemLabel="Datos" itemValue="" />
 																<f:selectItem itemLabel="CSV" itemValue="csv" />
@@ -139,6 +142,7 @@
 																<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 																<p:ajax event="change" onsuccess='$(&apos;[id*="vcanje_downloadFile001"]&apos;).click();' process="@this" update="@([id$=vcanje_panelexportar001])"/>
 															</p:selectOneMenu>
+															<p:tooltip for="vcanje_selectdescargar001" value="Desplegar Lista" position="top"></p:tooltip>
 															<p:commandButton id="vcanje_downloadFile001" widgetVar="vcanje_downloadFile001W" value="Download" ajax="false" icon="fa fa-fw fa-cloud-download"
 																actionListener="#{compChequesCanjeMaBean.exportAction}" style="display: none;" onclick="vcanje_updatedescargar001()">
 																<f:attribute name="start" 		value="#{compChequesCanjeMaBean.start}"/>
@@ -177,6 +181,7 @@
 											<f:selectItem itemLabel="SDMX" itemValue="sdmx" />
 											<p:ajax event="change" onsuccess='$(&apos;[id*="vcanje_downloadFile0002"]&apos;).click();' update="@this"/>
 										</p:selectOneMenu>
+										<p:tooltip for="vcanje_selectdescargar" value="Desplegar Lista" position="top"></p:tooltip>
 										<p:commandButton id="vcanje_downloadFile0002" widgetVar="vcanje_downloadFileW0002" value="Download" ajax="false"
 											icon="fa fa-fw fa-cloud-download" onclick="vcanje_updatedescargar002();"
 											actionListener="#{compChequesCanjeMaBean.exportAction}"
@@ -186,6 +191,7 @@
 											<f:attribute name="end" value="#{compChequesCanjeMaBean.end}"/>
 											<f:attribute name="tipodeplaza" value="#{compChequesCanjeMaBean.tipodeplaza}"/>
 										</p:commandButton>
+										<p:tooltip for="vcanje_downloadFile0002" value="Desplegar Lista" position="top"></p:tooltip>
 										<p:remoteCommand name="vcanje_updatedescargar002" update="@([id$=vcanje_panelexportar0002])" action="#{compChequesCanjeMaBean.changeTabExportar}" delay="3000"/>
 									</p:panelGrid>
 								</p:outputPanel>
