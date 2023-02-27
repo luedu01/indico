@@ -246,7 +246,6 @@ public class CompDevolucionCanjeMaBean extends GraficaGeneralBean {
 		        		ana.getNombreCiudadCompensacion(),
 		        		String.format("%.0f", ana.getNumCheques()),
 		        		String.format("%.2f", ana.getValorPresentado())
-		        		//String.valueOf(IndicoUtils.getInstance().assertDouble(ana.getValorPresentado()))
 		    		);
 		        	output.write((line + "\r\n").getBytes());
 		        	totalCantidad = totalCantidad + IndicoUtils.getInstance().assertDoubleMM(ana.getNumCheques());

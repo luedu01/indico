@@ -228,7 +228,6 @@ public class RestComposicionCanjeServices implements Serializable  {
 		    }
 			
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			e.printStackTrace();
 			logger.error(e.getMessage());
 			throw new IndicoException(ERROR_LITERAL);
