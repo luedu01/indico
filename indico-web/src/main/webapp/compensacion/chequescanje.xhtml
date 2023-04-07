@@ -169,11 +169,12 @@
 									</div>
 
 									<p:panelGrid columns="1" styleClass="panelgridExportar MarginLeft15">
-										<p:selectOneMenu widgetVar="vchque_exportarG002W" onchange="exportChartPipe(this.value,'vcanje_chartvalores', 'vcanje_chartcantidad', 'Canje Al Cobro'); restartExportar('vchque_exportarG002W');"  styleClass="selectonemenugrande selectDownload">
+										<p:selectOneMenu id="vchque_exportarG002W" widgetVar="vchque_exportarG002W" onchange="exportChartPipe(this.value,'vcanje_chartvalores', 'vcanje_chartcantidad', 'Canje Al Cobro'); restartExportar('vchque_exportarG002W');"  styleClass="selectonemenugrande selectDownload">
 											<f:selectItem itemLabel="Gráfica" itemValue="" />
 											<f:selectItem itemLabel="JPG" itemValue="jpg" />
 											<f:selectItem itemLabel="PDF" itemValue="pdf" />
 										</p:selectOneMenu>
+										<p:tooltip for="vchque_exportarG002W" value="Desplegar Lista" position="top"></p:tooltip>
 										<p:selectOneMenu id="vcanje_selectdescargar" widgetVar="vcanje_selectdescargarW" value="#{compChequesCanjeMaBean.tipoaexportar}" styleClass="selectonemenugrande">
 											<f:selectItem itemLabel="Datos" itemValue="" />
 											<f:selectItem itemLabel="CSV" itemValue="csv" />

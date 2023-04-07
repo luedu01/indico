@@ -4,7 +4,7 @@
 
 var _ENTERO		=1;
 var _PORCENTAJE	=2;
-var _NUMERICO	=2;
+var _NUMERICO	=3;
 var logerrors 	=true;
 var _DIARIO		=1;
 var _MENSUAL	=2;
@@ -1144,7 +1144,7 @@ var formatNumber = {
 					var splitStr = num.split('.');
 					var splitLeft = splitStr[0];
 					var splitRight = splitStr.length > 1 ? this.sepDecimal + splitStr[1] : '';
-					var regx = /(\d+)(\d{2})/;
+					var regx = /(\d+)(\d{3})/;
 					while (regx.test(splitLeft)) {
 						splitLeft = splitLeft.replace(regx, '$1' + this.separador + '$2');
 					}
@@ -1162,9 +1162,9 @@ function createlegend(titulo,valor,plot,tipodatototal) {
 	if (tipodatototal==_ENTERO) {//entero
 		numero = formatNumber.new(valor,0);
 	} if (tipodatototal==2) {//porcentaje
-		numero = Number(valor*100).toFixed(2);
+		numero = Number(valor*100).toFixed(3);
 	} else if  (tipodatototal==_NUMERICO) {
-		numero = formatNumber.new(valor,2);
+		numero = formatNumber.new(valor,3);
 	}
 	var line="<center><table class=\"custompielegendparent\">	"+
 	 	 " 	<tr> 									"+
@@ -1216,7 +1216,7 @@ function getDataFiltered(datos,dateselected) {
 		if (datos[i]["ejex"]==dateselected) {
 			datasel[j]=new Array(datos[i]["ciudad"],datos[i]["valorPorcentaje"])
 		   //totales = parseFloat(totales + datos[i]["valorPorcentaje"]);
-		   totales = parseFloat(totales + datos[i]["serieValor"]).toFixed(2);//eo
+		   totales = parseFloat(totales + datos[i]["serieValor"]);
 		   datossumados[j]=new Array(datos[i]["ciudad"],datos[i]["serieValor"],datos[i]["valorPorcentaje"])
 		   totalS= totalS + 1;
 			j++;
@@ -1246,7 +1246,7 @@ function getDataCountFiltered(datos,dateselected) {
 	for (var i=0; i<datos.length; i++) {
 		if (datos[i][1]==dateselected) {
 			datasel[j]=new Array(datos[i][2],datos[i][3])
-		   totales = parseFloat(totales + datos[i][4]).toFixed(2);//eo
+		   totales = parseFloat(totales + datos[i][4]);
 
 		   datossumados[j]=new Array(datos[i][2],datos[i][4],datos[i][3])
 		   totalS= totalS + 1;
@@ -1369,6 +1369,7 @@ function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza
 		dateselected = data["endX"];
 		datosvalores 	= getDataFiltereCompensacion(data["SerieValores"],vStorageFecSelected);
 		leftPlot 		= createplotpieleft ( chartvaloresid, datosvalores[0] , _DIARIO);
+		
 		legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
 		divlegendvalores = document.createElement('div');
 		divlegendvaloresid=chartvalores+"_legend"
@@ -1908,7 +1909,7 @@ function createplotpieleft (name,data,tipo) {
 				barMargin: 1,
 				shadowDepth: 3,
 				showDataLabels: true,
-				dataLabelFormatString: '%.2f%'
+				dataLabelFormatString: '%#.2f%'
 			},
             animation: {
                 show: false
@@ -1926,7 +1927,7 @@ function createplotpieleft (name,data,tipo) {
 
         },
         legend: {
-        	dataLabelFormatString: '%.2f%'
+        	dataLabelFormatString: '%#.2f%'
         },
 	});
 	return plot2;
@@ -2021,7 +2022,7 @@ function createplotpieright (name,data,tipo) {
 				barMargin: 1,
 				shadowDepth: 3,
 				showDataLabels: true,
-				dataLabelFormatString: '%.2f%',
+				dataLabelFormatString: '%#.2f%',
 			},
 
             animation: {
@@ -2037,7 +2038,10 @@ function createplotpieright (name,data,tipo) {
     		gridLineWidth : 0.8,
     		borderWidth: 0.8,
     		left: "0",
-        }
+        },
+        legend: {
+        	dataLabelFormatString: '%#.2f%'
+        },
 	});
 	return plot2;
 }

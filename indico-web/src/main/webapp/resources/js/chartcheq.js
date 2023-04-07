@@ -19,7 +19,7 @@ function completarFechaStart(fecha,sticks,fechaFinal,startSticks) {
 		fecha = new Date(anio, mes - 1, dia);
 	} 
 
-	if (isNaN(fecha) == true) {
+	if (isNaN(fecha) == true ) {
   		fecha=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
 	} else {
 		let anterior=new Date(sticks[0].split('-')[0],sticks[0].split('-')[1]-1,sticks[0].split('-')[2]);
@@ -39,7 +39,12 @@ function completarFechaStart(fecha,sticks,fechaFinal,startSticks) {
 		}
 		
 		if (sticks.length==pos) {
-			currentValue = sticks[pos-2];
+			if(sticks.length == 1){
+				currentValue = sticks[0];
+			} else {
+				currentValue = sticks[pos-2];
+			}
+			
 			fecha = new Date(currentValue.split('-')[0],currentValue.split('-')[1]-1,currentValue.split('-')[2]);
 		} else {
 			fecha = anterior;

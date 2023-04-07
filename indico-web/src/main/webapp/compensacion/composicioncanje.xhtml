@@ -177,12 +177,12 @@
 													</div>
 													<p:outputPanel id="vcomcanje_panelexportar001"  styleClass="border-left-c ui-g-6  NoPaddingRight">
 														<p:panelGrid columns="1" styleClass="panelgridExportar MarAuto ui-g-12 ui-md-6">
-															<p:selectOneMenu widgetVar="vchque_exportarG001W" onchange="exportChart2(this.value,'vcomcanje_chart','Composición del Canje'); restartExportar('vchque_exportarG001W');" styleClass="selectonemenugrande selectDownload">
+															<p:selectOneMenu id="vchque_exportarG001W" widgetVar="vchque_exportarG001W" onchange="exportChart2(this.value,'vcomcanje_chart','Composición del Canje'); restartExportar('vchque_exportarG001W');" styleClass="selectonemenugrande selectDownload">
 																<f:selectItem itemLabel="Gráfica" itemValue="" />
 																<f:selectItem itemLabel="JPG" itemValue="jpg" />
 																<f:selectItem itemLabel="PDF" itemValue="pdf" />
 															</p:selectOneMenu>
-															<p:tooltip for="vcomcanje_panelexportar001" value="Desplegar Lista" position="top"></p:tooltip>
+															<p:tooltip for="vchque_exportarG001W" value="Desplegar Lista" position="top"></p:tooltip>
 															<p:selectOneMenu id="vcomcanje_selectdescargar001" widgetVar="vcomcanje_selectdescargarW001" value="#{compComposicionCanjeMaBean.tipoaexportar}" styleClass="selectonemenugrande">
 																<f:selectItem itemLabel="Datos" itemValue="" />
 																<f:selectItem itemLabel="CSV" itemValue="csv" />
