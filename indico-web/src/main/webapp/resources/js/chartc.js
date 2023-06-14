@@ -1157,15 +1157,15 @@ var formatNumber = {
 }
 
 function createlegend(titulo,valor,plot,tipodatototal) {
-
 	var numero;
 	if (tipodatototal==_ENTERO) {//entero
 		numero = formatNumber.new(valor,0);
 	} if (tipodatototal==2) {//porcentaje
-		numero = Number(valor*100).toFixed(3);
+		numero = Number(valor*100).toFixed(2);
 	} else if  (tipodatototal==_NUMERICO) {
-		numero = formatNumber.new(valor,3);
+		numero = formatNumber.new(valor,2);
 	}
+
 	var line="<center><table class=\"custompielegendparent\">	"+
 	 	 " 	<tr> 									"+
 		 "		<td style=\"Wid100\" colspan=\"3\">	"+
@@ -1182,7 +1182,7 @@ function createlegend(titulo,valor,plot,tipodatototal) {
 			var porcentaje;
 			//if(parseFloat(plot.data[0][i][1]) < parseFloat(0.001)){
 				//var porcentaje = Number((parseFloat(plot.data[0][i][1])*100)).toFixed(3)
-			var porcentaje = Number((parseFloat(plot.data[0][i][1])*100)).toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{2})+(?!\d))/g, '$1.');//eo
+			var porcentaje = Number((parseFloat(plot.data[0][i][1])*100)).toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');//eo
 			/*}else{
 				var porcentaje = Number(plot.data[0][i][1]*100).toFixed(3);
 			}*/
@@ -1360,20 +1360,22 @@ function createChartMinDiario(chartvalores,chartcantidad,compdiario1,tipodeplaza
 		startvaluescomponentstimes (vStorageFecSelected,compdiario1,data,_DIARIO);
 		
 		$("#"+chartvalores)[0].setAttribute("class","");
-		chartvaloresid=chartvalores+"_chart";
-		divchart = document.createElement('div');
-		divchart.style="chartcustom"
-		divchart.id=chartvaloresid;
+		chartvaloresid	=	chartvalores+"_chart";
+		divchart 		= 	document.createElement('div');
+		divchart.style	=	"chartcustom"
+		divchart.id		=	chartvaloresid;
 		document.getElementById(chartvalores).appendChild(divchart);
-		datasel = [[]];
-		dateselected = data["endX"];
+		datasel 		= 	[[]];
+		dateselected 	= 	data["endX"];
+		
 		datosvalores 	= getDataFiltereCompensacion(data["SerieValores"],vStorageFecSelected);
+
 		leftPlot 		= createplotpieleft ( chartvaloresid, datosvalores[0] , _DIARIO);
 		
-		legendavalores = createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
-		divlegendvalores = document.createElement('div');
-		divlegendvaloresid=chartvalores+"_legend"
-		divlegendvalores.id=divlegendvaloresid;
+		legendavalores 		= 	createlegend("Valor de Cheques", datosvalores[1],leftPlot,_NUMERICO);
+		divlegendvalores 	= 	document.createElement('div');
+		divlegendvaloresid	=	chartvalores+"_legend"
+		divlegendvalores.id	=	divlegendvaloresid;
 		divlegendvalores.innerHTML=legendavalores;
 		document.getElementById(chartvalores).appendChild(divlegendvalores);
 		/* PIE CANTIDAD */
@@ -1710,19 +1712,17 @@ function getDataFiltereCompensacion(datos,dateselected) {
 	for (var i=0; i<datos.length; i++) {
 		if (datos[i].ejex==dateselected) {
 			datasel[j]=new Array(datos[i].ciudad,datos[i].valorPorcentaje)
-		    totales = parseFloat(totales + datos[i].serieValor).toFixed(2);//eo
+		    totales = parseFloat(totales + datos[i].serieValor);
 
 		    datossumados[j]=new Array(datos[i].ciudad,datos[i].serieValor,datos[i].valorPorcentaje)
 			j++;
 		}
 	}
-
 	var datosseleccionados = [[]];
 	//datosseleccionados[0] = datasel.sort(ordenar);
 	datosseleccionados[0] = datasel;
 	datosseleccionados[1] = totales;
 	return datosseleccionados;
-
 }
 
 function createChartMinAnual(chartvalores,chartcantidad,companual1,tipodeplaza,label,errormessage,almacen,onetime,periodoAnterior){
