@@ -48,7 +48,7 @@ public class IndicadorService implements Serializable {
         subTitles[3] = CHEQUES_LITERAL;
         
         urlImagen = new String[4];
-        urlImagen[0] = "./resources/images/Sistema de Pagos de Alto Valor.svg";
+        urlImagen[0] = "./resources/images/SistemadePagosdeAltoValor.svg";
         urlImagen[1] = IMAGE_COMP_CHEQUES_LITERAL;
         urlImagen[2] = IMAGE_COMP_CHEQUES_LITERAL;
         urlImagen[3] = IMAGE_COMP_CHEQUES_LITERAL;
